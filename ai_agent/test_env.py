@@ -1,9 +1,29 @@
-from C2EvasionEnv import C2EvasionEnv
+import numpy as np
 
-# Khởi tạo môi trường độc lập
-env = C2EvasionEnv()
+# sửa import theo project của bạn
+from c2_evasion_env import C2EvasionEnv
 
-print("--- Đang test trực tiếp hàm reset() ---")
-# Gọi reset thủ công để xem lệnh print [DEBUG] có hiện ra không
-obs, info = env.reset()
-print(f"Trạng thái ban đầu được cấp phát thành công! Shape: {obs.shape}")
+
+# malicious_pool phải được tạo giống lúc train
+env = C2EvasionEnv(
+    malicious_data_pool=malicious_pool,
+    max_steps=10,
+    debug=True,
+)
+
+print("=== TEST ENVIRONMENT ===")
+
+obs, info = env.reset(seed=42)
+
+print("Initial observation:")
+print(obs)
+
+print("\nObservation shape:", obs.shape)
+print("Observation dtype:", obs.dtype)
+
+print("\nAction space:")
+print("low :", env.action_space.low)
+print("high:", env.action_space.high)
+
+print("\nObservation space:")
+print("shape:", env.observation_space.shape)
