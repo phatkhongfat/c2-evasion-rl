@@ -1,0 +1,31 @@
+@startuml
+left to right direction
+skinparam actorStyle awesome
+title Use Case: Hệ thống C2 Evasion (RL)
+
+actor "Nhà nghiên cứu" as R
+actor "Red Agent (PPO)" as A
+actor "Blue IDS (Surrogate)" as B
+
+rectangle "Hệ thống C2 Evasion RL" {
+  usecase "Tiền xử lý dữ liệu CTU-13" as UC1
+  usecase "Huấn luyện mô hình IDS" as UC2
+  usecase "Tạo môi trường mô phỏng" as UC3
+  usecase "Huấn luyện agent né tránh" as UC4
+  usecase "Đánh giá tỷ lệ né tránh" as UC5
+  usecase "Sinh hành động biến đổi lưu lượng" as UC6
+  usecase "Phát hiện lưu lượng độc hại" as UC7
+}
+
+R --> UC1
+R --> UC2
+R --> UC3
+R --> UC4
+R --> UC5
+
+UC4 ..> UC6 : <<include>>
+UC4 ..> UC7 : <<include>>
+
+A --> UC6
+B --> UC7
+@enduml

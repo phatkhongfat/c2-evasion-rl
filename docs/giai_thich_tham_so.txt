@@ -1,0 +1,227 @@
+================================================================================
+GIẢI THÍCH THAM SỐ ĐẦY ĐỦ — DỰ ÁN "RL TRONG C2 EVASION"
+================================================================================
+Nguồn tham số:  ai_agent/config.py
+                ai_agent/c2_evasion_env.py
+                blue_team/train_surrogate.ipynb
+Mục đích file:  ghi lại (1) từng tham số là gì, (2) giá trị hiện tại,
+                (3) LOGIC vì sao chọn giá trị đó, (4) nhận xét cải thiện.
+
+--------------------------------------------------------------------------------
+1. TỔNG QUAN HỆ THỐNG (hai phe đối kháng)
+--------------------------------------------------------------------------------
+Blue Team  — Surrogate IDS: RandomForest huấn luyện trên CTU-13 để phân loại
+             luồng mạng Botnet (1) / Normal (0). Đóng vai "cảnh sát".
+Red Team   — Agent PPO: biến đổi đặc trưng của một luồng Botnet để khiến IDS
+             phân loại nhầm thành Normal (0) = né tránh thành công.
+Môi trường — C2EvasionEnv (Gymnasium): cầu nối hai bên, phát reward cho agent.
+
+Thiết kế này gọi là "surrogate-based evasion": ta thay IDS thật (đóng hộp đen,
+không truy cập) bằng một mô hình thay thế có cùng dữ liệu huấn luyện, để agent
+có gradient/reward mà luyện. Đây là giả định chuẩn trong nghiên cứu.
+
+--------------------------------------------------------------------------------
+2. THAM SỐ DỮ LIỆU & SURROGATE IDS  (blue_team/train_surrogate.ipynb)
+--------------------------------------------------------------------------------
+2.1 Bộ dữ liệu CTU-13 (13 file .parquet, ~10.6 triệu dòng)
+   Cột gốc: dur, proto, dir, state, stos, dtos, tot_pkts, tot_bytes,
+            src_bytes, label, Family.
+
+2.2 CHỌN 6 ĐẶC TRƯNG  =>  features = [dur, tot_pkts, tot_bytes, src_bytes, proto, state]
+   LOGIC CHỌN / LOẠI:
+     - KHÔNG dùng IP (SrcAddr/DstAddr) và Port (Sport/Dport): vì RandomForest
+       sẽ "học vẹt" địa chỉ nguồn/đích thay vì học hành vi. Botnet test dùng
+       IP khác là model tụt ngay. => rò rỉ (leakage), loại.
+     - KHÔNG dùng cột `Family` (tên họ botnet: Neris, Rbot, Virut...): Family
+       thực chất CHÍNH LÀ nhãn (mỗi họ 100% là botnet). Dùng nó = gian lận,
+       accuracy ~100% nhưng vô nghĩa khoa học. => loại.
+     - KHÔNG dùng `dir` (hướng luồng: <->, ->, <?>...): phân bố giữa botnet
+       và normal GẦN NHƯ TRÙNG (cả hai ~54% <-> , ~45% ->) => phân biệt yếu.
+     - KHÔNG dùng `stos` / `dtos` (Type of Service): gần như hằng số/bị NaN
+       (stos botnet chỉ 1 giá trị, dtos 2 giá trị) => không mang tín hiệu.
+     - GIỮ 6 đặc trưng trên: đây là bộ "hành vi luồng" cổ điển của IDS dựa
+       netflow, đủ sức phân biệt và DỄ biến đổi bởi agent (xem mục 3).
+
+2.3 NHÃN (Labeling)  =>  categorize_label:
+     label chứa "botnet" -> 1 ; chứa "normal" -> 0 ; còn lại (background) -> -1 (loại)
+   LOGIC: CTU-13 có 3 lớp dữ liệu; background (lưu lượng lẫn tạp) bị bỏ để mô
+   hình tập trung vào ranh giới botnet <-> normal rõ ràng.
+
+2.4 CÂN BẰNG DỮ LIỆU (Undersampling)  =>  lấy mẫu Normal = số Botnet (~202.5k)
+   LOGIC: dữ liệu lệch (botnet 262k / normal 202k sau lọc) tuy không nặng,
+   nhưng cân bằng giúp model không thiên vị lớp đông, F1 hai lớp đều cao.
+
+2.5 RANDOM FOREST  =>  n_estimators=100, max_depth=15, random_state=42
+   LOGIC:
+     - n_estimators=100: đủ rừng để ổn định (nhiều hơn -> chính xác hơn chút
+       nhưng chậm, ít hơn -> nhiễu). 100 là điểm cân bằng tốc độ/chất lượng.
+     - max_depth=15: chặn cây quá sâu. Depth không giới hạn sẽ OVERFIT từng
+       mẫu (nhớ vẹt cả outlier). 15 cho phép mô hình học tổng quát, accuracy
+       đo được trên test set ~94% (không phải 100% -> dấu hiệu chưa overfit).
+     - random_state=42: tái lập kết quả.
+   KẾT QUẢ: accuracy ~94%, precision/recall cả 2 lớp ~0.93-0.94 trên 80/20 split
+   có stratify => mô hình học THẬT, không phải thuộc lòng.
+
+2.6 MÃ HÓA ĐẶC TRƯNG PHÂN LOẠI  =>  LabelEncoder
+     - proto: 6 lớp (arp, icmp, igmp, rtp, tcp, udp) — chỉ botnet+normal mới
+       dùng 6 giao thức này; các giao thức lạ (esp, gre, ipv6...) nằm trong
+       background đã bị loại.
+     - state: 172 lớp (trạng thái kết nối netflow: CON, INT, S_, FSPA_FSPA...)
+   Lưu cùng model: surrogate_ids_ctu13.pkl + label_encoder_proto/state.pkl.
+
+2.7 TÁCH TẬP MALICIOUS  =>  data/malicious_ctu13.parquet (~262.5k mẫu botnet)
+   Đây là "hồ chứa" (pool) mà agent lấy mẫu ban đầu để biến đổi.
+
+--------------------------------------------------------------------------------
+3. THAM SỐ MÔI TRƯỜNG  (ai_agent/c2_evasion_env.py + config.py)
+--------------------------------------------------------------------------------
+3.1 KHÔNG GIAN QUAN SÁT (Observation) = 6 chiều, chuẩn hóa về [-1, 1]
+   FEATURE_BOUNDS (min,max dùng để chuẩn hóa — SUY RA TỪ DỮ LIỆU, xem nhận xét):
+     dur        (0, 1000)          tot_pkts  (1, 10000)
+     tot_bytes  (40, 1 000 000)    src_bytes (40, 1 000 000)
+     proto      (0, 1)             state     (0, 1)      [đã LabelEncoder]
+   LOGIC:
+     - Chuẩn hóa về [-1,1] để mạng neural PPO học ổn định (đầu vào cùng thang đo,
+       không bias theo đơn vị byte lớn vs dur nhỏ).
+     - LƯU Ý QUAN TRỌNG (đã sửa sai): agent nhận vector CHUẨN HÓA, nhưng judge
+       (surrogate) nhận vector THÔ. Trước đây có bug đưa nhầm vector chuẩn hóa
+       vào judge -> judge phân loại sai gần hết -> evasion rate giả 100%.
+     - proto/state để (0,1) vì đã mã hóa số nguyên nhỏ, không cần thang đo rộng.
+
+3.2 KHÔNG GIAN HÀNH ĐỘNG (Action) = 4 chiều liên tục, Box[-1, 1]
+     [jitter, padding, proto_hop, state_hop]
+   Ánh xạ hành động -> biến đổi lưu lượng (step() trong env):
+     - jitter (action[0]):        dur += action[0] * 5        => ±5 giây
+     - padding (action[1]):       byte_delta = action[1] * 500 => ±500 byte
+                                  tot_bytes += byte_delta ; src_bytes += byte_delta
+     - proto_hop (action[2]):     bool(action[2] > 0) => đổi toggle tcp <-> udp
+     - state_hop (action[3]):     bool(action[3] > 0) => đổi toggle CON <-> INT
+   CÁC BIẾN ĐỔI BỔ TRỢ (padding/fragmentation — mô phỏng kỹ thuật tấn công thật):
+     - Padding (byte_delta >= 0): thêm ceil(byte_delta / 1460) gói vào tot_pkts
+       (1460 = MSS của TCP, thêm byte cần thêm gói tương ứng).
+     - Phân mảnh (byte_delta < 0): fragment_ratio = 1 + |action[1]| * 4;
+       tot_pkts *= ratio; mỗi gói chẻ thêm 54 byte header IP+TCP tổng cộng.
+   LOGIC CHỌN TẦM BIẾN ĐỔI (±5s, ±500 byte):
+     - Phải NHỎ so với thang đo thật để mỗi bước là một "nước đi" vi tinh chỉnh,
+       giúp học dần dần (curriculum), tránh nhảy loạn sang vùng phi thực tế.
+     - ±5s là khoảng jitter hợp lý của nhịp heartbeat C2; ±500 byte đủ lớn để
+       lọt qua ngưỡng byte của cây quyết định nhưng không phá hỏng luồng.
+
+3.3 GIỚI HẠN EPISODE  =>  MAX_STEPS = 10
+   LOGIC: cho agent tối đa 10 nước biến đổi. Nếu không né tránh được trong 10
+   bước thì truncated. Đủ để thử vài combo, đồng thời ép agent né TRÁNH NHANH
+   (đừng biến đổi vô hạn) — khớp thực tế: kẻ tấn công không có thời gian vô hạn.
+
+3.4 HÀM THƯỞNG (Reward Shaping)  =>  các hằng số trong config.py
+     REWARD_EVASION  = +50.0    : né tránh thành công (prediction = 0)
+     REWARD_DETECTION = -2.0    : bị phát hiện (prediction = 1)
+     STEP_PENALTY     = -0.1    : phạt mỗi bước (khuyến khích né nhanh)
+     CONFIDENCE_BONUS_SCALE = 0.1 : thưởng khi confidence giảm
+     COST_BYTE  = 0.01          : chi phí mỗi byte padding
+     COST_JITTER = 0.1          : chi phí mỗi giây jitter
+   Công thức reward thực tế trong step():
+     reward = (evasion ? +50 : -2)
+              - (0.01*|byte_delta| + 0.10*|jitter|)     // chi phí biến đổi
+              - 0.1                                     // phạt bước
+              + 0.1 * max(0, P_malicious_đầu - P_malicious_sau)  // bonus confidence
+   LOGIC CHỌN GIÁ TRỊ:
+     - +50 >> |−2|: né tránh thành công là mục tiêu chính, phần thưởng lớn để
+       tín hiệu học rõ ngay cả khi hiếm (sparse reward).
+     - phạt bước −0.1 và chi phí biến đổi: chống agent "lạm dụng" biến đổi to.
+       Một luồng bị nhồi quá nhiều byte/padding là phi thực tế; chi phí cân bằng
+       giữa "né được" và "biến đổi tối thiểu".
+     - bonus confidence 0.1*max(0, ΔP): tín hiệu MỊN (dense) — dù chưa lật được
+       nhãn, giảm được độ tin "ác" của judge cũng đáng thưởng, giúp agent leo
+       dốc dần thay vì đợi trúng đích mới có reward.
+
+3.5 KIỂM SOÁT GIÁ TRỊ (bounds)  =>  dur>=0, tot_bytes/src_bytes>=0, tot_pkts>=1
+   LOGIC: ngăn biến đổi tạo ra luồng vô nghĩa (thời gian âm, 0 gói tin).
+
+--------------------------------------------------------------------------------
+4. THAM SỐ PPO  (ai_agent/config.py -> train_agent.py)
+--------------------------------------------------------------------------------
+     PPO_LEARNING_RATE = 1e-4      PPO_N_STEPS   = 1024
+     PPO_BATCH_SIZE    = 32        PPO_GAMMA     = 0.99
+     PPO_ENT_COEF      = 0.01      PPO_CLIP_RANGE = 0.2
+     TOTAL_TIMESTEPS   = 50 000    SEED           = 42    device = cpu
+   LOGIC CHỌN TỪNG GIÁ TRỊ:
+     - learning_rate 1e-4: NHỎ hơn mặc định SB3 (3e-4). Môi trường này reward
+       thưa và action tinh vi, lr thấp giúp cập nhật mượt, không phá vỡ policy
+       đang tốt (overshooting).
+     - n_steps 1024: mỗi lần thu thập 1024 bước rồi mới cập nhật. Episode chỉ
+       10 bước nên một buffer chứa ~100 episode => mẫu đa dạng, gradient ổn.
+     - batch_size 32: chia 1024 bước thành 32 minibatch (32 lần cập nhật/epoch),
+       cân bằng tốc độ hội tụ vs nhiễu gradient.
+     - gamma 0.99: chiết khấu nhẹ. Episode rất ngắn nên gamma gần 1 giúp agent
+       cân nhắc phần thưởng cuối (né được) không bị bào mòn quá nhiều.
+     - ent_coef 0.01: hệ số entropy khuyến khích KHÁM PHÁ (thử nhiều combo khác
+       nhau), chống tụ về một nước đi đơn điệu (vd luôn padding max).
+     - clip_range 0.2: giới hạn trust region chuẩn PPO, ngăn cập nhật policy
+       đột ngột (giữ ổn định khi dùng chung buffer cũ).
+     - total_timesteps 50k: đủ lớn để học với lr thấp; có thể nới lên 100k-200k
+       nếu muốn hội tụ sâu hơn.
+     - seed 42: tái lập thí nghiệm.
+
+--------------------------------------------------------------------------------
+5. NHẬN XÉT & CƠ HỘI CẢI THIỆN (dựa trên dữ liệu thật đo được)
+--------------------------------------------------------------------------------
+5.1 FEATURE_BOUNDS hiện tại là "đoán tay", chưa khớp phân bố thật:
+     - dur  thật:  p50=0.2s, p95=243s, p99=1265s, max=3600s.  Bound (0,1000)
+       CLIP mọi thứ >1000s => mất phân biệt ở đuôi dài.
+     - tot_bytes thật: p50=321, p99=101.8k, max=277.7M. Bound (0,1e6) phù hợp
+       p99 nhưng max cực trị (277M) vượt xa -> vài giá trị bị ép về 1.0.
+     - tot_pkts thật: max=235.8k nhưng bound (1,10000) => phần lớn >10000 bị
+       clip về 1.0. ĐÂY LÀ CHỖ MẤT TÍN HIỆU RÕ NHẤT.
+   => ĐỀ XUẤT: thay bound bằng percentile thật (ví dụ p95/p99 đo ở trên) thay vì
+      số tròn đoán tay. Có thể thêm clip thông minh (winsorize) outlier.
+
+5.2 THÊM ĐẶC TRƯNG MỚI (câu hỏi "thêm feature khác được không?") — kết luận từ dữ liệu:
+     - CỘT PPS (packets per second) = tot_pkts / dur:  phân biệt RẤT MẠNH.
+         normal median ~322 pps, botnet median ~9.9 pps (gấp ~32 lần!).
+         Nguyên nhân: botnet C2 thường là nhịp "heartbeat" thưa (vài gói/giây),
+         còn normal có lưu lượng dày. Đây là feature đáng thêm NHẤT.
+     - bpp (bytes/packet) = tot_bytes/tot_pkts: normal 121.9 vs botnet 123.0 =>
+         gần như không phân biệt, KHÔNG đáng.
+     - src_ratio = src_bytes/tot_bytes: 0.35 vs 0.36 => không phân biệt.
+     - dir (hướng luồng): phân bố gần trùng => yếu (xem 2.2).
+     - stos/dtos: hằng số/NaN => không dùng.
+   => KHUYẾN NGHỊ: (a) thêm pps (và có thể log-scale để nén thang đo),
+      (b) cân nhắc bỏ/ghép bớt các feature dư thừa. Lưu ý: thêm feature bắt buộc
+      HUẤN LUYỆN LẠI surrogate (RandomForest) và cập nhật cả OBSERVATION_FEATURES
+      + FEATURE_BOUNDS lẫn _extract_features trong env.
+
+5.3 OVERFIT?  Xem mục trả lời riêng ở cuối file (mục 6) và trong chat.
+
+--------------------------------------------------------------------------------
+6. VỀ CÂU HỎI "BÀI CŨ CÓ OVERFIT KHÔNG?"
+--------------------------------------------------------------------------------
+Phân biệt hai khái niệm:
+  (a) Surrogate RandomForest: KHÔNG overfit. Huấn luyện trên 80% dữ liệu cân
+      bằng, đánh giá trên 20% giữ lại (stratify) => accuracy ~94%, không chạm
+      100%. Model học TỔNG QUÁT, không thuộc lòng. (Nếu dùng Family/độ sâu vô
+      hạn thì mới overfit.)
+  (b) THÍ NGHIỆM EVASION có rò rỉ dữ liệu (data leakage) — đây mới là điểm yếu:
+      - Tập malicious pool mà agent luyện né tránh CHÍNH LÀ tập botnet đã dùng
+        huấn luyện surrogate (cùng 13 file, chỉ lọc nhãn botnet). Nghĩa là agent
+        đang né một "cảnh sát" ĐÃ TỪNG THẤY chính những mẫu đó.
+      - Không có tập botnet GIỮ LẠI (held-out) chưa từng vào huấn luyện để đánh
+        giá evasion rate độc lập. Điểm "evasion ~16-30%" là trên dữ liệu trùng.
+      => Đây là "rò rỉ/overfit ở cấp thí nghiệm", KHÔNG phải model overfit.
+         Hệ quả: evasion rate đo được là GIỚI HẠN TRÊN (lạc quan) so với thực tế
+         khi IDS thật chưa từng thấy luồng đó.
+   KHẮC PHỤC ĐỀ XUẤT:
+      1) Tách held-out: chia botnet thành 70% train surrogate / 30% chỉ dùng để
+         đánh giá evasion (agent chưa từng luyện trên 30% này).
+      2) Có thể huấn luyện surrogate trên botnet họ A (vd Neris, Rbot) và đánh
+         giá evasion trên botnet họ B (vd Virut, Menti) => tổng quát hóa thật.
+      3) Báo cáo cả hai con số: evasion on-train vs on-held-out để minh bạch.
+      4) Lưu ý bug cũ: đã từng đưa vector CHUẨN HÓA vào judge -> evasion giả 100%.
+         Bug đó là "rò rỉ chuẩn hóa", đã sửa (mục 3.1). Đừng nhầm với overfit.
+
+================================================================================
+TÓM TẮT 1 DÒNG
+================================================================================
+Surrogate RandomForest học thật (94%, có test riêng) => không overfit; NHƯNG thí
+nghiệm evasion dùng lại đúng dữ liệu huấn luyện cho cả luyện lẫn đánh giá => rò rỉ
+dữ liệu, nên tỷ lệ né tránh đo được là lạc quan. Feature đáng thêm nhất là pps.
+================================================================================
