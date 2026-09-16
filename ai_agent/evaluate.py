@@ -7,11 +7,11 @@ from c2_evasion_env import C2EvasionEnv
 
 def load_test_pool():
     # Sử dụng logic nạp dữ liệu giống hệt lúc train
-    dataset_path = os.path.expanduser('~/Projects/c2-evasion-rl/data/archive/*.parquet')
+    # Use relative paths from script directory
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    base_dir = os.path.dirname(script_dir)
+    dataset_path = os.path.join(base_dir, 'data', 'archive', '*.parquet')
     file_paths = glob.glob(dataset_path)
-    
-    if len(file_paths) == 0:
-        file_paths = glob.glob('../data/archive/*.parquet')
         
     df_list = [pd.read_parquet(file) for file in file_paths]
     df = pd.concat(df_list, ignore_index=True)
