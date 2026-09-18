@@ -1,3 +1,83 @@
+# C2 Evasion RL – Học Tăng Cường cho Né Tránh Phát Hiện Lưu Lượng C2 Botnet
+
+Khung học tăng cường (RL) huấn luyện một tác tử để biến đổi lưu lượng C2 (Command & Control) của botnet nhằm tránh phát hiện bởi IDS (Intrusion Detection System) sử dụng PPO (Proximal Policy Optimization).
+
+## Tổng Quan
+
+Dự án này kết hợp:
+- **Red Team**: Tác tử RL nâng cao (PPO/SAC) huấn luyện biến đổi lưu lượng mạng độc hại
+- **Blue Team**: Surrogate IDS hiệu suất cao (XGBoost/LightGBM) huấn luyện phát hiện lưu lượng botnet
+- **Phân Tích**: Explainability SHAP + theo dõi tầm quan trọng của tính năng
+- **Giám Sát**: Theo dõi thí nghiệm Weights & Biases + sổ đăng ký mô hình MLflow
+- **Dữ Liệu**: Tập dữ liệu botnet CTU-13 (13 kịch bản botnet thực tế)
+
+Tác tử học áp dụng các chiến thuật né tránh (jitter, padding, protocol hopping, state mutation) trong khi giảm thiểu độ tin cậy phát hiện—chứng minh tính mạnh mẽ đối kháng của các hệ thống bảo mật.
+
+## Quy Trình Công Việc (Vietnamese Workflow)
+
+### Bước 1: Cài Đặt Môi Trường
+
+```bash
+# Cách 1: Conda (Recommended)
+conda env create -f environment.yml
+conda activate rl_c2_evasion
+
+# Cách 2: Pip + venv
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt  # Nếu cần
+```
+
+### Bước 2: Chuẩn Bị Dữ Liệu & Mô Hình Surrogate
+
+```bash
+# Chạy notebook huấn luyện surrogate IDS
+cd blue_team
+jupyter notebook train_surrogate.ipynb
+# Output: data/surrogate_ids_ctu13.pkl, data/label_encoder_*.pkl
+cd ..
+```
+
+### Bước 3: Kiểm Tra Môi Trường
+
+```bash
+python3 setup_check.py
+# Hoặc sử dụng Makefile:
+make check
+```
+
+### Bước 4: Huấn Luyện Tác Tử PPO
+
+```bash
+make train
+# Hoặc thủ công:
+cd ai_agent
+python3 train_agent.py
+```
+
+Theo dõi quá trình huấn luyện:
+```bash
+make tensorboard
+# Truy cập http://localhost:6006
+```
+
+### Bước 5: Đánh Giá Tác Tử
+
+```bash
+make eval
+# Hoặc:
+cd ai_agent
+python3 evaluate.py
+```
+
+### Bước 6: Dọn Dẹp
+
+```bash
+make clean
+```
+
+---
+
 # C2 Evasion RL – Reinforcement Learning for Botnet C2 Traffic Evasion
 
 A reinforcement learning framework that trains an agent to mutate botnet C2 (Command & Control) traffic to evade detection by an IDS (Intrusion Detection System) using PPO (Proximal Policy Optimization).
@@ -5,33 +85,81 @@ A reinforcement learning framework that trains an agent to mutate botnet C2 (Com
 ## Overview
 
 This project combines:
-- **Red Team**: PPO agent trained to mutate malicious network flows
-- **Blue Team**: Surrogate IDS model (scikit-learn) trained to detect botnet traffic
+- **Red Team**: Advanced RL agent (PPO/SAC) trained to mutate malicious network flows
+- **Blue Team**: High-performance surrogate IDS (XGBoost/LightGBM) trained to detect botnet traffic
+- **Analysis**: SHAP explainability + feature importance tracking
+- **Monitoring**: Weights & Biases experiment tracking + MLflow model registry
 - **Data**: CTU-13 botnet dataset (13 real botnet capture scenarios)
 
 The agent learns to apply evasion tactics (jitter, padding, protocol hopping, state mutation) while minimizing detection confidence—demonstrating adversarial robustness of security systems.
 
-## Environment Setup
+### Key Improvements Over Basic RL
+- **Better algorithms**: SAC (Soft Actor-Critic) for more efficient learning vs PPO
+- **Stronger IDS surrogate**: XGBoost/LightGBM replace scikit-learn for better adversarial robustness
+- **Explainability**: SHAP + LIME integration to understand evasion strategies
+- **Production-ready**: MLflow + Weights & Biases for reproducibility and monitoring
 
-### Option 1: Conda (Recommended)
+## Workflow (English)
+
+### Step 1: Setup Environment
 
 ```bash
+# Option 1: Conda (Recommended)
 conda env create -f environment.yml
 conda activate rl_c2_evasion
-```
 
-### Option 2: Pip + venv
-
-```bash
+# Option 2: Pip + venv
 python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
+source venv/bin/activate
+pip install -r requirements.txt  # If needed
 ```
 
-### Verify Installation
+### Step 2: Prepare Data & Surrogate Model
 
 ```bash
-python3 -c "import gymnasium, stable_baselines3, torch, scapy; print('✓ All dependencies loaded')"
+# Run surrogate IDS training notebook
+cd blue_team
+jupyter notebook train_surrogate.ipynb
+# Output: data/surrogate_ids_ctu13.pkl, data/label_encoder_*.pkl
+cd ..
+```
+
+### Step 3: Verify Environment
+
+```bash
+python3 setup_check.py
+# Or use Makefile:
+make check
+```
+
+### Step 4: Train PPO Agent
+
+```bash
+make train
+# Or manually:
+cd ai_agent
+python3 train_agent.py
+```
+
+Monitor training:
+```bash
+make tensorboard
+# Visit http://localhost:6006
+```
+
+### Step 5: Evaluate Agent
+
+```bash
+make eval
+# Or:
+cd ai_agent
+python3 evaluate.py
+```
+
+### Step 6: Cleanup
+
+```bash
+make clean
 ```
 
 ## Project Structure
@@ -60,7 +188,7 @@ c2-evasion-rl/
 ├── data/                              # Datasets
 │   ├── malicious_ctu13.parquet        # Aggregated CTU-13 botnet flows
 │   ├── archive/                       # Individual CTU-13 scenarios (1-13)
-│   ├── surrogate_ids_ctu13.pkl        # Trained surrogate model (scikit-learn)
+│   ├── surrogate_ids_ctu13.pkl        # Trained surrogate model
 │   ├── label_encoder_proto.pkl        # Protocol encoder
 │   └── label_encoder_state.pkl        # State encoder
 │
@@ -68,56 +196,9 @@ c2-evasion-rl/
 │   └── ppo_c2_evasion_agent.zip       # Trained PPO policy
 │
 ├── environment.yml                    # Conda environment spec
-├── requirements.txt                   # Pip dependencies
+├── Makefile                           # Workflow automation
 └── README.md                          # This file
 ```
-
-## Quick Start
-
-### 1. Prepare Training Data & Encoders
-
-Before training, generate the surrogate IDS model and label encoders:
-
-```bash
-cd blue_team
-jupyter notebook train_surrogate.ipynb  # Follow cells to generate pickle files
-# Output: data/surrogate_ids_ctu13.pkl, data/label_encoder_*.pkl
-cd ..
-```
-
-Or use the setup script:
-
-```bash
-python3 setup_blue_team.py  # Automates surrogate model generation
-```
-
-### 2. Train the PPO Agent
-
-```bash
-cd ai_agent
-python3 train_agent.py
-```
-
-**Expected output:**
-- Training logs to `c2_ppo_tensorboard/` (view with TensorBoard)
-- Trained model saved to `../models/ppo_c2_evasion_agent.zip`
-- Training takes ~5-10 min (50k timesteps) on CPU
-
-Monitor training in real-time:
-
-```bash
-tensorboard --logdir=ai_agent/c2_ppo_tensorboard/
-# Open http://localhost:6006 in browser
-```
-
-### 3. Evaluate the Trained Agent
-
-```bash
-cd ai_agent
-python3 evaluate.py
-```
-
-**Output:** Evasion success rate on 80 random test samples, with tactics breakdown (jitter, padding, protocol hops).
 
 ## Configuration
 
@@ -173,21 +254,14 @@ reward = R_evasion × (evaded)
 1. **Missing trained models** – `.pkl` files must be generated from `blue_team/` notebooks
    - **Fix:** Run `blue_team/train_surrogate.ipynb` first or provide pre-trained weights
 
-2. **Hardcoded paths in evaluate.py** – Line 10 uses `~/Projects/...`
-   - **Fix:** Use relative paths with `os.path.dirname(os.path.abspath(__file__))`
-
-3. **No `models/` directory** – Agent can't save trained weights
+2. **No `models/` directory** – Agent can't save trained weights
    - **Fix:** Add `.gitkeep` to `models/` folder
 
-4. **No CI/testing** – No automated checks for environment setup
+3. **No CI/testing** – No automated checks for environment setup
    - **Fix:** Add `test_setup.py` or pytest fixtures
-
-5. **Missing requirements.txt** – Pip users must manually manage versions
-   - **Fix:** Auto-generated from `environment.yml`
 
 ### Suggested Enhancements
 
-- [ ] Add `Makefile` with `make train`, `make eval`, `make tensorboard` targets
 - [ ] Docker support for reproducible environments
 - [ ] Wandb integration for experiment tracking
 - [ ] Multi-agent training (compete: evasion vs. detection)
@@ -235,21 +309,35 @@ tensorboard --logdir=ai_agent/c2_ppo_tensorboard/ --port=6006
 
 ## Dependencies
 
-### Core ML Stack
+### Core RL Stack
 
 - `gymnasium==1.3.0` – RL environment framework
 - `stable-baselines3==2.9.0` – PPO, DQN, A2C implementations
-- `scikit-learn` – Surrogate IDS classifier
-- `pytorch` (CPU) – Neural network backbone
+- `sb3-contrib==2.2.1` – SAC, TD3, QRDQN advanced algorithms
+- `pytorch>=2.1` – Neural network backbone & GPU support
 - `tensorboard==2.21.0` – Training visualization
 
-### Data & Utils
+### Advanced ML (Improved)
 
-- `pandas`, `numpy` – Data manipulation
-- `pyarrow` – Parquet file I/O
+- `xgboost>=2.0` – High-performance gradient boosting (surrogate IDS)
+- `lightgbm>=4.0` – Alternative gradient boosting
+- `shap>=0.42` – Feature importance & explainability
+- `lime==0.2.0` – Model-agnostic explanations
+- `eli5==0.13.0` – Feature visualization
+
+### Experiment Tracking & Reproducibility
+
+- `wandb==0.15.12` – Weights & Biases for monitoring
+- `mlflow==2.8.1` – Model registry & tracking
+- `featuretools==1.28.0` – Automated feature engineering
+
+### Data & Utilities
+
+- `pandas>=2.0`, `numpy>=1.24` – Data manipulation (pinned versions)
+- `pyarrow>=12.0` – Parquet file I/O
 - `scapy==2.7.0` – Network packet crafting
 - `flask==3.1.3` – C2 server mock
-- `opencv-python==5.0.0.93` – Image processing (optional)
+- `opencv-python==4.8.1.78` – Image processing (stable version)
 
 See `environment.yml` for full dependency list and versions.
 
@@ -265,19 +353,6 @@ See `environment.yml` for full dependency list and versions.
 
 **License:** Public / Research use
 
-## Citation
-
-If you use this project in research, cite:
-
-```bibtex
-@misc{c2evasion_rl,
-  title={C2 Evasion RL: Adversarial Reinforcement Learning for Botnet Traffic Evasion},
-  author={Your Name},
-  year={2024},
-  howpublished={\url{https://github.com/phatkhongfat/c2-evasion-rl}}
-}
-```
-
 ## References
 
 - [Stable Baselines3 Docs](https://stable-baselines3.readthedocs.io/)
@@ -288,14 +363,3 @@ If you use this project in research, cite:
 ## License
 
 MIT License – See LICENSE file for details.
-
-## Contact
-
-**Project Owner:** Lê Hoàng Phát  
-**Email:** lehoangphat1511@gmail.com  
-**GitHub:** [phatkhongfat](https://github.com/phatkhongfat)
-
----
-
-**Last Updated:** September 2024  
-**Status:** Active Development

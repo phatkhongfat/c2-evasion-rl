@@ -3,43 +3,171 @@ channels:
   - pytorch
   - conda-forge
   - defaults
+
 dependencies:
-  # 1. Core Python & System
-  - python=3.10
+  # ============================================================================
+  # CORE PYTHON & SYSTEM
+  # ============================================================================
+  - python=3.11
   - pip
 
-  # 2. Data Science & Machine Learning
-  - numpy
-  - pandas
-  - scipy
-  - scikit-learn
-  - matplotlib
-  - pyarrow
-  - joblib
+  # ============================================================================
+  # DATA SCIENCE & ML (Stable versions for reproducibility)
+  # ============================================================================
+  - numpy>=1.24,<2.0              # Numerical computing
+  - pandas>=2.0,<3.0              # Data manipulation
+  - scipy>=1.10,<2.0              # Scientific computing
+  - scikit-learn>=1.3,<2.0        # ML utilities
+  - matplotlib>=3.7,<4.0          # Basic plotting
+  - pyarrow>=12.0,<14.0           # Parquet I/O
+  - joblib>=1.3,<2.0              # Parallelization
 
-  # 3. Deep Learning (PyTorch - Bản CPU mặc định để tránh lỗi nặng máy)
-  - pytorch
-  - torchvision
-  - torchaudio
-  - cpuonly
+  # ============================================================================
+  # ADVANCED ML (Better than basic sklearn)
+  # ============================================================================
+  - xgboost>=2.0,<3.0             # Gradient boosting (surrogate IDS)
+  - lightgbm>=4.0,<5.0            # Alternative gradient boosting
+  - shap>=0.42,<1.0               # Feature importance & explainability
 
-  # 4. Utilities & Networking
-  - requests
-  - beautifulsoup4
-  - tqdm
-  - pyyaml
+  # ============================================================================
+  # DEEP LEARNING (PyTorch)
+  # Choose ONE option below based on your hardware:
+  #
+  # OPTION 1: CPU ONLY (default)
+  #   Keep as-is. Works on any machine, slower for training.
+  #
+  # OPTION 2: GPU (CUDA 11.8)
+  #   Replace pytorch line with:
+  #   - pytorch::pytorch[version=">=2.1,<3.0"]=*=cuda118*
+  #   - pytorch::pytorch-cuda=11.8
+  #   Requires NVIDIA GPU + CUDA drivers installed
+  #
+  # OPTION 3: GPU (Latest CUDA)
+  #   Replace pytorch line with:
+  #   - pytorch::pytorch[version=">=2.1,<3.0"]=*=cuda*
+  #   - pytorch::pytorch-cuda   (auto-detects CUDA version)
+  # ============================================================================
+  - pytorch::pytorch>=2.1,<3.0    # CPU version (fast setup)
+  - pytorch::torchvision>=0.16,<1.0
+  - pytorch::torchaudio>=2.1,<3.0
+  # - pytorch::pytorch-cuda=11.8  # UNCOMMENT for GPU support
 
-  # 5. Jupyter Workspace
-  - jupyterlab
-  - notebook
-  - ipython
+  # ============================================================================
+  # UTILITIES & NETWORKING
+  # ============================================================================
+  - requests>=2.31,<3.0           # HTTP client
+  - beautifulsoup4>=4.12,<5.0     # HTML parsing
+  - tqdm>=4.66,<5.0               # Progress bars
+  - pyyaml>=6.0,<7.0              # YAML parsing
+  - networkx>=3.1,<4.0            # Flow graph analysis
 
-  # 6. Specific Versions via PIP (Chính xác như máy cũ của bạn)
+  # ============================================================================
+  # JUPYTER & DEVELOPMENT
+  # ============================================================================
+  - jupyterlab>=4.0,<5.0          # Jupyter IDE
+  - notebook>=7.0,<8.0            # Notebook support
+  - ipython>=8.0,<9.0             # Enhanced Python shell
+  - pytest>=7.4,<8.0              # Testing framework
+
+  # ============================================================================
+  # VISUALIZATION & ANALYSIS
+  # ============================================================================
+  - plotly>=5.17,<6.0             # Interactive plots
+  - seaborn>=0.13,<1.0            # Statistical visualization
+  - graphviz                      # Flow diagram rendering
+
+  # ============================================================================
+  # PIP PACKAGES (RL, Security, Monitoring)
+  # ============================================================================
   - pip:
-      - gymnasium==1.3.0
-      - stable-baselines3==2.9.0
-      - tensorboard==2.21.0
-      - scapy==2.7.0
-      - flask==3.1.3
-      - opencv-python==5.0.0.93
-      - rich==15.0.0
+      # --- Reinforcement Learning ---
+      - gymnasium==1.3.0          # RL environment framework
+      - stable-baselines3==2.9.0  # PPO, DQN, A2C algorithms
+      - sb3-contrib==2.2.1        # SAC, TD3, QRDQN advanced algorithms
+      - tensorboard==2.21.0       # Training visualization
+
+      # --- Network & Security ---
+      - scapy==2.7.0              # Packet crafting & analysis
+      - flask==3.1.3              # C2 server mock
+      - flask-cors==4.0.0         # Cross-origin requests
+
+      # --- Computer Vision ---
+      - opencv-python==4.8.1.78   # Image processing (stable version)
+
+      # --- Explainability ---
+      - lime==0.2.0               # Model explanations
+      - eli5==0.13.0              # Feature visualization
+
+      # --- Experiment Tracking & Monitoring ---
+      - wandb==0.15.12            # Weights & Biases integration
+      - mlflow==2.8.1             # Model registry & tracking
+
+      # --- Data Processing ---
+      - featuretools==1.28.0      # Automated feature engineering
+      - category-encoders==2.6.3  # Categorical encoding
+
+      # --- Code Quality ---
+      - pytest-cov==4.1.0         # Code coverage
+      - black==23.12.0            # Code formatter
+      - flake8==6.1.0             # Linter
+      - mypy==1.7.1               # Type checking
+
+      # --- Utilities ---
+      - rich==15.0.0              # Beautiful terminal output
+      - python-dotenv==1.0.0      # .env file support
+      - click==8.1.7              # CLI tools
+
+# ============================================================================
+# INSTALLATION INSTRUCTIONS
+# ============================================================================
+#
+# 1. Create environment:
+#    conda env create -f environment.yml
+#
+# 2. Activate environment:
+#    conda activate rl_c2_evasion
+#
+# 3. Verify installation:
+#    python setup_check.py
+#
+# 4. For GPU support:
+#    - Edit this file: uncomment pytorch-cuda line, comment out CPU pytorch line
+#    - Recreate environment: conda env create -f environment.yml --force
+#    - Ensure NVIDIA drivers are installed: nvidia-smi
+#
+# 5. Launch training:
+#    make train           # or: python ai_agent/train_agent.py
+#
+# 6. Evaluate agent:
+#    make eval            # or: python ai_agent/evaluate.py
+#
+# 7. Monitor experiments (if using Weights & Biases):
+#    wandb login
+#    # Experiments auto-logged during training
+#
+# ============================================================================
+#
+# TROUBLESHOOTING:
+#
+# Issue: "conda: command not found"
+#   → Install Miniconda: https://docs.conda.io/projects/miniconda
+#
+# Issue: "Solving environment failed" / "Conflict detected"
+#   → Try: conda clean --all
+#   → Then: conda env create -f environment.yml
+#
+# Issue: "ModuleNotFoundError: No module named 'gymnasium'"
+#   → Verify conda env is activated: conda activate rl_c2_evasion
+#   → Or install manually: pip install -r requirements.txt
+#
+# Issue: GPU not detected (CUDA not working)
+#   → Check: nvidia-smi
+#   → Install NVIDIA CUDA Toolkit matching your GPU
+#   → Rebuild environment with GPU pytorch line uncommented
+#
+# Issue: Slow installation
+#   → Try alternative conda channel: conda config --add channels conda-forge
+#   → Use faster solver: conda install -c conda-forge mamba
+#   → Then: mamba env create -f environment.yml
+#
+# ============================================================================

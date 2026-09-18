@@ -1,8 +1,77 @@
+# Python
 __pycache__/
-*.pyc
-.ipynb_checkpoints/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+
+# IDE
 .vscode/
-data/*.csv
-data/*.pcap
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs & Models
+ai_agent/logs/
+ai_agent/c2_ppo_tensorboard/
+models/*.zip
 *.pkl
-*.zip
+!data/label_encoder_*.pkl
+!data/surrogate_ids_ctu13.pkl
+
+# Large data files
+data/archive/
+data/*.parquet
+
+# Weights & Biases
+wandb/
+*.wandb
+
+# MLflow
+mlruns/
+.mlflow/
+
+# OS
+Thumbs.db
+
+# Misc
+.env
+.env.local
+*.log
+*.pcap
+*.csv
