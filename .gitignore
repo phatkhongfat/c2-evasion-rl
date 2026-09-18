@@ -75,3 +75,12 @@ Thumbs.db
 *.log
 *.pcap
 *.csv
+
+# IDE & Code Tools
+.claude/
+.codegraph/
+codegraph.json
+.code-intelligence/
+skills-lock.json
+*.bundle
+*.tar.gz
