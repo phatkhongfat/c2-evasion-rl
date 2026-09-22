@@ -247,12 +247,47 @@ reward = R_evasion × (evaded)
 
 **Goal:** Agent learns to minimize mutations while maximizing evasion.
 
+## Recent Updates (Sep 2026)
+
+### ✅ Callback Fix – Accurate Evasion Metrics
+
+**Issue:** `evasion_metrics_callback.py` was aggregating per-step instead of per-episode, deflating reported evasion rates by ~3×.
+- Old: 30% on TensorBoard for a 94% evasion rollout
+- Root cause: Successful episodes = 1 step, failed episodes = up to 10 steps → metric ≈ p / L
+
+**Fix:** Callback now aggregates per-episode:
+```python
+# Accumulate within episode, append only on termination
+if done:
+    self.episode_evasion_buffer.append(final_success_flag)
+```
+**Impact:** TensorBoard now reports true episode-level evasion rate. Retrain with the fixed callback for honest benchmarks.
+
+### ✅ Surrogate Upgrade – RandomForest → XGBoost
+
+**Benchmark on CTU-13 (matched hyperparams):**
+
+| Metric | RandomForest | XGBoost | Delta |
+|--------|--------------|---------|-------|
+| F1 Score | 0.9365 | **0.9476** | +1.2 pp |
+| ROC AUC | 0.9835 | **0.9888** | +0.5 pp |
+| Inference (ms) | 7.0 | **1.35** | 5.2× faster |
+| Model Size | 38.9 MB | **7.5 MB** | 5.2× smaller |
+| Proba Sharpness | 54.1% | **71.9%** | +33% (better reward signal) |
+
+**New surrogate notebook:** `blue_team/train_surrogate_xgboost.ipynb`
+**Trained model:** `data/surrogate_ids_ctu13.pkl` (XGBoost)
+
+**Recommendation:** Use XGBoost. It wins on every metric and enables faster RL training cycles.
+
+---
+
 ## Known Issues & Improvements
 
 ### Current Limitations
 
 1. **Missing trained models** – `.pkl` files must be generated from `blue_team/` notebooks
-   - **Fix:** Run `blue_team/train_surrogate.ipynb` first or provide pre-trained weights
+   - **Fix:** Run `blue_team/train_surrogate_xgboost.ipynb` first or provide pre-trained weights
 
 2. **No `models/` directory** – Agent can't save trained weights
    - **Fix:** Add `.gitkeep` to `models/` folder

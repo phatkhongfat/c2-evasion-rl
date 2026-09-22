@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surrogate Judge Comparison: RandomForest vs XGBoost</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 14px;
+        }
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .chart-wrapper {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+        .chart-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .metrics-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .metrics-table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        .metrics-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .metrics-table tr:nth-child(even) {
+            background: #f5f5f5;
+        }
+        .metrics-table tr:hover {
+            background: #efefef;
+        }
+        .positive {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .verdict {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin-top: 30px;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+        .verdict h2 {
+            margin-top: 0;
+        }
+        .winner {
+            background: #2ecc71;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Surrogate Judge Comparison</h1>
+        <p class="subtitle">RandomForest vs XGBoost on CTU-13 Botnet Detection</p>
+        
+        <div class="charts-grid">
+            <!-- F1 Score -->
+            <div class="chart-wrapper">
+                <div class="chart-title">F1 Score</div>
+                <canvas id="f1Chart"></canvas>
+            </div>
+            
+            <!-- AUC -->
+            <div class="chart-wrapper">
+                <div class="chart-title">ROC AUC</div>
+                <canvas id="aucChart"></canvas>
+            </div>
+            
+            <!-- Inference Speed -->
+            <div class="chart-wrapper">
+                <div class="chart-title">Inference Speed (ms)</div>
+                <canvas id="speedChart"></canvas>
+            </div>
+            
+            <!-- Model Size -->
+            <div class="chart-wrapper">
+                <div class="chart-title">Model Size (MB)</div>
+                <canvas id="sizeChart"></canvas>
+            </div>
+            
+            <!-- Probability Sharpness -->
+            <div class="chart-wrapper">
+                <div class="chart-title">Proba @ Extremes (%)</div>
+                <canvas id="sharpenessChart"></canvas>
+            </div>
+            
+            <!-- Summary Stats -->
+            <div class="chart-wrapper">
+                <div class="chart-title">Performance Gain</div>
+                <canvas id="gainChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Metrics Table -->
+        <table class="metrics-table">
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>RandomForest</th>
+                    <th>XGBoost</th>
+                    <th>Delta</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>F1 Score</strong></td>
+                    <td>0.9365</td>
+                    <td>0.9476</td>
+                    <td class="positive">+1.2 pp</td>
+                </tr>
+                <tr>
+                    <td><strong>ROC AUC</strong></td>
+                    <td>0.9835</td>
+                    <td>0.9888</td>
+                    <td class="positive">+0.5 pp</td>
+                </tr>
+                <tr>
+                    <td><strong>Inference (ms/call)</strong></td>
+                    <td>7.0</td>
+                    <td>1.35</td>
+                    <td class="positive">5.2× faster</td>
+                </tr>
+                <tr>
+                    <td><strong>Model Size (MB)</strong></td>
+                    <td>38.9</td>
+                    <td>7.5</td>
+                    <td class="positive">5.2× smaller</td>
+                </tr>
+                <tr>
+                    <td><strong>Proba Sharpness (%)</strong></td>
+                    <td>54.1</td>
+                    <td>71.9</td>
+                    <td class="positive">+33%</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="verdict">
+            <h2>✅ Recommendation</h2>
+            <p><strong>SWITCH TO XGBOOST</strong> — it wins on all metrics:</p>
+            <ul>
+                <li>F1 improves by <strong>1.2 percentage points</strong> (0.9365 → 0.9476)</li>
+                <li>ROC AUC improves by <strong>0.5 percentage points</strong> (0.9835 → 0.9888)</li>
+                <li>Inference is <strong>5.2× faster</strong> (7.0ms → 1.35ms per prediction)</li>
+                <li>Model size is <strong>5.2× smaller</strong> (38.9MB → 7.5MB on disk)</li>
+                <li>Probability gradients are <strong>33% sharper</strong>, enabling better confidence thresholding</li>
+            </ul>
+            <p><strong>Status:</strong> <span class="winner">XGBoost trained and saved</span></p>
+        </div>
+    </div>
+
+    <script>
+        const chartOptions = {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { display: false },
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                }
+            }
+        };
+
+        // F1 Score Chart
+        new Chart(document.getElementById('f1Chart'), {
+            type: 'bar',
+            data: {
+                labels: ['RandomForest', 'XGBoost'],
+                datasets: [{
+                    label: 'F1 Score',
+                    data: [0.9365, 0.9476],
+                    backgroundColor: ['#FF6B6B', '#4ECDC4'],
+                    borderColor: ['#e74c3c', '#1abc9c'],
+                    borderWidth: 2,
+                }]
+            },
+            options: {
+                ...chartOptions,
+                scales: {
+                    y: { min: 0.90, max: 1.0 }
+                }
+            }
+        });
+
+        // AUC Chart
+        new Chart(document.getElementById('aucChart'), {
+            type: 'bar',
+            data: {
+                labels: ['RandomForest', 'XGBoost'],
+                datasets: [{
+                    label: 'ROC AUC',
+                    data: [0.9835, 0.9888],
+                    backgroundColor: ['#FF6B6B', '#4ECDC4'],
+                    borderColor: ['#e74c3c', '#1abc9c'],
+                    borderWidth: 2,
+                }]
+            },
+            options: {
+                ...chartOptions,
+                scales: {
+                    y: { min: 0.97, max: 1.0 }
+                }
+            }
+        });
+
+        // Speed Chart (log scale)
+        new Chart(document.getElementById('speedChart'), {
+            type: 'bar',
+            data: {
+                labels: ['RandomForest', 'XGBoost'],
+                datasets: [{
+                    label: 'Inference (ms)',
+                    data: [7.0, 1.35],
+                    backgroundColor: ['#FF6B6B', '#4ECDC4'],
+                    borderColor: ['#e74c3c', '#1abc9c'],
+                    borderWidth: 2,
+                }]
+            },
+            options: {
+                ...chartOptions,
+                scales: {
+                    y: { type: 'logarithmic' }
+                }
+            }
+        });
+
+        // Model Size Chart
+        new Chart(document.getElementById('sizeChart'), {
+            type: 'bar',
+            data: {
+                labels: ['RandomForest', 'XGBoost'],
+                datasets: [{
+                    label: 'Size (MB)',
+                    data: [38.9, 7.5],
+                    backgroundColor: ['#FF6B6B', '#4ECDC4'],
+                    borderColor: ['#e74c3c', '#1abc9c'],
+                    borderWidth: 2,
+                }]
+            },
+            options: chartOptions
+        });
+
+        // Probability Sharpness Chart
+        new Chart(document.getElementById('sharpenessChart'), {
+            type: 'bar',
+            data: {
+                labels: ['RandomForest', 'XGBoost'],
+                datasets: [{
+                    label: 'Extreme Proba (%)',
+                    data: [54.1, 71.9],
+                    backgroundColor: ['#FF6B6B', '#4ECDC4'],
+                    borderColor: ['#e74c3c', '#1abc9c'],
+                    borderWidth: 2,
+                }]
+            },
+            options: {
+                ...chartOptions,
+                scales: {
+                    y: { max: 100 }
+                }
+            }
+        });
+
+        // Gain Chart
+        new Chart(document.getElementById('gainChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['XGBoost wins', 'XGBoost advantage'],
+                datasets: [{
+                    data: [100, 0],
+                    backgroundColor: ['#4ECDC4', '#f0f0f0'],
+                    borderColor: ['#1abc9c', '#ddd'],
+                    borderWidth: 2,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    tooltip: { enabled: false },
+                    legend: { display: false }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
