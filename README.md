@@ -1,8 +1,16 @@
 # C2 Evasion RL
 
+**English** · [Tiếng Việt](README.vi.md)
+
 RL agent (PPO) that mutates botnet C2 flows from the CTU-13 dataset to slip past an ML-based intrusion detector, which plays the role of the defender.
 
 The point is not to build a working attack tool. It is to measure how much an adaptive attacker can hurt a detector, and to find out where the detector's blind spots are.
+
+## Pipeline
+
+![Pipeline](docs/pipeline.png)
+
+Source: `docs/pipeline.mmd` (Mermaid).
 
 ## How it works
 
@@ -194,6 +202,7 @@ blue_team/         judge training
 red_team/          mock C2 infrastructure (Flask server, client, interceptors)
 data/              CTU-13 flows, trained judge, label encoders
 models/            saved PPO policy
+docs/              pipeline diagram (pipeline.mmd source, .svg and .png exports)
 ```
 
 ## Troubleshooting

@@ -1,0 +1,73 @@
+flowchart TB
+  IN(["INPUT · CTU-13 binetflow<br/>13 file .parquet · 10.598.771 dòng"])
+
+  subgraph PRE["① Tiền xử lý"]
+    direction TB
+    P1["Gán nhãn<br/>botnet=1 · normal=0 · background=bỏ"]
+    P2["6 đặc trưng + LabelEncoder<br/>dur · tot_pkts · tot_bytes<br/>src_bytes · proto · state"]
+    P3["Undersampling<br/>botnet 262.573 · normal 202.549<br/>→ cân bằng 405.098"]
+    P4["Chia train / test 80-20<br/>324.078 / 81.020"]
+  end
+
+  subgraph BLUE["② Blue Team · huấn luyện judge"]
+    direction TB
+    B1["XGBoost<br/>100 cây · depth 6 · lr 0.1<br/>n_jobs=1"]
+    B2["F1 0.9122 · AUC 0.9716<br/>0.39 MB"]
+    B3[("surrogate_ids_ctu13.pkl<br/>label_encoder_proto.pkl<br/>label_encoder_state.pkl")]
+  end
+
+  subgraph RL["③ Vòng lặp RL · Red Team"]
+    direction TB
+    R1["reset()<br/>bốc 1 flow botnet ngẫu nhiên"]
+    R2["PPO agent<br/>chọn 4 hành động liên tục"]
+    R3["Env.step · biến đổi flow<br/>jitter ±5s · padding ±500B<br/>proto hop · state hop<br/>packet / fragment transform"]
+    R4["Judge chấm điểm<br/>predict + predict_proba<br/>trên 1 dòng"]
+    R5["Reward<br/>+50 né được · −2 bị bắt<br/>−0.1 mỗi bước<br/>− chi phí biến đổi<br/>+ thưởng giảm độ tự tin"]
+  end
+
+  subgraph TRAIN["④ Huấn luyện PPO"]
+    direction TB
+    T1["PPO MlpPolicy<br/>lr 1e-4 · n_steps 1024<br/>50.000 bước · CPU"]
+    T2["EvasionMetricsCallback<br/>tổng hợp theo EPISODE"]
+    T3[("ppo_c2_evasion_agent.zip")]
+    T4["TensorBoard<br/>fps · ep_len · ep_rew<br/>evasion_success_rate"]
+  end
+
+  subgraph EVAL["⑤ Đánh giá"]
+    E1["evaluate.py<br/>80 episode · deterministic=True"]
+  end
+
+  OUT(["KẾT QUẢ<br/>agent ~89% · random 81.5%"])
+
+  IN --> P1 --> P2 --> P3 --> P4 --> B1 --> B2 --> B3
+  B3 --> R1 --> R2
+  R2 -- "hành động" --> R3 --> R4 --> R5
+  R5 -- "obs · reward" --> R2
+  R5 --> T1
+  T1 -- "cập nhật policy" --> R2
+  T1 --> T2 --> T4
+  T1 --> T3
+  T3 --> E1 --> OUT
+
+  NOTE["Lưu ý: env đọc thẳng data/archive/*.parquet<br/>và tự lọc nhãn botnet.<br/>File malicious_ctu13.parquet do notebook sinh ra<br/>không được env dùng tới."]
+  R1 -.- NOTE
+
+  classDef data fill:#F1F5F9,stroke:#7C8BA0,color:#17202B;
+  classDef blue fill:#EFF4FF,stroke:#2563EB,color:#1D4ED8;
+  classDef red  fill:#FEF2F2,stroke:#DC2626,color:#B91C1C;
+  classDef train fill:#FFFBEB,stroke:#D97706,color:#92400E;
+  classDef io   fill:#ECFDF5,stroke:#059669,color:#047857;
+  classDef note fill:#FDF4FF,stroke:#A855F7,color:#6B21A8;
+
+  class P1,P2,P3,P4 data;
+  class B1,B2,B3 blue;
+  class R1,R2,R3,R4,R5 red;
+  class T1,T2,T3,T4 train;
+  class E1,OUT,IN io;
+  class NOTE note;
+
+  style PRE fill:#FAFBFD,stroke:#E2E8F0,color:#17202B;
+  style BLUE fill:#F5F9FF,stroke:#BFD4FE,color:#1D4ED8;
+  style RL fill:#FFF7F7,stroke:#FBCACA,color:#B91C1C;
+  style TRAIN fill:#FFFDF5,stroke:#FDE68A,color:#92400E;
+  style EVAL fill:#F0FDF4,stroke:#A7F3D0,color:#047857;
