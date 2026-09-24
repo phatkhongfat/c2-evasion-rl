@@ -70,6 +70,30 @@ CANDIDATE_FEATURES = [
 
 assert len(CANDIDATE_FEATURES) == 20, len(CANDIDATE_FEATURES)
 
+# One-line meaning per candidate feature, surfaced in the validation report.
+DESCRIPTIONS = {
+    "pkt_size_mean": "mean packet size = tot_bytes / tot_pkts (directly observable)",
+    "pkt_size_std": "packet-size spread from the bimodal MSS/tail segmentation model",
+    "pkt_size_min": "smallest packet: header-only (hdr) unless single-packet flow",
+    "pkt_size_max": "largest packet: min(mean, MSS) — MSS-bounded data segment",
+    "pkt_size_median": "midpoint of the reconstructed size range",
+    "pkt_size_iqr": "reconstructed size range width (max - min)",
+    "pkt_size_cv": "packet-size coefficient of variation (std / mean)",
+    "iat_mean": "mean inter-arrival time = dur / (tot_pkts - 1) (observable)",
+    "iat_std": "inter-arrival spread at the fixed 0.25 CoV of the pcap emitter",
+    "iat_min": "0.2 x iat_mean (model quantity)",
+    "iat_max": "1.8 x iat_mean (model quantity)",
+    "iat_cv": "inter-arrival CoV — constant 0.25 for multi-packet flows",
+    "pkt_rate": "packets per second = tot_pkts / dur (ratio, nonlinear)",
+    "bytes_rate": "bytes per second = tot_bytes / dur (ratio, nonlinear)",
+    "avg_pkt_size": "alias of pkt_size_mean (kept to expose the duplication)",
+    "syn_count": "1 for TCP flows (SYN assumed present), else 0",
+    "fin_count": "1 if 'F' appears in the CTU-13 state string, else 0",
+    "rst_count": "1 if 'R' appears in the CTU-13 state string, else 0",
+    "flags_variety": "count of the three flag classes present (0-3)",
+    "payload_entropy_est": "8 x payload fraction — header-only=0, bulk transfer~8",
+}
+
 
 def _f(value, default=0.0):
     try:
