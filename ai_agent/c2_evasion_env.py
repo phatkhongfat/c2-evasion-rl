@@ -21,6 +21,10 @@ from config import (
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from flow_features import CANDIDATE_FEATURES, derive_flow_features
 
+# Import the verified Snort replica for snort-direct reward training
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'snort_validation'))
+from snort_query_service import query_snort_verdict
+
 warnings.filterwarnings("ignore", message="X does not have valid feature names")
 
 class C2EvasionEnv(gym.Env):
@@ -35,7 +39,9 @@ class C2EvasionEnv(gym.Env):
         max_steps=MAX_STEPS,
         snort_surrogate_path=None,
         snort_penalty_scale=SNORT_PENALTY_SCALE,
-        snort_feature_names=None
+        snort_feature_names=None,
+        snort_direct=False,
+        snort_direct_mode="replica"
     ):
         super(C2EvasionEnv, self).__init__()
 
@@ -47,6 +53,8 @@ class C2EvasionEnv(gym.Env):
             self.snort_feature_names = self._resolve_snort_features(
                 self.snort_surrogate, snort_feature_names)
         self.snort_penalty_scale = snort_penalty_scale
+        self.snort_direct = snort_direct
+        self.snort_direct_mode = snort_direct_mode
         self.protocol_encoder = joblib.load(proto_encoder_path)
         self.state_encoder = joblib.load(state_encoder_path)
 
@@ -146,27 +154,44 @@ class C2EvasionEnv(gym.Env):
         # 5. Reward shaping
         mutation_cost = (abs(byte_delta) * COST_BYTE) + (abs(jitter) * COST_JITTER)
 
-        if prediction == 0:  # Evaded
-            reward = REWARD_EVASION - mutation_cost
-            evaded = True
-            terminated = True
-        else:  # Detected
-            reward = REWARD_DETECTION - mutation_cost
-            evaded = False
-            terminated = False
+        # Snort-direct reward: use the verified replica instead of XGBoost
+        snort_detected = None
+        if self.snort_direct:
+            snort_detected = query_snort_verdict(self.current_sample, 
+                                                 mode=self.snort_direct_mode)
+            if snort_detected:  # Detected by Snort replica
+                reward = REWARD_DETECTION - mutation_cost
+                evaded = False
+                terminated = False
+            else:  # Evaded Snort
+                reward = REWARD_EVASION - mutation_cost
+                evaded = True
+                terminated = True
+            confidence_reduction = 0.0  # N/A for snort-direct
+        else:
+            # Original XGBoost-based reward
+            if prediction == 0:  # Evaded
+                reward = REWARD_EVASION - mutation_cost
+                evaded = True
+                terminated = True
+            else:  # Detected
+                reward = REWARD_DETECTION - mutation_cost
+                evaded = False
+                terminated = False
+
+            # Confidence bonus: reward for decreasing the judge's confidence in "malicious"
+            confidence_reduction = self.initial_proba - proba
+            reward += max(0, confidence_reduction) * CONFIDENCE_BONUS_SCALE
 
         # Step penalty (encourage quick evasion)
         reward += STEP_PENALTY
 
-        # Confidence bonus: reward for decreasing the judge's confidence in "malicious"
-        confidence_reduction = self.initial_proba - proba
-        reward += max(0, confidence_reduction) * CONFIDENCE_BONUS_SCALE
-
         truncated = self.current_step >= self.max_steps
 
         # Defense-aware: penalize flows the Snort surrogate expects to be flagged
+        # (only used when NOT in snort-direct mode)
         snort_proba = None
-        if self.snort_surrogate is not None:
+        if not self.snort_direct and self.snort_surrogate is not None:
             snort_vec = self._snort_features(self.current_sample).reshape(1, -1)
             snort_proba = float(self.snort_surrogate.predict_proba(snort_vec)[0][1])
             reward -= self.snort_penalty_scale * snort_proba
@@ -181,8 +206,9 @@ class C2EvasionEnv(gym.Env):
             "state_hop": state_hop,
             "episode_length": self.current_step,
             "reward": reward,
-            "confidence_reduction": confidence_reduction,
+            "confidence_reduction": (confidence_reduction if not self.snort_direct else None),
             "snort_proba": snort_proba,
+            "snort_detected": snort_detected,
             "snort_penalty_scale": (self.snort_penalty_scale
                                     if self.snort_surrogate is not None else None),
             "snort_feature_width": (len(self.snort_feature_names)

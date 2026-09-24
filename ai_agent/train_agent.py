@@ -67,6 +67,10 @@ def parse_args():
     ap.add_argument("--snort-surrogate", default=None,
                     help="path to the Snort surrogate pickle; use "
                          "data/snort_surrogate_enhanced.pkl for the 16-feature model")
+    ap.add_argument("--snort-direct", action="store_true",
+                    help="use verified Snort replica verdict directly for reward (replaces XGBoost judge)")
+    ap.add_argument("--snort-direct-mode", default="replica",
+                    help="mode for snort-direct: 'replica' (verified mock) or 'real' (live Snort IDS)")
     ap.add_argument("--enhanced", action="store_true",
                     help="shorthand for --snort --snort-surrogate <enhanced path>")
     return ap.parse_args()
@@ -92,7 +96,9 @@ if __name__ == "__main__":
     env_kwargs = dict(
         malicious_data_pool=malicious_pool,
         max_steps=10,
-        snort_surrogate_path=snort_surrogate if args.snort else None
+        snort_surrogate_path=snort_surrogate if args.snort else None,
+        snort_direct=args.snort_direct,
+        snort_direct_mode=args.snort_direct_mode
     )
     if args.snort and args.snort_lambda is not None:
         env_kwargs["snort_penalty_scale"] = args.snort_lambda
@@ -124,13 +130,17 @@ if __name__ == "__main__":
     model.learn(total_timesteps=TOTAL_TIMESTEPS, callback=callback)
 
     os.makedirs(MODEL_DIR, exist_ok=True)
-    # Tag must be unique per (defense-aware?, surrogate version, lambda).
-    # Omitting the enhanced marker silently overwrites the blind-surrogate
-    # model of the same lambda and makes the sweep irreproducible.
-    tag = "_snortaware" if args.snort else ""
+    # Tag must be unique per (reward variant, surrogate version, lambda).
+    # Omitting a marker silently overwrites the model of another variant and
+    # makes the sweep irreproducible.  snort-direct in particular does NOT set
+    # --snort, so without its own marker it would overwrite the blind model.
+    if args.snort_direct:
+        tag = "_snortaware_direct"
+    else:
+        tag = "_snortaware" if args.snort else ""
     if args.enhanced:
         tag += "_enhanced"
-    if args.snort and args.snort_lambda is not None:
+    if args.snort_lambda is not None:
         tag += f"_{args.snort_lambda}"
     model_save_path = os.path.join(MODEL_DIR, f"ppo_c2_evasion_agent{tag}.zip")
     if os.path.exists(model_save_path):
