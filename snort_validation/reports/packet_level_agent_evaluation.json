@@ -1,0 +1,16 @@
+{
+  "seed": 42,
+  "n_episodes": 80,
+  "model": "ppo_packet_level_agent.zip",
+  "environment": "PacketLevelEnv",
+  "agent": {
+    "detected": 4,
+    "evaded": 76,
+    "evasion_rate": 95.0
+  },
+  "random_baseline": {
+    "detected": 5,
+    "evaded": 75,
+    "evasion_rate": 93.75
+  }
+}
