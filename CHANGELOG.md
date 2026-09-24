@@ -305,10 +305,14 @@ originally trained against.
 | Run | Surrogate used for reward | λ | XGBoost evasion | Snort detection | Snort evasion |
 |---|---|---|---|---|---|
 | **No-mutation baseline** | — | — | 3.8% (3/80) | 6.25% (5/80) | 93.8% |
-| **Random mutations** | — | — | 66.2% (53/80) | 67.5% (54/80) | 32.5% |
+| **Random mutations** | — | — | 66.2% (53/80) | 68.75% (55/80) | 31.25% |
 | **Blind agent** | none | — | **97.5% (78/80)** | **70.0% (56/80)** | 30.0% |
 | **λ=10, blind surrogate** | 6-feature v1 | 10 | 95.0% (76/80) | 85.0% (68/80) | 15.0% |
 | **λ=10, enhanced surrogate** | 16-feature v2 | 10 | 95.0% (76/80) | 85.0% (68/80) | 15.0% |
+
+The two control rows (baseline 3/80, random 55/80) are **identical across all
+three runs**, which is the signature that episode pairing is working. Under the
+old unseeded harness these moved between runs (baseline: 5% → 15% → 10% → 3.8%).
 
 ### Reading the table
 
@@ -320,11 +324,18 @@ originally trained against.
    detection rises 70.0% → 85.0% when λ=10 shaping is added. Adding the
    surrogate penalty made the agent 15 points *easier* to catch by the real IDS.
 
-3. **The enhanced surrogate changed nothing on the agent side.** λ=10 blind and
-   λ=10 enhanced are identical to the last digit: 95.0% / 85.0%, same 76/80 and
-   68/80 episodes, identical mutated features on all 80 episodes. Ten new
-   features, +0.0019 surrogate AUC, and **exactly zero** change in agent
-   behaviour.
+3. **The enhanced surrogate changed the agent's behaviour but not its outcome.**
+   The λ=10 blind-surrogate and λ=10 enhanced-surrogate agents produce
+   **completely different mutation sequences — 0 of 80 episodes share mutated
+   features** — and land on **exactly the same aggregate result**: 76/80 XGBoost
+   evasion and 68/80 Snort detections, in both cases. The ten extra features
+   redirected *which* flows the agent mutated without moving *how many* it
+   evaded. Different strategy, same score.
+
+   That is a sharper result than a trivial "nothing changed". It means the
+   enriched features did reach the agent's policy (it explored a different
+   region of mutation space) but the region it found is equally detectable. The
+   extra features added search dimensions, not evasion capability.
 
 ### Why (1) and (2) happen — and it is not a bug
 
@@ -354,10 +365,10 @@ than a positive result would have been.
    selected features are significantly correlated with Snort verdicts
    (`payload_entropy_est` at r = −0.51, p ≈ 2e-22). But 9 of 10 are restatements
    of `tot_bytes / tot_pkts`, the surrogate's confusion matrix did not move, and
-   the agent's behaviour did not move. *Correlation with the target is not
-   evidence that a feature adds usable information* — a lesson worth stating
-   plainly in the thesis, because a feature-importance table would have hidden
-   it.
+   the agent's evasion *count* did not move (0.0pp) even though its mutation
+   *strategy* changed entirely. *Correlation with the target is not evidence
+   that a feature adds usable information* — a lesson worth stating plainly in
+   the thesis, because a feature-importance table would have hidden it.
 
 2. **A strong proxy is not a good reward signal.** The v1 surrogate has AUC
    0.998 and the v2 has 0.9993 — both near-perfect at *predicting Snort*, and
