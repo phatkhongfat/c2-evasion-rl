@@ -10,8 +10,7 @@ PROTO_ENCODER_PATH = os.path.join(DATA_DIR, "label_encoder_proto.pkl")
 STATE_ENCODER_PATH = os.path.join(DATA_DIR, "label_encoder_state.pkl")
 
 MAX_STEPS = 10
-OBSERVATION_FEATURES = ['dur', 'tot_pkts', 'tot_bytes', 'src_bytes', 'proto', 'state',
-                        'pkt_rate', 'byte_rate', 'src_byte_ratio', 'proto_diversity']
+OBSERVATION_FEATURES = ['dur', 'tot_pkts', 'tot_bytes', 'src_bytes', 'proto', 'state']
 
 # Approximate min/max for normalization (derived from data exploration)
 FEATURE_BOUNDS = {
