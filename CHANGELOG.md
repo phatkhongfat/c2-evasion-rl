@@ -391,6 +391,43 @@ than a positive result would have been.
    rule logic turned out to be derived from the same aggregate. The
    "behavioural" framing of the candidate set was optimistic.
 
+### The baseline paradox — the sharpest result in the table
+
+The no-mutation baseline **evades real Snort 93.8% of the time**, while every
+agent mutates itself into a *worse* position (30.0%, 15.0%, 15.0%). Read the
+two judge columns together and the reason is unambiguous:
+
+| Policy | XGBoost judge says evaded | Real Snort says evaded | Gap |
+|---|---|---|---|
+| No mutation | 3.8% | **93.8%** | **90.0pp** |
+| Random | 66.2% | 31.2% | 35.0pp |
+| Agent | 97.5% | 30.0% | 67.5pp |
+
+On *unmutated* real botnet flows the two judges disagree by ~90 percentage
+points. Snort's behaviour rules barely fire on genuine CTU-13 botnet traffic,
+while the XGBoost surrogate flags almost all of it.
+
+**Consequences.**
+
+1. The agent is **counterproductive**: it starts from flows that already evade
+   Snort 93.8% of the time and mutates them into flows that evade only 30%.
+   The agent is not defeating the defense; it is manufacturing detection.
+
+2. The surrogate's 0.998–0.9993 AUC is **not evidence of fidelity**. It is
+   accuracy at reproducing a label that, on this corpus, is nearly the inverse
+   of the real detector's behaviour. The surrogate learned to predict *the
+   validation pipeline's own verdicts*, which were themselves produced by
+   behaviour rules that do not fire on the target distribution.
+
+3. **This, not the feature count, is why the λ sweep failed.** The reward was
+   `−λ · P(surrogate flags flow)`, and the surrogate's notion of "flagged" is
+   anti-correlated with Snort's on the flows that matter. Adding λ pushed the
+   agent further into the surrogate's confidence region — i.e. further into
+   detection.
+
+The honest summary is that the reward shaping did not fail because the features
+were weak. It failed because the reward signal pointed the wrong way.
+
 ### Decision gates, restated
 
 | Gate | Threshold | Result | Verdict |
