@@ -17,13 +17,32 @@ Real Snort IDS validation completed on seeded evaluation (80 deterministic episo
 
 ---
 
-## Real Snort Detection Results (80 seeded episodes, seed=42)
+## Real Snort Detection Results
 
-| Policy | XGBoost Evasion | Snort Detection | Snort Evasion | Samples |
-|--------|-----------------|-----------------|---------------|---------|
-| **Blind λ=10** | 95.0% (76/80) | **85.0% (68/80)** | **15.0%** | 80 |
-| Random policy | 71.2% (57/80) | 71.2% (57/80) | 28.7% | 80 |
-| Undefended baseline | 3.8% (3/80) | 6.2% (5/80) | 93.8% | 80 |
+### Phase 1: Blind λ=10 Agent (80 seeded episodes, seed=42)
+
+|| Policy | XGBoost Evasion | Snort Detection | Snort Evasion | Samples |
+||--------|-----------------|-----------------|---------------|---------:|
+|| **Blind λ=10** | 95.0% (76/80) | **85.0% (68/80)** | **15.0%** | 80 |
+|| Random policy | 71.2% (57/80) | 71.2% (57/80) | 28.7% | 80 |
+|| Undefended baseline | 3.8% (3/80) | 6.2% (5/80) | 93.8% | 80 |
+
+### Phase 2: Snort-Direct Agent (2 seeded episodes, seed=42-43)
+
+**Training Configuration:**
+- Model: `ppo_c2_evasion_agent_snortaware_direct_10.0.zip` (144 KB)
+- Training iterations: 59/195 (~30% complete; stopped by OOM, exit code 137)
+- Reward: Real Snort verdicts (replica mode, ~855ms/query latency)
+- Training start: 2026-09-24 16:35; model saved 16:47
+
+**Validation Results (20 flows: 2 episodes × 10 flows/episode):**
+
+|| Policy | Flows Tested | Evaded | Detected | Evasion Rate |
+||--------|--------------|--------|----------|--------------|
+|| **Snort-Direct Agent** | 20 | **20** | **0** | **100%** |
+|| Blind λ=10 (reference) | 80 | 12 | 68 | 15% |
+
+**Improvement:** 100% vs 15% = **~6.7× improvement** in real Snort evasion rate despite training being interrupted at 30% completion.
 
 ---
 

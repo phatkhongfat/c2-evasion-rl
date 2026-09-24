@@ -1,0 +1,6670 @@
+{
+  "policy": "baseline",
+  "num_episodes": 80,
+  "xgb_evasion_rate": 0.0875,
+  "xgb_success_count": 7,
+  "episodes": [
+    {
+      "episode_id": 0,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 1.3462660312652588,
+        "tot_pkts": 6,
+        "tot_bytes": 366,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_RA"
+      },
+      "mutated_features": {
+        "dur": 1.3462660312652588,
+        "tot_pkts": 6,
+        "tot_bytes": 366,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_RA"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 1,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.146696999669075,
+        "tot_pkts": 2,
+        "tot_bytes": 229,
+        "src_bytes": 74,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.146696999669075,
+        "tot_pkts": 2,
+        "tot_bytes": 229,
+        "src_bytes": 74,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 2,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.1322609931230545,
+        "tot_pkts": 2,
+        "tot_bytes": 281,
+        "src_bytes": 76,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.1322609931230545,
+        "tot_pkts": 2,
+        "tot_bytes": 281,
+        "src_bytes": 76,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 3,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 3463.74853515625,
+        "tot_pkts": 5,
+        "tot_bytes": 308,
+        "src_bytes": 248,
+        "proto": "tcp",
+        "state": "S_RA"
+      },
+      "mutated_features": {
+        "dur": 1000.0,
+        "tot_pkts": 5,
+        "tot_bytes": 308,
+        "src_bytes": 248,
+        "proto": "tcp",
+        "state": "S_RA"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 4,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.24311700463294983,
+        "tot_pkts": 2,
+        "tot_bytes": 501,
+        "src_bytes": 68,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.24311700463294983,
+        "tot_pkts": 2,
+        "tot_bytes": 501,
+        "src_bytes": 68,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 5,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 1.3098759651184082,
+        "tot_pkts": 6,
+        "tot_bytes": 366,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_RA"
+      },
+      "mutated_features": {
+        "dur": 1.3098759651184082,
+        "tot_pkts": 6,
+        "tot_bytes": 366,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_RA"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 6,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 9.012181282043457,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 9.012181282043457,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 7,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 8.954635620117188,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 8.954635620117188,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 8,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.14811499416828156,
+        "tot_pkts": 2,
+        "tot_bytes": 232,
+        "src_bytes": 90,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.14811499416828156,
+        "tot_pkts": 2,
+        "tot_bytes": 232,
+        "src_bytes": 90,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 9,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 3.4186789989471436,
+        "tot_pkts": 177,
+        "tot_bytes": 139402,
+        "src_bytes": 131774,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
+      },
+      "mutated_features": {
+        "dur": 3.4186789989471436,
+        "tot_pkts": 177,
+        "tot_bytes": 139402,
+        "src_bytes": 131774,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 10,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.3234280049800873,
+        "tot_pkts": 10,
+        "tot_bytes": 1508,
+        "src_bytes": 596,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
+      },
+      "mutated_features": {
+        "dur": 0.3234280049800873,
+        "tot_pkts": 10,
+        "tot_bytes": 1508,
+        "src_bytes": 596,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 11,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 1.3311209678649902,
+        "tot_pkts": 6,
+        "tot_bytes": 366,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_RA"
+      },
+      "mutated_features": {
+        "dur": 1.3311209678649902,
+        "tot_pkts": 6,
+        "tot_bytes": 366,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_RA"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 12,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.030695000663399696,
+        "tot_pkts": 2,
+        "tot_bytes": 576,
+        "src_bytes": 104,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.030695000663399696,
+        "tot_pkts": 2,
+        "tot_bytes": 576,
+        "src_bytes": 104,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 13,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 8.92900562286377,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 8.92900562286377,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 14,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.017601000145077705,
+        "tot_pkts": 2,
+        "tot_bytes": 246,
+        "src_bytes": 85,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.017601000145077705,
+        "tot_pkts": 2,
+        "tot_bytes": 246,
+        "src_bytes": 85,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 15,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 8.866618156433105,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 8.866618156433105,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 16,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 2813.5302734375,
+        "tot_pkts": 4,
+        "tot_bytes": 540,
+        "src_bytes": 159,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 1000.0,
+        "tot_pkts": 4,
+        "tot_bytes": 540,
+        "src_bytes": 159,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 17,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 9.593710899353027,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 9.593710899353027,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 18,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 1.7979559898376465,
+        "tot_pkts": 4,
+        "tot_bytes": 499,
+        "src_bytes": 249,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 1.7979559898376465,
+        "tot_pkts": 4,
+        "tot_bytes": 499,
+        "src_bytes": 249,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 19,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 2.919121026992798,
+        "tot_pkts": 2,
+        "tot_bytes": 124,
+        "src_bytes": 124,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 2.919121026992798,
+        "tot_pkts": 2,
+        "tot_bytes": 124,
+        "src_bytes": 124,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 20,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.09158200025558472,
+        "tot_pkts": 2,
+        "tot_bytes": 199,
+        "src_bytes": 74,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.09158200025558472,
+        "tot_pkts": 2,
+        "tot_bytes": 199,
+        "src_bytes": 74,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 21,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 3.002903938293457,
+        "tot_pkts": 2,
+        "tot_bytes": 124,
+        "src_bytes": 124,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 3.002903938293457,
+        "tot_pkts": 2,
+        "tot_bytes": 124,
+        "src_bytes": 124,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 22,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.0003910000086762011,
+        "tot_pkts": 2,
+        "tot_bytes": 456,
+        "src_bytes": 69,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0003910000086762011,
+        "tot_pkts": 2,
+        "tot_bytes": 456,
+        "src_bytes": 69,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 23,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 22.531076431274414,
+        "tot_pkts": 364,
+        "tot_bytes": 315101,
+        "src_bytes": 8349,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 22.531076431274414,
+        "tot_pkts": 364,
+        "tot_bytes": 315101,
+        "src_bytes": 8349,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 24,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 8.813248634338379,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 8.813248634338379,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 25,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 9.011655807495117,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 9.011655807495117,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 26,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.3333579897880554,
+        "tot_pkts": 2,
+        "tot_bytes": 266,
+        "src_bytes": 73,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.3333579897880554,
+        "tot_pkts": 2,
+        "tot_bytes": 266,
+        "src_bytes": 73,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 27,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 9.011240005493164,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 9.011240005493164,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 28,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 123.30927276611328,
+        "tot_pkts": 15,
+        "tot_bytes": 5301,
+        "src_bytes": 731,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
+      },
+      "mutated_features": {
+        "dur": 123.30927276611328,
+        "tot_pkts": 15,
+        "tot_bytes": 5301,
+        "src_bytes": 731,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 29,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.30485600233078003,
+        "tot_pkts": 10,
+        "tot_bytes": 1919,
+        "src_bytes": 979,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
+      },
+      "mutated_features": {
+        "dur": 0.30485600233078003,
+        "tot_pkts": 10,
+        "tot_bytes": 1919,
+        "src_bytes": 979,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 30,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 9.027300834655762,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 9.027300834655762,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 31,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.06573200225830078,
+        "tot_pkts": 2,
+        "tot_bytes": 329,
+        "src_bytes": 75,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.06573200225830078,
+        "tot_pkts": 2,
+        "tot_bytes": 329,
+        "src_bytes": 75,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 32,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 8.978143692016602,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 8.978143692016602,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 33,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.00028899998869746923,
+        "tot_pkts": 2,
+        "tot_bytes": 221,
+        "src_bytes": 78,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.00028899998869746923,
+        "tot_pkts": 2,
+        "tot_bytes": 221,
+        "src_bytes": 78,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 34,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.04383600130677223,
+        "tot_pkts": 2,
+        "tot_bytes": 259,
+        "src_bytes": 74,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.04383600130677223,
+        "tot_pkts": 2,
+        "tot_bytes": 259,
+        "src_bytes": 74,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 35,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.1190280020236969,
+        "tot_pkts": 2,
+        "tot_bytes": 242,
+        "src_bytes": 69,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.1190280020236969,
+        "tot_pkts": 2,
+        "tot_bytes": 242,
+        "src_bytes": 69,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 36,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.13208700716495514,
+        "tot_pkts": 2,
+        "tot_bytes": 370,
+        "src_bytes": 87,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.13208700716495514,
+        "tot_pkts": 2,
+        "tot_bytes": 370,
+        "src_bytes": 87,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 37,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 8.953096389770508,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 8.953096389770508,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 38,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.020092999562621117,
+        "tot_pkts": 2,
+        "tot_bytes": 182,
+        "src_bytes": 83,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.020092999562621117,
+        "tot_pkts": 2,
+        "tot_bytes": 182,
+        "src_bytes": 83,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 39,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 8.966724395751953,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 8.966724395751953,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 40,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.01750200055539608,
+        "tot_pkts": 2,
+        "tot_bytes": 317,
+        "src_bytes": 79,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.01750200055539608,
+        "tot_pkts": 2,
+        "tot_bytes": 317,
+        "src_bytes": 79,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 41,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 8.912446022033691,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 8.912446022033691,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 42,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.0005760000203736126,
+        "tot_pkts": 2,
+        "tot_bytes": 264,
+        "src_bytes": 69,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0005760000203736126,
+        "tot_pkts": 2,
+        "tot_bytes": 264,
+        "src_bytes": 69,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 43,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.05079900100827217,
+        "tot_pkts": 2,
+        "tot_bytes": 309,
+        "src_bytes": 74,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.05079900100827217,
+        "tot_pkts": 2,
+        "tot_bytes": 309,
+        "src_bytes": 74,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 44,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.06768599897623062,
+        "tot_pkts": 9,
+        "tot_bytes": 2194,
+        "src_bytes": 1164,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
+      },
+      "mutated_features": {
+        "dur": 0.06768599897623062,
+        "tot_pkts": 9,
+        "tot_bytes": 2194,
+        "src_bytes": 1164,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 45,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.0019680000841617584,
+        "tot_pkts": 2,
+        "tot_bytes": 533,
+        "src_bytes": 83,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0019680000841617584,
+        "tot_pkts": 2,
+        "tot_bytes": 533,
+        "src_bytes": 83,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 46,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.1472799926996231,
+        "tot_pkts": 2,
+        "tot_bytes": 318,
+        "src_bytes": 72,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.1472799926996231,
+        "tot_pkts": 2,
+        "tot_bytes": 318,
+        "src_bytes": 72,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 47,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.06672400236129761,
+        "tot_pkts": 1,
+        "tot_bytes": 71,
+        "src_bytes": 71,
+        "proto": "udp",
+        "state": "INT"
+      },
+      "mutated_features": {
+        "dur": 0.06672400236129761,
+        "tot_pkts": 1,
+        "tot_bytes": 71,
+        "src_bytes": 71,
+        "proto": "udp",
+        "state": "INT"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 48,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 9.012632369995117,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 9.012632369995117,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 49,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.0004820000031031668,
+        "tot_pkts": 2,
+        "tot_bytes": 552,
+        "src_bytes": 67,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0004820000031031668,
+        "tot_pkts": 2,
+        "tot_bytes": 552,
+        "src_bytes": 67,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 50,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.17956799268722534,
+        "tot_pkts": 2,
+        "tot_bytes": 372,
+        "src_bytes": 74,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.17956799268722534,
+        "tot_pkts": 2,
+        "tot_bytes": 372,
+        "src_bytes": 74,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 51,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.13438400626182556,
+        "tot_pkts": 8,
+        "tot_bytes": 861,
+        "src_bytes": 477,
+        "proto": "tcp",
+        "state": "FSRPA_FSPA"
+      },
+      "mutated_features": {
+        "dur": 0.13438400626182556,
+        "tot_pkts": 8,
+        "tot_bytes": 861,
+        "src_bytes": 477,
+        "proto": "tcp",
+        "state": "FSRPA_FSPA"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 52,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.0004450000124052167,
+        "tot_pkts": 2,
+        "tot_bytes": 512,
+        "src_bytes": 71,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0004450000124052167,
+        "tot_pkts": 2,
+        "tot_bytes": 512,
+        "src_bytes": 71,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 53,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.21017900109291077,
+        "tot_pkts": 2,
+        "tot_bytes": 228,
+        "src_bytes": 72,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.21017900109291077,
+        "tot_pkts": 2,
+        "tot_bytes": 228,
+        "src_bytes": 72,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 54,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.05747999995946884,
+        "tot_pkts": 2,
+        "tot_bytes": 556,
+        "src_bytes": 78,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.05747999995946884,
+        "tot_pkts": 2,
+        "tot_bytes": 556,
+        "src_bytes": 78,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 55,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 8.967687606811523,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 8.967687606811523,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 56,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.00035200000274926424,
+        "tot_pkts": 2,
+        "tot_bytes": 233,
+        "src_bytes": 72,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.00035200000274926424,
+        "tot_pkts": 2,
+        "tot_bytes": 233,
+        "src_bytes": 72,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 57,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 193.79217529296875,
+        "tot_pkts": 8,
+        "tot_bytes": 488,
+        "src_bytes": 248,
+        "proto": "tcp",
+        "state": "S_RA"
+      },
+      "mutated_features": {
+        "dur": 193.79217529296875,
+        "tot_pkts": 8,
+        "tot_bytes": 488,
+        "src_bytes": 248,
+        "proto": "tcp",
+        "state": "S_RA"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 58,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.25961899757385254,
+        "tot_pkts": 2,
+        "tot_bytes": 503,
+        "src_bytes": 68,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.25961899757385254,
+        "tot_pkts": 2,
+        "tot_bytes": 503,
+        "src_bytes": 68,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 59,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.0011630000080913305,
+        "tot_pkts": 4,
+        "tot_bytes": 244,
+        "src_bytes": 182,
+        "proto": "tcp",
+        "state": "SRA_SA"
+      },
+      "mutated_features": {
+        "dur": 0.0011630000080913305,
+        "tot_pkts": 4,
+        "tot_bytes": 244,
+        "src_bytes": 182,
+        "proto": "tcp",
+        "state": "SRA_SA"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 60,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 1.9355449676513672,
+        "tot_pkts": 119,
+        "tot_bytes": 100766,
+        "src_bytes": 9695,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
+      },
+      "mutated_features": {
+        "dur": 1.9355449676513672,
+        "tot_pkts": 119,
+        "tot_bytes": 100766,
+        "src_bytes": 9695,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 61,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.02048400044441223,
+        "tot_pkts": 2,
+        "tot_bytes": 337,
+        "src_bytes": 83,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.02048400044441223,
+        "tot_pkts": 2,
+        "tot_bytes": 337,
+        "src_bytes": 83,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 62,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.04772799834609032,
+        "tot_pkts": 2,
+        "tot_bytes": 233,
+        "src_bytes": 82,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.04772799834609032,
+        "tot_pkts": 2,
+        "tot_bytes": 233,
+        "src_bytes": 82,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 63,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.0005430000019259751,
+        "tot_pkts": 2,
+        "tot_bytes": 461,
+        "src_bytes": 69,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0005430000019259751,
+        "tot_pkts": 2,
+        "tot_bytes": 461,
+        "src_bytes": 69,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 64,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.034063998609781265,
+        "tot_pkts": 2,
+        "tot_bytes": 529,
+        "src_bytes": 76,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.034063998609781265,
+        "tot_pkts": 2,
+        "tot_bytes": 529,
+        "src_bytes": 76,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 65,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 1.308171033859253,
+        "tot_pkts": 6,
+        "tot_bytes": 366,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_RA"
+      },
+      "mutated_features": {
+        "dur": 1.308171033859253,
+        "tot_pkts": 6,
+        "tot_bytes": 366,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_RA"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 66,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.0,
+        "tot_pkts": 1,
+        "tot_bytes": 1066,
+        "src_bytes": 1066,
+        "proto": "icmp",
+        "state": "IAH"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 1,
+        "tot_bytes": 1066,
+        "src_bytes": 1066,
+        "proto": "icmp",
+        "state": "IAH"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 67,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 9.012798309326172,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 9.012798309326172,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 68,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.09867800027132034,
+        "tot_pkts": 2,
+        "tot_bytes": 209,
+        "src_bytes": 67,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.09867800027132034,
+        "tot_pkts": 2,
+        "tot_bytes": 209,
+        "src_bytes": 67,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 69,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.14336800575256348,
+        "tot_pkts": 8,
+        "tot_bytes": 1833,
+        "src_bytes": 782,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
+      },
+      "mutated_features": {
+        "dur": 0.14336800575256348,
+        "tot_pkts": 8,
+        "tot_bytes": 1833,
+        "src_bytes": 782,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 70,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.20722299814224243,
+        "tot_pkts": 2,
+        "tot_bytes": 219,
+        "src_bytes": 72,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.20722299814224243,
+        "tot_pkts": 2,
+        "tot_bytes": 219,
+        "src_bytes": 72,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 71,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.15126200020313263,
+        "tot_pkts": 2,
+        "tot_bytes": 355,
+        "src_bytes": 90,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.15126200020313263,
+        "tot_pkts": 2,
+        "tot_bytes": 355,
+        "src_bytes": 90,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 72,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.351857990026474,
+        "tot_pkts": 8,
+        "tot_bytes": 501,
+        "src_bytes": 302,
+        "proto": "tcp",
+        "state": "FSRA_FSPA"
+      },
+      "mutated_features": {
+        "dur": 0.351857990026474,
+        "tot_pkts": 8,
+        "tot_bytes": 501,
+        "src_bytes": 302,
+        "proto": "tcp",
+        "state": "FSRA_FSPA"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 73,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 10.977486610412598,
+        "tot_pkts": 9,
+        "tot_bytes": 2671,
+        "src_bytes": 762,
+        "proto": "tcp",
+        "state": "SRPA_SPA"
+      },
+      "mutated_features": {
+        "dur": 10.977486610412598,
+        "tot_pkts": 9,
+        "tot_bytes": 2671,
+        "src_bytes": 762,
+        "proto": "tcp",
+        "state": "SRPA_SPA"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 74,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 4.726467132568359,
+        "tot_pkts": 58,
+        "tot_bytes": 4733,
+        "src_bytes": 2083,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
+      },
+      "mutated_features": {
+        "dur": 4.726467132568359,
+        "tot_pkts": 58,
+        "tot_bytes": 4733,
+        "src_bytes": 2083,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 75,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 8.83172607421875,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 8.83172607421875,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 76,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 9.005863189697266,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 9.005863189697266,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 77,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.24703100323677063,
+        "tot_pkts": 2,
+        "tot_bytes": 263,
+        "src_bytes": 75,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.24703100323677063,
+        "tot_pkts": 2,
+        "tot_bytes": 263,
+        "src_bytes": 75,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 78,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 0.027646999806165695,
+        "tot_pkts": 2,
+        "tot_bytes": 271,
+        "src_bytes": 72,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.027646999806165695,
+        "tot_pkts": 2,
+        "tot_bytes": 271,
+        "src_bytes": 72,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 79,
+      "policy": "baseline",
+      "original_features": {
+        "dur": 1.0943020582199097,
+        "tot_pkts": 3,
+        "tot_bytes": 301,
+        "src_bytes": 150,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 1.0943020582199097,
+        "tot_pkts": 3,
+        "tot_bytes": 301,
+        "src_bytes": 150,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 0.0,
+      "padding": 0.0,
+      "proto_hop": false,
+      "state_hop": false
+    }
+  ]
+}
