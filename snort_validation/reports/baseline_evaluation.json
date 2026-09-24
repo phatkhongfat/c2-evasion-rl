@@ -1,27 +1,27 @@
 {
   "policy": "baseline",
   "num_episodes": 80,
-  "xgb_evasion_rate": 0.0875,
-  "xgb_success_count": 7,
+  "xgb_evasion_rate": 0.075,
+  "xgb_success_count": 6,
   "episodes": [
     {
       "episode_id": 0,
       "policy": "baseline",
       "original_features": {
-        "dur": 2.4966249465942383,
-        "tot_pkts": 140,
-        "tot_bytes": 104914,
-        "src_bytes": 94343,
-        "proto": "tcp",
-        "state": "FSPA_FSPA"
+        "dur": 0.0787229984998703,
+        "tot_pkts": 2,
+        "tot_bytes": 346,
+        "src_bytes": 73,
+        "proto": "udp",
+        "state": "CON"
       },
       "mutated_features": {
-        "dur": 2.4966249465942383,
-        "tot_pkts": 140,
-        "tot_bytes": 104914,
-        "src_bytes": 94343,
-        "proto": "tcp",
-        "state": "FSPA_FSPA"
+        "dur": 0.0787229984998703,
+        "tot_pkts": 2,
+        "tot_bytes": 346,
+        "src_bytes": 73,
+        "proto": "udp",
+        "state": "CON"
       },
       "actions": [
         [
@@ -96,18 +96,18 @@
       "episode_id": 1,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.328794002532959,
+        "dur": 0.00028899998869746923,
         "tot_pkts": 2,
-        "tot_bytes": 219,
-        "src_bytes": 80,
+        "tot_bytes": 368,
+        "src_bytes": 78,
         "proto": "udp",
         "state": "CON"
       },
       "mutated_features": {
-        "dur": 0.328794002532959,
+        "dur": 0.00028899998869746923,
         "tot_pkts": 2,
-        "tot_bytes": 219,
-        "src_bytes": 80,
+        "tot_bytes": 368,
+        "src_bytes": 78,
         "proto": "udp",
         "state": "CON"
       },
@@ -117,64 +117,10 @@
           0.0,
           0.0,
           0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
         ]
       ],
-      "steps": 10,
-      "evaded_xgboost": false,
+      "steps": 1,
+      "evaded_xgboost": true,
       "jitter": 0.0,
       "padding": 0.0,
       "proto_hop": false,
@@ -184,20 +130,20 @@
       "episode_id": 2,
       "policy": "baseline",
       "original_features": {
-        "dur": 2.9087040424346924,
+        "dur": 0.5589680075645447,
         "tot_pkts": 2,
-        "tot_bytes": 124,
-        "src_bytes": 124,
-        "proto": "tcp",
-        "state": "S_"
+        "tot_bytes": 152,
+        "src_bytes": 76,
+        "proto": "udp",
+        "state": "CON"
       },
       "mutated_features": {
-        "dur": 2.9087040424346924,
+        "dur": 0.5589680075645447,
         "tot_pkts": 2,
-        "tot_bytes": 124,
-        "src_bytes": 124,
-        "proto": "tcp",
-        "state": "S_"
+        "tot_bytes": 152,
+        "src_bytes": 76,
+        "proto": "udp",
+        "state": "CON"
       },
       "actions": [
         [
@@ -272,7 +218,7 @@
       "episode_id": 3,
       "policy": "baseline",
       "original_features": {
-        "dur": 9.012497901916504,
+        "dur": 9.01655387878418,
         "tot_pkts": 3,
         "tot_bytes": 186,
         "src_bytes": 186,
@@ -280,7 +226,7 @@
         "state": "S_"
       },
       "mutated_features": {
-        "dur": 9.012497901916504,
+        "dur": 9.01655387878418,
         "tot_pkts": 3,
         "tot_bytes": 186,
         "src_bytes": 186,
@@ -360,20 +306,20 @@
       "episode_id": 4,
       "policy": "baseline",
       "original_features": {
-        "dur": 2.9675381183624268,
+        "dur": 0.07113900035619736,
         "tot_pkts": 2,
-        "tot_bytes": 124,
-        "src_bytes": 124,
-        "proto": "tcp",
-        "state": "S_"
+        "tot_bytes": 152,
+        "src_bytes": 76,
+        "proto": "udp",
+        "state": "CON"
       },
       "mutated_features": {
-        "dur": 2.9675381183624268,
+        "dur": 0.07113900035619736,
         "tot_pkts": 2,
-        "tot_bytes": 124,
-        "src_bytes": 124,
-        "proto": "tcp",
-        "state": "S_"
+        "tot_bytes": 152,
+        "src_bytes": 76,
+        "proto": "udp",
+        "state": "CON"
       },
       "actions": [
         [
@@ -448,20 +394,20 @@
       "episode_id": 5,
       "policy": "baseline",
       "original_features": {
-        "dur": 5.437576770782471,
+        "dur": 0.033574000000953674,
         "tot_pkts": 2,
-        "tot_bytes": 280,
-        "src_bytes": 280,
+        "tot_bytes": 343,
+        "src_bytes": 75,
         "proto": "udp",
-        "state": "INT"
+        "state": "CON"
       },
       "mutated_features": {
-        "dur": 5.437576770782471,
+        "dur": 0.033574000000953674,
         "tot_pkts": 2,
-        "tot_bytes": 280,
-        "src_bytes": 280,
+        "tot_bytes": 343,
+        "src_bytes": 75,
         "proto": "udp",
-        "state": "INT"
+        "state": "CON"
       },
       "actions": [
         [
@@ -536,20 +482,20 @@
       "episode_id": 6,
       "policy": "baseline",
       "original_features": {
-        "dur": 13.969749450683594,
-        "tot_pkts": 2,
-        "tot_bytes": 138,
-        "src_bytes": 69,
-        "proto": "udp",
-        "state": "CON"
+        "dur": 9.012516975402832,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
       },
       "mutated_features": {
-        "dur": 13.969749450683594,
-        "tot_pkts": 2,
-        "tot_bytes": 138,
-        "src_bytes": 69,
-        "proto": "udp",
-        "state": "CON"
+        "dur": 9.012516975402832,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
       },
       "actions": [
         [
@@ -624,18 +570,18 @@
       "episode_id": 7,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.15978799760341644,
+        "dur": 0.19044600427150726,
         "tot_pkts": 2,
-        "tot_bytes": 319,
-        "src_bytes": 71,
+        "tot_bytes": 178,
+        "src_bytes": 81,
         "proto": "udp",
         "state": "CON"
       },
       "mutated_features": {
-        "dur": 0.15978799760341644,
+        "dur": 0.19044600427150726,
         "tot_pkts": 2,
-        "tot_bytes": 319,
-        "src_bytes": 71,
+        "tot_bytes": 178,
+        "src_bytes": 81,
         "proto": "udp",
         "state": "CON"
       },
@@ -645,64 +591,10 @@
           0.0,
           0.0,
           0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
         ]
       ],
-      "steps": 10,
-      "evaded_xgboost": false,
+      "steps": 1,
+      "evaded_xgboost": true,
       "jitter": 0.0,
       "padding": 0.0,
       "proto_hop": false,
@@ -712,18 +604,18 @@
       "episode_id": 8,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.0004710000066552311,
+        "dur": 0.13934800028800964,
         "tot_pkts": 2,
-        "tot_bytes": 512,
-        "src_bytes": 71,
+        "tot_bytes": 218,
+        "src_bytes": 70,
         "proto": "udp",
         "state": "CON"
       },
       "mutated_features": {
-        "dur": 0.0004710000066552311,
+        "dur": 0.13934800028800964,
         "tot_pkts": 2,
-        "tot_bytes": 512,
-        "src_bytes": 71,
+        "tot_bytes": 218,
+        "src_bytes": 70,
         "proto": "udp",
         "state": "CON"
       },
@@ -800,20 +692,20 @@
       "episode_id": 9,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.2907100021839142,
+        "dur": 3.00913405418396,
         "tot_pkts": 2,
-        "tot_bytes": 518,
-        "src_bytes": 74,
-        "proto": "udp",
-        "state": "CON"
+        "tot_bytes": 124,
+        "src_bytes": 124,
+        "proto": "tcp",
+        "state": "S_"
       },
       "mutated_features": {
-        "dur": 0.2907100021839142,
+        "dur": 3.00913405418396,
         "tot_pkts": 2,
-        "tot_bytes": 518,
-        "src_bytes": 74,
-        "proto": "udp",
-        "state": "CON"
+        "tot_bytes": 124,
+        "src_bytes": 124,
+        "proto": "tcp",
+        "state": "S_"
       },
       "actions": [
         [
@@ -888,18 +780,18 @@
       "episode_id": 10,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.03006500005722046,
+        "dur": 0.21643799543380737,
         "tot_pkts": 2,
-        "tot_bytes": 262,
-        "src_bytes": 81,
+        "tot_bytes": 198,
+        "src_bytes": 68,
         "proto": "udp",
         "state": "CON"
       },
       "mutated_features": {
-        "dur": 0.03006500005722046,
+        "dur": 0.21643799543380737,
         "tot_pkts": 2,
-        "tot_bytes": 262,
-        "src_bytes": 81,
+        "tot_bytes": 198,
+        "src_bytes": 68,
         "proto": "udp",
         "state": "CON"
       },
@@ -976,20 +868,20 @@
       "episode_id": 11,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.00035099999513477087,
+        "dur": 2.9639370441436768,
         "tot_pkts": 2,
-        "tot_bytes": 319,
-        "src_bytes": 80,
-        "proto": "udp",
-        "state": "CON"
+        "tot_bytes": 124,
+        "src_bytes": 124,
+        "proto": "tcp",
+        "state": "S_"
       },
       "mutated_features": {
-        "dur": 0.00035099999513477087,
+        "dur": 2.9639370441436768,
         "tot_pkts": 2,
-        "tot_bytes": 319,
-        "src_bytes": 80,
-        "proto": "udp",
-        "state": "CON"
+        "tot_bytes": 124,
+        "src_bytes": 124,
+        "proto": "tcp",
+        "state": "S_"
       },
       "actions": [
         [
@@ -1064,20 +956,20 @@
       "episode_id": 12,
       "policy": "baseline",
       "original_features": {
-        "dur": 12.492875099182129,
-        "tot_pkts": 13,
-        "tot_bytes": 3382,
-        "src_bytes": 2594,
-        "proto": "tcp",
-        "state": "FSPA_FSPA"
+        "dur": 0.001921999966725707,
+        "tot_pkts": 2,
+        "tot_bytes": 493,
+        "src_bytes": 90,
+        "proto": "udp",
+        "state": "CON"
       },
       "mutated_features": {
-        "dur": 12.492875099182129,
-        "tot_pkts": 13,
-        "tot_bytes": 3382,
-        "src_bytes": 2594,
-        "proto": "tcp",
-        "state": "FSPA_FSPA"
+        "dur": 0.001921999966725707,
+        "tot_pkts": 2,
+        "tot_bytes": 493,
+        "src_bytes": 90,
+        "proto": "udp",
+        "state": "CON"
       },
       "actions": [
         [
@@ -1085,10 +977,64 @@
           0.0,
           0.0,
           0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
         ]
       ],
-      "steps": 1,
-      "evaded_xgboost": true,
+      "steps": 10,
+      "evaded_xgboost": false,
       "jitter": 0.0,
       "padding": 0.0,
       "proto_hop": false,
@@ -1098,20 +1044,20 @@
       "episode_id": 13,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.025289999321103096,
-        "tot_pkts": 2,
-        "tot_bytes": 240,
-        "src_bytes": 77,
-        "proto": "udp",
-        "state": "CON"
+        "dur": 8.911759376525879,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
       },
       "mutated_features": {
-        "dur": 0.025289999321103096,
-        "tot_pkts": 2,
-        "tot_bytes": 240,
-        "src_bytes": 77,
-        "proto": "udp",
-        "state": "CON"
+        "dur": 8.911759376525879,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
       },
       "actions": [
         [
@@ -1186,20 +1132,20 @@
       "episode_id": 14,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.035916998982429504,
-        "tot_pkts": 2,
-        "tot_bytes": 542,
-        "src_bytes": 88,
-        "proto": "udp",
-        "state": "CON"
+        "dur": 1.9403400421142578,
+        "tot_pkts": 6,
+        "tot_bytes": 366,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_RA"
       },
       "mutated_features": {
-        "dur": 0.035916998982429504,
-        "tot_pkts": 2,
-        "tot_bytes": 542,
-        "src_bytes": 88,
-        "proto": "udp",
-        "state": "CON"
+        "dur": 1.9403400421142578,
+        "tot_pkts": 6,
+        "tot_bytes": 366,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_RA"
       },
       "actions": [
         [
@@ -1274,18 +1220,18 @@
       "episode_id": 15,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.025210000574588776,
+        "dur": 0.00026000000070780516,
         "tot_pkts": 2,
-        "tot_bytes": 330,
-        "src_bytes": 68,
+        "tot_bytes": 310,
+        "src_bytes": 72,
         "proto": "udp",
         "state": "CON"
       },
       "mutated_features": {
-        "dur": 0.025210000574588776,
+        "dur": 0.00026000000070780516,
         "tot_pkts": 2,
-        "tot_bytes": 330,
-        "src_bytes": 68,
+        "tot_bytes": 310,
+        "src_bytes": 72,
         "proto": "udp",
         "state": "CON"
       },
@@ -1362,20 +1308,20 @@
       "episode_id": 16,
       "policy": "baseline",
       "original_features": {
-        "dur": 1.3072370290756226,
-        "tot_pkts": 6,
-        "tot_bytes": 366,
-        "src_bytes": 186,
-        "proto": "tcp",
-        "state": "S_RA"
+        "dur": 0.05445899814367294,
+        "tot_pkts": 2,
+        "tot_bytes": 307,
+        "src_bytes": 71,
+        "proto": "udp",
+        "state": "CON"
       },
       "mutated_features": {
-        "dur": 1.3072370290756226,
-        "tot_pkts": 6,
-        "tot_bytes": 366,
-        "src_bytes": 186,
-        "proto": "tcp",
-        "state": "S_RA"
+        "dur": 0.05445899814367294,
+        "tot_pkts": 2,
+        "tot_bytes": 307,
+        "src_bytes": 71,
+        "proto": "udp",
+        "state": "CON"
       },
       "actions": [
         [
@@ -1450,20 +1396,20 @@
       "episode_id": 17,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.000291000003926456,
-        "tot_pkts": 2,
-        "tot_bytes": 327,
-        "src_bytes": 80,
-        "proto": "udp",
-        "state": "CON"
+        "dur": 2.1538538932800293,
+        "tot_pkts": 123,
+        "tot_bytes": 104027,
+        "src_bytes": 12533,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
       },
       "mutated_features": {
-        "dur": 0.000291000003926456,
-        "tot_pkts": 2,
-        "tot_bytes": 327,
-        "src_bytes": 80,
-        "proto": "udp",
-        "state": "CON"
+        "dur": 2.1538538932800293,
+        "tot_pkts": 123,
+        "tot_bytes": 104027,
+        "src_bytes": 12533,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
       },
       "actions": [
         [
@@ -1471,10 +1417,64 @@
           0.0,
           0.0,
           0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
         ]
       ],
-      "steps": 1,
-      "evaded_xgboost": true,
+      "steps": 10,
+      "evaded_xgboost": false,
       "jitter": 0.0,
       "padding": 0.0,
       "proto_hop": false,
@@ -1484,18 +1484,18 @@
       "episode_id": 18,
       "policy": "baseline",
       "original_features": {
-        "dur": 8.929381370544434,
-        "tot_pkts": 3,
-        "tot_bytes": 186,
-        "src_bytes": 186,
+        "dur": 136.9606475830078,
+        "tot_pkts": 6,
+        "tot_bytes": 372,
+        "src_bytes": 372,
         "proto": "tcp",
         "state": "S_"
       },
       "mutated_features": {
-        "dur": 8.929381370544434,
-        "tot_pkts": 3,
-        "tot_bytes": 186,
-        "src_bytes": 186,
+        "dur": 136.9606475830078,
+        "tot_pkts": 6,
+        "tot_bytes": 372,
+        "src_bytes": 372,
         "proto": "tcp",
         "state": "S_"
       },
@@ -1572,18 +1572,18 @@
       "episode_id": 19,
       "policy": "baseline",
       "original_features": {
-        "dur": 8.950940132141113,
-        "tot_pkts": 3,
-        "tot_bytes": 186,
-        "src_bytes": 186,
+        "dur": 2.932507038116455,
+        "tot_pkts": 2,
+        "tot_bytes": 124,
+        "src_bytes": 124,
         "proto": "tcp",
         "state": "S_"
       },
       "mutated_features": {
-        "dur": 8.950940132141113,
-        "tot_pkts": 3,
-        "tot_bytes": 186,
-        "src_bytes": 186,
+        "dur": 2.932507038116455,
+        "tot_pkts": 2,
+        "tot_bytes": 124,
+        "src_bytes": 124,
         "proto": "tcp",
         "state": "S_"
       },
@@ -1660,18 +1660,18 @@
       "episode_id": 20,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.0006230000290088356,
+        "dur": 0.2918449938297272,
         "tot_pkts": 2,
-        "tot_bytes": 618,
-        "src_bytes": 73,
+        "tot_bytes": 254,
+        "src_bytes": 70,
         "proto": "udp",
         "state": "CON"
       },
       "mutated_features": {
-        "dur": 0.0006230000290088356,
+        "dur": 0.2918449938297272,
         "tot_pkts": 2,
-        "tot_bytes": 618,
-        "src_bytes": 73,
+        "tot_bytes": 254,
+        "src_bytes": 70,
         "proto": "udp",
         "state": "CON"
       },
@@ -1748,20 +1748,20 @@
       "episode_id": 21,
       "policy": "baseline",
       "original_features": {
-        "dur": 121.52731323242188,
-        "tot_pkts": 14,
-        "tot_bytes": 5290,
-        "src_bytes": 672,
+        "dur": 8.911089897155762,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
         "proto": "tcp",
-        "state": "FSPA_FSPA"
+        "state": "S_"
       },
       "mutated_features": {
-        "dur": 121.52731323242188,
-        "tot_pkts": 14,
-        "tot_bytes": 5290,
-        "src_bytes": 672,
+        "dur": 8.911089897155762,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
         "proto": "tcp",
-        "state": "FSPA_FSPA"
+        "state": "S_"
       },
       "actions": [
         [
@@ -1836,20 +1836,20 @@
       "episode_id": 22,
       "policy": "baseline",
       "original_features": {
-        "dur": 36.34831237792969,
-        "tot_pkts": 48,
-        "tot_bytes": 24506,
-        "src_bytes": 19581,
+        "dur": 9.014771461486816,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
         "proto": "tcp",
-        "state": "FSPA_FSPA"
+        "state": "S_"
       },
       "mutated_features": {
-        "dur": 36.34831237792969,
-        "tot_pkts": 48,
-        "tot_bytes": 24506,
-        "src_bytes": 19581,
+        "dur": 9.014771461486816,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
         "proto": "tcp",
-        "state": "FSPA_FSPA"
+        "state": "S_"
       },
       "actions": [
         [
@@ -1924,20 +1924,20 @@
       "episode_id": 23,
       "policy": "baseline",
       "original_features": {
-        "dur": 6.101602077484131,
+        "dur": 0.023183999583125114,
         "tot_pkts": 2,
-        "tot_bytes": 124,
-        "src_bytes": 124,
-        "proto": "tcp",
-        "state": "S_"
+        "tot_bytes": 292,
+        "src_bytes": 78,
+        "proto": "udp",
+        "state": "CON"
       },
       "mutated_features": {
-        "dur": 6.101602077484131,
+        "dur": 0.023183999583125114,
         "tot_pkts": 2,
-        "tot_bytes": 124,
-        "src_bytes": 124,
-        "proto": "tcp",
-        "state": "S_"
+        "tot_bytes": 292,
+        "src_bytes": 78,
+        "proto": "udp",
+        "state": "CON"
       },
       "actions": [
         [
@@ -2012,18 +2012,18 @@
       "episode_id": 24,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.0385419987142086,
+        "dur": 0.17343799769878387,
         "tot_pkts": 2,
-        "tot_bytes": 274,
-        "src_bytes": 84,
+        "tot_bytes": 308,
+        "src_bytes": 75,
         "proto": "udp",
         "state": "CON"
       },
       "mutated_features": {
-        "dur": 0.0385419987142086,
+        "dur": 0.17343799769878387,
         "tot_pkts": 2,
-        "tot_bytes": 274,
-        "src_bytes": 84,
+        "tot_bytes": 308,
+        "src_bytes": 75,
         "proto": "udp",
         "state": "CON"
       },
@@ -2100,20 +2100,20 @@
       "episode_id": 25,
       "policy": "baseline",
       "original_features": {
-        "dur": 9.011457443237305,
-        "tot_pkts": 3,
-        "tot_bytes": 186,
-        "src_bytes": 186,
-        "proto": "tcp",
-        "state": "S_"
+        "dur": 0.9255099892616272,
+        "tot_pkts": 2,
+        "tot_bytes": 266,
+        "src_bytes": 75,
+        "proto": "udp",
+        "state": "CON"
       },
       "mutated_features": {
-        "dur": 9.011457443237305,
-        "tot_pkts": 3,
-        "tot_bytes": 186,
-        "src_bytes": 186,
-        "proto": "tcp",
-        "state": "S_"
+        "dur": 0.9255099892616272,
+        "tot_pkts": 2,
+        "tot_bytes": 266,
+        "src_bytes": 75,
+        "proto": "udp",
+        "state": "CON"
       },
       "actions": [
         [
@@ -2188,20 +2188,20 @@
       "episode_id": 26,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.07307600229978561,
-        "tot_pkts": 2,
-        "tot_bytes": 228,
-        "src_bytes": 79,
-        "proto": "udp",
-        "state": "CON"
+        "dur": 8.861201286315918,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
       },
       "mutated_features": {
-        "dur": 0.07307600229978561,
-        "tot_pkts": 2,
-        "tot_bytes": 228,
-        "src_bytes": 79,
-        "proto": "udp",
-        "state": "CON"
+        "dur": 8.861201286315918,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
       },
       "actions": [
         [
@@ -2276,20 +2276,20 @@
       "episode_id": 27,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.010146000422537327,
-        "tot_pkts": 2,
-        "tot_bytes": 334,
-        "src_bytes": 91,
-        "proto": "udp",
-        "state": "CON"
+        "dur": 9.030058860778809,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
       },
       "mutated_features": {
-        "dur": 0.010146000422537327,
-        "tot_pkts": 2,
-        "tot_bytes": 334,
-        "src_bytes": 91,
-        "proto": "udp",
-        "state": "CON"
+        "dur": 9.030058860778809,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
       },
       "actions": [
         [
@@ -2364,18 +2364,18 @@
       "episode_id": 28,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.030837999656796455,
+        "dur": 0.24007000029087067,
         "tot_pkts": 2,
-        "tot_bytes": 493,
-        "src_bytes": 77,
+        "tot_bytes": 253,
+        "src_bytes": 73,
         "proto": "udp",
         "state": "CON"
       },
       "mutated_features": {
-        "dur": 0.030837999656796455,
+        "dur": 0.24007000029087067,
         "tot_pkts": 2,
-        "tot_bytes": 493,
-        "src_bytes": 77,
+        "tot_bytes": 253,
+        "src_bytes": 73,
         "proto": "udp",
         "state": "CON"
       },
@@ -2452,20 +2452,20 @@
       "episode_id": 29,
       "policy": "baseline",
       "original_features": {
-        "dur": 887.3721313476562,
+        "dur": 0.21350300312042236,
         "tot_pkts": 2,
-        "tot_bytes": 2132,
-        "src_bytes": 2132,
-        "proto": "icmp",
-        "state": "UNK"
+        "tot_bytes": 304,
+        "src_bytes": 76,
+        "proto": "udp",
+        "state": "CON"
       },
       "mutated_features": {
-        "dur": 887.3721313476562,
+        "dur": 0.21350300312042236,
         "tot_pkts": 2,
-        "tot_bytes": 2132,
-        "src_bytes": 2132,
-        "proto": "icmp",
-        "state": "UNK"
+        "tot_bytes": 304,
+        "src_bytes": 76,
+        "proto": "udp",
+        "state": "CON"
       },
       "actions": [
         [
@@ -2540,20 +2540,20 @@
       "episode_id": 30,
       "policy": "baseline",
       "original_features": {
-        "dur": 8.91287899017334,
-        "tot_pkts": 3,
-        "tot_bytes": 186,
-        "src_bytes": 186,
-        "proto": "tcp",
-        "state": "S_"
+        "dur": 1087.3587646484375,
+        "tot_pkts": 2,
+        "tot_bytes": 2132,
+        "src_bytes": 2132,
+        "proto": "icmp",
+        "state": "UNK"
       },
       "mutated_features": {
-        "dur": 8.91287899017334,
-        "tot_pkts": 3,
-        "tot_bytes": 186,
-        "src_bytes": 186,
-        "proto": "tcp",
-        "state": "S_"
+        "dur": 1087.3587646484375,
+        "tot_pkts": 2,
+        "tot_bytes": 2132,
+        "src_bytes": 2132,
+        "proto": "icmp",
+        "state": "UNK"
       },
       "actions": [
         [
@@ -2628,20 +2628,20 @@
       "episode_id": 31,
       "policy": "baseline",
       "original_features": {
-        "dur": 9.011468887329102,
-        "tot_pkts": 3,
-        "tot_bytes": 186,
-        "src_bytes": 186,
-        "proto": "tcp",
-        "state": "S_"
+        "dur": 0.3209739923477173,
+        "tot_pkts": 2,
+        "tot_bytes": 268,
+        "src_bytes": 83,
+        "proto": "udp",
+        "state": "CON"
       },
       "mutated_features": {
-        "dur": 9.011468887329102,
-        "tot_pkts": 3,
-        "tot_bytes": 186,
-        "src_bytes": 186,
-        "proto": "tcp",
-        "state": "S_"
+        "dur": 0.3209739923477173,
+        "tot_pkts": 2,
+        "tot_bytes": 268,
+        "src_bytes": 83,
+        "proto": "udp",
+        "state": "CON"
       },
       "actions": [
         [
@@ -2716,20 +2716,20 @@
       "episode_id": 32,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.0004720000142697245,
-        "tot_pkts": 2,
-        "tot_bytes": 512,
-        "src_bytes": 67,
-        "proto": "udp",
-        "state": "CON"
+        "dur": 6.271146774291992,
+        "tot_pkts": 8,
+        "tot_bytes": 1608,
+        "src_bytes": 644,
+        "proto": "tcp",
+        "state": "SRPA_SPA"
       },
       "mutated_features": {
-        "dur": 0.0004720000142697245,
-        "tot_pkts": 2,
-        "tot_bytes": 512,
-        "src_bytes": 67,
-        "proto": "udp",
-        "state": "CON"
+        "dur": 6.271146774291992,
+        "tot_pkts": 8,
+        "tot_bytes": 1608,
+        "src_bytes": 644,
+        "proto": "tcp",
+        "state": "SRPA_SPA"
       },
       "actions": [
         [
@@ -2804,20 +2804,20 @@
       "episode_id": 33,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.04388999938964844,
-        "tot_pkts": 2,
-        "tot_bytes": 276,
-        "src_bytes": 69,
-        "proto": "udp",
-        "state": "CON"
+        "dur": 9.01282024383545,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
       },
       "mutated_features": {
-        "dur": 0.04388999938964844,
-        "tot_pkts": 2,
-        "tot_bytes": 276,
-        "src_bytes": 69,
-        "proto": "udp",
-        "state": "CON"
+        "dur": 9.01282024383545,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
       },
       "actions": [
         [
@@ -2892,20 +2892,20 @@
       "episode_id": 34,
       "policy": "baseline",
       "original_features": {
-        "dur": 8.849690437316895,
-        "tot_pkts": 3,
-        "tot_bytes": 186,
-        "src_bytes": 186,
+        "dur": 0.31790900230407715,
+        "tot_pkts": 9,
+        "tot_bytes": 558,
+        "src_bytes": 302,
         "proto": "tcp",
-        "state": "S_"
+        "state": "FSRA_FSPA"
       },
       "mutated_features": {
-        "dur": 8.849690437316895,
-        "tot_pkts": 3,
-        "tot_bytes": 186,
-        "src_bytes": 186,
+        "dur": 0.31790900230407715,
+        "tot_pkts": 9,
+        "tot_bytes": 558,
+        "src_bytes": 302,
         "proto": "tcp",
-        "state": "S_"
+        "state": "FSRA_FSPA"
       },
       "actions": [
         [
@@ -2980,20 +2980,20 @@
       "episode_id": 35,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.00031400000443682075,
-        "tot_pkts": 2,
-        "tot_bytes": 341,
-        "src_bytes": 71,
-        "proto": "udp",
-        "state": "CON"
+        "dur": 60.96711349487305,
+        "tot_pkts": 10,
+        "tot_bytes": 1076,
+        "src_bytes": 437,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
       },
       "mutated_features": {
-        "dur": 0.00031400000443682075,
-        "tot_pkts": 2,
-        "tot_bytes": 341,
-        "src_bytes": 71,
-        "proto": "udp",
-        "state": "CON"
+        "dur": 60.96711349487305,
+        "tot_pkts": 10,
+        "tot_bytes": 1076,
+        "src_bytes": 437,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
       },
       "actions": [
         [
@@ -3068,18 +3068,18 @@
       "episode_id": 36,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.3312999904155731,
+        "dur": 0.024017000570893288,
         "tot_pkts": 2,
-        "tot_bytes": 324,
-        "src_bytes": 70,
+        "tot_bytes": 438,
+        "src_bytes": 87,
         "proto": "udp",
         "state": "CON"
       },
       "mutated_features": {
-        "dur": 0.3312999904155731,
+        "dur": 0.024017000570893288,
         "tot_pkts": 2,
-        "tot_bytes": 324,
-        "src_bytes": 70,
+        "tot_bytes": 438,
+        "src_bytes": 87,
         "proto": "udp",
         "state": "CON"
       },
@@ -3156,20 +3156,20 @@
       "episode_id": 37,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.0003819999983534217,
-        "tot_pkts": 2,
-        "tot_bytes": 262,
-        "src_bytes": 73,
-        "proto": "udp",
-        "state": "CON"
+        "dur": 1.1702029705047607,
+        "tot_pkts": 10,
+        "tot_bytes": 1158,
+        "src_bytes": 600,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
       },
       "mutated_features": {
-        "dur": 0.0003819999983534217,
-        "tot_pkts": 2,
-        "tot_bytes": 262,
-        "src_bytes": 73,
-        "proto": "udp",
-        "state": "CON"
+        "dur": 1.1702029705047607,
+        "tot_pkts": 10,
+        "tot_bytes": 1158,
+        "src_bytes": 600,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
       },
       "actions": [
         [
@@ -3244,18 +3244,18 @@
       "episode_id": 38,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.28329500555992126,
+        "dur": 0.017374999821186066,
         "tot_pkts": 2,
-        "tot_bytes": 282,
-        "src_bytes": 75,
+        "tot_bytes": 221,
+        "src_bytes": 73,
         "proto": "udp",
         "state": "CON"
       },
       "mutated_features": {
-        "dur": 0.28329500555992126,
+        "dur": 0.017374999821186066,
         "tot_pkts": 2,
-        "tot_bytes": 282,
-        "src_bytes": 75,
+        "tot_bytes": 221,
+        "src_bytes": 73,
         "proto": "udp",
         "state": "CON"
       },
@@ -3265,64 +3265,10 @@
           0.0,
           0.0,
           0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
         ]
       ],
-      "steps": 10,
-      "evaded_xgboost": false,
+      "steps": 1,
+      "evaded_xgboost": true,
       "jitter": 0.0,
       "padding": 0.0,
       "proto_hop": false,
@@ -3332,20 +3278,20 @@
       "episode_id": 39,
       "policy": "baseline",
       "original_features": {
-        "dur": 71.96233367919922,
-        "tot_pkts": 35,
-        "tot_bytes": 6299,
-        "src_bytes": 1183,
-        "proto": "tcp",
-        "state": "SRPA_FSPA"
+        "dur": 0.06485600024461746,
+        "tot_pkts": 2,
+        "tot_bytes": 255,
+        "src_bytes": 71,
+        "proto": "udp",
+        "state": "CON"
       },
       "mutated_features": {
-        "dur": 71.96233367919922,
-        "tot_pkts": 35,
-        "tot_bytes": 6299,
-        "src_bytes": 1183,
-        "proto": "tcp",
-        "state": "SRPA_FSPA"
+        "dur": 0.06485600024461746,
+        "tot_pkts": 2,
+        "tot_bytes": 255,
+        "src_bytes": 71,
+        "proto": "udp",
+        "state": "CON"
       },
       "actions": [
         [
@@ -3420,20 +3366,20 @@
       "episode_id": 40,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.00033099998836405575,
-        "tot_pkts": 2,
-        "tot_bytes": 154,
-        "src_bytes": 77,
-        "proto": "udp",
-        "state": "CON"
+        "dur": 0.9552429914474487,
+        "tot_pkts": 15,
+        "tot_bytes": 6010,
+        "src_bytes": 1404,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
       },
       "mutated_features": {
-        "dur": 0.00033099998836405575,
-        "tot_pkts": 2,
-        "tot_bytes": 154,
-        "src_bytes": 77,
-        "proto": "udp",
-        "state": "CON"
+        "dur": 0.9552429914474487,
+        "tot_pkts": 15,
+        "tot_bytes": 6010,
+        "src_bytes": 1404,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
       },
       "actions": [
         [
@@ -3441,10 +3387,64 @@
           0.0,
           0.0,
           0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
         ]
       ],
-      "steps": 1,
-      "evaded_xgboost": true,
+      "steps": 10,
+      "evaded_xgboost": false,
       "jitter": 0.0,
       "padding": 0.0,
       "proto_hop": false,
@@ -3454,20 +3454,20 @@
       "episode_id": 41,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.49745601415634155,
-        "tot_pkts": 59,
-        "tot_bytes": 32247,
-        "src_bytes": 1849,
-        "proto": "tcp",
-        "state": "FSPA_FSPA"
+        "dur": 0.13416999578475952,
+        "tot_pkts": 2,
+        "tot_bytes": 260,
+        "src_bytes": 72,
+        "proto": "udp",
+        "state": "CON"
       },
       "mutated_features": {
-        "dur": 0.49745601415634155,
-        "tot_pkts": 59,
-        "tot_bytes": 32247,
-        "src_bytes": 1849,
-        "proto": "tcp",
-        "state": "FSPA_FSPA"
+        "dur": 0.13416999578475952,
+        "tot_pkts": 2,
+        "tot_bytes": 260,
+        "src_bytes": 72,
+        "proto": "udp",
+        "state": "CON"
       },
       "actions": [
         [
@@ -3475,10 +3475,64 @@
           0.0,
           0.0,
           0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
         ]
       ],
-      "steps": 1,
-      "evaded_xgboost": true,
+      "steps": 10,
+      "evaded_xgboost": false,
       "jitter": 0.0,
       "padding": 0.0,
       "proto_hop": false,
@@ -3488,20 +3542,20 @@
       "episode_id": 42,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.0004250000056345016,
+        "dur": 960.2116088867188,
         "tot_pkts": 2,
-        "tot_bytes": 512,
-        "src_bytes": 67,
-        "proto": "udp",
-        "state": "CON"
+        "tot_bytes": 2132,
+        "src_bytes": 2132,
+        "proto": "icmp",
+        "state": "UNK"
       },
       "mutated_features": {
-        "dur": 0.0004250000056345016,
+        "dur": 960.2116088867188,
         "tot_pkts": 2,
-        "tot_bytes": 512,
-        "src_bytes": 67,
-        "proto": "udp",
-        "state": "CON"
+        "tot_bytes": 2132,
+        "src_bytes": 2132,
+        "proto": "icmp",
+        "state": "UNK"
       },
       "actions": [
         [
@@ -3576,18 +3630,18 @@
       "episode_id": 43,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.3459230065345764,
+        "dur": 0.18612000346183777,
         "tot_pkts": 2,
-        "tot_bytes": 362,
-        "src_bytes": 71,
+        "tot_bytes": 270,
+        "src_bytes": 98,
         "proto": "udp",
         "state": "CON"
       },
       "mutated_features": {
-        "dur": 0.3459230065345764,
+        "dur": 0.18612000346183777,
         "tot_pkts": 2,
-        "tot_bytes": 362,
-        "src_bytes": 71,
+        "tot_bytes": 270,
+        "src_bytes": 98,
         "proto": "udp",
         "state": "CON"
       },
@@ -3664,20 +3718,20 @@
       "episode_id": 44,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.02463899925351143,
-        "tot_pkts": 2,
-        "tot_bytes": 620,
-        "src_bytes": 74,
-        "proto": "udp",
-        "state": "CON"
+        "dur": 8.902514457702637,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
       },
       "mutated_features": {
-        "dur": 0.02463899925351143,
-        "tot_pkts": 2,
-        "tot_bytes": 620,
-        "src_bytes": 74,
-        "proto": "udp",
-        "state": "CON"
+        "dur": 8.902514457702637,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
       },
       "actions": [
         [
@@ -3752,7 +3806,7 @@
       "episode_id": 45,
       "policy": "baseline",
       "original_features": {
-        "dur": 9.029272079467773,
+        "dur": 9.202987670898438,
         "tot_pkts": 3,
         "tot_bytes": 186,
         "src_bytes": 186,
@@ -3760,7 +3814,7 @@
         "state": "S_"
       },
       "mutated_features": {
-        "dur": 9.029272079467773,
+        "dur": 9.202987670898438,
         "tot_pkts": 3,
         "tot_bytes": 186,
         "src_bytes": 186,
@@ -3840,18 +3894,18 @@
       "episode_id": 46,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.0003060000017285347,
+        "dur": 0.2562969923019409,
         "tot_pkts": 2,
-        "tot_bytes": 208,
-        "src_bytes": 67,
+        "tot_bytes": 323,
+        "src_bytes": 72,
         "proto": "udp",
         "state": "CON"
       },
       "mutated_features": {
-        "dur": 0.0003060000017285347,
+        "dur": 0.2562969923019409,
         "tot_pkts": 2,
-        "tot_bytes": 208,
-        "src_bytes": 67,
+        "tot_bytes": 323,
+        "src_bytes": 72,
         "proto": "udp",
         "state": "CON"
       },
@@ -3861,10 +3915,64 @@
           0.0,
           0.0,
           0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
         ]
       ],
-      "steps": 1,
-      "evaded_xgboost": true,
+      "steps": 10,
+      "evaded_xgboost": false,
       "jitter": 0.0,
       "padding": 0.0,
       "proto_hop": false,
@@ -3874,20 +3982,20 @@
       "episode_id": 47,
       "policy": "baseline",
       "original_features": {
-        "dur": 87.40086364746094,
-        "tot_pkts": 31,
-        "tot_bytes": 2627,
-        "src_bytes": 1607,
-        "proto": "tcp",
-        "state": "FSPA_FSPA"
+        "dur": 0.14076000452041626,
+        "tot_pkts": 2,
+        "tot_bytes": 333,
+        "src_bytes": 75,
+        "proto": "udp",
+        "state": "CON"
       },
       "mutated_features": {
-        "dur": 87.40086364746094,
-        "tot_pkts": 31,
-        "tot_bytes": 2627,
-        "src_bytes": 1607,
-        "proto": "tcp",
-        "state": "FSPA_FSPA"
+        "dur": 0.14076000452041626,
+        "tot_pkts": 2,
+        "tot_bytes": 333,
+        "src_bytes": 75,
+        "proto": "udp",
+        "state": "CON"
       },
       "actions": [
         [
@@ -3895,10 +4003,64 @@
           0.0,
           0.0,
           0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
         ]
       ],
-      "steps": 1,
-      "evaded_xgboost": true,
+      "steps": 10,
+      "evaded_xgboost": false,
       "jitter": 0.0,
       "padding": 0.0,
       "proto_hop": false,
@@ -3908,20 +4070,20 @@
       "episode_id": 48,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.01477499958127737,
-        "tot_pkts": 1,
-        "tot_bytes": 72,
-        "src_bytes": 72,
-        "proto": "udp",
-        "state": "INT"
+        "dur": 41.69110107421875,
+        "tot_pkts": 20,
+        "tot_bytes": 4927,
+        "src_bytes": 825,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
       },
       "mutated_features": {
-        "dur": 0.01477499958127737,
-        "tot_pkts": 1,
-        "tot_bytes": 72,
-        "src_bytes": 72,
-        "proto": "udp",
-        "state": "INT"
+        "dur": 41.69110107421875,
+        "tot_pkts": 20,
+        "tot_bytes": 4927,
+        "src_bytes": 825,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
       },
       "actions": [
         [
@@ -3996,20 +4158,20 @@
       "episode_id": 49,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.5343570113182068,
-        "tot_pkts": 4,
-        "tot_bytes": 244,
-        "src_bytes": 124,
-        "proto": "tcp",
-        "state": "S_RA"
+        "dur": 0.0003499999875202775,
+        "tot_pkts": 2,
+        "tot_bytes": 261,
+        "src_bytes": 77,
+        "proto": "udp",
+        "state": "CON"
       },
       "mutated_features": {
-        "dur": 0.5343570113182068,
-        "tot_pkts": 4,
-        "tot_bytes": 244,
-        "src_bytes": 124,
-        "proto": "tcp",
-        "state": "S_RA"
+        "dur": 0.0003499999875202775,
+        "tot_pkts": 2,
+        "tot_bytes": 261,
+        "src_bytes": 77,
+        "proto": "udp",
+        "state": "CON"
       },
       "actions": [
         [
@@ -4017,64 +4179,10 @@
           0.0,
           0.0,
           0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
         ]
       ],
-      "steps": 10,
-      "evaded_xgboost": false,
+      "steps": 1,
+      "evaded_xgboost": true,
       "jitter": 0.0,
       "padding": 0.0,
       "proto_hop": false,
@@ -4084,20 +4192,20 @@
       "episode_id": 50,
       "policy": "baseline",
       "original_features": {
-        "dur": 9.029911041259766,
-        "tot_pkts": 3,
-        "tot_bytes": 186,
-        "src_bytes": 186,
-        "proto": "tcp",
-        "state": "S_"
+        "dur": 1457.685791015625,
+        "tot_pkts": 4,
+        "tot_bytes": 608,
+        "src_bytes": 164,
+        "proto": "udp",
+        "state": "CON"
       },
       "mutated_features": {
-        "dur": 9.029911041259766,
-        "tot_pkts": 3,
-        "tot_bytes": 186,
-        "src_bytes": 186,
-        "proto": "tcp",
-        "state": "S_"
+        "dur": 1457.685791015625,
+        "tot_pkts": 4,
+        "tot_bytes": 608,
+        "src_bytes": 164,
+        "proto": "udp",
+        "state": "CON"
       },
       "actions": [
         [
@@ -4172,18 +4280,18 @@
       "episode_id": 51,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.14952899515628815,
+        "dur": 0.017129000276327133,
         "tot_pkts": 2,
-        "tot_bytes": 202,
-        "src_bytes": 74,
+        "tot_bytes": 254,
+        "src_bytes": 69,
         "proto": "udp",
         "state": "CON"
       },
       "mutated_features": {
-        "dur": 0.14952899515628815,
+        "dur": 0.017129000276327133,
         "tot_pkts": 2,
-        "tot_bytes": 202,
-        "src_bytes": 74,
+        "tot_bytes": 254,
+        "src_bytes": 69,
         "proto": "udp",
         "state": "CON"
       },
@@ -4260,7 +4368,7 @@
       "episode_id": 52,
       "policy": "baseline",
       "original_features": {
-        "dur": 9.011425018310547,
+        "dur": 9.04316234588623,
         "tot_pkts": 3,
         "tot_bytes": 186,
         "src_bytes": 186,
@@ -4268,7 +4376,7 @@
         "state": "S_"
       },
       "mutated_features": {
-        "dur": 9.011425018310547,
+        "dur": 9.04316234588623,
         "tot_pkts": 3,
         "tot_bytes": 186,
         "src_bytes": 186,
@@ -4348,7 +4456,7 @@
       "episode_id": 53,
       "policy": "baseline",
       "original_features": {
-        "dur": 8.965547561645508,
+        "dur": 9.014313697814941,
         "tot_pkts": 3,
         "tot_bytes": 186,
         "src_bytes": 186,
@@ -4356,7 +4464,7 @@
         "state": "S_"
       },
       "mutated_features": {
-        "dur": 8.965547561645508,
+        "dur": 9.014313697814941,
         "tot_pkts": 3,
         "tot_bytes": 186,
         "src_bytes": 186,
@@ -4436,18 +4544,18 @@
       "episode_id": 54,
       "policy": "baseline",
       "original_features": {
-        "dur": 3.0047969818115234,
-        "tot_pkts": 2,
-        "tot_bytes": 124,
-        "src_bytes": 124,
+        "dur": 9.028900146484375,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
         "proto": "tcp",
         "state": "S_"
       },
       "mutated_features": {
-        "dur": 3.0047969818115234,
-        "tot_pkts": 2,
-        "tot_bytes": 124,
-        "src_bytes": 124,
+        "dur": 9.028900146484375,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
         "proto": "tcp",
         "state": "S_"
       },
@@ -4524,17 +4632,17 @@
       "episode_id": 55,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.00032900000223889947,
+        "dur": 0.10646799951791763,
         "tot_pkts": 2,
-        "tot_bytes": 219,
+        "tot_bytes": 603,
         "src_bytes": 68,
         "proto": "udp",
         "state": "CON"
       },
       "mutated_features": {
-        "dur": 0.00032900000223889947,
+        "dur": 0.10646799951791763,
         "tot_pkts": 2,
-        "tot_bytes": 219,
+        "tot_bytes": 603,
         "src_bytes": 68,
         "proto": "udp",
         "state": "CON"
@@ -4612,20 +4720,20 @@
       "episode_id": 56,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.444597989320755,
-        "tot_pkts": 10,
-        "tot_bytes": 2005,
-        "src_bytes": 1485,
+        "dur": 8.910621643066406,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
         "proto": "tcp",
-        "state": "FSPA_FSPA"
+        "state": "S_"
       },
       "mutated_features": {
-        "dur": 0.444597989320755,
-        "tot_pkts": 10,
-        "tot_bytes": 2005,
-        "src_bytes": 1485,
+        "dur": 8.910621643066406,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
         "proto": "tcp",
-        "state": "FSPA_FSPA"
+        "state": "S_"
       },
       "actions": [
         [
@@ -4633,10 +4741,64 @@
           0.0,
           0.0,
           0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
         ]
       ],
-      "steps": 1,
-      "evaded_xgboost": true,
+      "steps": 10,
+      "evaded_xgboost": false,
       "jitter": 0.0,
       "padding": 0.0,
       "proto_hop": false,
@@ -4646,20 +4808,20 @@
       "episode_id": 57,
       "policy": "baseline",
       "original_features": {
-        "dur": 1.3077499866485596,
-        "tot_pkts": 6,
-        "tot_bytes": 366,
-        "src_bytes": 186,
-        "proto": "tcp",
-        "state": "S_RA"
+        "dur": 0.0005849999724887311,
+        "tot_pkts": 2,
+        "tot_bytes": 552,
+        "src_bytes": 67,
+        "proto": "udp",
+        "state": "CON"
       },
       "mutated_features": {
-        "dur": 1.3077499866485596,
-        "tot_pkts": 6,
-        "tot_bytes": 366,
-        "src_bytes": 186,
-        "proto": "tcp",
-        "state": "S_RA"
+        "dur": 0.0005849999724887311,
+        "tot_pkts": 2,
+        "tot_bytes": 552,
+        "src_bytes": 67,
+        "proto": "udp",
+        "state": "CON"
       },
       "actions": [
         [
@@ -4734,20 +4896,20 @@
       "episode_id": 58,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.16131900250911713,
-        "tot_pkts": 2,
-        "tot_bytes": 310,
-        "src_bytes": 70,
-        "proto": "udp",
-        "state": "CON"
+        "dur": 8.986699104309082,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
       },
       "mutated_features": {
-        "dur": 0.16131900250911713,
-        "tot_pkts": 2,
-        "tot_bytes": 310,
-        "src_bytes": 70,
-        "proto": "udp",
-        "state": "CON"
+        "dur": 8.986699104309082,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
       },
       "actions": [
         [
@@ -4822,20 +4984,20 @@
       "episode_id": 59,
       "policy": "baseline",
       "original_features": {
-        "dur": 9.296295166015625,
-        "tot_pkts": 3,
-        "tot_bytes": 186,
-        "src_bytes": 186,
-        "proto": "tcp",
-        "state": "S_"
+        "dur": 0.0004079999926034361,
+        "tot_pkts": 2,
+        "tot_bytes": 611,
+        "src_bytes": 71,
+        "proto": "udp",
+        "state": "CON"
       },
       "mutated_features": {
-        "dur": 9.296295166015625,
-        "tot_pkts": 3,
-        "tot_bytes": 186,
-        "src_bytes": 186,
-        "proto": "tcp",
-        "state": "S_"
+        "dur": 0.0004079999926034361,
+        "tot_pkts": 2,
+        "tot_bytes": 611,
+        "src_bytes": 71,
+        "proto": "udp",
+        "state": "CON"
       },
       "actions": [
         [
@@ -4910,20 +5072,20 @@
       "episode_id": 60,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.36709898710250854,
-        "tot_pkts": 8,
-        "tot_bytes": 2620,
-        "src_bytes": 1426,
-        "proto": "tcp",
-        "state": "FSPA_FSA"
+        "dur": 0.2930240035057068,
+        "tot_pkts": 2,
+        "tot_bytes": 221,
+        "src_bytes": 75,
+        "proto": "udp",
+        "state": "CON"
       },
       "mutated_features": {
-        "dur": 0.36709898710250854,
-        "tot_pkts": 8,
-        "tot_bytes": 2620,
-        "src_bytes": 1426,
-        "proto": "tcp",
-        "state": "FSPA_FSA"
+        "dur": 0.2930240035057068,
+        "tot_pkts": 2,
+        "tot_bytes": 221,
+        "src_bytes": 75,
+        "proto": "udp",
+        "state": "CON"
       },
       "actions": [
         [
@@ -4998,20 +5160,20 @@
       "episode_id": 61,
       "policy": "baseline",
       "original_features": {
-        "dur": 9.011049270629883,
-        "tot_pkts": 3,
-        "tot_bytes": 186,
-        "src_bytes": 186,
-        "proto": "tcp",
-        "state": "S_"
+        "dur": 0.12937499582767487,
+        "tot_pkts": 2,
+        "tot_bytes": 213,
+        "src_bytes": 77,
+        "proto": "udp",
+        "state": "CON"
       },
       "mutated_features": {
-        "dur": 9.011049270629883,
-        "tot_pkts": 3,
-        "tot_bytes": 186,
-        "src_bytes": 186,
-        "proto": "tcp",
-        "state": "S_"
+        "dur": 0.12937499582767487,
+        "tot_pkts": 2,
+        "tot_bytes": 213,
+        "src_bytes": 77,
+        "proto": "udp",
+        "state": "CON"
       },
       "actions": [
         [
@@ -5086,20 +5248,20 @@
       "episode_id": 62,
       "policy": "baseline",
       "original_features": {
-        "dur": 8.930514335632324,
-        "tot_pkts": 3,
-        "tot_bytes": 186,
-        "src_bytes": 186,
+        "dur": 0.36924898624420166,
+        "tot_pkts": 7,
+        "tot_bytes": 597,
+        "src_bytes": 415,
         "proto": "tcp",
-        "state": "S_"
+        "state": "FSPA_SRA"
       },
       "mutated_features": {
-        "dur": 8.930514335632324,
-        "tot_pkts": 3,
-        "tot_bytes": 186,
-        "src_bytes": 186,
+        "dur": 0.36924898624420166,
+        "tot_pkts": 7,
+        "tot_bytes": 597,
+        "src_bytes": 415,
         "proto": "tcp",
-        "state": "S_"
+        "state": "FSPA_SRA"
       },
       "actions": [
         [
@@ -5174,18 +5336,18 @@
       "episode_id": 63,
       "policy": "baseline",
       "original_features": {
-        "dur": 9.005223274230957,
-        "tot_pkts": 3,
-        "tot_bytes": 186,
-        "src_bytes": 186,
+        "dur": 2.927856922149658,
+        "tot_pkts": 2,
+        "tot_bytes": 124,
+        "src_bytes": 124,
         "proto": "tcp",
         "state": "S_"
       },
       "mutated_features": {
-        "dur": 9.005223274230957,
-        "tot_pkts": 3,
-        "tot_bytes": 186,
-        "src_bytes": 186,
+        "dur": 2.927856922149658,
+        "tot_pkts": 2,
+        "tot_bytes": 124,
+        "src_bytes": 124,
         "proto": "tcp",
         "state": "S_"
       },
@@ -5262,20 +5424,20 @@
       "episode_id": 64,
       "policy": "baseline",
       "original_features": {
-        "dur": 9.014463424682617,
-        "tot_pkts": 3,
-        "tot_bytes": 186,
-        "src_bytes": 186,
-        "proto": "tcp",
-        "state": "S_"
+        "dur": 30.002025604248047,
+        "tot_pkts": 6,
+        "tot_bytes": 432,
+        "src_bytes": 360,
+        "proto": "udp",
+        "state": "CON"
       },
       "mutated_features": {
-        "dur": 9.014463424682617,
-        "tot_pkts": 3,
-        "tot_bytes": 186,
-        "src_bytes": 186,
-        "proto": "tcp",
-        "state": "S_"
+        "dur": 30.002025604248047,
+        "tot_pkts": 6,
+        "tot_bytes": 432,
+        "src_bytes": 360,
+        "proto": "udp",
+        "state": "CON"
       },
       "actions": [
         [
@@ -5350,18 +5512,18 @@
       "episode_id": 65,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.00032500000088475645,
+        "dur": 0.04381600022315979,
         "tot_pkts": 2,
-        "tot_bytes": 456,
-        "src_bytes": 69,
+        "tot_bytes": 222,
+        "src_bytes": 85,
         "proto": "udp",
         "state": "CON"
       },
       "mutated_features": {
-        "dur": 0.00032500000088475645,
+        "dur": 0.04381600022315979,
         "tot_pkts": 2,
-        "tot_bytes": 456,
-        "src_bytes": 69,
+        "tot_bytes": 222,
+        "src_bytes": 85,
         "proto": "udp",
         "state": "CON"
       },
@@ -5438,20 +5600,20 @@
       "episode_id": 66,
       "policy": "baseline",
       "original_features": {
-        "dur": 2.999933958053589,
-        "tot_pkts": 2,
-        "tot_bytes": 124,
-        "src_bytes": 124,
+        "dur": 0.043421998620033264,
+        "tot_pkts": 12,
+        "tot_bytes": 2951,
+        "src_bytes": 926,
         "proto": "tcp",
-        "state": "S_"
+        "state": "FSPA_FSPA"
       },
       "mutated_features": {
-        "dur": 2.999933958053589,
-        "tot_pkts": 2,
-        "tot_bytes": 124,
-        "src_bytes": 124,
+        "dur": 0.043421998620033264,
+        "tot_pkts": 12,
+        "tot_bytes": 2951,
+        "src_bytes": 926,
         "proto": "tcp",
-        "state": "S_"
+        "state": "FSPA_FSPA"
       },
       "actions": [
         [
@@ -5459,64 +5621,10 @@
           0.0,
           0.0,
           0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
         ]
       ],
-      "steps": 10,
-      "evaded_xgboost": false,
+      "steps": 1,
+      "evaded_xgboost": true,
       "jitter": 0.0,
       "padding": 0.0,
       "proto_hop": false,
@@ -5526,20 +5634,20 @@
       "episode_id": 67,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.00035700001171790063,
+        "dur": 3.004357099533081,
         "tot_pkts": 2,
-        "tot_bytes": 300,
-        "src_bytes": 68,
-        "proto": "udp",
-        "state": "CON"
+        "tot_bytes": 124,
+        "src_bytes": 124,
+        "proto": "tcp",
+        "state": "S_"
       },
       "mutated_features": {
-        "dur": 0.00035700001171790063,
+        "dur": 3.004357099533081,
         "tot_pkts": 2,
-        "tot_bytes": 300,
-        "src_bytes": 68,
-        "proto": "udp",
-        "state": "CON"
+        "tot_bytes": 124,
+        "src_bytes": 124,
+        "proto": "tcp",
+        "state": "S_"
       },
       "actions": [
         [
@@ -5614,20 +5722,20 @@
       "episode_id": 68,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.528672993183136,
-        "tot_pkts": 4,
-        "tot_bytes": 244,
-        "src_bytes": 124,
-        "proto": "tcp",
-        "state": "S_RA"
+        "dur": 0.103363998234272,
+        "tot_pkts": 2,
+        "tot_bytes": 196,
+        "src_bytes": 74,
+        "proto": "udp",
+        "state": "CON"
       },
       "mutated_features": {
-        "dur": 0.528672993183136,
-        "tot_pkts": 4,
-        "tot_bytes": 244,
-        "src_bytes": 124,
-        "proto": "tcp",
-        "state": "S_RA"
+        "dur": 0.103363998234272,
+        "tot_pkts": 2,
+        "tot_bytes": 196,
+        "src_bytes": 74,
+        "proto": "udp",
+        "state": "CON"
       },
       "actions": [
         [
@@ -5702,20 +5810,20 @@
       "episode_id": 69,
       "policy": "baseline",
       "original_features": {
-        "dur": 1.266029953956604,
+        "dur": 9.012969970703125,
         "tot_pkts": 3,
-        "tot_bytes": 683,
-        "src_bytes": 138,
-        "proto": "udp",
-        "state": "CON"
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
       },
       "mutated_features": {
-        "dur": 1.266029953956604,
+        "dur": 9.012969970703125,
         "tot_pkts": 3,
-        "tot_bytes": 683,
-        "src_bytes": 138,
-        "proto": "udp",
-        "state": "CON"
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
       },
       "actions": [
         [
@@ -5790,20 +5898,20 @@
       "episode_id": 70,
       "policy": "baseline",
       "original_features": {
-        "dur": 3.00485897064209,
+        "dur": 0.04305199906229973,
         "tot_pkts": 2,
-        "tot_bytes": 124,
-        "src_bytes": 124,
-        "proto": "tcp",
-        "state": "S_"
+        "tot_bytes": 493,
+        "src_bytes": 74,
+        "proto": "udp",
+        "state": "CON"
       },
       "mutated_features": {
-        "dur": 3.00485897064209,
+        "dur": 0.04305199906229973,
         "tot_pkts": 2,
-        "tot_bytes": 124,
-        "src_bytes": 124,
-        "proto": "tcp",
-        "state": "S_"
+        "tot_bytes": 493,
+        "src_bytes": 74,
+        "proto": "udp",
+        "state": "CON"
       },
       "actions": [
         [
@@ -5878,18 +5986,18 @@
       "episode_id": 71,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.15356700122356415,
+        "dur": 0.04312000051140785,
         "tot_pkts": 2,
-        "tot_bytes": 243,
-        "src_bytes": 69,
+        "tot_bytes": 491,
+        "src_bytes": 76,
         "proto": "udp",
         "state": "CON"
       },
       "mutated_features": {
-        "dur": 0.15356700122356415,
+        "dur": 0.04312000051140785,
         "tot_pkts": 2,
-        "tot_bytes": 243,
-        "src_bytes": 69,
+        "tot_bytes": 491,
+        "src_bytes": 76,
         "proto": "udp",
         "state": "CON"
       },
@@ -5966,20 +6074,20 @@
       "episode_id": 72,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.12341299653053284,
+        "dur": 2.977411985397339,
         "tot_pkts": 2,
-        "tot_bytes": 276,
-        "src_bytes": 72,
-        "proto": "udp",
-        "state": "CON"
+        "tot_bytes": 124,
+        "src_bytes": 124,
+        "proto": "tcp",
+        "state": "S_"
       },
       "mutated_features": {
-        "dur": 0.12341299653053284,
+        "dur": 2.977411985397339,
         "tot_pkts": 2,
-        "tot_bytes": 276,
-        "src_bytes": 72,
-        "proto": "udp",
-        "state": "CON"
+        "tot_bytes": 124,
+        "src_bytes": 124,
+        "proto": "tcp",
+        "state": "S_"
       },
       "actions": [
         [
@@ -6054,20 +6162,20 @@
       "episode_id": 73,
       "policy": "baseline",
       "original_features": {
-        "dur": 99.42872619628906,
-        "tot_pkts": 21,
-        "tot_bytes": 22386,
-        "src_bytes": 22386,
-        "proto": "icmp",
-        "state": "ECO"
+        "dur": 7.53607702255249,
+        "tot_pkts": 5,
+        "tot_bytes": 306,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_RA"
       },
       "mutated_features": {
-        "dur": 99.42872619628906,
-        "tot_pkts": 21,
-        "tot_bytes": 22386,
-        "src_bytes": 22386,
-        "proto": "icmp",
-        "state": "ECO"
+        "dur": 7.53607702255249,
+        "tot_pkts": 5,
+        "tot_bytes": 306,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_RA"
       },
       "actions": [
         [
@@ -6142,18 +6250,18 @@
       "episode_id": 74,
       "policy": "baseline",
       "original_features": {
-        "dur": 8.50936222076416,
-        "tot_pkts": 125,
-        "tot_bytes": 100937,
-        "src_bytes": 91540,
+        "dur": 0.975953996181488,
+        "tot_pkts": 116,
+        "tot_bytes": 100167,
+        "src_bytes": 9169,
         "proto": "tcp",
         "state": "FSPA_FSPA"
       },
       "mutated_features": {
-        "dur": 8.50936222076416,
-        "tot_pkts": 125,
-        "tot_bytes": 100937,
-        "src_bytes": 91540,
+        "dur": 0.975953996181488,
+        "tot_pkts": 116,
+        "tot_bytes": 100167,
+        "src_bytes": 9169,
         "proto": "tcp",
         "state": "FSPA_FSPA"
       },
@@ -6230,20 +6338,20 @@
       "episode_id": 75,
       "policy": "baseline",
       "original_features": {
-        "dur": 2.937946081161499,
+        "dur": 0.2513419985771179,
         "tot_pkts": 2,
-        "tot_bytes": 124,
-        "src_bytes": 124,
-        "proto": "tcp",
-        "state": "S_"
+        "tot_bytes": 357,
+        "src_bytes": 70,
+        "proto": "udp",
+        "state": "CON"
       },
       "mutated_features": {
-        "dur": 2.937946081161499,
+        "dur": 0.2513419985771179,
         "tot_pkts": 2,
-        "tot_bytes": 124,
-        "src_bytes": 124,
-        "proto": "tcp",
-        "state": "S_"
+        "tot_bytes": 357,
+        "src_bytes": 70,
+        "proto": "udp",
+        "state": "CON"
       },
       "actions": [
         [
@@ -6318,18 +6426,18 @@
       "episode_id": 76,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.25379401445388794,
+        "dur": 0.01736699976027012,
         "tot_pkts": 2,
-        "tot_bytes": 265,
-        "src_bytes": 75,
+        "tot_bytes": 194,
+        "src_bytes": 71,
         "proto": "udp",
         "state": "CON"
       },
       "mutated_features": {
-        "dur": 0.25379401445388794,
+        "dur": 0.01736699976027012,
         "tot_pkts": 2,
-        "tot_bytes": 265,
-        "src_bytes": 75,
+        "tot_bytes": 194,
+        "src_bytes": 71,
         "proto": "udp",
         "state": "CON"
       },
@@ -6339,64 +6447,10 @@
           0.0,
           0.0,
           0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0
         ]
       ],
-      "steps": 10,
-      "evaded_xgboost": false,
+      "steps": 1,
+      "evaded_xgboost": true,
       "jitter": 0.0,
       "padding": 0.0,
       "proto_hop": false,
@@ -6406,20 +6460,20 @@
       "episode_id": 77,
       "policy": "baseline",
       "original_features": {
-        "dur": 8.923778533935547,
-        "tot_pkts": 3,
-        "tot_bytes": 186,
-        "src_bytes": 186,
-        "proto": "tcp",
-        "state": "S_"
+        "dur": 0.0682540014386177,
+        "tot_pkts": 2,
+        "tot_bytes": 229,
+        "src_bytes": 71,
+        "proto": "udp",
+        "state": "CON"
       },
       "mutated_features": {
-        "dur": 8.923778533935547,
-        "tot_pkts": 3,
-        "tot_bytes": 186,
-        "src_bytes": 186,
-        "proto": "tcp",
-        "state": "S_"
+        "dur": 0.0682540014386177,
+        "tot_pkts": 2,
+        "tot_bytes": 229,
+        "src_bytes": 71,
+        "proto": "udp",
+        "state": "CON"
       },
       "actions": [
         [
@@ -6494,20 +6548,20 @@
       "episode_id": 78,
       "policy": "baseline",
       "original_features": {
-        "dur": 0.07321999967098236,
-        "tot_pkts": 2,
-        "tot_bytes": 244,
-        "src_bytes": 70,
-        "proto": "udp",
-        "state": "CON"
+        "dur": 8.009303092956543,
+        "tot_pkts": 8,
+        "tot_bytes": 1714,
+        "src_bytes": 892,
+        "proto": "tcp",
+        "state": "SRPA_SPA"
       },
       "mutated_features": {
-        "dur": 0.07321999967098236,
-        "tot_pkts": 2,
-        "tot_bytes": 244,
-        "src_bytes": 70,
-        "proto": "udp",
-        "state": "CON"
+        "dur": 8.009303092956543,
+        "tot_pkts": 8,
+        "tot_bytes": 1714,
+        "src_bytes": 892,
+        "proto": "tcp",
+        "state": "SRPA_SPA"
       },
       "actions": [
         [
@@ -6582,7 +6636,7 @@
       "episode_id": 79,
       "policy": "baseline",
       "original_features": {
-        "dur": 9.029509544372559,
+        "dur": 9.01301097869873,
         "tot_pkts": 3,
         "tot_bytes": 186,
         "src_bytes": 186,
@@ -6590,7 +6644,7 @@
         "state": "S_"
       },
       "mutated_features": {
-        "dur": 9.029509544372559,
+        "dur": 9.01301097869873,
         "tot_pkts": 3,
         "tot_bytes": 186,
         "src_bytes": 186,
