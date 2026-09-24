@@ -200,16 +200,28 @@ capability**. Different strategy, same score.
 **Evaluation Date:** 2026-09-24  
 **Seeded Validation (identical 80 deterministic episodes, seed=42, all policies):**
 
-| Policy | XGBoost Evasion | Snort Detection | Snort Evasion |
-|--------|-----------------|-----------------|---------------|
-| Blind Agent (no shaping) | 97.5% (78/80) | **70.0% (56/80)** | 30.0% |
-| Blind λ=10 (v1 surrogate) | 95.0% (76/80) | 85.0% (68/80) | 15.0% |
-| Enhanced λ=10 (v2 surrogate) | 95.0% (76/80) | 85.0% (68/80) | 15.0% |
-| Random | 66.2% (53/80) | 68.75% (55/80) | 31.25% |
-| Baseline (no mutation) | 3.8% (3/80) | 6.25% (5/80) | 93.8% |
+|| Policy | XGBoost Evasion | Snort Detection | Snort Evasion |
+||--------|-----------------|-----------------|------------------|
+|| Blind Agent (no shaping) | 97.5% (78/80) | **70.0% (56/80)** | 30.0% |
+|| Blind λ=10 (v1 surrogate) | 95.0% (76/80) | 85.0% (68/80) | 15.0% |
+|| Enhanced λ=10 (v2 surrogate) | 95.0% (76/80) | 85.0% (68/80) | 15.0% |
+|| **Snort-Direct Agent** | **11.2% (9/80)** | **93.8% (75/80)** | **6.2% (5/80)** |
+|| Random | 66.2% (53/80) | 68.75% (55/80) | 31.25% |
+|| Baseline (no mutation) | 3.8% (3/80) | 6.25% (5/80) | 93.8% |
 
-The control rows (baseline 3/80, random 55/80) are **identical across all three
-runs**, which is the signature that episode pairing is working.
+The control rows (baseline 3/80, random 55/80) are **identical across all
+runs**, confirming deterministic episode pairing.
+
+**New Finding — Snort-Direct Training (Task 3):**
+The snort-direct agent, trained with real Snort verdicts via replica mock
+(`--snort-direct --snort-direct-mode replica`, 196 iterations, 277s), achieved
+**6.2% real Snort evasion** on the full 80-episode validation set. This is a
+**degradation from the blind λ=10 baseline (15.0% evasion)** and indicates
+overfitting to the replica mock's decision boundaries. The agent achieved 100%
+evasion on a small validation set (20 flows) but failed to generalize to real
+Snort on the broader seeded evaluation. The replica mock, while 100% accurate on
+small samples (299/299 real verdicts in lab validation), diverges from real
+Snort's actual detection logic at scale.
 
 **Key Findings:**
 
@@ -224,6 +236,14 @@ runs**, which is the signature that episode pairing is working.
 3. **The surrogate is a poor proxy for real Snort.** The XGBoost surrogate
    predicts ~95% evasion while real Snort catches 85% of the same mutations —
    a **~80pp gap**.
+
+4. **Training directly on real Snort verdicts via replica mock degraded
+   generalization.** The snort-direct agent (trained with `--snort-direct
+   --snort-direct-mode replica`) achieved 100% evasion on a small validation set
+   (20 flows) but only 6.2% on the full 80-episode test — **worse than the blind
+   λ=10 baseline (15.0%)** and indicating severe overfitting. The replica mock,
+   while 100% accurate on small samples (299/299 real verdicts), does not capture
+   real Snort's full decision logic at scale.
 
 **Interpretation:** The reward is `−λ · P(surrogate flags this flow)`. The agent
 minimizes that penalty, but the surrogate's decision surface is dominated by
@@ -314,7 +334,7 @@ The **entire** Snort line landed on **2026-09-24** — not spread across
 
 **Central Question:** Can enriched behavioral features improve RL evasion robustness against Snort?
 
-**Short Answer:** No. Enriched features improve surrogate calibration without improving real-world evasion, and the defense-aware reward that motivated the exercise actively **degrades** real-world evasion.
+**Short Answer:** No. Enriched features improve surrogate calibration without improving real-world evasion, the defense-aware reward that motivated the exercise actively **degrades** real-world evasion, and training directly on real Snort verdicts via a replica mock causes severe overfitting.
 
 **Detailed Findings:**
 
@@ -331,21 +351,29 @@ The **entire** Snort line landed on **2026-09-24** — not spread across
 
 3. **Defense-aware shaping requires the defense in the loop, not a model of it.**
    The agent that ignored the defense entirely was the best real-world evader
-   (70.0% detection vs 85.0%). "Train against the thing" and "train against a
-   model of the thing" are not interchangeable for an evasion agent — and the
+   (70.0% detection vs 85.0%). Train against the thing and train against a
+   model of the thing are not interchangeable for an evasion agent — and the
    gap between them is exactly the exploitability of the proxy.
 
 4. **The detection surface is flow-aggregate, not behavioural.** Snort's
    behaviour rules (dsize thresholds, small-packet bursts) were calibrated to the
    CTU-13 distribution, and yet `tot_pkts` — a raw aggregate — dominates every
-   model of them. The "behavioural" framing of the candidate set was optimistic:
+   model of them. The behavioural framing of the candidate set was optimistic:
    the behavioural features turned out to be derived from the same aggregate they
    were meant to augment.
+
+5. **Perfect lab accuracy does not guarantee field robustness.** The snort-direct
+   agent, trained with real Snort verdicts via a replica mock that achieved 100%
+   accuracy on 299 real verdicts, degraded from 15.0% real Snort evasion (blind
+   λ=10 baseline) to 6.2% on the full 80-episode test. The replica mock's
+   decision boundaries, while perfect on small samples, diverge from real Snort
+   at scale — a classic case of overfitting the proxy, not the ground truth.
 
 **Key Lesson:** Training against a surrogate, even a perfect one, does not
 guarantee real-world evasion. The surrogate must be **verified against ground
 truth** before deployment — and the verification must be behavioural, not
-statistical.
+statistical. A replica mock accurate on small samples may diverge catastrophically
+on larger test sets.
 
 ---
 
