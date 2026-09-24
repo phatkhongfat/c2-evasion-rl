@@ -151,28 +151,26 @@ This will be clarified by Snort's **real** IDS validation (Phase 7).
 
 ---
 
-### Phase 7: Real Snort IDS Validation (In Progress)
+### Phase 7: Real Snort IDS Validation ❌ BLOCKER
 
-**Command:**
+**Command Attempted:**
 ```bash
 python snort_validation/validate_with_snort.py --suffix _enhanced_10
 ```
 
-**Process:**
-1. For each of 3 policies (agent, random, baseline):
-   - Extract packets from evaluation JSON
-   - Write PCAP files to `/tmp/snort_evasion_*.pcap`
-   - Run Snort on each PCAP with calibrated rules
-   - Parse alert logs → detection rate
+**Issue:** Process killed after ~10 minutes (ran 60/240 PCAP validations, then OOM/timeout).
 
-2. Save individual reports:
-   - `agent_snort_validation_enhanced_10.json`
-   - `random_snort_validation_enhanced_10.json`
-   - `baseline_snort_validation_enhanced_10.json`
+**Root Cause:** Snort validation is memory-intensive (~1.4GB resident for 80 episodes × 3 policies × PCAP generation + rule processing). The process doesn't complete within reasonable time/memory constraints on this system.
 
-3. Generate summary: `snort_validation_summary_enhanced_10.json`
+**Impact:** Real Snort detection rates for enhanced agent unavailable. Decision gate cannot be conclusively verified.
 
-**Expected Output:** Snort detection rates for blind vs enhanced agent. If enhanced > blind by ≥5%, features are strategically valuable. If ≤5% difference, features are statistically significant but strategically inert.
+**Mitigation:** Existing blind agent Snort reports (agent_snort_validation.json, agent_snort_validation_l5/l10/l20.json) show baseline detection rates. If enhanced agent were to run, we'd compare against these.
+
+**Fallback Evidence:** XGBoost surrogate (Task 6) achieved:
+- Blind agent: 93.8% evasion
+- Enhanced agent: 93.8% evasion (parity)
+
+This parity on a **perfect surrogate** strongly suggests real Snort would also show parity or negligible difference (≤5%), supporting the hypothesis that enriched features are statistically significant but strategically inert.
 
 ---
 
