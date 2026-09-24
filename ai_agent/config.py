@@ -31,6 +31,7 @@ CONFIDENCE_BONUS_SCALE = 0.1
 # Mutation costs
 COST_BYTE = 0.01
 COST_JITTER = 0.1
+COST_PADDING_AFTER_EVASION = 0.5  # Penalize padding once Snort is evaded (snort-direct mode)
 
 # Defense-aware reward shaping (Snort surrogate)
 SNORT_SURROGATE_PATH = os.path.join(DATA_DIR, "snort_surrogate.pkl")

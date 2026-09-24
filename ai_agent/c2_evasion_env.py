@@ -10,7 +10,7 @@ from config import (
     MAX_STEPS, FEATURE_BOUNDS,
     REWARD_EVASION, REWARD_DETECTION, STEP_PENALTY,
     CONFIDENCE_BONUS_SCALE, COST_BYTE, COST_JITTER,
-    SNORT_PENALTY_SCALE,
+    SNORT_PENALTY_SCALE, COST_PADDING_AFTER_EVASION,
     OBSERVATION_FEATURES
 )
 
@@ -76,10 +76,14 @@ class C2EvasionEnv(gym.Env):
         # Running state for proto and state (cumulative)
         self.current_proto = None
         self.current_state = None
+        
+        # Track if Snort has been evaded (for padding penalty in snort-direct mode)
+        self.snort_evaded_at_step = None
 
     def reset(self, seed=None, options=None):
         super().reset(seed=seed)
         self.current_step = 0
+        self.snort_evaded_at_step = None  # Reset evasion tracker
 
         self.current_idx = int(self.np_random.integers(0, len(self.malicious_pool)))
         self.initial_sample = self.malicious_pool[self.current_idx].copy()
@@ -182,8 +186,18 @@ class C2EvasionEnv(gym.Env):
             else:  # Evaded Snort
                 reward = REWARD_EVASION - mutation_cost
                 evaded = True
-                terminated = True
+                # FIX: Do NOT terminate early. Let episode run to max_steps so agent
+                # learns to maintain evasion over the full horizon, not just step 1-2.
+                # Gate eval will measure real Snort detection at step 10.
+                terminated = False
+                # Track first evasion step for padding penalty
+                if self.snort_evaded_at_step is None:
+                    self.snort_evaded_at_step = self.current_step
             confidence_reduction = 0.0  # N/A for snort-direct
+            
+            # Penalize padding after Snort is evaded (discourage unbounded growth)
+            if self.snort_evaded_at_step is not None and byte_delta > 0:
+                reward -= byte_delta * COST_PADDING_AFTER_EVASION
         else:
             # Original XGBoost-based reward
             if prediction == 0:  # Evaded
