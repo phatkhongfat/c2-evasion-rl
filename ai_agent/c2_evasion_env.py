@@ -48,11 +48,11 @@ class C2EvasionEnv(gym.Env):
 
         self.judge = joblib.load(model_path)
         self.snort_surrogate = None
-        self.snort_feature_names = None
+        # Resolve feature names from the judge model (which may have been trained on derived features)
+        self.snort_feature_names = self._resolve_snort_features(
+            self.judge, snort_feature_names)
         if snort_surrogate_path and os.path.exists(snort_surrogate_path):
             self.snort_surrogate = joblib.load(snort_surrogate_path)
-            self.snort_feature_names = self._resolve_snort_features(
-                self.snort_surrogate, snort_feature_names)
         self.snort_penalty_scale = snort_penalty_scale
         self.snort_direct = snort_direct
         self.snort_direct_mode = snort_direct_mode
