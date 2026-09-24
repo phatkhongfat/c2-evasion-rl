@@ -181,25 +181,42 @@ def load_evaluation_results(eval_output_path: Path) -> Dict:
         return json.load(f)
 
 
+def parse_args():
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--suffix", default="",
+                    help="run-tag suffix, e.g. _l10. Reads "
+                         "<policy>_evaluation<suffix>.json and writes "
+                         "<policy>_snort_validation<suffix>.json + "
+                         "snort_validation_summary<suffix>.json")
+    return ap.parse_args()
+
+
 def main():
     """
     Main validation workflow: validate agent, random, and baseline policies.
-    
+
     Expects run_evaluation.py to have already generated:
-    - snort_validation/reports/agent_evaluation.json
-    - snort_validation/reports/random_evaluation.json
-    - snort_validation/reports/baseline_evaluation.json
+    - snort_validation/reports/agent_evaluation<suffix>.json
+    - snort_validation/reports/random_evaluation<suffix>.json
+    - snort_validation/reports/baseline_evaluation<suffix>.json
+
+    The suffix matters: without it a lambda sweep overwrites (or, worse, is
+    silently assumed identical to) the blind run.  Each lambda must be
+    validated from its OWN evaluation file.
     """
+    args = parse_args()
+    sfx = args.suffix
     repo_root = Path(__file__).parent.parent
     snort_conf = repo_root / "snort_validation/rules/snort.conf"
     output_dir = repo_root / "snort_validation/pcaps"
     reports_dir = repo_root / "snort_validation/reports"
-    
+
     # Check for evaluation files
     eval_files = {
-        'agent': reports_dir / "agent_evaluation.json",
-        'random': reports_dir / "random_evaluation.json",
-        'baseline': reports_dir / "baseline_evaluation.json"
+        'agent': reports_dir / f"agent_evaluation{sfx}.json",
+        'random': reports_dir / f"random_evaluation{sfx}.json",
+        'baseline': reports_dir / f"baseline_evaluation{sfx}.json"
     }
     
     missing = [name for name, path in eval_files.items() if not path.exists()]
@@ -236,7 +253,7 @@ def main():
         all_results[policy_name] = results
         
         # Save individual report
-        report_path = reports_dir / f"{policy_name}_snort_validation.json"
+        report_path = reports_dir / f"{policy_name}_snort_validation{sfx}.json"
         with open(report_path, 'w') as f:
             json.dump(results, f, indent=2)
         
@@ -263,7 +280,7 @@ def main():
     print("="*70)
     
     # Save combined summary
-    summary_path = reports_dir / "snort_validation_summary.json"
+    summary_path = reports_dir / f"snort_validation_summary{sfx}.json"
     with open(summary_path, 'w') as f:
         json.dump(all_results, f, indent=2)
     

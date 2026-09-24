@@ -65,7 +65,7 @@ def extract_flow_features(env):
     }
 
 
-def run_evaluation_with_capture(num_episodes=80, policy_type='agent', agent_model="models/ppo_c2_evasion_agent.zip"):
+def run_evaluation_with_capture(num_episodes=80, policy_type='agent', agent_model="models/ppo_c2_evasion_agent.zip", seed=42):
     """
     Run evaluation and capture episode data.
     
@@ -73,6 +73,8 @@ def run_evaluation_with_capture(num_episodes=80, policy_type='agent', agent_mode
         num_episodes: number of episodes to run
         policy_type: 'agent' (PPO), 'random', or 'baseline' (no mutation)
         agent_model: path (relative to repo root) to the PPO model zip
+        seed: base seed; episode i is reset with seed+i, so all policies and
+              all runs are evaluated on the SAME episode sequence
     
     Returns:
         dict with episodes data and summary stats
@@ -108,7 +110,8 @@ def run_evaluation_with_capture(num_episodes=80, policy_type='agent', agent_mode
     success_count = 0
     
     for i in range(num_episodes):
-        obs, info = env.reset()
+        # Deterministic episode sampling: identical across policies and runs.
+        obs, info = env.reset(seed=seed + i)
         
         # Capture original flow features
         original_features = extract_flow_features(env)
@@ -184,6 +187,17 @@ def parse_args():
     ap = argparse.ArgumentParser()
     ap.add_argument("--agent-model", default="models/ppo_c2_evasion_agent.zip",
                     help="path to PPO model zip for the agent policy")
+    ap.add_argument("--suffix", default="",
+                    help="run-tag suffix for output files, e.g. _enhanced_10. "
+                         "REQUIRED to keep a new sweep from overwriting the "
+                         "blind baseline reports.")
+    ap.add_argument("--num-episodes", type=int, default=80)
+    ap.add_argument("--seed", type=int, default=42,
+                    help="base seed; episode i uses seed+i so every policy "
+                         "and every run sees the SAME 80 episodes. Without "
+                         "this, cross-run deltas mix policy effect with "
+                         "episode-sampling variance (the no-mutation baseline "
+                         "alone moved 5%%->15%% between unseeded runs).")
     return ap.parse_args()
 
 def main():
@@ -191,20 +205,21 @@ def main():
     Main workflow: run evaluation for agent, random, and baseline policies.
     """
     args = parse_args()
+    sfx = args.suffix
     output_dir = Path(__file__).parent.parent / "snort_validation/reports"
     output_dir.mkdir(parents=True, exist_ok=True)
-    
+
     # 1. Agent policy (PPO)
     print("=" * 70)
     print("PHASE 1: AGENT POLICY (PPO)")
     print("=" * 70)
-    agent_results = run_evaluation_with_capture(num_episodes=80, policy_type='agent', agent_model=args.agent_model)
+    agent_results = run_evaluation_with_capture(num_episodes=args.num_episodes, policy_type='agent', agent_model=args.agent_model, seed=args.seed)
     
     if agent_results is None:
         print("ERROR: Failed to run agent evaluation")
         return
     
-    agent_output = output_dir / "agent_evaluation.json"
+    agent_output = output_dir / f"agent_evaluation{sfx}.json"
     with open(agent_output, 'w') as f:
         json.dump(agent_results, f, indent=2)
     print(f"✓ Agent results saved to: {agent_output}\n")
@@ -213,9 +228,9 @@ def main():
     print("=" * 70)
     print("PHASE 2: RANDOM POLICY (BASELINE)")
     print("=" * 70)
-    random_results = run_evaluation_with_capture(num_episodes=80, policy_type='random')
+    random_results = run_evaluation_with_capture(num_episodes=args.num_episodes, policy_type="random", seed=args.seed)
     
-    random_output = output_dir / "random_evaluation.json"
+    random_output = output_dir / f"random_evaluation{sfx}.json"
     with open(random_output, 'w') as f:
         json.dump(random_results, f, indent=2)
     print(f"✓ Random results saved to: {random_output}\n")
@@ -224,9 +239,9 @@ def main():
     print("=" * 70)
     print("PHASE 3: NO MUTATION BASELINE")
     print("=" * 70)
-    baseline_results = run_evaluation_with_capture(num_episodes=80, policy_type='baseline')
+    baseline_results = run_evaluation_with_capture(num_episodes=args.num_episodes, policy_type="baseline", seed=args.seed)
     
-    baseline_output = output_dir / "baseline_evaluation.json"
+    baseline_output = output_dir / f"baseline_evaluation{sfx}.json"
     with open(baseline_output, 'w') as f:
         json.dump(baseline_results, f, indent=2)
     print(f"✓ Baseline results saved to: {baseline_output}\n")

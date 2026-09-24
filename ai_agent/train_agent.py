@@ -11,7 +11,7 @@ from c2_evasion_env import C2EvasionEnv
 from evasion_metrics_callback import EvasionMetricsCallback
 from config import (
     DATA_DIR, ARCHIVE_DIR, MODEL_DIR, SNORT_SURROGATE_PATH,
-    SNORT_SURROGATE_ENHANCED_PATH,
+    SNORT_SURROGATE_ENHANCED_PATH, SNORT_PENALTY_SCALE,
     PPO_LEARNING_RATE, PPO_N_STEPS, PPO_BATCH_SIZE,
     PPO_GAMMA, PPO_ENT_COEF, PPO_CLIP_RANGE,
     TOTAL_TIMESTEPS
@@ -124,9 +124,19 @@ if __name__ == "__main__":
     model.learn(total_timesteps=TOTAL_TIMESTEPS, callback=callback)
 
     os.makedirs(MODEL_DIR, exist_ok=True)
+    # Tag must be unique per (defense-aware?, surrogate version, lambda).
+    # Omitting the enhanced marker silently overwrites the blind-surrogate
+    # model of the same lambda and makes the sweep irreproducible.
     tag = "_snortaware" if args.snort else ""
+    if args.enhanced:
+        tag += "_enhanced"
     if args.snort and args.snort_lambda is not None:
         tag += f"_{args.snort_lambda}"
     model_save_path = os.path.join(MODEL_DIR, f"ppo_c2_evasion_agent{tag}.zip")
+    if os.path.exists(model_save_path):
+        print(f"[!] WARNING: overwriting existing model {model_save_path}")
     model.save(model_save_path)
     print(f"[+] Training complete. Model saved to {model_save_path}")
+    print(f"[+] Reward config: snort={args.snort} enhanced={args.enhanced} "
+          f"lambda={env_kwargs.get('snort_penalty_scale', SNORT_PENALTY_SCALE)} "
+          f"surrogate={snort_surrogate if args.snort else 'none'}")
