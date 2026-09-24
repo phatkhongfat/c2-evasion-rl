@@ -61,17 +61,22 @@ def parse_args():
     ap = argparse.ArgumentParser()
     ap.add_argument("--snort", action="store_true",
                     help="enable Snort-surrogate defense-aware reward")
+    ap.add_argument("--snort-lambda", type=float, default=None,
+                    help="override SNORT_PENALTY_SCALE for reward shaping (e.g. 10.0)")
     return ap.parse_args()
 
 if __name__ == "__main__":
     args = parse_args()
     malicious_pool = load_malicious_pool()
 
-    env = C2EvasionEnv(
+    env_kwargs = dict(
         malicious_data_pool=malicious_pool,
         max_steps=10,
         snort_surrogate_path=SNORT_SURROGATE_PATH if args.snort else None
     )
+    if args.snort and args.snort_lambda is not None:
+        env_kwargs["snort_penalty_scale"] = args.snort_lambda
+    env = C2EvasionEnv(**env_kwargs)
 
     print("[*] Checking environment compatibility...")
     check_env(env, warn=True)
@@ -100,6 +105,8 @@ if __name__ == "__main__":
 
     os.makedirs(MODEL_DIR, exist_ok=True)
     tag = "_snortaware" if args.snort else ""
+    if args.snort and args.snort_lambda is not None:
+        tag += f"_{args.snort_lambda}"
     model_save_path = os.path.join(MODEL_DIR, f"ppo_c2_evasion_agent{tag}")
     model.save(model_save_path)
     print(f"[+] Training complete. Model saved to {model_save_path}.zip")
