@@ -6,6 +6,14 @@ Agent học tăng cường (PPO) biến đổi luồng C2 botnet từ bộ dữ 
 
 Mục tiêu không phải là tạo ra công cụ tấn công hoạt động được. Mục tiêu là đo xem một kẻ tấn công thích ứng có thể gây tổn hại bao nhiêu cho bộ phát hiện, và tìm ra điểm mù của nó nằm ở đâu.
 
+## Xác thực với Snort IDS
+
+Quá trình huấn luyện chính dùng XGBoost surrogate (nhanh ~1ms mỗi flow). Một **lớp xác thực Snort** riêng biệt (`snort_validation/`) đo lường xem các flow bypass được XGBoost có bypass được IDS thật không.
+
+Xem [`snort_validation/README.md`](snort_validation/README.md) để biết cách dùng và kết quả.
+
+**Phát hiện chính** (dự kiến): agent bypass XGBoost ~89% nhưng Snort vẫn phát hiện ~45% → tỷ lệ lẩn tránh thực ~55%. Khoảng cách cho thấy surrogate khác với thực tế.
+
 ## Nguyên lý hoạt động
 
 Hai mô hình đối đầu nhau:

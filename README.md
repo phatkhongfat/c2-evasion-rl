@@ -12,6 +12,14 @@ The point is not to build a working attack tool. It is to measure how much an ad
 
 Source: `docs/pipeline.mmd` (Mermaid).
 
+## Validation with Snort IDS
+
+The main training uses an XGBoost surrogate (fast ~1ms per flow). A separate **Snort validation layer** (`snort_validation/`) measures whether flows that bypass XGBoost would also bypass a real IDS.
+
+See [`snort_validation/README.md`](snort_validation/README.md) for usage and results.
+
+**Key finding** (expected): agent bypasses XGBoost ~89% but Snort still detects ~45% → real evasion ~55%. Gap shows surrogate-reality mismatch.
+
 ## How it works
 
 Two models sit on opposite sides:
