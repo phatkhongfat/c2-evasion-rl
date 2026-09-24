@@ -2,6 +2,7 @@ import os
 import glob
 import pandas as pd
 import random
+import argparse
 import numpy as np
 import torch
 from stable_baselines3 import PPO
@@ -9,7 +10,7 @@ from stable_baselines3.common.env_checker import check_env
 from c2_evasion_env import C2EvasionEnv
 from evasion_metrics_callback import EvasionMetricsCallback
 from config import (
-    DATA_DIR, ARCHIVE_DIR, MODEL_DIR,
+    DATA_DIR, ARCHIVE_DIR, MODEL_DIR, SNORT_SURROGATE_PATH,
     PPO_LEARNING_RATE, PPO_N_STEPS, PPO_BATCH_SIZE,
     PPO_GAMMA, PPO_ENT_COEF, PPO_CLIP_RANGE,
     TOTAL_TIMESTEPS
@@ -56,12 +57,20 @@ def load_malicious_pool():
     print(f"[+] Loaded {len(pool)} malicious samples.")
     return pool
 
+def parse_args():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--snort", action="store_true",
+                    help="enable Snort-surrogate defense-aware reward")
+    return ap.parse_args()
+
 if __name__ == "__main__":
+    args = parse_args()
     malicious_pool = load_malicious_pool()
 
     env = C2EvasionEnv(
         malicious_data_pool=malicious_pool,
-        max_steps=10
+        max_steps=10,
+        snort_surrogate_path=SNORT_SURROGATE_PATH if args.snort else None
     )
 
     print("[*] Checking environment compatibility...")
@@ -90,6 +99,7 @@ if __name__ == "__main__":
     model.learn(total_timesteps=TOTAL_TIMESTEPS, callback=callback)
 
     os.makedirs(MODEL_DIR, exist_ok=True)
-    model_save_path = os.path.join(MODEL_DIR, "ppo_c2_evasion_agent")
+    tag = "_snortaware" if args.snort else ""
+    model_save_path = os.path.join(MODEL_DIR, f"ppo_c2_evasion_agent{tag}")
     model.save(model_save_path)
     print(f"[+] Training complete. Model saved to {model_save_path}.zip")
