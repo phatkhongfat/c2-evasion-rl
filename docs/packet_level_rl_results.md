@@ -22,6 +22,15 @@ Per-seed agent evasion on the subset: 28.3 / 31.3 / 31.3 / 32.0 / 31.3 — the
 gap holds on every seed, and 10.7 pp against a seed-to-seed std of ~1.3 pp is
 roughly a 6-sigma effect.
 
+## Subset analysis: where does the agent help most?
+
+See [`packet_level_subset_analysis.md`](packet_level_subset_analysis.md) for the
+full 9-subset sweep. Best reporting subset: **`tcp_pkt>=10`** (26,772 flows, 10.2%
+of pool) → agent **26.2%** vs random **15.0%** (**+11.2 pp**, 3 seeds × 200
+episodes). Pure TCP gives a cleaner protocol signal than the mixed ≥10-packet set
+above. Medium flows (5–19 packets) show +7.5 pp; large flows (≥50 packets or
+≥10K bytes) see zero benefit — the rules already catch them.
+
 ## Why the two numbers differ by an order of magnitude
 
 The full-pool rate is dominated by flows that are *already* undetectable and by

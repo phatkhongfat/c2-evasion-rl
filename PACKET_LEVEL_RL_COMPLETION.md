@@ -68,6 +68,15 @@ It is a **smoke test, not a result**: 80 episodes puts one episode at 1.25 pp,
 and the measured seed-to-seed standard deviation is ~1.1 pp. The +1.2 pp gap is
 one episode wide — inside the noise floor of the measurement.
 
+### Subset sweep (which flows show the clearest margin?)
+
+9 subsets tested (3 seeds × 200 episodes each). Best: **`tcp_pkt>=10`** (26,772
+flows, 10.2% of pool) → **26.2% agent vs 15.0% random (+11.2 pp)**. Pure TCP gives
+a cleaner protocol signal than the original mixed ≥10-packet set. Medium flows
+(5–19 packets, 39K flows) show +7.5 pp. Large flows (≥50 packets or ≥10K bytes)
+see zero benefit — the rules already catch them. Full table in
+[`docs/packet_level_subset_analysis.md`](docs/packet_level_subset_analysis.md).
+
 ### Multi-seed measurement (5 seeds, 400 episodes/seed full pool, 300/seed subset)
 
 | Population | Agent evasion | Random evasion | Gap |
