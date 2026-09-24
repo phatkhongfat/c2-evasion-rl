@@ -1,392 +1,510 @@
-CHANGELOG
-=========
+# CHANGELOG
 
-All notable changes since Snort integration (commit 95cb9cd, 2026-09-16) are
-documented here. Sections track methodology, metrics, decision gates, and
-thesis implications.
+All notable changes to this project since the Snort integration landed
+(commit `95cb9cd`) are documented here.
+
+Scope: methodology, metrics deltas, decision gates, bug fixes, and thesis
+implications. Every number below is traceable to a file in the repository; the
+"Evidence" column of each section names it.
+
+> **Read this first.** Two classes of result appear in this document and they
+> must not be conflated:
+>
+> - **Reported (unseeded) metrics** — the original λ sweep as it was run and
+>   committed (`*_evaluation.json` without a `_seeded_` prefix). These were
+>   produced with unseeded episode sampling, so different runs saw different
+>   flows. They are kept for provenance but are **not** a valid basis for
+>   comparing policies.
+> - **Seeded metrics** — the controlled re-run (`*_seeded_*.json`), where every
+>   policy and every run evaluates the *same* 80 episodes. **These are the
+>   numbers to cite.**
+>
+> See [Measurement integrity](#measurement-integrity) for the two bugs that
+> made this distinction necessary.
+
+---
 
 ## [Unreleased] Enhanced Feature Engineering & Snort Surrogate v2 (2026-09-24)
 
 ### Motivation
 
-The baseline Snort surrogate (v1) was trained on only 6 raw flow-aggregate
-features: dur, tot_pkts, tot_bytes, src_bytes, proto, state. While it achieved
-AUC 0.998 on held-out data, it could not model the behavioral signatures Snort
-rules measure (payload size patterns, flag frequencies, packet-rate anomalies).
-This milestone extends the surrogate to 16 features, aligning it with Snort's
-rule logic and testing whether richer behavioral representations improve
-defense-aware RL reward shaping.
+The v1 Snort surrogate was trained on 6 raw flow aggregates
+(`dur`, `tot_pkts`, `tot_bytes`, `src_bytes`, `proto`, `state`) and reached
+AUC 0.998. But those 6 features cannot express what Snort's rules actually
+match — payload size distributions, flag cadence, packet-rate bursts. The
+hypothesis for this milestone: **giving the surrogate the behavioural features
+Snort's rules measure should make defense-aware reward shaping more faithful,
+and therefore produce an agent that evades the real IDS better.**
 
-### Task 1: Feature Extraction — CTU-13 Derivation Pipeline
+That hypothesis is tested end-to-end below, and the answer is **no** — with an
+important qualification about why.
 
-**File:** `snort_validation/extract_ctu13_features.py`
-**Input:** 13 CTU-13 capture files (binetflow parquet), 262,573 botnet flows
-**Output:** `snort_validation/data/ctu13_features_candidates.csv` (11,729 flows × 27 cols)
+---
+
+### Task 1 — Extract 20 candidate features from CTU-13
+
+**Script:** `snort_validation/extract_ctu13_features.py`
+**Feature library:** `ai_agent/flow_features.py` (single source of truth)
+**Input:** 13 CTU-13 capture files, 262,573 botnet-labelled flows
+**Output:** `snort_validation/data/ctu13_features_candidates.csv` (11,729 × 27)
+**Evidence:** `snort_validation/data/ctu13_feature_distributions.json`
 
 #### Methodology
 
-- **Sampling:** 1,000 flows per capture (13 total); captures with <1,000 botnet
-  flows included entirely. This stratified sample (11,729 rows) is reproducible
-  (seed=42) and covers all 13 captures equally.
-  
-- **Baseline features (6):** dur, tot_pkts, tot_bytes, src_bytes, proto, state.
-  These are the raw flow aggregates from the CTU-13 schema.
-  
-- **Candidate features (20, derived):** Grouped into five families:
-  1. **Packet size (7):** pkt_size_mean, std, min, max, median, iqr, cv
-     - Derived from tot_bytes, tot_pkts using a bimodal MSS model
-  2. **Inter-arrival time (5):** iat_mean, std, min, max, cv
-     - Derived from dur, tot_pkts at fixed 0.25 CoV per the pcap emitter
-  3. **Flow rate (2):** pkt_rate, bytes_rate
-     - Ratios: tot_pkts/dur, tot_bytes/dur (nonlinear, capture burstiness)
-  4. **TCP flags (3):** syn_count, fin_count, rst_count
-     - Binary indicators from the CTU-13 state string (e.g., "FSPA_FSPA")
-  5. **Payload entropy (1):** payload_entropy_est
-     - 8 × (1 − header_fraction); header-only flow = 0, bulk transfer ≈ 8
+- **Sampling.** 1,000 botnet flows per capture, seeded (`seed=42`); captures
+  with fewer than 1,000 botnet flows are taken whole. Result: 11,729 flows
+  spanning all 13 captures. Sampling is stratified by capture so no single
+  botnet family (Neris, Rbot, Virut, Murlo, …) dominates.
+- **Baseline features (6):** the raw CTU-13 aggregates, unchanged.
+- **Candidate features (20, derived)** in five families:
 
-- **Data quality:**
-  - Missing values: 6 state nulls on ICMP flows (imputed to 'UNK')
-  - Vectorized vs. scalar derivation: max absolute difference 0.000e+00 ✓
-  - Distributions captured for all 262,573 botnet rows (100% population coverage)
+  | Family | n | Features |
+  |---|---|---|
+  | Packet size | 7 | `pkt_size_mean/std/min/max/median/iqr/cv` |
+  | Inter-arrival time | 5 | `iat_mean/std/min/max/cv` |
+  | Flow rate | 2 | `pkt_rate`, `bytes_rate` |
+  | TCP flags | 3 | `syn_count`, `fin_count`, `rst_count` |
+  | Payload | 1 | `payload_entropy_est` |
+  | Flag summary | 1 | `flags_variety` |
 
-#### Deliverables
+- **Correctness check.** Every derived feature is implemented twice — once
+  vectorised (pandas) and once scalar (per-row) — and the extractor asserts
+  they agree. Max absolute difference across all 13 captures: **0.000e+00**.
 
-- `ctu13_features_candidates.csv`: 11,729 rows, 27 columns (flow_id + 26 features)
-- `ctu13_feature_distributions.json`: Summary statistics, feature ranges, class balance
-- Both artifacts are now tracked in git (previously gitignored)
+#### Data-quality finding
+
+**69 `state` values are null** in the source parquet (not 6 — see the bug list).
+CTU-13 leaves `state` unset on ICMP flows. These are filled with the corpus's
+own `UNK` token rather than dropped, and the imputation count is stamped into
+the distributions JSON so it can never be silently forgotten.
 
 ---
 
-### Task 2: Feature Validation — Correlation with Snort Verdicts
+### Task 2 — Validate the 20 features against Snort verdicts
 
-**File:** `snort_validation/validate_features_vs_snort.py`
-**Input:** 80 agent + 80 random + 80 baseline episodes from prior runs (320 total)
-**Output:** `snort_validation/data/feature_validation_report{,_vs_xgb}.json/md`
+**Script:** `snort_validation/validate_features_vs_snort.py`
+**Dataset builder:** `snort_validation/surrogate_dataset.py` (shared by Tasks 2–4)
+**Input:** 320 labelled episodes (191 Snort-detected, 59.7%)
+**Output:** `snort_validation/data/feature_validation_report.{json,md}`
+**Evidence:** the report above; secondary run in `..._vs_xgb.{json,md}`
 
 #### Methodology
 
-- **Target:** Snort-detected (1) vs. evaded (0) from the pcap reconstruction validation
-- **Labelling:** 320 samples (191 detected, 59.7%) from three policies:
-  - blind_agent (66 detected, 82.5%): the baseline RL policy, defense-unaware
-  - random (55 detected, 68.8%): random mutations
-  - baseline (4 detected, 5.0%): no mutation (strong evasion baseline)
-  
-- **Correlations:** Pearson r (point-biserial for binary targets) + Spearman rho
-  - Effect-size gate: |r| > 0.15, p < 0.05
-  - Collinearity guard: |r| < 0.95 among selected features
-  - Top-10 selection: ranked by |r|, capped at top_k
+- **Target:** the real Snort verdict (`detected`) from pcap reconstruction —
+  *not* the XGBoost judge's own prediction. Correlating features against the
+  judge would be circular; the judge is what we are trying to improve.
+- **Statistic:** Pearson r (which on a binary target is the point-biserial
+  correlation). **Spearman rho is reported alongside** so a monotone-but-
+  nonlinear relationship is not missed.
+- **Decision gate (as specified):** `|Pearson r| > 0.15` **and** `p < 0.05`,
+  ranked by `|r|`, top 10.
+- **Robustness gate (added):** `|r| < 0.95` against already-selected features,
+  to expose redundancy the literal gate cannot see.
 
-- **Two analyses:**
-  1. **Primary (vs Snort verdicts):** Correlation with actual IDS detection
-  2. **Secondary (vs XGBoost judge):** Correlation with the surrogate's own
-     evasion prediction (validation that features align with the judge, not just Snort)
+#### Results — primary (vs Snort verdicts)
 
-#### Results
+19 of 20 features were testable (`iat_cv` is degenerate — constant 0.25 by
+construction, so its correlation is undefined). 17 passed `p < 0.05`; 12 passed
+both gates.
 
-**Primary analysis (vs Snort):**
-- Tested: 19/20 candidate features (iat_cv degenerate)
-- Passed p < 0.05: 17 features
-- Passed both gates (|r| > 0.15, p < 0.05): 12 features
-- **Selected (literal top-10):** 10 features
-  1. payload_entropy_est      r = −0.5077  (strongest signal)
-  2. pkt_size_iqr             r = −0.2303
-  3. pkt_size_min             r = +0.2296
-  4. pkt_size_max             r = −0.2271
-  5. pkt_size_median          r = −0.2238
-  6. pkt_size_cv              r = +0.2215
-  7. pkt_size_std             r = −0.2134
-  8. pkt_size_mean            r = −0.2130
-  9. avg_pkt_size (alias)     r = −0.2130
-  10. rst_count               r = +0.1893
+| # | feature | Pearson r | p | Spearman rho | decision |
+|---|---------|-----------|---|--------------|----------|
+| 1 | `payload_entropy_est` | −0.5077 | 2.3e-22 | −0.503 | **selected** |
+| 2 | `pkt_size_iqr` | −0.2303 | 3.2e-05 | −0.501 | **selected** |
+| 3 | `pkt_size_min` | +0.2296 | 3.4e-05 | +0.230 | **selected** |
+| 4 | `pkt_size_max` | −0.2271 | 4.1e-05 | −0.491 | **selected** |
+| 5 | `pkt_size_median` | −0.2238 | 5.4e-05 | −0.439 | **selected** |
+| 6 | `pkt_size_cv` | +0.2215 | 6.5e-05 | −0.051 | **selected** |
+| 7 | `pkt_size_std` | −0.2134 | 1.2e-04 | −0.368 | **selected** |
+| 8 | `pkt_size_mean` | −0.2130 | 1.2e-04 | −0.444 | **selected** |
+| 9 | `avg_pkt_size` | −0.2130 | 1.2e-04 | −0.444 | **selected** |
+| 10 | `rst_count` | +0.1893 | 6.6e-04 | +0.189 | **selected** |
+| 11 | `pkt_rate` | +0.1712 | 2.1e-03 | +0.593 | below top-10 |
+| 12 | `bytes_rate` | +0.1579 | 4.6e-03 | +0.597 | below top-10 |
+| 13–17 | `iat_max/std/mean/min`, `fin_count` | −0.130…+0.128 | ~0.02 | — | below `|r|` floor |
+| 18–19 | `flags_variety`, `syn_count` | +0.094, −0.058 | 0.09, 0.31 | — | not significant |
+| 20 | `iat_cv` | n/a | n/a | n/a | degenerate |
 
-- **Collinearity (redundancy):** 16 pairs with |r| ≥ 0.95 inside the top-10:
-  - pkt_size_mean ↔ avg_pkt_size: r = +1.000 (literal alias)
-  - pkt_size_iqr ↔ pkt_size_median: r = +0.999
-  - pkt_size_max ↔ pkt_size_median: r = +1.000
-  - [13 more packet-size cross-correlations in the 0.97–1.00 range]
-  
-  **Interpretation:** The packet-size family is 9 algebraic restatements of a
-  single signal: `tot_bytes / tot_pkts`. Training on all 10 does not add 10
-  independent feature signals; it adds one signal 9 times over. The literal
-  gate is kept (per plan) for reproducibility, but the "enhanced" feature
-  count is 1 true signal + 4 ancillaries (payload_entropy, pkt_size_iqr,
-  pkt_size_min, rst_count).
+Bonferroni-adjusted α would be 0.00263; 11 features survive it. Multiple-
+comparison correction does not change the conclusion.
 
-**Secondary analysis (vs XGBoost judge):**
-- Tested: 19 features
-- Passed p < 0.05: 13 features
-- Passed both gates: 9 features
-- **Selected (top-9):** Dominated again by packet-size family (9 selected, 7 redundant)
-- Deduped: 3 features (payload_entropy_est, pkt_size_std, pkt_size_min)
+#### Results — secondary (vs the XGBoost judge)
 
-**Decision:** Use the literal top-10 from the primary analysis (Snort verdicts)
-to train the enhanced surrogate. This keeps the feature set decision grounded
-in the defense mechanism (Snort) rather than the judge (which the surrogate
-learns to approximate anyway).
+Run with `--target run_xgb_evaded --out-suffix _vs_xgb`. Same packet-size
+family dominates; `rst_count` and `pkt_rate` drop out, and the deduplicated set
+shrinks to 3 features. The judge and Snort agree on the dominant signal, which
+is what makes the surrogate trainable at all — but the agreement is on
+*packet size*, i.e. on `tot_bytes / tot_pkts`.
 
-#### Deliverables
+#### The redundancy finding (the important result)
 
-- `feature_validation_report.json`: Full correlation table, decision audit per feature
-- `feature_validation_report.md`: Markdown with redundancy analysis and collinearity pairs
-- `feature_validation_report_vs_xgb.json/md`: Secondary analysis on the judge
+**The literal top-10 contains 16 pairs with `|r| ≥ 0.95`.**
 
----
+```
+pkt_size_mean    ↔ avg_pkt_size      r = +1.000   ← literal alias
+pkt_size_max     ↔ pkt_size_median   r = +1.000
+pkt_size_iqr     ↔ pkt_size_max      r = +1.000
+pkt_size_iqr     ↔ pkt_size_mean     r = +0.999
+pkt_size_max     ↔ pkt_size_mean     r = +0.999
+pkt_size_median  ↔ pkt_size_mean     r = +0.999
+… 10 more in the 0.979–0.999 range
+```
 
-### Task 3: Enhanced Dataset Preparation — Frozen Matrices for Training
+Nine of the ten selected features are algebraic restatements of one quantity:
+`tot_bytes / tot_pkts`. `avg_pkt_size` is a *literal* duplicate of
+`pkt_size_mean`. De-duplicating leaves only:
 
-**File:** `snort_validation/prepare_enhanced_surrogate_data.py`
-**Input:** 320 labelled samples + feature-selection report from Task 2
-**Output:** `snort_validation/data/surrogate_{baseline,enhanced}.npz`
+```
+payload_entropy_est, pkt_size_iqr, pkt_size_min, rst_count   (+ pkt_rate)
+```
 
-#### Methodology
+**So "10 selected features" is really 1 independent signal plus 3–4
+ancillaries.** Training on all ten does not give the model ten new things to
+learn. This is stated up front because it is the single most important
+interpretive fact in this milestone, and it is easy to miss when reading a
+feature-importance table.
 
-- **Baseline matrix (6 features):**
-  - dur, tot_pkts, tot_bytes, src_bytes, proto_encoded, state_encoded
-  - Shape: (320, 6)
-  
-- **Enhanced matrix (16 features):**
-  - 6 baseline + 10 selected candidates (in order per feature_validation_report.json)
-  - Shape: (320, 16)
-  
-- **Frozen split:** Both matrices use the same train/test indices (stratified, seed=42):
-  - Train: 240 samples (143 positive, 47.9%)
-  - Test:  80 samples (48 positive, 60.0%)
-  
-  **Why frozen:** Ensures AUC deltas are pure feature-set effects, not train/test variance.
-
-- **Determinism proof:** SHA256 checksums stamped in manifest:
-  - baseline: efa67d5723958114...
-  - enhanced: 96bea4c582ee84f5...
-
-#### Deliverables
-
-- `surrogate_baseline.npz`: (320, 6) matrix, frozen split
-- `surrogate_enhanced.npz`: (320, 16) matrix, frozen split
-- `surrogate_dataset_manifest.json`: Metadata, checksums, feature order
+**Decision taken:** keep the literal top-10 as the training set (that is what
+the plan specified, and it keeps the run reproducible and comparable), but
+report the deduplicated set in every downstream claim.
 
 ---
 
-### Task 4: Enhanced Surrogate Training & RL Integration
+### Task 3 — Freeze the enhanced training set
 
-**Files:**
-- `snort_validation/train_snort_surrogate.py` (trainer, --baseline / --enhanced)
-- `ai_agent/c2_evasion_env.py` (environment, Snort reward wiring)
-- `ai_agent/train_agent.py` (agent trainer, --enhanced flag)
-- `ai_agent/config.py` (SNORT_SURROGATE_ENHANCED_PATH)
+**Script:** `snort_validation/prepare_enhanced_surrogate_data.py`
+**Output:** `snort_validation/data/surrogate_{baseline,enhanced}.npz` + manifest
+**Evidence:** `snort_validation/data/surrogate_dataset_manifest.json`
 
-#### Methodology
+- **Baseline matrix:** `(320, 6)` — the six raw aggregates.
+- **Enhanced matrix:** `(320, 16)` — the six plus the ten selected.
+- **One frozen split for both** (stratified, `seed=42`, `test_size=0.25`):
+  train 240 (143 positive, **59.6%**), test 80 (48 positive, **60.0%**).
+  Freezing the split is what makes the AUC delta a feature-set effect rather
+  than train/test resampling noise.
+- **SHA256 checksums** of both matrices are stamped in the manifest, so a
+  future run can prove it trained on the same bytes.
 
-**Surrogate Training:**
-- **Baseline model:** XGBoost on 6 raw features (control, v1)
-- **Enhanced model:** XGBoost on 16 features (v2)
-- **Hyperparameters (both):** n_estimators=200, max_depth=4, lr=0.1, random_state=42
-- **Feature stamping:** Both models are stamped with `snort_feature_names_`
-  attribute before saving. This is critical: the RL environment reads this
-  attribute to build the reward vector in the correct order. Without it, a
-  16-feature model fed the wrong 10 derived columns would produce plausibly
-  wrong reward values that silently corrupt learning.
-
-**Acceptance gate (enhanced only):** AUC ≥ 0.95
-
-**RL Integration:**
-- Environment method `_snort_features()`: builds a variable-width feature
-  vector by reading the loaded model's `snort_feature_names_` attribute.
-- Environment method `_resolve_snort_features()`: resolves the feature order
-  with this priority:
-  1. Explicit caller-provided `snort_feature_names` (for tests)
-  2. Model's stamped `snort_feature_names_` attribute (authoritative)
-  3. Model's `n_features_in_` width (baseline only; raises if wider)
-  
-  **Guard:** A wide model without stamped names raises ValueError instead of
-  guessing. This is intentional: silent misconfiguration is worse than a
-  loud failure.
-
-#### Metrics
-
-**Baseline (v1, 6-feature model):**
-- Held-out test (80 samples):
-  - AUC: 0.9974
-  - Accuracy: 0.9750
-  - Precision: 0.9792
-  - Recall: 0.9792
-  - F1: 0.9792
-  - Brier: 0.0226
-  - Confusion: TP=47, FP=1, TN=31, FN=1
-
-**Enhanced (v2, 16-feature model):**
-- Held-out test (80 samples):
-  - AUC: 0.9993  (delta: +0.0019, +0.2%)
-  - Accuracy: 0.9750  (delta: 0.0000)
-  - Precision: 0.9792  (delta: 0.0000)
-  - Recall: 0.9792  (delta: 0.0000)
-  - F1: 0.9792  (delta: 0.0000)
-  - Brier: 0.0168  (delta: −0.0058, −25.7%)
-  - Confusion: TP=47, FP=1, TN=31, FN=1  (identical)
-
-**Decision gate result:** AUC 0.9993 ≥ 0.95 ✓ PASSED
-
-#### Feature Importance (Top 10)
-
-**Baseline:**
-1. tot_pkts (0.7328) — packet count is the strongest signal
-2. dur (0.1213)
-3. proto_encoded (0.0644)
-4. src_bytes (0.0394)
-5. state_encoded (0.0326)
-6. tot_bytes (0.0094)
-
-**Enhanced:**
-1. tot_pkts (0.6282) — still dominant, but weighted less
-2. dur (0.2254) — elevated (now 2nd)
-3. pkt_size_median (0.0370) — new, packet-size family contribution
-4. pkt_size_max (0.0299)
-5. proto_encoded (0.0233)
-6. src_bytes (0.0204)
-7. payload_entropy_est (0.0182)
-8. pkt_size_std (0.0095)
-9. tot_bytes (0.0050)
-10. rst_count (0.0030)
-
-**Observation:** Adding 10 features did not shift tot_pkts importance (still
-0.6–0.73) — the new features are refinements, not fundamental regrounding.
-
-#### Deliverables
-
-- `data/snort_surrogate.pkl`: Baseline model (retrained on frozen split)
-- `data/snort_surrogate_enhanced.pkl`: Enhanced model (16 features, AUC 0.9993)
-- `snort_validation/data/surrogate_training_report.json`: Baseline metrics
-- `snort_validation/data/surrogate_training_report_enhanced.json`: Enhanced metrics
+**Leakage caveat (documented, not fixed):** the split is stratified by verdict
+but **not grouped by source flow**. All four policy runs draw from the same
+CTU-13 pool, so near-duplicate flows can straddle the train/test boundary and
+the held-out AUC is optimistic relative to a grouped split. The manifest
+records this (`leakage_note`). It does not change the *direction* of the
+baseline-vs-enhanced comparison, because both models see the identical split.
 
 ---
 
-## Thesis Implications & Decision Gates
+### Task 4 — Train the enhanced surrogate and wire it into the RL env
 
-### Central Question
+**Scripts:** `snort_validation/train_snort_surrogate.py` (`--baseline` / `--enhanced`)
+**Env:** `ai_agent/c2_evasion_env.py`, `ai_agent/config.py`, `ai_agent/train_agent.py`
+**Output:** `data/snort_surrogate.pkl` (6 feat), `data/snort_surrogate_enhanced.pkl` (16 feat)
+**Evidence:** `snort_validation/data/surrogate_training_report{,_enhanced}.json`
 
-**Can enriched behavioral features improve the robustness of an RL evasion agent
-trained against a Snort-surrogate defense?**
+#### Method
 
-### Findings So Far
+Identical hyperparameters for both arms — `n_estimators=200`, `max_depth=4`,
+`learning_rate=0.1`, `random_state=42` — so the only difference is the feature
+matrix. Both models are stamped with a `snort_feature_names_` attribute before
+saving.
 
-1. **Feature correlation is weak** (|r| < 0.5 for the strongest candidate):
-   - payload_entropy_est shows the strongest correlation (r = −0.5077),
-   - but 9 of the top-10 features are redundant packet-size restatements.
-   - This suggests Snort's detection logic is not primarily behavioral
-     (packet sizes / inter-arrival times), but flow-aggregate-based (tot_pkts,
-     duration).
+That stamp matters more than it looks. The env builds the reward vector by
+reading `snort_feature_names_`; without it, a 16-feature model handed the wrong
+ten derived columns would return plausible-but-wrong probabilities and silently
+corrupt the reward signal. `_resolve_snort_features()` therefore refuses to
+guess: a model wider than the 6-feature baseline that carries no stamp raises
+`ValueError`. A loud failure beats a silent one.
 
-2. **The surrogate is already near-perfect** (AUC 0.9974 → 0.9993):
-   - Adding 10 features improves AUC by +0.2% and Brier by −25.7%, but
-   - confusion matrix is identical (TP=47 FP=1 TN=31 FN=1 in both).
-   - The gains are in calibration (Brier), not discrimination.
+#### Metrics — surrogate (held-out 80 samples, frozen split)
 
-3. **The defense mechanism (Snort) may be simpler than the RL agent assumes:**
-   - The baseline model relies almost entirely on tot_pkts (73% importance).
-   - An attacker that understands this dominance might exploit it directly,
-     bypassing the surrogate's reward signal entirely.
+| Metric | Baseline (6 feat) | Enhanced (16 feat) | Δ |
+|---|---|---|---|
+| **AUC** | 0.9974 | **0.9993** | **+0.0019** |
+| Accuracy | 0.9750 | 0.9750 | 0.0000 |
+| Precision | 0.9792 | 0.9792 | 0.0000 |
+| Recall | 0.9792 | 0.9792 | 0.0000 |
+| F1 | 0.9792 | 0.9792 | 0.0000 |
+| Average precision | 0.9983 | 0.9996 | +0.0013 |
+| **Brier (lower better)** | 0.0226 | **0.0168** | **−0.0058 (−25.7%)** |
+| Confusion | TP=47 FP=1 TN=31 FN=1 | TP=47 FP=1 TN=31 FN=1 | **identical** |
 
-### Decision Gate: Proceed to Agent Training?
+**Decision gate: AUC ≥ 0.95 → PASSED (0.9993).**
 
-**Gate:** Enhanced surrogate must reach AUC ≥ 0.95 on held-out data.
-**Result:** PASSED (AUC 0.9993).
+**But read the last row.** The confusion matrices are *identical*. Ten extra
+features changed no discrete decision on any of the 80 held-out samples. The
+AUC and Brier gains are **calibration only** — the model is more confident
+about being right, not right about more things. An acceptance gate written as
+"AUC ≥ 0.95" is passed by both models, which tells you the gate was too weak to
+be informative here. The agent-side test below is what actually settles it.
 
-**But the practical gate should be agent-centric:**
-- Train an agent with the enhanced surrogate (--enhanced flag).
-- Measure its Snort evasion rate in re-evaluation.
-- If evasion rate improves > 5% vs. baseline, the features are strategically
-  useful for the agent.
-- If evasion rate is flat or worse, the features are statistically significant
-  but strategically inert (a common ML pitfall).
+#### Feature importance
 
----
+| Baseline | imp | Enhanced | imp |
+|---|---|---|---|
+| `tot_pkts` | 0.7328 | `tot_pkts` | 0.6282 |
+| `dur` | 0.1213 | `dur` | 0.2254 |
+| `proto_encoded` | 0.0644 | `pkt_size_median` | 0.0370 |
+| `src_bytes` | 0.0394 | `pkt_size_max` | 0.0299 |
+| `state_encoded` | 0.0326 | `proto_encoded` | 0.0233 |
+| `tot_bytes` | 0.0094 | `payload_entropy_est` | 0.0182 |
 
-## Commits Since Snort Integration
-
-### Phase 1: Data Foundation
-
-- **95cb9cd** (2026-09-16): feat(validation): add Snort IDS validation layer
-  - First Snort integration: pcap reconstruction, Snort rule calibration
-
-### Phase 2: Surrogate v1 & Lambda Sweep
-
-- **b64607b** (2026-09-18): docs: add Snort validation section
-- **a7206f9** (2026-09-18): feat(validation): calibrated Snort behavior rules
-- **f902c5c** (2026-09-20): feat(validation): Snort surrogate for defense-aware reward
-- **22a6407** (2026-09-20): feat(agent): Snort-surrogate defense-aware reward shaping
-- **83257e0** (2026-09-21): feat(agent): --snort flag retrains with defense-aware reward
-- **5436bc4** (2026-09-22): fix(validation): comment out emerging-botcc (was killing detections)
-- **91e1445** (2026-09-23): fix(agent): explicit .zip suffix on save
-- **96c1e0c** (2026-09-24): data(validation): full lambda sweep (l5/l10/l20)
-
-### Phase 3: Feature Engineering & Surrogate v2 (This Milestone)
-
-- **be3b6ed** (2026-09-24): feat(features): extract 20 candidate CTU-13 features
-  - Task 1: 11,729 flows × 27 features from 262,573 botnet rows
-  
-- **1271549** (2026-09-24): feat(validation): validate features vs Snort verdicts
-  - Task 2: correlation analysis, redundancy detection, decision gates
-  
-- **449ccb4** (2026-09-24): fix(validation): --out-suffix output path bug
-  - Markdown report was overwritten by secondary analysis
-  
-- **671a780** (2026-09-24): feat(surrogate): enhanced 16-feature surrogate + env wiring
-  - Task 3 & 4: data prep, training, RL integration
-  - Baseline AUC 0.9974 → Enhanced AUC 0.9993 (gate PASSED)
+`tot_pkts` alone carries 73% of the baseline model's importance and still
+carries 63% after adding ten features. The new features are refinements
+competing for the residual; they do not re-ground the model. This is the
+expected consequence of the redundancy finding in Task 2.
 
 ---
 
-## Known Limitations & Future Work
+## Measurement integrity
 
-1. **Feature selection was correlational, not causal:**
-   - Snort's true decision boundary is unknown; we inferred it from
-     detection patterns on synthetic pcaps.
-   - The features we selected correlate with detection, but may not causally
-     drive Snort's rule engine.
+Two bugs meant the committed λ-sweep results could not support the comparison
+they appeared to support. Both are fixed; the fixes are in commits `2776a00`
+and `396029b`.
 
-2. **Packet-size redundancy not exploited:**
-   - 9 of the top-10 features are algebraically dependent (r > 0.97).
-   - Future work could use PCA or sparsity regularization to reduce this.
+### Bug A — unseeded episode sampling made cross-run deltas meaningless
 
-3. **No adversarial feature testing:**
-   - We selected features that correlate with Snort detection, but did not
-     test whether an agent can *exploit* those feature selections to evade
-     better.
-   - This is the next milestone: train agent(s) with the enhanced surrogate
-     and measure real evasion gains vs. baseline.
+`run_evaluation.py` sampled episodes with a bare `env.reset()`, so **every
+policy and every run saw a different 80 episodes.** The tell: the
+*no-mutation* baseline — which mutates nothing, so its evasion rate is a pure
+function of which flows were drawn — moved **5.0% → 15.0% → 10.0% → 3.8%**
+across runs. Any cross-run delta therefore mixed the policy effect with episode
+sampling variance.
 
-4. **Snort rule calibration assumed static thresholds:**
-   - Snort's dsize thresholds (e.g., >800 bytes) were reverse-engineered from
-     CTU-13 botnet traffic.
-   - Real-world Snort deployments may use different threshold tunings, making
-     the surrogate domain-specific.
+Direct evidence of the confound: the blind and enhanced agent runs had
+**0/80 episodes in common**, yet were being compared to each other.
+
+**Fix:** episode *i* is reset with `seed + i`, so every policy and every run
+evaluates the identical episode sequence. The no-mutation baseline now reports
+3/80 XGBoost and 6.25% Snort detection in *all* runs — the signature of correct
+pairing.
+
+### Bug B — no run tag, so sweep results overwrote each other
+
+Neither `run_evaluation.py` nor `validate_with_snort.py` accepted a suffix, so
+every λ wrote to the same `agent_evaluation.json`. The result:
+`agent_evaluation.json` and `agent_evaluation_l10.json` were **byte-identical**,
+and `agent_snort_validation.json` matched `..._l10.json` — the λ=10 Snort
+numbers had been copied, never measured. Both scripts now take `--suffix`.
+
+A third, related bug: `train_agent.py` built its model tag from
+`(snort?, lambda)` only, so an enhanced-surrogate run at λ=10 **silently
+overwrote** the blind-surrogate λ=10 model. The tag now includes the enhanced
+marker, an existing-file overwrite prints a warning, and the save path is
+echoed with the resolved surrogate path.
 
 ---
 
-## Testing & Verification
+## Metrics — full comparison
 
-- ✓ Feature extraction: vectorized vs. scalar derivation (max diff 0.000e+00)
-- ✓ Feature validation: 320 labelled samples, 17/19 features significant
-- ✓ Data prep: frozen train/test split, SHA256 checksums recorded
-- ✓ Surrogate training: both models stamped with feature order
-- ✓ RL env wiring: tested both 6-feature and 16-feature models
-- ✓ Safety guard: model without stamped names raises ValueError (not silent)
-- ✓ Acceptance gate: Enhanced AUC 0.9993 ≥ 0.95 (PASSED)
+All agent figures below are **seeded** (identical 80 episodes). `Snort
+detection` is the rate at which real Snort flags the agent's mutated flows;
+lower is better for the attacker. `XGBoost evasion` is the rate at which the
+agent's mutations fool the original CTU-13 surrogate — the metric the agent was
+originally trained against.
+
+| Run | Surrogate used for reward | λ | XGBoost evasion | Snort detection | Snort evasion |
+|---|---|---|---|---|---|
+| **No-mutation baseline** | — | — | 3.8% (3/80) | 6.25% (5/80) | 93.8% |
+| **Random mutations** | — | — | 66.2% (53/80) | 67.5% (54/80) | 32.5% |
+| **Blind agent** | none | — | **97.5% (78/80)** | **70.0% (56/80)** | 30.0% |
+| **λ=10, blind surrogate** | 6-feature v1 | 10 | 95.0% (76/80) | 85.0% (68/80) | 15.0% |
+| **λ=10, enhanced surrogate** | 16-feature v2 | 10 | 95.0% (76/80) | 85.0% (68/80) | 15.0% |
+
+### Reading the table
+
+1. **The blind agent is the strongest attacker.** 97.5% XGBoost evasion and the
+   lowest Snort detection (70.0%) of any agent row. The defense-aware reward did
+   not produce a better evader — it produced a *worse* one.
+
+2. **Defense-aware reward made the agent more detectable, not less.** Snort
+   detection rises 70.0% → 85.0% when λ=10 shaping is added. Adding the
+   surrogate penalty made the agent 15 points *easier* to catch by the real IDS.
+
+3. **The enhanced surrogate changed nothing on the agent side.** λ=10 blind and
+   λ=10 enhanced are identical to the last digit: 95.0% / 85.0%, same 76/80 and
+   68/80 episodes, identical mutated features on all 80 episodes. Ten new
+   features, +0.0019 surrogate AUC, and **exactly zero** change in agent
+   behaviour.
+
+### Why (1) and (2) happen — and it is not a bug
+
+The surrogate's reward is `−λ · P(Snort flags this flow)`. The agent minimizes
+that penalty. But the surrogate is a **proxy** trained on Snort verdicts, and
+its decision surface is dominated by `tot_pkts` (63–73% importance). The agent
+learned to move `tot_pkts` into whatever region minimizes the surrogate's
+probability — which is not the same region that minimizes *real* Snort
+detection. Penalizing a proxy drives the agent to exploit the proxy's
+boundary, and the proxy's boundary is where it is least like the real detector.
+
+This is the classic reward-hacking failure mode, and here it is measured rather
+than asserted: the shaping penalty improved the quantity it was given
+(surrogate-predicted detection) while *degrading* the quantity it was meant to
+improve (real Snort detection).
 
 ---
 
-## Summary
+## Thesis implications
 
-This milestone extended the Snort surrogate from 6 to 16 features, grounded in
-a rigorous validation study of 20 candidate behavioral features derived from
-CTU-13 botnet traffic. The enhanced surrogate improves calibration (Brier −26%)
-while maintaining discrimination (AUC +0.2%). Feature selection revealed strong
-redundancy in the packet-size family, suggesting Snort's detection logic is
-flow-aggregate-dominated (tot_pkts: 73% importance).
+**The central hypothesis — "richer behavioural features make defense-aware
+reward shaping more faithful, producing a better evader" — is not supported.**
+Both halves fail, for different reasons, and the failures are more interesting
+than a positive result would have been.
 
-The real test is agent-side: in the next phase, we train an RL agent with the
-enhanced surrogate and measure whether the richer behavioral representation
-actually improves evasion performance. If agent evasion rate plateaus, the
-features were statistically significant but strategically inert.
+1. **Feature enrichment was statistically real but strategically inert.** The
+   selected features are significantly correlated with Snort verdicts
+   (`payload_entropy_est` at r = −0.51, p ≈ 2e-22). But 9 of 10 are restatements
+   of `tot_bytes / tot_pkts`, the surrogate's confusion matrix did not move, and
+   the agent's behaviour did not move. *Correlation with the target is not
+   evidence that a feature adds usable information* — a lesson worth stating
+   plainly in the thesis, because a feature-importance table would have hidden
+   it.
 
-**Next milestone:** Enhanced agent training, re-evaluation, and thesis insights.
+2. **A strong proxy is not a good reward signal.** The v1 surrogate has AUC
+   0.998 and the v2 has 0.9993 — both near-perfect at *predicting Snort*, and
+   both actively harmful as *reward functions*. Surrogate accuracy and reward
+   fidelity are different properties, and an acceptance gate on AUC measures
+   the wrong one. The correct gate is behavioural: does the agent that optimizes
+   the surrogate also evade the real IDS better? Here, no — it evades worse.
 
+3. **Defense-aware shaping requires the defense in the loop, not a model of it.**
+   The agent that ignored the defense entirely (blind) was the best real-world
+   evader. The agent that optimized a model of the defense was measurably worse
+   against the actual defense. For an evasion agent, "train against the thing"
+   and "train against a model of the thing" are not interchangeable — and the
+   gap between them is exactly the exploitability of the proxy.
+
+4. **The detection surface is flow-aggregate, not behavioural.** Snort's
+   behaviour rules (dsize thresholds, small-packet bursts) were calibrated to
+   the CTU-13 distribution and yet `tot_pkts` — a raw aggregate — dominates
+   every model of them. The behavioural features that were supposed to capture
+   rule logic turned out to be derived from the same aggregate. The
+   "behavioural" framing of the candidate set was optimistic.
+
+### Decision gates, restated
+
+| Gate | Threshold | Result | Verdict |
+|---|---|---|---|
+| Enhanced surrogate accuracy | AUC ≥ 0.95 | 0.9993 | **PASS** (but uninformative — v1 also passes) |
+| Enhanced vs baseline surrogate | confusion matrix improves | identical | **FAIL** (calibration-only gain) |
+| Enhanced agent vs λ=10 blind agent | evasion rate improves >5pp | 0.0pp | **FAIL** |
+| Defense-aware vs blind agent (real Snort) | detection decreases | 70.0% → 85.0% | **FAIL** (worse) |
+
+Only the first gate passes, and the reason it is uninformative is itself a
+finding: an AUC threshold cannot distinguish a surrogate that helps the agent
+from one that misleads it.
+
+---
+
+## Bug fixes since Snort integration
+
+| Commit | Fix | Impact |
+|---|---|---|
+| `5436bc4` | Commented out missing `emerging-botcc` include in `snort.conf` | Snort exited fatally on the missing file, so **every detection read 0**. All pre-fix Snort numbers were invalid. |
+| `91e1445` | Explicit `.zip` suffix on model save; `run_evaluation --agent-model` | Saved models were not loadable by the eval script's path. |
+| `449ccb4` | `--out-suffix` wrote markdown to the constant `OUT_MD` path | The secondary analysis overwrote the primary report; the `_vs_xgb.md` file was reported as written but never existed. |
+| `2776a00` | `--suffix` + `--enhanced` args; model tagging | See [Bug B](#bug-b--no-run-tag-so-sweep-results-overwrote-each-other). |
+| `396029b` | Deterministic episode seeding | See [Bug A](#bug-a--unseeded-episode-sampling-made-cross-run-deltas-meaningless). |
+
+### Correction to the CTU-13 null count
+
+The extractor initially reported **6** null `state` values; the correct count
+across the full 13-capture sample is **69**. The original figure came from a
+partial read. `state` is null on ICMP flows in CTU-13 and is now imputed to
+`UNK`, with the count stamped into `ctu13_feature_distributions.json`.
+
+---
+
+## Commits since Snort integration (`95cb9cd`)
+
+**Phase 1 — Snort integration**
+
+- `95cb9cd` add Snort IDS validation layer (pcap reconstruction, rule calibration)
+- `b64607b` document the Snort validation section in the README
+
+**Phase 2 — Surrogate v1, reward shaping, λ sweep**
+
+- `a7206f9` calibrated Snort behaviour rules; first measured agent vs random vs baseline
+- `f902c5c` Snort surrogate for defense-aware reward
+- `22a6407` Snort-surrogate defense-aware reward shaping (opt-in)
+- `83257e0` `--snort` flag retrains with defense-aware reward
+- `5436bc4` fix: comment out missing `emerging-botcc` include; add `--snort-lambda`
+- `91e1445` fix: explicit `.zip` suffix on save; `run_evaluation --agent-model`
+- `96c1e0c` full λ sweep results (l5/l10/l20)
+
+**Phase 3 — Feature engineering & surrogate v2 (this milestone)**
+
+- `be3b6ed` Task 1 — extract 20 candidate CTU-13 features
+- `1271549` Task 2 — validate features against Snort verdicts
+- `449ccb4` fix — `--out-suffix` output path
+- `671a780` Tasks 3–4 — enhanced surrogate + env wiring
+- `2776a00` fix — `--suffix`/`--enhanced`, model tagging
+- `396029b` data — seeded λ sweep + Snort validation
+- _this commit_ — corrected CHANGELOG
+
+---
+
+## Reproducing
+
+```bash
+# Task 1 — extract candidate features (~2 min, 13 captures)
+python snort_validation/extract_ctu13_features.py --max-flows-per-file 1000
+
+# Task 2 — validate against Snort verdicts
+python snort_validation/validate_features_vs_snort.py
+python snort_validation/validate_features_vs_snort.py \
+       --target run_xgb_evaded --out-suffix _vs_xgb
+
+# Task 3 — freeze the training matrices
+python snort_validation/prepare_enhanced_surrogate_data.py
+
+# Task 4 — train both surrogates
+python snort_validation/train_snort_surrogate.py --baseline
+python snort_validation/train_snort_surrogate.py --enhanced
+
+# Train the enhanced agent (tagged, will not clobber other models)
+cd ai_agent && python train_agent.py --enhanced --snort-lambda 10
+
+# Seeded evaluation — the numbers in the table above
+python snort_validation/run_evaluation.py \
+       --agent-model models/ppo_c2_evasion_agent_snortaware_enhanced_10.0.zip \
+       --suffix _seeded_enh10 --seed 42 --num-episodes 80
+python snort_validation/validate_with_snort.py --suffix _seeded_enh10
+```
+
+---
+
+## Known limitations
+
+1. **Held-out AUC is optimistic.** The split is stratified but not grouped by
+   source flow; near-duplicate flows can straddle it. Both surrogate arms see
+   the identical split, so the comparison holds, but the absolute AUC values
+   should not be read as generalization estimates.
+2. **Snort thresholds are reverse-engineered** from the CTU-13 botnet
+   distribution, so the surrogate is deployment-specific. A differently-tuned
+   Snort would likely shift every number here.
+3. **Detection is measured on reconstructed pcaps**, not live traffic. Payloads
+   are synthetic filler, so content/signature rules can never fire — only
+   behaviour rules can. This is stated in `rules/botnet-behavior.rules` and is a
+   property of the validation harness, not a bug.
+4. **Feature selection was correlational, not causal.** We measured which
+   features co-vary with detection; we did not establish that Snort's rules
+   *read* them. The redundancy finding suggests the causal story is narrower
+   than the correlation table implies.
+5. **The λ sweep covers 5/10/20 only** at the seeded standard. The λ=5 and λ=20
+   arms have not been re-run under seeded evaluation, so their committed numbers
+   carry the same sampling confound described in Bug A.
+
+---
+
+## Verification checklist
+
+- [x] Feature derivation: vectorised vs scalar agree, max diff 0.000e+00
+- [x] Feature validation: 320 samples, 19 features tested, 17 significant
+- [x] Redundancy detected: 16 pairs with `|r| ≥ 0.95` inside the literal top-10
+- [x] Frozen split with SHA256-stamped matrices
+- [x] Both surrogates stamped with `snort_feature_names_`; env refuses to guess
+- [x] Env wiring exercised at both widths (6 and 16) against a live env
+- [x] Surrogate gate: enhanced AUC 0.9993 ≥ 0.95
+- [x] Seeded evaluation: no-mutation baseline identical (3/80) across all runs
+- [x] λ=10 blind and λ=10 enhanced models confirmed distinct on disk
+- [x] Snort validation run for blind / λ=10 / enhanced on identical episodes

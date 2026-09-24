@@ -112,6 +112,12 @@ def run_evaluation_with_capture(num_episodes=80, policy_type='agent', agent_mode
     for i in range(num_episodes):
         # Deterministic episode sampling: identical across policies and runs.
         obs, info = env.reset(seed=seed + i)
+
+        # The random policy must also be reproducible. action_space.sample()
+        # draws from a separate RNG that env.reset(seed=...) does not touch, so
+        # it produced a different mutation sequence on every run (57/80 one
+        # run, 55/80 the next) and made the random row un-comparable.
+        rng = np.random.default_rng(seed + i)
         
         # Capture original flow features
         original_features = extract_flow_features(env)
@@ -126,7 +132,7 @@ def run_evaluation_with_capture(num_episodes=80, policy_type='agent', agent_mode
             if policy_type == 'agent' and model is not None:
                 action, _ = model.predict(obs, deterministic=True)
             elif policy_type == 'random':
-                action = env.action_space.sample()
+                action = rng.uniform(-1.0, 1.0, size=4).astype(np.float32)
             else:  # baseline: no action
                 action = np.zeros(4, dtype=np.float32)  # [0, 0, 0, 0] = no mutation
             
