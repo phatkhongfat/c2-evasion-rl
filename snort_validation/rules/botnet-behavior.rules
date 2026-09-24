@@ -1,0 +1,46 @@
+# Botnet behavior ruleset — threshold-based detection for synthesized flows.
+#
+# IMPORTANT DESIGN NOTE (read before trusting numbers):
+# The validation pcap is reconstructed from 6 flow-metadata features. Packet
+# payloads are synthetic (filler bytes), so signature/content-based botnet
+# rules (payload match) CANNOT fire. Rules here detect botnet BEHAVIOR at the
+# flow/packet level: large payload bursts, repeated small-packet beacons,
+# abnormal flow termination patterns. Thresholds are calibrated against the
+# real CTU-13 botnet flow distribution (see bench-c2/calibrate_snort_thresholds.py).
+# IP-reputation rules (emerging-botcc.rules) are included separately and will
+# ~never fire on synthetic traffic — that is expected, not a bug.
+
+# ---------------------------------------------------------------------------
+# Botnet C2: large TCP payload bursts (data exfil / malware download).
+# Matches flows whose data packets exceed dsize. threshold: alert only when a
+# source sends >= N such packets within the window (chatty C2 host).
+# ---------------------------------------------------------------------------
+alert tcp any any -> any any (msg:"BOTNET-C2 large TCP payload burst"; flow:established; dsize:>800; threshold:type both, track by_src, count 3, seconds 120; reference:url,ctuniversity.org; classtype:trojan-activity; sid:3000001; rev:1;)
+
+# ---------------------------------------------------------------------------
+# Botnet C2 to-client TCP payload (download direction).
+# ---------------------------------------------------------------------------
+alert tcp any any -> any any (msg:"BOTNET-C2 large download chunk"; flow:from_server,established; dsize:>1200; threshold:type both, track by_dst, count 3, seconds 120; classtype:trojan-activity; sid:3000002; rev:1;)
+
+# ---------------------------------------------------------------------------
+# Botnet beacon: UDP keep-alive burst — many small datagrams in a short window.
+# Classic botnet heartbeat (small fixed-size payload at regular cadence).
+# ---------------------------------------------------------------------------
+alert udp any any -> any any (msg:"BOTNET-beacon UDP small-packet burst"; dsize:<65; threshold:type both, track by_src, count 5, seconds 30; classtype:trojan-activity; sid:3000003; rev:1;)
+
+# ---------------------------------------------------------------------------
+# Botnet beacon: repeated TCP small packets (short chatty C2 over TCP).
+# ---------------------------------------------------------------------------
+alert tcp any any -> any any (msg:"BOTNET-beacon TCP small-packet burst"; flow:established; dsize:<65; threshold:type both, track by_src, count 8, seconds 60; classtype:trojan-activity; sid:3000004; rev:1;)
+
+# ---------------------------------------------------------------------------
+# Botnet connect-back: TCP FIN burst over a very short window
+# (botnet scanning / failed connect-back chatter).
+# ---------------------------------------------------------------------------
+alert tcp any any -> any any (msg:"BOTNET connect-back FIN burst"; flags:F; threshold:type both, track by_src, count 6, seconds 10; classtype:trojan-activity; sid:3000005; rev:1;)
+
+# ---------------------------------------------------------------------------
+# Generic large-flow heuristic: single packet carrying very large payload
+# (any protocol) — typical of CnC data staging.
+# ---------------------------------------------------------------------------
+alert tcp any any -> any any (msg:"BOTNET large single-packet exfil"; flow:established; dsize:>1400; classtype:trojan-activity; sid:3000006; rev:1;)

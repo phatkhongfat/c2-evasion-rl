@@ -1,0 +1,5 @@
+# Generated artifacts — do not commit
+pcaps/
+*.log
+snort_logs/
+test_evaluation.json

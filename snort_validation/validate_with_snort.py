@@ -15,8 +15,10 @@ import sys
 from pathlib import Path
 from typing import List, Dict, Tuple
 
-# Add parent to path to import from ai_agent
-sys.path.insert(0, str(Path(__file__).parent.parent))
+# Ensure flow_to_pcap.py (same dir) and ai_agent (parent) are importable
+_HERE = Path(__file__).parent
+sys.path.insert(0, str(_HERE))
+sys.path.insert(0, str(_HERE.parent))
 
 from flow_to_pcap import synthesize_flow_pcap
 
@@ -44,6 +46,10 @@ class SnortValidator:
         """
         log_dir = self.output_dir / "snort_logs"
         log_dir.mkdir(exist_ok=True)
+        # Snort 2.9 APPENDS to an existing alert file — stale alerts from a
+        # previous episode would be counted for this one. Wipe before each run.
+        for stale in log_dir.glob("alert*"):
+            stale.unlink()
         
         # Run Snort in offline mode
         cmd = [

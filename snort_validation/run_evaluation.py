@@ -46,15 +46,21 @@ def extract_flow_features(env):
     """
     Extract current flow features from environment.
     
-    Returns dict with the 6 flow features.
+    Returns dict with the 6 flow features (after any mutations).
     """
+    # Access current_sample which holds mutated flow features
+    sample = getattr(env, 'current_sample', None)
+    if sample is None:
+        # Fallback to initial_sample if current_sample not available
+        sample = getattr(env, 'initial_sample', {})
+    
     return {
-        'dur': float(env.current_flow.get('dur', 0)),
-        'tot_pkts': int(env.current_flow.get('tot_pkts', 0)),
-        'tot_bytes': int(env.current_flow.get('tot_bytes', 0)),
-        'src_bytes': int(env.current_flow.get('src_bytes', 0)),
-        'proto': str(env.current_flow.get('proto', 'udp')),
-        'state': str(env.current_flow.get('state', 'INT'))
+        'dur': float(sample.get('dur', 0)),
+        'tot_pkts': int(sample.get('tot_pkts', 0)),
+        'tot_bytes': int(sample.get('tot_bytes', 0)),
+        'src_bytes': int(sample.get('src_bytes', 0)),
+        'proto': str(getattr(env, 'current_proto', sample.get('proto', 'udp'))),
+        'state': str(getattr(env, 'current_state', sample.get('state', 'CON')))
     }
 
 
@@ -117,9 +123,14 @@ def run_evaluation_with_capture(num_episodes=80, policy_type='agent'):
             elif policy_type == 'random':
                 action = env.action_space.sample()
             else:  # baseline: no action
-                action = 0  # NOOP action (if implemented) or minimal action
+                action = np.zeros(4, dtype=np.float32)  # [0, 0, 0, 0] = no mutation
             
-            episode_actions.append(int(action))
+            if hasattr(action, 'tolist'):
+                episode_actions.append(action.tolist())
+            elif isinstance(action, (list, tuple)):
+                episode_actions.append(list(action))
+            else:
+                episode_actions.append([float(action)])
             obs, reward, done, truncated, info = env.step(action)
             step_count += 1
         

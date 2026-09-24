@@ -1,0 +1,3736 @@
+{
+  "policy": "agent",
+  "num_episodes": 80,
+  "xgb_evasion_rate": 0.975,
+  "xgb_success_count": 78,
+  "episodes": [
+    {
+      "episode_id": 0,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.22001899778842926,
+        "tot_pkts": 2,
+        "tot_bytes": 393,
+        "src_bytes": 72,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 37,
+        "tot_bytes": 1523,
+        "src_bytes": 1202,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7591842412948608,
+          0.03210530802607536,
+          -0.6998075246810913
+        ],
+        [
+          -1.0,
+          -0.7592843174934387,
+          0.032468970865011215,
+          -0.6996199488639832
+        ]
+      ],
+      "steps": 2,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.64215087890625,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 1,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.1855749934911728,
+        "tot_pkts": 2,
+        "tot_bytes": 299,
+        "src_bytes": 72,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 37,
+        "tot_bytes": 1429,
+        "src_bytes": 1202,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7591974139213562,
+          0.03209039568901062,
+          -0.6998247504234314
+        ],
+        [
+          -1.0,
+          -0.75928795337677,
+          0.0324479416012764,
+          -0.6996347904205322
+        ]
+      ],
+      "steps": 2,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.64398193359375,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 2,
+      "policy": "agent",
+      "original_features": {
+        "dur": 8.987112045288086,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 5.0,
+        "tot_pkts": 31348,
+        "tot_bytes": 1690392,
+        "src_bytes": 1690392,
+        "proto": "udp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7567340135574341,
+          0.030580438673496246,
+          -0.6991850733757019
+        ],
+        [
+          -1.0,
+          -0.7581945061683655,
+          0.03201061114668846,
+          -0.6991980075836182
+        ],
+        [
+          -1.0,
+          -0.7594919204711914,
+          0.03544546291232109,
+          -0.6977825164794922
+        ],
+        [
+          -1.0,
+          -0.7601351737976074,
+          0.04726032912731171,
+          -0.6904001832008362
+        ],
+        [
+          -1.0,
+          -0.7615987658500671,
+          0.09900014847517014,
+          -0.6568647027015686
+        ],
+        [
+          -0.4800896942615509,
+          -0.7371526956558228,
+          0.3566496968269348,
+          -0.46425098180770874
+        ],
+        [
+          1.0,
+          -0.31429168581962585,
+          0.8520640730857849,
+          0.17305031418800354
+        ]
+      ],
+      "steps": 7,
+      "evaded_xgboost": true,
+      "jitter": 5.0,
+      "padding": -157.14584350585938,
+      "proto_hop": true,
+      "state_hop": true
+    },
+    {
+      "episode_id": 3,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.1206279993057251,
+        "tot_pkts": 2,
+        "tot_bytes": 212,
+        "src_bytes": 74,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 9,
+        "tot_bytes": 210,
+        "src_bytes": 72,
+        "proto": "tcp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592189908027649,
+          0.03208296746015549,
+          -0.6998425126075745
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.6094970703125,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 4,
+      "policy": "agent",
+      "original_features": {
+        "dur": 1.7653210163116455,
+        "tot_pkts": 3,
+        "tot_bytes": 331,
+        "src_bytes": 150,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 13,
+        "tot_bytes": 491,
+        "src_bytes": 310,
+        "proto": "tcp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7587606310844421,
+          0.03188449144363403,
+          -0.6996713876724243
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.38031005859375,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 5,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.069132000207901,
+        "tot_pkts": 9,
+        "tot_bytes": 2195,
+        "src_bytes": 1165,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 37,
+        "tot_bytes": 3327,
+        "src_bytes": 2297,
+        "proto": "udp",
+        "state": "FSPA_FSPA"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592145204544067,
+          0.033142946660518646,
+          -0.699184238910675
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.6072692871094,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 6,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.20818400382995605,
+        "tot_pkts": 2,
+        "tot_bytes": 355,
+        "src_bytes": 81,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 9,
+        "tot_bytes": 353,
+        "src_bytes": 79,
+        "proto": "tcp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7591891884803772,
+          0.03210125118494034,
+          -0.6998131275177002
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.5946044921875,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 7,
+      "policy": "agent",
+      "original_features": {
+        "dur": 8.91086196899414,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 5.0,
+        "tot_pkts": 31348,
+        "tot_bytes": 1690392,
+        "src_bytes": 1690392,
+        "proto": "udp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.756755530834198,
+          0.03059399500489235,
+          -0.6991904377937317
+        ],
+        [
+          -1.0,
+          -0.7582159638404846,
+          0.03202414512634277,
+          -0.6992033123970032
+        ],
+        [
+          -1.0,
+          -0.7594919204711914,
+          0.03544546291232109,
+          -0.6977825164794922
+        ],
+        [
+          -1.0,
+          -0.7601351737976074,
+          0.04726029932498932,
+          -0.6904001832008362
+        ],
+        [
+          -1.0,
+          -0.7615988254547119,
+          0.09900015592575073,
+          -0.6568647623062134
+        ],
+        [
+          -0.48008981347084045,
+          -0.737152636051178,
+          0.35664963722229004,
+          -0.46425098180770874
+        ],
+        [
+          1.0,
+          -0.31429171562194824,
+          0.8520639538764954,
+          0.17305029928684235
+        ]
+      ],
+      "steps": 7,
+      "evaded_xgboost": true,
+      "jitter": 5.0,
+      "padding": -157.14585876464844,
+      "proto_hop": true,
+      "state_hop": true
+    },
+    {
+      "episode_id": 8,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.00025099999038502574,
+        "tot_pkts": 2,
+        "tot_bytes": 265,
+        "src_bytes": 71,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 37,
+        "tot_bytes": 1395,
+        "src_bytes": 1201,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592505812644958,
+          0.032115351408720016,
+          -0.6998428702354431
+        ],
+        [
+          -1.0,
+          -0.7592892050743103,
+          0.03244005888700485,
+          -0.6996402144432068
+        ]
+      ],
+      "steps": 2,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.64459228515625,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 9,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.12184499949216843,
+        "tot_pkts": 2,
+        "tot_bytes": 236,
+        "src_bytes": 75,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 9,
+        "tot_bytes": 234,
+        "src_bytes": 73,
+        "proto": "tcp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592177987098694,
+          0.03208836913108826,
+          -0.6998385190963745
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.60888671875,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 10,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.3221279978752136,
+        "tot_pkts": 10,
+        "tot_bytes": 1909,
+        "src_bytes": 991,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 41,
+        "tot_bytes": 3203,
+        "src_bytes": 2285,
+        "proto": "udp",
+        "state": "FSPA_FSPA"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7591572999954224,
+          0.03303574025630951,
+          -0.6992062926292419
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.5786437988281,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 11,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.0005159999709576368,
+        "tot_pkts": 2,
+        "tot_bytes": 138,
+        "src_bytes": 69,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 9,
+        "tot_bytes": 136,
+        "src_bytes": 67,
+        "proto": "tcp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592552304267883,
+          0.03208639472723007,
+          -0.6998629570007324
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.62762451171875,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 12,
+      "policy": "agent",
+      "original_features": {
+        "dur": 64.61602783203125,
+        "tot_pkts": 11,
+        "tot_bytes": 1136,
+        "src_bytes": 497,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
+      },
+      "mutated_features": {
+        "dur": 59.61602783203125,
+        "tot_pkts": 44,
+        "tot_bytes": 2547,
+        "src_bytes": 1908,
+        "proto": "udp",
+        "state": "FSPA_FSPA"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7405020594596863,
+          0.02122754603624344,
+          -0.6945067644119263
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -370.25103759765625,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 13,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.020198000594973564,
+        "tot_pkts": 2,
+        "tot_bytes": 230,
+        "src_bytes": 73,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 9,
+        "tot_bytes": 228,
+        "src_bytes": 71,
+        "proto": "tcp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592463493347168,
+          0.0321044884622097,
+          -0.6998466849327087
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.6231689453125,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 14,
+      "policy": "agent",
+      "original_features": {
+        "dur": 10.174588203430176,
+        "tot_pkts": 8,
+        "tot_bytes": 1293,
+        "src_bytes": 578,
+        "proto": "tcp",
+        "state": "SRPA_SPA"
+      },
+      "mutated_features": {
+        "dur": 0.17458820343017578,
+        "tot_pkts": 134,
+        "tot_bytes": 7339,
+        "src_bytes": 6624,
+        "proto": "tcp",
+        "state": "SRPA_SPA"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7563892006874084,
+          0.030950073152780533,
+          -0.6987300515174866
+        ],
+        [
+          -1.0,
+          -0.7579155564308167,
+          0.03347308933734894,
+          -0.6980684399604797
+        ]
+      ],
+      "steps": 2,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -378.957763671875,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 15,
+      "policy": "agent",
+      "original_features": {
+        "dur": 8.983824729919434,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 5.0,
+        "tot_pkts": 31348,
+        "tot_bytes": 1690392,
+        "src_bytes": 1690392,
+        "proto": "udp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7567349076271057,
+          0.030581049621105194,
+          -0.699185311794281
+        ],
+        [
+          -1.0,
+          -0.7581954598426819,
+          0.03201121836900711,
+          -0.699198305606842
+        ],
+        [
+          -1.0,
+          -0.7594919204711914,
+          0.03544546291232109,
+          -0.6977825164794922
+        ],
+        [
+          -1.0,
+          -0.7601351737976074,
+          0.04726032912731171,
+          -0.6904001832008362
+        ],
+        [
+          -1.0,
+          -0.7615987658500671,
+          0.09900014847517014,
+          -0.6568647027015686
+        ],
+        [
+          -0.4800896942615509,
+          -0.7371526956558228,
+          0.3566496968269348,
+          -0.46425098180770874
+        ],
+        [
+          1.0,
+          -0.31429168581962585,
+          0.8520640730857849,
+          0.17305031418800354
+        ]
+      ],
+      "steps": 7,
+      "evaded_xgboost": true,
+      "jitter": 5.0,
+      "padding": -157.14584350585938,
+      "proto_hop": true,
+      "state_hop": true
+    },
+    {
+      "episode_id": 16,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.0763930007815361,
+        "tot_pkts": 2,
+        "tot_bytes": 209,
+        "src_bytes": 72,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 9,
+        "tot_bytes": 207,
+        "src_bytes": 70,
+        "proto": "tcp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592313885688782,
+          0.03208959475159645,
+          -0.6998462677001953
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.6156921386719,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 17,
+      "policy": "agent",
+      "original_features": {
+        "dur": 988.32861328125,
+        "tot_pkts": 9,
+        "tot_bytes": 558,
+        "src_bytes": 558,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 963.3999284803867,
+        "tot_pkts": 15170,
+        "tot_bytes": 817812,
+        "src_bytes": 817812,
+        "proto": "udp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.3455122411251068,
+          -0.17479291558265686,
+          -0.533526599407196
+        ],
+        [
+          -1.0,
+          -0.34784308075904846,
+          -0.17294520139694214,
+          -0.5341832041740417
+        ],
+        [
+          -1.0,
+          -0.3499811291694641,
+          -0.16992443799972534,
+          -0.5340270400047302
+        ],
+        [
+          -1.0,
+          -0.35164254903793335,
+          -0.16400033235549927,
+          -0.5318539142608643
+        ],
+        [
+          -1.0,
+          -0.35211873054504395,
+          -0.1508711576461792,
+          -0.5246341824531555
+        ],
+        [
+          -1.0,
+          -0.3494938015937805,
+          -0.11919339746236801,
+          -0.5041431784629822
+        ],
+        [
+          -0.9344246983528137,
+          -0.33782723546028137,
+          -0.03663938492536545,
+          -0.4453802704811096
+        ],
+        [
+          -0.05131227523088455,
+          -0.2928435504436493,
+          0.18787261843681335,
+          -0.2661011517047882
+        ],
+        [
+          1.0,
+          -0.12612174451351166,
+          0.5900903344154358,
+          0.14381232857704163
+        ],
+        [
+          1.0,
+          -0.026229046285152435,
+          0.682854950428009,
+          0.2845768928527832
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 5.0,
+      "padding": -13.114522933959961,
+      "proto_hop": true,
+      "state_hop": true
+    },
+    {
+      "episode_id": 18,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.05922200158238411,
+        "tot_pkts": 2,
+        "tot_bytes": 281,
+        "src_bytes": 69,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 37,
+        "tot_bytes": 1411,
+        "src_bytes": 1199,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592334151268005,
+          0.032107964158058167,
+          -0.6998365521430969
+        ],
+        [
+          -1.0,
+          -0.7592885494232178,
+          0.03244313970208168,
+          -0.6996380090713501
+        ]
+      ],
+      "steps": 2,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.644287109375,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 19,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.029990000650286674,
+        "tot_pkts": 2,
+        "tot_bytes": 393,
+        "src_bytes": 67,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 37,
+        "tot_bytes": 1523,
+        "src_bytes": 1197,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592373490333557,
+          0.032137639820575714,
+          -0.6998212933540344
+        ],
+        [
+          -1.0,
+          -0.759284257888794,
+          0.03246765956282616,
+          -0.6996207237243652
+        ]
+      ],
+      "steps": 2,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.6421203613281,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 20,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.023080000653862953,
+        "tot_pkts": 2,
+        "tot_bytes": 363,
+        "src_bytes": 77,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 9,
+        "tot_bytes": 361,
+        "src_bytes": 75,
+        "proto": "tcp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592405676841736,
+          0.032134760171175,
+          -0.6998251080513
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.6202697753906,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 21,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.0003000000142492354,
+        "tot_pkts": 2,
+        "tot_bytes": 250,
+        "src_bytes": 78,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 9,
+        "tot_bytes": 248,
+        "src_bytes": 76,
+        "proto": "tcp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592512965202332,
+          0.03211377561092377,
+          -0.699844241142273
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.6256408691406,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 22,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.020137999206781387,
+        "tot_pkts": 2,
+        "tot_bytes": 349,
+        "src_bytes": 89,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 37,
+        "tot_bytes": 1479,
+        "src_bytes": 1219,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592421174049377,
+          0.03213520720601082,
+          -0.6998258829116821
+        ],
+        [
+          -1.0,
+          -0.7592863440513611,
+          0.032463498413562775,
+          -0.6996247172355652
+        ]
+      ],
+      "steps": 2,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.6431579589844,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 23,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.11985699832439423,
+        "tot_pkts": 2,
+        "tot_bytes": 213,
+        "src_bytes": 70,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 37,
+        "tot_bytes": 1343,
+        "src_bytes": 1200,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592191100120544,
+          0.03208228573203087,
+          -0.6998429298400879
+        ],
+        [
+          -1.0,
+          -0.7592911124229431,
+          0.03242817148566246,
+          -0.6996485590934753
+        ]
+      ],
+      "steps": 2,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.64556884765625,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 24,
+      "policy": "agent",
+      "original_features": {
+        "dur": 9.077371597290039,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 5.0,
+        "tot_pkts": 31348,
+        "tot_bytes": 1690392,
+        "src_bytes": 1690392,
+        "proto": "udp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7567084431648254,
+          0.030564412474632263,
+          -0.6991787552833557
+        ],
+        [
+          -1.0,
+          -0.7581691145896912,
+          0.031994618475437164,
+          -0.6991917490959167
+        ],
+        [
+          -1.0,
+          -0.7594919204711914,
+          0.03544546663761139,
+          -0.6977825164794922
+        ],
+        [
+          -1.0,
+          -0.7601351737976074,
+          0.0472603440284729,
+          -0.6904001832008362
+        ],
+        [
+          -1.0,
+          -0.7615987658500671,
+          0.09900017827749252,
+          -0.6568647027015686
+        ],
+        [
+          -0.4800896942615509,
+          -0.7371527552604675,
+          0.3566496968269348,
+          -0.46425098180770874
+        ],
+        [
+          1.0,
+          -0.31429168581962585,
+          0.8520640730857849,
+          0.17305031418800354
+        ]
+      ],
+      "steps": 7,
+      "evaded_xgboost": true,
+      "jitter": 5.0,
+      "padding": -157.14584350585938,
+      "proto_hop": true,
+      "state_hop": true
+    },
+    {
+      "episode_id": 25,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.29074400663375854,
+        "tot_pkts": 2,
+        "tot_bytes": 305,
+        "src_bytes": 74,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 9,
+        "tot_bytes": 303,
+        "src_bytes": 72,
+        "proto": "tcp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7591678500175476,
+          0.03207363188266754,
+          -0.6998162865638733
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.58392333984375,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 26,
+      "policy": "agent",
+      "original_features": {
+        "dur": 1.2355190515518188,
+        "tot_pkts": 3,
+        "tot_bytes": 356,
+        "src_bytes": 154,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 13,
+        "tot_bytes": 516,
+        "src_bytes": 314,
+        "proto": "tcp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.758908212184906,
+          0.03198494017124176,
+          -0.6997033953666687
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.4541015625,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 27,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.020538000389933586,
+        "tot_pkts": 2,
+        "tot_bytes": 318,
+        "src_bytes": 83,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 9,
+        "tot_bytes": 316,
+        "src_bytes": 81,
+        "proto": "tcp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592430710792542,
+          0.03212670236825943,
+          -0.6998315453529358
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.62152099609375,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 28,
+      "policy": "agent",
+      "original_features": {
+        "dur": 2.9347341060638428,
+        "tot_pkts": 2,
+        "tot_bytes": 124,
+        "src_bytes": 124,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 5.0,
+        "tot_pkts": 26106,
+        "tot_bytes": 1407257,
+        "src_bytes": 1407257,
+        "proto": "udp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7584345936775208,
+          0.03157798573374748,
+          -0.6996553540229797
+        ],
+        [
+          -1.0,
+          -0.7592954039573669,
+          0.03242238983511925,
+          -0.6996551156044006
+        ],
+        [
+          -1.0,
+          -0.7594242691993713,
+          0.034273911267519,
+          -0.6985082030296326
+        ],
+        [
+          -1.0,
+          -0.7598926424980164,
+          0.042400017380714417,
+          -0.6934493184089661
+        ],
+        [
+          -1.0,
+          -0.7612470388412476,
+          0.07743533700704575,
+          -0.6710707545280457
+        ],
+        [
+          -0.9131614565849304,
+          -0.754601240158081,
+          0.24605777859687805,
+          -0.5521242022514343
+        ],
+        [
+          1.0,
+          -0.4123188853263855,
+          0.8101184964179993,
+          0.08004660159349442
+        ]
+      ],
+      "steps": 7,
+      "evaded_xgboost": true,
+      "jitter": 5.0,
+      "padding": -206.15943908691406,
+      "proto_hop": true,
+      "state_hop": true
+    },
+    {
+      "episode_id": 29,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.5057060122489929,
+        "tot_pkts": 12,
+        "tot_bytes": 2767,
+        "src_bytes": 1607,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
+      },
+      "mutated_features": {
+        "dur": 5.0,
+        "tot_pkts": 30127,
+        "tot_bytes": 1626917,
+        "src_bytes": 1625757,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7590940594673157,
+          0.03344794362783432,
+          -0.6989169716835022
+        ],
+        [
+          -1.0,
+          -0.7594005465507507,
+          0.03605218231678009,
+          -0.6973921060562134
+        ],
+        [
+          -1.0,
+          -0.759989857673645,
+          0.0469084195792675,
+          -0.690608024597168
+        ],
+        [
+          -1.0,
+          -0.7614141702651978,
+          0.09428251534700394,
+          -0.659988284111023
+        ],
+        [
+          -0.5921280980110168,
+          -0.7425763010978699,
+          0.32854095101356506,
+          -0.48740774393081665
+        ],
+        [
+          1.0,
+          -0.33602821826934814,
+          0.8447230458259583,
+          0.15355990827083588
+        ]
+      ],
+      "steps": 6,
+      "evaded_xgboost": true,
+      "jitter": 5.0,
+      "padding": -168.0141143798828,
+      "proto_hop": true,
+      "state_hop": true
+    },
+    {
+      "episode_id": 30,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.12958799302577972,
+        "tot_pkts": 2,
+        "tot_bytes": 265,
+        "src_bytes": 76,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 9,
+        "tot_bytes": 263,
+        "src_bytes": 74,
+        "proto": "tcp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.759214460849762,
+          0.03209373727440834,
+          -0.699833333492279
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.60723876953125,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 31,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.029019000008702278,
+        "tot_pkts": 2,
+        "tot_bytes": 225,
+        "src_bytes": 74,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 9,
+        "tot_bytes": 223,
+        "src_bytes": 72,
+        "proto": "tcp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592441439628601,
+          0.0321020781993866,
+          -0.6998466849327087
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.6220703125,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 32,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.022533999755978584,
+        "tot_pkts": 2,
+        "tot_bytes": 424,
+        "src_bytes": 79,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 37,
+        "tot_bytes": 1554,
+        "src_bytes": 1209,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592384219169617,
+          0.03214898705482483,
+          -0.6998153328895569
+        ],
+        [
+          -1.0,
+          -0.7592832446098328,
+          0.03247770667076111,
+          -0.6996142268180847
+        ]
+      ],
+      "steps": 2,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.6416320800781,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 33,
+      "policy": "agent",
+      "original_features": {
+        "dur": 9.022979736328125,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 5.0,
+        "tot_pkts": 31348,
+        "tot_bytes": 1690392,
+        "src_bytes": 1690392,
+        "proto": "udp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7567238211631775,
+          0.030574079602956772,
+          -0.6991825699806213
+        ],
+        [
+          -1.0,
+          -0.7581843733787537,
+          0.03200427070260048,
+          -0.6991955637931824
+        ],
+        [
+          -1.0,
+          -0.7594919204711914,
+          0.03544546663761139,
+          -0.6977825164794922
+        ],
+        [
+          -1.0,
+          -0.7601351737976074,
+          0.04726032912731171,
+          -0.6904001832008362
+        ],
+        [
+          -1.0,
+          -0.7615987658500671,
+          0.09900014847517014,
+          -0.6568647027015686
+        ],
+        [
+          -0.4800896942615509,
+          -0.7371527552604675,
+          0.3566496968269348,
+          -0.46425098180770874
+        ],
+        [
+          1.0,
+          -0.31429168581962585,
+          0.8520640730857849,
+          0.17305031418800354
+        ]
+      ],
+      "steps": 7,
+      "evaded_xgboost": true,
+      "jitter": 5.0,
+      "padding": -157.14584350585938,
+      "proto_hop": true,
+      "state_hop": true
+    },
+    {
+      "episode_id": 34,
+      "policy": "agent",
+      "original_features": {
+        "dur": 7.299685955047607,
+        "tot_pkts": 8,
+        "tot_bytes": 1907,
+        "src_bytes": 885,
+        "proto": "tcp",
+        "state": "SRPA_SPA"
+      },
+      "mutated_features": {
+        "dur": 5.0,
+        "tot_pkts": 25560,
+        "tot_bytes": 1379581,
+        "src_bytes": 1378559,
+        "proto": "tcp",
+        "state": "SRPA_SPA"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.757183313369751,
+          0.031677499413490295,
+          -0.6987948417663574
+        ],
+        [
+          -1.0,
+          -0.7587053179740906,
+          0.034200310707092285,
+          -0.6981291174888611
+        ],
+        [
+          -1.0,
+          -0.7597692012786865,
+          0.04185011237859726,
+          -0.6937791705131531
+        ],
+        [
+          -1.0,
+          -0.761031985282898,
+          0.0730118602514267,
+          -0.6739321351051331
+        ],
+        [
+          -1.0,
+          -0.7568956613540649,
+          0.22094863653182983,
+          -0.5709477066993713
+        ],
+        [
+          1.0,
+          -0.4737382233142853,
+          0.7757532000541687,
+          0.010211346670985222
+        ]
+      ],
+      "steps": 6,
+      "evaded_xgboost": true,
+      "jitter": 5.0,
+      "padding": -236.86911010742188,
+      "proto_hop": true,
+      "state_hop": true
+    },
+    {
+      "episode_id": 35,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.528689980506897,
+        "tot_pkts": 4,
+        "tot_bytes": 244,
+        "src_bytes": 124,
+        "proto": "tcp",
+        "state": "S_RA"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 17,
+        "tot_bytes": 566,
+        "src_bytes": 446,
+        "proto": "udp",
+        "state": "S_RA"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7591153979301453,
+          0.03212374448776245,
+          -0.699744701385498
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.5577087402344,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 36,
+      "policy": "agent",
+      "original_features": {
+        "dur": 88.76520538330078,
+        "tot_pkts": 11,
+        "tot_bytes": 1100,
+        "src_bytes": 543,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
+      },
+      "mutated_features": {
+        "dur": 83.76520538330078,
+        "tot_pkts": 44,
+        "tot_bytes": 2515,
+        "src_bytes": 1958,
+        "proto": "udp",
+        "state": "FSPA_FSPA"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7331296801567078,
+          0.016800377517938614,
+          -0.6924493312835693
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -366.5648498535156,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 37,
+      "policy": "agent",
+      "original_features": {
+        "dur": 839.4654541015625,
+        "tot_pkts": 85,
+        "tot_bytes": 15963,
+        "src_bytes": 3769,
+        "proto": "tcp",
+        "state": "SRPA_SPA"
+      },
+      "mutated_features": {
+        "dur": 819.4654541015625,
+        "tot_pkts": 4263,
+        "tot_bytes": 240745,
+        "src_bytes": 228551,
+        "proto": "tcp",
+        "state": "SRPA_SPA"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.41690751910209656,
+          -0.13499164581298828,
+          -0.5631576776504517
+        ],
+        [
+          -1.0,
+          -0.41813963651657104,
+          -0.1242293193936348,
+          -0.5577977299690247
+        ],
+        [
+          -1.0,
+          -0.4170275330543518,
+          -0.09600774198770523,
+          -0.5403815507888794
+        ],
+        [
+          -1.0,
+          -0.4077446162700653,
+          -0.014484543353319168,
+          -0.4840388298034668
+        ]
+      ],
+      "steps": 4,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -203.872314453125,
+      "proto_hop": false,
+      "state_hop": false
+    },
+    {
+      "episode_id": 38,
+      "policy": "agent",
+      "original_features": {
+        "dur": 9.012513160705566,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 5.0,
+        "tot_pkts": 31348,
+        "tot_bytes": 1690392,
+        "src_bytes": 1690392,
+        "proto": "udp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7567268013954163,
+          0.030575931072235107,
+          -0.6991832852363586
+        ],
+        [
+          -1.0,
+          -0.7581873536109924,
+          0.032006122171878815,
+          -0.6991962790489197
+        ],
+        [
+          -1.0,
+          -0.7594919204711914,
+          0.03544546663761139,
+          -0.6977825164794922
+        ],
+        [
+          -1.0,
+          -0.7601351737976074,
+          0.04726032912731171,
+          -0.6904001832008362
+        ],
+        [
+          -1.0,
+          -0.7615987658500671,
+          0.09900014847517014,
+          -0.6568647027015686
+        ],
+        [
+          -0.4800896942615509,
+          -0.7371527552604675,
+          0.3566496968269348,
+          -0.46425098180770874
+        ],
+        [
+          1.0,
+          -0.31429168581962585,
+          0.8520640730857849,
+          0.17305031418800354
+        ]
+      ],
+      "steps": 7,
+      "evaded_xgboost": true,
+      "jitter": 5.0,
+      "padding": -157.14584350585938,
+      "proto_hop": true,
+      "state_hop": true
+    },
+    {
+      "episode_id": 39,
+      "policy": "agent",
+      "original_features": {
+        "dur": 9.022980690002441,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 5.0,
+        "tot_pkts": 31348,
+        "tot_bytes": 1690392,
+        "src_bytes": 1690392,
+        "proto": "udp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7567238211631775,
+          0.030574079602956772,
+          -0.6991825699806213
+        ],
+        [
+          -1.0,
+          -0.7581843733787537,
+          0.03200427070260048,
+          -0.6991955637931824
+        ],
+        [
+          -1.0,
+          -0.7594919204711914,
+          0.03544546663761139,
+          -0.6977825164794922
+        ],
+        [
+          -1.0,
+          -0.7601351737976074,
+          0.04726032912731171,
+          -0.6904001832008362
+        ],
+        [
+          -1.0,
+          -0.7615987658500671,
+          0.09900014847517014,
+          -0.6568647027015686
+        ],
+        [
+          -0.4800896942615509,
+          -0.7371527552604675,
+          0.3566496968269348,
+          -0.46425098180770874
+        ],
+        [
+          1.0,
+          -0.31429168581962585,
+          0.8520640730857849,
+          0.17305031418800354
+        ]
+      ],
+      "steps": 7,
+      "evaded_xgboost": true,
+      "jitter": 5.0,
+      "padding": -157.14584350585938,
+      "proto_hop": true,
+      "state_hop": true
+    },
+    {
+      "episode_id": 40,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.0003659999929368496,
+        "tot_pkts": 2,
+        "tot_bytes": 347,
+        "src_bytes": 68,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 37,
+        "tot_bytes": 1477,
+        "src_bytes": 1198,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.759247362613678,
+          0.03213287144899368,
+          -0.6998304128646851
+        ],
+        [
+          -1.0,
+          -0.7592860460281372,
+          0.03245764225721359,
+          -0.699627697467804
+        ]
+      ],
+      "steps": 2,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.6430358886719,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 41,
+      "policy": "agent",
+      "original_features": {
+        "dur": 9.013382911682129,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 5.0,
+        "tot_pkts": 31348,
+        "tot_bytes": 1690392,
+        "src_bytes": 1690392,
+        "proto": "udp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7567265629768372,
+          0.03057577833533287,
+          -0.6991832852363586
+        ],
+        [
+          -1.0,
+          -0.7581871747970581,
+          0.03200596198439598,
+          -0.6991962790489197
+        ],
+        [
+          -1.0,
+          -0.7594919204711914,
+          0.03544546663761139,
+          -0.6977825164794922
+        ],
+        [
+          -1.0,
+          -0.7601351737976074,
+          0.04726032912731171,
+          -0.6904001832008362
+        ],
+        [
+          -1.0,
+          -0.7615987658500671,
+          0.09900014847517014,
+          -0.6568647027015686
+        ],
+        [
+          -0.4800896942615509,
+          -0.7371527552604675,
+          0.3566496968269348,
+          -0.46425098180770874
+        ],
+        [
+          1.0,
+          -0.31429168581962585,
+          0.8520640730857849,
+          0.17305031418800354
+        ]
+      ],
+      "steps": 7,
+      "evaded_xgboost": true,
+      "jitter": 5.0,
+      "padding": -157.14584350585938,
+      "proto_hop": true,
+      "state_hop": true
+    },
+    {
+      "episode_id": 42,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.06340499967336655,
+        "tot_pkts": 2,
+        "tot_bytes": 450,
+        "src_bytes": 79,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 9,
+        "tot_bytes": 448,
+        "src_bytes": 77,
+        "proto": "tcp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592260241508484,
+          0.032147567719221115,
+          -0.6998084783554077
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.6130065917969,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 43,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.145455002784729,
+        "tot_pkts": 2,
+        "tot_bytes": 268,
+        "src_bytes": 68,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 9,
+        "tot_bytes": 266,
+        "src_bytes": 66,
+        "proto": "tcp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592098116874695,
+          0.03208954632282257,
+          -0.6998328566551208
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.60491943359375,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 44,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.13241499662399292,
+        "tot_pkts": 2,
+        "tot_bytes": 248,
+        "src_bytes": 77,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 9,
+        "tot_bytes": 246,
+        "src_bytes": 75,
+        "proto": "tcp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592143416404724,
+          0.032089706510305405,
+          -0.6998356580734253
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.607177734375,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 45,
+      "policy": "agent",
+      "original_features": {
+        "dur": 127.10026550292969,
+        "tot_pkts": 15,
+        "tot_bytes": 930,
+        "src_bytes": 546,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
+      },
+      "mutated_features": {
+        "dur": 122.10026550292969,
+        "tot_pkts": 59,
+        "tot_bytes": 2945,
+        "src_bytes": 2561,
+        "proto": "udp",
+        "state": "FSPA_FSPA"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7210453152656555,
+          0.009811758995056152,
+          -0.6888309121131897
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -360.52264404296875,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 46,
+      "policy": "agent",
+      "original_features": {
+        "dur": 2.955596923828125,
+        "tot_pkts": 2,
+        "tot_bytes": 124,
+        "src_bytes": 124,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 5.0,
+        "tot_pkts": 26106,
+        "tot_bytes": 1407257,
+        "src_bytes": 1407257,
+        "proto": "udp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7584287524223328,
+          0.03157427906990051,
+          -0.6996539831161499
+        ],
+        [
+          -1.0,
+          -0.7592954039573669,
+          0.03242238983511925,
+          -0.6996551156044006
+        ],
+        [
+          -1.0,
+          -0.7594242691993713,
+          0.034273911267519,
+          -0.6985082030296326
+        ],
+        [
+          -1.0,
+          -0.7598926424980164,
+          0.042400017380714417,
+          -0.6934493184089661
+        ],
+        [
+          -1.0,
+          -0.7612470388412476,
+          0.07743533700704575,
+          -0.6710707545280457
+        ],
+        [
+          -0.9131614565849304,
+          -0.754601240158081,
+          0.24605777859687805,
+          -0.5521242022514343
+        ],
+        [
+          1.0,
+          -0.4123188853263855,
+          0.8101184964179993,
+          0.08004660159349442
+        ]
+      ],
+      "steps": 7,
+      "evaded_xgboost": true,
+      "jitter": 5.0,
+      "padding": -206.15943908691406,
+      "proto_hop": true,
+      "state_hop": true
+    },
+    {
+      "episode_id": 47,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.1866530030965805,
+        "tot_pkts": 13,
+        "tot_bytes": 6081,
+        "src_bytes": 750,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 53,
+        "tot_bytes": 7861,
+        "src_bytes": 2530,
+        "proto": "udp",
+        "state": "FSPA_FSPA"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7590460181236267,
+          0.0340745784342289,
+          -0.6985012888908386
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.52301025390625,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 48,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.00035700001171790063,
+        "tot_pkts": 2,
+        "tot_bytes": 283,
+        "src_bytes": 78,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 9,
+        "tot_bytes": 281,
+        "src_bytes": 76,
+        "proto": "tcp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592499852180481,
+          0.032121144235134125,
+          -0.6998390555381775
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.625,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 49,
+      "policy": "agent",
+      "original_features": {
+        "dur": 3.004309892654419,
+        "tot_pkts": 2,
+        "tot_bytes": 124,
+        "src_bytes": 124,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 5.0,
+        "tot_pkts": 26106,
+        "tot_bytes": 1407257,
+        "src_bytes": 1407257,
+        "proto": "udp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7584150433540344,
+          0.031565628945827484,
+          -0.6996505856513977
+        ],
+        [
+          -1.0,
+          -0.7592954039573669,
+          0.03242238983511925,
+          -0.6996551156044006
+        ],
+        [
+          -1.0,
+          -0.7594242691993713,
+          0.034273911267519,
+          -0.6985082030296326
+        ],
+        [
+          -1.0,
+          -0.7598926424980164,
+          0.042400017380714417,
+          -0.6934493184089661
+        ],
+        [
+          -1.0,
+          -0.7612470388412476,
+          0.07743533700704575,
+          -0.6710707545280457
+        ],
+        [
+          -0.9131614565849304,
+          -0.754601240158081,
+          0.24605777859687805,
+          -0.5521242022514343
+        ],
+        [
+          1.0,
+          -0.4123188853263855,
+          0.8101184964179993,
+          0.08004660159349442
+        ]
+      ],
+      "steps": 7,
+      "evaded_xgboost": true,
+      "jitter": 5.0,
+      "padding": -206.15943908691406,
+      "proto_hop": true,
+      "state_hop": true
+    },
+    {
+      "episode_id": 50,
+      "policy": "agent",
+      "original_features": {
+        "dur": 8.982773780822754,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 5.0,
+        "tot_pkts": 31348,
+        "tot_bytes": 1690392,
+        "src_bytes": 1690392,
+        "proto": "udp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7567351460456848,
+          0.030581194907426834,
+          -0.6991854906082153
+        ],
+        [
+          -1.0,
+          -0.758195698261261,
+          0.03201141208410263,
+          -0.699198305606842
+        ],
+        [
+          -1.0,
+          -0.7594919204711914,
+          0.03544546291232109,
+          -0.6977825164794922
+        ],
+        [
+          -1.0,
+          -0.7601351737976074,
+          0.04726032912731171,
+          -0.6904001832008362
+        ],
+        [
+          -1.0,
+          -0.7615987658500671,
+          0.09900014847517014,
+          -0.6568647027015686
+        ],
+        [
+          -0.4800896942615509,
+          -0.7371526956558228,
+          0.3566496968269348,
+          -0.46425098180770874
+        ],
+        [
+          1.0,
+          -0.31429168581962585,
+          0.8520640730857849,
+          0.17305031418800354
+        ]
+      ],
+      "steps": 7,
+      "evaded_xgboost": true,
+      "jitter": 5.0,
+      "padding": -157.14584350585938,
+      "proto_hop": true,
+      "state_hop": true
+    },
+    {
+      "episode_id": 51,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.08734700083732605,
+        "tot_pkts": 2,
+        "tot_bytes": 419,
+        "src_bytes": 75,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 37,
+        "tot_bytes": 1549,
+        "src_bytes": 1205,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592204213142395,
+          0.032135386019945145,
+          -0.6998122334480286
+        ],
+        [
+          -1.0,
+          -0.7592833638191223,
+          0.03247556462883949,
+          -0.6996155381202698
+        ]
+      ],
+      "steps": 2,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.6416931152344,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 52,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.15917499363422394,
+        "tot_pkts": 2,
+        "tot_bytes": 581,
+        "src_bytes": 80,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 9,
+        "tot_bytes": 579,
+        "src_bytes": 78,
+        "proto": "tcp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7591943144798279,
+          0.03216015547513962,
+          -0.6997812390327454
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.59716796875,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 53,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.000391999987186864,
+        "tot_pkts": 2,
+        "tot_bytes": 353,
+        "src_bytes": 91,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 9,
+        "tot_bytes": 351,
+        "src_bytes": 89,
+        "proto": "tcp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592474818229675,
+          0.03214013949036598,
+          -0.6998263597488403
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.6237487792969,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 54,
+      "policy": "agent",
+      "original_features": {
+        "dur": 959.8236083984375,
+        "tot_pkts": 40,
+        "tot_bytes": 42640,
+        "src_bytes": 42640,
+        "proto": "icmp",
+        "state": "ECO"
+      },
+      "mutated_features": {
+        "dur": 953.2712965011597,
+        "tot_pkts": 14993,
+        "tot_bytes": 848897,
+        "src_bytes": 848897,
+        "proto": "icmp",
+        "state": "ECO"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.3525354266166687,
+          -0.14925312995910645,
+          -0.5260933041572571
+        ],
+        [
+          -1.0,
+          -0.35438627004623413,
+          -0.14432141184806824,
+          -0.5246068239212036
+        ],
+        [
+          -1.0,
+          -0.35527294874191284,
+          -0.13369372487068176,
+          -0.5190985202789307
+        ],
+        [
+          -1.0,
+          -0.35367658734321594,
+          -0.10855362564325333,
+          -0.5031774640083313
+        ],
+        [
+          -0.9940118193626404,
+          -0.3451102077960968,
+          -0.044389329850673676,
+          -0.45814526081085205
+        ],
+        [
+          -0.3164505958557129,
+          -0.3130490779876709,
+          0.12924279272556305,
+          -0.32348865270614624
+        ],
+        [
+          1.0,
+          -0.1864495575428009,
+          0.5046546459197998,
+          0.03126150369644165
+        ],
+        [
+          1.0,
+          -0.03458884358406067,
+          0.686983048915863,
+          0.2802794575691223
+        ],
+        [
+          1.0,
+          -0.0059680938720703125,
+          0.7014586329460144,
+          0.31245940923690796
+        ],
+        [
+          1.0,
+          0.0005198940634727478,
+          0.7027282118797302,
+          0.3186151385307312
+        ]
+      ],
+      "steps": 10,
+      "evaded_xgboost": false,
+      "jitter": 5.0,
+      "padding": 0.2599470317363739,
+      "proto_hop": true,
+      "state_hop": true
+    },
+    {
+      "episode_id": 55,
+      "policy": "agent",
+      "original_features": {
+        "dur": 9.016134262084961,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 5.0,
+        "tot_pkts": 31348,
+        "tot_bytes": 1690392,
+        "src_bytes": 1690392,
+        "proto": "udp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7567257285118103,
+          0.030575286597013474,
+          -0.6991830468177795
+        ],
+        [
+          -1.0,
+          -0.758186399936676,
+          0.03200549632310867,
+          -0.6991960406303406
+        ],
+        [
+          -1.0,
+          -0.7594919204711914,
+          0.03544546663761139,
+          -0.6977825164794922
+        ],
+        [
+          -1.0,
+          -0.7601351737976074,
+          0.04726032912731171,
+          -0.6904001832008362
+        ],
+        [
+          -1.0,
+          -0.7615987658500671,
+          0.09900014847517014,
+          -0.6568647027015686
+        ],
+        [
+          -0.4800896942615509,
+          -0.7371527552604675,
+          0.3566496968269348,
+          -0.46425098180770874
+        ],
+        [
+          1.0,
+          -0.31429168581962585,
+          0.8520640730857849,
+          0.17305031418800354
+        ]
+      ],
+      "steps": 7,
+      "evaded_xgboost": true,
+      "jitter": 5.0,
+      "padding": -157.14584350585938,
+      "proto_hop": true,
+      "state_hop": true
+    },
+    {
+      "episode_id": 56,
+      "policy": "agent",
+      "original_features": {
+        "dur": 1.2566180229187012,
+        "tot_pkts": 3,
+        "tot_bytes": 382,
+        "src_bytes": 144,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 13,
+        "tot_bytes": 542,
+        "src_bytes": 304,
+        "proto": "tcp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7589011788368225,
+          0.031984440982341766,
+          -0.6996992826461792
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.4505920410156,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 57,
+      "policy": "agent",
+      "original_features": {
+        "dur": 2.962362051010132,
+        "tot_pkts": 2,
+        "tot_bytes": 124,
+        "src_bytes": 124,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 5.0,
+        "tot_pkts": 26106,
+        "tot_bytes": 1407257,
+        "src_bytes": 1407257,
+        "proto": "udp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7584269046783447,
+          0.031573064625263214,
+          -0.6996534466743469
+        ],
+        [
+          -1.0,
+          -0.7592954039573669,
+          0.03242238983511925,
+          -0.6996551156044006
+        ],
+        [
+          -1.0,
+          -0.7594242691993713,
+          0.034273911267519,
+          -0.6985082030296326
+        ],
+        [
+          -1.0,
+          -0.7598926424980164,
+          0.042400017380714417,
+          -0.6934493184089661
+        ],
+        [
+          -1.0,
+          -0.7612470388412476,
+          0.07743533700704575,
+          -0.6710707545280457
+        ],
+        [
+          -0.9131614565849304,
+          -0.754601240158081,
+          0.24605777859687805,
+          -0.5521242022514343
+        ],
+        [
+          1.0,
+          -0.4123188853263855,
+          0.8101184964179993,
+          0.08004660159349442
+        ]
+      ],
+      "steps": 7,
+      "evaded_xgboost": true,
+      "jitter": 5.0,
+      "padding": -206.15943908691406,
+      "proto_hop": true,
+      "state_hop": true
+    },
+    {
+      "episode_id": 58,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.2689250111579895,
+        "tot_pkts": 2,
+        "tot_bytes": 306,
+        "src_bytes": 70,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 37,
+        "tot_bytes": 1436,
+        "src_bytes": 1200,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7591738104820251,
+          0.032076701521873474,
+          -0.6998181343078613
+        ],
+        [
+          -1.0,
+          -0.7592875957489014,
+          0.03244900703430176,
+          -0.6996339559555054
+        ]
+      ],
+      "steps": 2,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.643798828125,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 59,
+      "policy": "agent",
+      "original_features": {
+        "dur": 19.567216873168945,
+        "tot_pkts": 211,
+        "tot_bytes": 190866,
+        "src_bytes": 5973,
+        "proto": "tcp",
+        "state": "SRPA_SPA"
+      },
+      "mutated_features": {
+        "dur": 9.567216873168945,
+        "tot_pkts": 3330,
+        "tot_bytes": 358548,
+        "src_bytes": 173655,
+        "proto": "tcp",
+        "state": "SRPA_SPA"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7428562641143799,
+          0.08736442774534225,
+          -0.6549478769302368
+        ],
+        [
+          -1.0,
+          -0.7433473467826843,
+          0.1428757607936859,
+          -0.6183176636695862
+        ]
+      ],
+      "steps": 2,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -371.6736755371094,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 60,
+      "policy": "agent",
+      "original_features": {
+        "dur": 3.0039401054382324,
+        "tot_pkts": 2,
+        "tot_bytes": 124,
+        "src_bytes": 124,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 5.0,
+        "tot_pkts": 26106,
+        "tot_bytes": 1407257,
+        "src_bytes": 1407257,
+        "proto": "udp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7584152221679688,
+          0.03156568855047226,
+          -0.6996505856513977
+        ],
+        [
+          -1.0,
+          -0.7592954039573669,
+          0.03242238983511925,
+          -0.6996551156044006
+        ],
+        [
+          -1.0,
+          -0.7594242691993713,
+          0.034273911267519,
+          -0.6985082030296326
+        ],
+        [
+          -1.0,
+          -0.7598926424980164,
+          0.042400017380714417,
+          -0.6934493184089661
+        ],
+        [
+          -1.0,
+          -0.7612470388412476,
+          0.07743533700704575,
+          -0.6710707545280457
+        ],
+        [
+          -0.9131614565849304,
+          -0.754601240158081,
+          0.24605777859687805,
+          -0.5521242022514343
+        ],
+        [
+          1.0,
+          -0.4123188853263855,
+          0.8101184964179993,
+          0.08004660159349442
+        ]
+      ],
+      "steps": 7,
+      "evaded_xgboost": true,
+      "jitter": 5.0,
+      "padding": -206.15943908691406,
+      "proto_hop": true,
+      "state_hop": true
+    },
+    {
+      "episode_id": 61,
+      "policy": "agent",
+      "original_features": {
+        "dur": 1.0281859636306763,
+        "tot_pkts": 6,
+        "tot_bytes": 366,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_RA"
+      },
+      "mutated_features": {
+        "dur": 3.9770009517669678,
+        "tot_pkts": 22841,
+        "tot_bytes": 1231253,
+        "src_bytes": 1231073,
+        "proto": "tcp",
+        "state": "S_RA"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7589829564094543,
+          0.03217156603932381,
+          -0.6996248364448547
+        ],
+        [
+          -1.0,
+          -0.7593611478805542,
+          0.03354999050498009,
+          -0.6989540457725525
+        ],
+        [
+          -1.0,
+          -0.7596865296363831,
+          0.03892743960022926,
+          -0.6956146359443665
+        ],
+        [
+          -1.0,
+          -0.7607546448707581,
+          0.06196434795856476,
+          -0.681061327457428
+        ],
+        [
+          -1.0,
+          -0.7603784203529358,
+          0.16815564036369324,
+          -0.6092711091041565
+        ],
+        [
+          0.7954002022743225,
+          -0.6062374114990234,
+          0.6533337235450745,
+          -0.16952647268772125
+        ]
+      ],
+      "steps": 6,
+      "evaded_xgboost": true,
+      "jitter": 3.9770009517669678,
+      "padding": -303.11871337890625,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 62,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.16346600651741028,
+        "tot_pkts": 2,
+        "tot_bytes": 264,
+        "src_bytes": 70,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 37,
+        "tot_bytes": 1394,
+        "src_bytes": 1200,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592049241065979,
+          0.03208598867058754,
+          -0.6998318433761597
+        ],
+        [
+          -1.0,
+          -0.7592892050743103,
+          0.03243960812687874,
+          -0.6996405124664307
+        ]
+      ],
+      "steps": 2,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.64459228515625,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 63,
+      "policy": "agent",
+      "original_features": {
+        "dur": 1.839339017868042,
+        "tot_pkts": 32,
+        "tot_bytes": 11947,
+        "src_bytes": 7615,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
+      },
+      "mutated_features": {
+        "dur": 10.0,
+        "tot_pkts": 48123,
+        "tot_bytes": 2606986,
+        "src_bytes": 2602654,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7585569620132446,
+          0.03778388351202011,
+          -0.6959516406059265
+        ],
+        [
+          -1.0,
+          -0.7594588398933411,
+          0.045192111283540726,
+          -0.6916518807411194
+        ],
+        [
+          -1.0,
+          -0.7605960965156555,
+          0.07556396722793579,
+          -0.6722472906112671
+        ],
+        [
+          -1.0,
+          -0.7564760446548462,
+          0.21906626224517822,
+          -0.5723578333854675
+        ],
+        [
+          1.0,
+          -0.4876095950603485,
+          0.7666009068489075,
+          -0.006853645667433739
+        ],
+        [
+          1.0,
+          -0.22706109285354614,
+          0.8697436451911926,
+          0.2460709661245346
+        ]
+      ],
+      "steps": 6,
+      "evaded_xgboost": true,
+      "jitter": 5.0,
+      "padding": -113.53054809570312,
+      "proto_hop": true,
+      "state_hop": true
+    },
+    {
+      "episode_id": 64,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.0003220000071451068,
+        "tot_pkts": 2,
+        "tot_bytes": 384,
+        "src_bytes": 71,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 37,
+        "tot_bytes": 1514,
+        "src_bytes": 1201,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592460513114929,
+          0.03214191272854805,
+          -0.6998242735862732
+        ],
+        [
+          -1.0,
+          -0.7592846751213074,
+          0.03246667981147766,
+          -0.6996215581893921
+        ]
+      ],
+      "steps": 2,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.642333984375,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 65,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.06575799733400345,
+        "tot_pkts": 2,
+        "tot_bytes": 295,
+        "src_bytes": 70,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 37,
+        "tot_bytes": 1425,
+        "src_bytes": 1200,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592310905456543,
+          0.03211021423339844,
+          -0.6998337507247925
+        ],
+        [
+          -1.0,
+          -0.7592880725860596,
+          0.032446522265672684,
+          -0.6996356844902039
+        ]
+      ],
+      "steps": 2,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.64404296875,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 66,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.1943890005350113,
+        "tot_pkts": 2,
+        "tot_bytes": 287,
+        "src_bytes": 78,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 9,
+        "tot_bytes": 285,
+        "src_bytes": 76,
+        "proto": "tcp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7591955661773682,
+          0.03208770230412483,
+          -0.6998251080513
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.5977783203125,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 67,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.1413470059633255,
+        "tot_pkts": 10,
+        "tot_bytes": 1631,
+        "src_bytes": 734,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 41,
+        "tot_bytes": 2925,
+        "src_bytes": 2028,
+        "proto": "udp",
+        "state": "FSPA_FSPA"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592142224311829,
+          0.0329391248524189,
+          -0.6992971301078796
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.60711669921875,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 68,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.15328200161457062,
+        "tot_pkts": 2,
+        "tot_bytes": 273,
+        "src_bytes": 72,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 37,
+        "tot_bytes": 1403,
+        "src_bytes": 1202,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592074275016785,
+          0.032090283930301666,
+          -0.6998308897018433
+        ],
+        [
+          -1.0,
+          -0.7592888474464417,
+          0.032442107796669006,
+          -0.6996389031410217
+        ]
+      ],
+      "steps": 2,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.6444091796875,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 69,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.00047400000039488077,
+        "tot_pkts": 2,
+        "tot_bytes": 512,
+        "src_bytes": 71,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 37,
+        "tot_bytes": 1642,
+        "src_bytes": 1201,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592411637306213,
+          0.03217051550745964,
+          -0.6998041868209839
+        ],
+        [
+          -1.0,
+          -0.7592797875404358,
+          0.032495349645614624,
+          -0.6996014714241028
+        ]
+      ],
+      "steps": 2,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.639892578125,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 70,
+      "policy": "agent",
+      "original_features": {
+        "dur": 1.4914590120315552,
+        "tot_pkts": 6,
+        "tot_bytes": 364,
+        "src_bytes": 242,
+        "proto": "tcp",
+        "state": "FSA_FSA"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 25,
+        "tot_bytes": 1010,
+        "src_bytes": 888,
+        "proto": "udp",
+        "state": "FSA_FSA"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7588541507720947,
+          0.032103538513183594,
+          -0.6995856761932373
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.42706298828125,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 71,
+      "policy": "agent",
+      "original_features": {
+        "dur": 1.3083670139312744,
+        "tot_pkts": 6,
+        "tot_bytes": 366,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_RA"
+      },
+      "mutated_features": {
+        "dur": 3.977001190185547,
+        "tot_pkts": 22841,
+        "tot_bytes": 1231253,
+        "src_bytes": 1231073,
+        "proto": "tcp",
+        "state": "S_RA"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7589044570922852,
+          0.03212195262312889,
+          -0.6996055245399475
+        ],
+        [
+          -1.0,
+          -0.7593610882759094,
+          0.03355003148317337,
+          -0.6989539861679077
+        ],
+        [
+          -1.0,
+          -0.7596866488456726,
+          0.03892744705080986,
+          -0.6956146359443665
+        ],
+        [
+          -1.0,
+          -0.7607546448707581,
+          0.06196440011262894,
+          -0.681061327457428
+        ],
+        [
+          -1.0,
+          -0.7603784203529358,
+          0.168155699968338,
+          -0.6092711091041565
+        ],
+        [
+          0.7954002618789673,
+          -0.6062373518943787,
+          0.6533337831497192,
+          -0.16952645778656006
+        ]
+      ],
+      "steps": 6,
+      "evaded_xgboost": true,
+      "jitter": 3.977001190185547,
+      "padding": -303.1186828613281,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 72,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.07107999920845032,
+        "tot_pkts": 2,
+        "tot_bytes": 204,
+        "src_bytes": 76,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 9,
+        "tot_bytes": 202,
+        "src_bytes": 74,
+        "proto": "tcp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592331171035767,
+          0.03209046274423599,
+          -0.6998469233512878
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.6165466308594,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 73,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.06551399827003479,
+        "tot_pkts": 2,
+        "tot_bytes": 403,
+        "src_bytes": 73,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 37,
+        "tot_bytes": 1533,
+        "src_bytes": 1203,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592270970344543,
+          0.032135143876075745,
+          -0.6998164653778076
+        ],
+        [
+          -1.0,
+          -0.7592839598655701,
+          0.032471466809511185,
+          -0.6996182799339294
+        ]
+      ],
+      "steps": 2,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.6419677734375,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 74,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.0672990009188652,
+        "tot_pkts": 2,
+        "tot_bytes": 205,
+        "src_bytes": 79,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 9,
+        "tot_bytes": 203,
+        "src_bytes": 77,
+        "proto": "tcp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592342495918274,
+          0.03209212049841881,
+          -0.6998465657234192
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.61712646484375,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 75,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.0004330000083427876,
+        "tot_pkts": 2,
+        "tot_bytes": 406,
+        "src_bytes": 70,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 37,
+        "tot_bytes": 1536,
+        "src_bytes": 1200,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592451572418213,
+          0.032146554440259933,
+          -0.699820876121521
+        ],
+        [
+          -1.0,
+          -0.7592838406562805,
+          0.03247135132551193,
+          -0.6996182799339294
+        ]
+      ],
+      "steps": 2,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.64190673828125,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 76,
+      "policy": "agent",
+      "original_features": {
+        "dur": 23.963319778442383,
+        "tot_pkts": 33,
+        "tot_bytes": 11384,
+        "src_bytes": 7362,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
+      },
+      "mutated_features": {
+        "dur": 13.963319778442383,
+        "tot_pkts": 535,
+        "tot_bytes": 37738,
+        "src_bytes": 33716,
+        "proto": "tcp",
+        "state": "FSPA_FSPA"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7522806525230408,
+          0.03368670865893364,
+          -0.6944797039031982
+        ],
+        [
+          -1.0,
+          -0.7540963888168335,
+          0.04180721566081047,
+          -0.6903355717658997
+        ]
+      ],
+      "steps": 2,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -377.0481872558594,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 77,
+      "policy": "agent",
+      "original_features": {
+        "dur": 1.3894180059432983,
+        "tot_pkts": 6,
+        "tot_bytes": 366,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_RA"
+      },
+      "mutated_features": {
+        "dur": 3.977001190185547,
+        "tot_pkts": 22841,
+        "tot_bytes": 1231253,
+        "src_bytes": 1231073,
+        "proto": "tcp",
+        "state": "S_RA"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7588818073272705,
+          0.032107628881931305,
+          -0.6995999813079834
+        ],
+        [
+          -1.0,
+          -0.7593610882759094,
+          0.03355003148317337,
+          -0.6989539861679077
+        ],
+        [
+          -1.0,
+          -0.7596866488456726,
+          0.03892744705080986,
+          -0.6956146359443665
+        ],
+        [
+          -1.0,
+          -0.7607546448707581,
+          0.06196440011262894,
+          -0.681061327457428
+        ],
+        [
+          -1.0,
+          -0.7603784203529358,
+          0.168155699968338,
+          -0.6092711091041565
+        ],
+        [
+          0.7954002618789673,
+          -0.6062373518943787,
+          0.6533337831497192,
+          -0.16952645778656006
+        ]
+      ],
+      "steps": 6,
+      "evaded_xgboost": true,
+      "jitter": 3.977001190185547,
+      "padding": -303.1186828613281,
+      "proto_hop": true,
+      "state_hop": false
+    },
+    {
+      "episode_id": 78,
+      "policy": "agent",
+      "original_features": {
+        "dur": 8.985029220581055,
+        "tot_pkts": 3,
+        "tot_bytes": 186,
+        "src_bytes": 186,
+        "proto": "tcp",
+        "state": "S_"
+      },
+      "mutated_features": {
+        "dur": 5.0,
+        "tot_pkts": 31348,
+        "tot_bytes": 1690392,
+        "src_bytes": 1690392,
+        "proto": "udp",
+        "state": "S_"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7567345499992371,
+          0.03058081865310669,
+          -0.6991851925849915
+        ],
+        [
+          -1.0,
+          -0.7581951022148132,
+          0.03201097249984741,
+          -0.6991981863975525
+        ],
+        [
+          -1.0,
+          -0.7594919204711914,
+          0.03544546291232109,
+          -0.6977825164794922
+        ],
+        [
+          -1.0,
+          -0.7601351737976074,
+          0.04726032912731171,
+          -0.6904001832008362
+        ],
+        [
+          -1.0,
+          -0.7615987658500671,
+          0.09900014847517014,
+          -0.6568647027015686
+        ],
+        [
+          -0.4800896942615509,
+          -0.7371526956558228,
+          0.3566496968269348,
+          -0.46425098180770874
+        ],
+        [
+          1.0,
+          -0.31429168581962585,
+          0.8520640730857849,
+          0.17305031418800354
+        ]
+      ],
+      "steps": 7,
+      "evaded_xgboost": true,
+      "jitter": 5.0,
+      "padding": -157.14584350585938,
+      "proto_hop": true,
+      "state_hop": true
+    },
+    {
+      "episode_id": 79,
+      "policy": "agent",
+      "original_features": {
+        "dur": 0.1584639996290207,
+        "tot_pkts": 2,
+        "tot_bytes": 240,
+        "src_bytes": 74,
+        "proto": "udp",
+        "state": "CON"
+      },
+      "mutated_features": {
+        "dur": 0.0,
+        "tot_pkts": 9,
+        "tot_bytes": 238,
+        "src_bytes": 72,
+        "proto": "tcp",
+        "state": "CON"
+      },
+      "actions": [
+        [
+          -1.0,
+          -0.7592073082923889,
+          0.03208252042531967,
+          -0.6998355388641357
+        ]
+      ],
+      "steps": 1,
+      "evaded_xgboost": true,
+      "jitter": -5.0,
+      "padding": -379.6036682128906,
+      "proto_hop": true,
+      "state_hop": false
+    }
+  ]
+}

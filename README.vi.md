@@ -12,7 +12,15 @@ Quá trình huấn luyện chính dùng XGBoost surrogate (nhanh ~1ms mỗi flow
 
 Xem [`snort_validation/README.md`](snort_validation/README.md) để biết cách dùng và kết quả.
 
-**Phát hiện chính** (dự kiến): agent bypass XGBoost ~89% nhưng Snort vẫn phát hiện ~45% → tỷ lệ lẩn tránh thực ~55%. Khoảng cách cho thấy surrogate khác với thực tế.
+**Kết quả đo được** (80 episode mỗi policy, rule subset behavior, test pool CTU-13):
+
+| Policy | Lẩn tránh XGBoost | Bị Snort phát hiện |
+|---|---|---|
+| Agent (PPO) | 97.5% | 71.2% |
+| Biến đổi ngẫu nhiên | 65.0% | 60.0% |
+| Không biến đổi (baseline) | 8.8% | 11.2% |
+
+Kết quả khớp với câu chuyện surrogate-thực tế, và theo hướng gay gắt hơn dự kiến: mutation của agent giúp ẩn flow khỏi XGBoost nhưng lại *làm tăng* tỷ lệ bị Snort phát hiện (71.2% so với 60.0% của random). XGBoost vẫn bắt 91.2% flow botnet chưa biến đổi, nên kịch bản vẫn đứng: kẻ tấn công thích ứng thắng được một detector (lẩn tránh XGBoost 97.5%) trong khi detector dựa trên hành vi thứ hai vẫn gắn cờ 71.2% số flow đã biến đổi tương tự. Đây chính là độ lệch surrogate-thực tế mà lớp xác thực tồn tại để phơi bày.
 
 ## Nguyên lý hoạt động
 

@@ -112,7 +112,7 @@ python snort_validation/validate_with_snort.py
 # - snort_validation/reports/snort_validation_summary.json
 ```
 
-### Expected Output
+### Measured Output (80 episodes per policy, behavior rule subset)
 
 ```
 ======================================================================
@@ -120,26 +120,26 @@ SNORT VALIDATION SUMMARY
 ======================================================================
 Policy          XGBoost Evasion      Snort Detection      Snort Evasion
 ----------------------------------------------------------------------
-Agent                  89.0%                 45.0%                55.0%
-Random                 81.5%                 72.0%                28.0%
-Baseline                0.0%                 90.4%                 9.6%
+Agent                  97.5%                 71.2%                28.7%
+Random                 65.0%                 60.0%                40.0%
+Baseline                8.8%                 11.2%                88.8%
 ======================================================================
 ```
 
 **Interpretation**:
-- Agent bypasses XGBoost 89% but Snort still detects 45% → **real evasion rate ~55%**
-- Gap between XGBoost and Snort evasion shows judge-reality mismatch
-- Baseline (no mutation) shows Snort catches 90.4% of original botnet flows
+- Agent bypasses XGBoost 97.5% (vs 65.0% random) but Snort still detects 71.2% of the same mutated flows → agent's XGBoost-targeting mutations *increase* Snort detection over random (71.2% vs 60.0%)
+- The two detectors disagree sharply: flows the surrogate calls "normal" are still flagged by the behavior-based IDS
+- Baseline note: 8.8% XGBoost evasion means the surrogate still catches 91.2% of unmutated CTU-13 botnet flows; Snort's 11.2% detection on the same pool reflects that most CTU-13 botnet flows are very short (median 2 packets) and leave little behavioral footprint for threshold rules
 
 ## Baseline Comparison
 
 | Policy   | XGBoost Evasion | Snort Detection | Snort Evasion | Interpretation |
 |----------|-----------------|-----------------|---------------|----------------|
-| Agent    | 89%             | 45%             | 55%           | Agent beats random by ~7% on XGBoost, ~27% on Snort evasion |
-| Random   | 81.5%           | 72%             | 28%           | Random mutations fool XGBoost but not Snort |
-| Baseline | 0%              | 90.4%           | 9.6%          | Original flows detected by both XGBoost and Snort |
+| Agent    | 97.5%           | 71.2%           | 28.7%         | Agent beats both random and Snort badly on XGBoost, but Snort still flags the mutations more than random's |
+| Random   | 65.0%           | 60.0%           | 40.0%         | Random mutations fool XGBoost less, yet evade Snort more than agent |
+| Baseline | 8.8%            | 11.2%           | 88.8%         | Unmutated flows caught by XGBoost; mostly too short for behavior rules |
 
-**Key finding**: XGBoost is easier to fool than Snort. Agent learns patterns that work against the surrogate but don't generalize to signature-based IDS.
+**Key finding**: The surrogate-reality mismatch is real and asymmetric. The PPO agent learned to defeat the *specific* XGBoost judge (97.5% evasion) but its mutations are *more* visible to Snort's behavior rules than random mutations are (71.2% vs 60.0% detection). Evading one detector does not transfer to a second, differently-built one — exactly the failure mode the validation layer exists to demonstrate.
 
 ## Limitations
 

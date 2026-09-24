@@ -18,7 +18,15 @@ The main training uses an XGBoost surrogate (fast ~1ms per flow). A separate **S
 
 See [`snort_validation/README.md`](snort_validation/README.md) for usage and results.
 
-**Key finding** (expected): agent bypasses XGBoost ~89% but Snort still detects ~45% → real evasion ~55%. Gap shows surrogate-reality mismatch.
+**Measured** (80 episodes per policy, behavior rule subset, CTU-13 test pool):
+
+| Policy | XGBoost evasion | Snort detection |
+|---|---|---|
+| Agent (PPO) | 97.5% | 71.2% |
+| Random mutations | 65.0% | 60.0% |
+| No mutation (baseline) | 8.8% | 11.2% |
+
+The result matches the surrogate-reality story, and in a harsher direction than expected: the agent's mutations that hide the flow from XGBoost *increase* Snort's detection (71.2% vs 60.0% for random). The XGBoost surrogate still catches 91.2% of unmutated botnet flows, so the playbook holds: an adaptive attacker can beat one detector (XGBoost evasion 97.5%) while a second, behavior-based detector still flags 71.2% of the same mutated flows. This is the surrogate-reality mismatch the validation layer exists to surface.
 
 ## How it works
 
