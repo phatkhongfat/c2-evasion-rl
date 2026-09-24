@@ -1,0 +1,19 @@
+{
+  "snort_feature_names": [
+    "dur",
+    "tot_pkts",
+    "tot_bytes",
+    "src_bytes",
+    "proto_encoded",
+    "state_encoded",
+    "payload_entropy_est",
+    "pkt_size_iqr",
+    "pkt_size_min",
+    "rst_count",
+    "pkt_rate",
+    "src_pkt_ratio",
+    "dst_pkt_ratio",
+    "src_byte_ratio",
+    "bidirectional_activity"
+  ]
+}

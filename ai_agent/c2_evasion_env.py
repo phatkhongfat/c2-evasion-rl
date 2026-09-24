@@ -95,9 +95,10 @@ class C2EvasionEnv(gym.Env):
 
         # Raw features for the judge (trained on raw magnitudes), normalized for the agent
         raw = self._extract_features(self.current_sample)
-        self.initial_pred = int(self.judge.predict(raw.reshape(1, -1))[0])
+        judge_features = self._snort_features(self.current_sample)
+        self.initial_pred = int(self.judge.predict(judge_features.reshape(1, -1))[0])
         # Get initial probability of being malicious (for confidence shaping)
-        self.initial_proba = self.judge.predict_proba(raw.reshape(1, -1))[0][1]
+        self.initial_proba = self.judge.predict_proba(judge_features.reshape(1, -1))[0][1]
 
         return self._normalize(raw), {}
 
@@ -169,8 +170,9 @@ class C2EvasionEnv(gym.Env):
             self.current_sample["tot_pkts"], 1.0, FEATURE_BOUNDS["tot_pkts"][1]))
 
         raw = self._extract_features(self.current_sample)
-        prediction = int(self.judge.predict(raw.reshape(1, -1))[0])
-        proba = self.judge.predict_proba(raw.reshape(1, -1))[0][1]
+        judge_features = self._snort_features(self.current_sample)
+        prediction = int(self.judge.predict(judge_features.reshape(1, -1))[0])
+        proba = self.judge.predict_proba(judge_features.reshape(1, -1))[0][1]
 
         # 5. Reward shaping
         mutation_cost = (abs(byte_delta) * COST_BYTE) + (abs(jitter) * COST_JITTER)
