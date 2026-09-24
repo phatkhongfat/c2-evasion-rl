@@ -107,6 +107,6 @@ if __name__ == "__main__":
     tag = "_snortaware" if args.snort else ""
     if args.snort and args.snort_lambda is not None:
         tag += f"_{args.snort_lambda}"
-    model_save_path = os.path.join(MODEL_DIR, f"ppo_c2_evasion_agent{tag}")
+    model_save_path = os.path.join(MODEL_DIR, f"ppo_c2_evasion_agent{tag}.zip")
     model.save(model_save_path)
-    print(f"[+] Training complete. Model saved to {model_save_path}.zip")
+    print(f"[+] Training complete. Model saved to {model_save_path}")

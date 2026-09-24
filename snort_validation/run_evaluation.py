@@ -11,6 +11,7 @@ import os
 import sys
 import glob
 import json
+import argparse
 import pandas as pd
 import numpy as np
 from pathlib import Path
@@ -64,13 +65,14 @@ def extract_flow_features(env):
     }
 
 
-def run_evaluation_with_capture(num_episodes=80, policy_type='agent'):
+def run_evaluation_with_capture(num_episodes=80, policy_type='agent', agent_model="models/ppo_c2_evasion_agent.zip"):
     """
     Run evaluation and capture episode data.
     
     Args:
         num_episodes: number of episodes to run
         policy_type: 'agent' (PPO), 'random', or 'baseline' (no mutation)
+        agent_model: path (relative to repo root) to the PPO model zip
     
     Returns:
         dict with episodes data and summary stats
@@ -90,7 +92,7 @@ def run_evaluation_with_capture(num_episodes=80, policy_type='agent'):
     
     model = None
     if policy_type == 'agent':
-        model_path = script_dir / "models/ppo_c2_evasion_agent.zip"
+        model_path = script_dir / agent_model
         print(f"[*] Loading PPO model from: {model_path}")
         try:
             model = PPO.load(str(model_path), env=env, device="cpu")
@@ -178,10 +180,17 @@ def run_evaluation_with_capture(num_episodes=80, policy_type='agent'):
     }
 
 
+def parse_args():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--agent-model", default="models/ppo_c2_evasion_agent.zip",
+                    help="path to PPO model zip for the agent policy")
+    return ap.parse_args()
+
 def main():
     """
     Main workflow: run evaluation for agent, random, and baseline policies.
     """
+    args = parse_args()
     output_dir = Path(__file__).parent.parent / "snort_validation/reports"
     output_dir.mkdir(parents=True, exist_ok=True)
     
@@ -189,7 +198,7 @@ def main():
     print("=" * 70)
     print("PHASE 1: AGENT POLICY (PPO)")
     print("=" * 70)
-    agent_results = run_evaluation_with_capture(num_episodes=80, policy_type='agent')
+    agent_results = run_evaluation_with_capture(num_episodes=80, policy_type='agent', agent_model=args.agent_model)
     
     if agent_results is None:
         print("ERROR: Failed to run agent evaluation")
