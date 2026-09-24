@@ -1,0 +1,54 @@
+# Aggressive botnet behavior ruleset — low thresholds for research baseline.
+#
+# DESIGN GOAL: Catch 70-80% of CTU-13 malicious flows to create a challenging
+# IDS environment for RL agent training. Thresholds lowered to median behavior.
+#
+# WARNING: This is a RESEARCH configuration. In production these rules would
+# generate excessive false positives. Use for ML training only.
+
+# ---------------------------------------------------------------------------
+# TCP flows with ANY established traffic
+# Threshold: 2+ packets (catches median Neris/Virut behavior)
+# ---------------------------------------------------------------------------
+alert tcp any any -> any any (msg:"BOTNET TCP established low threshold"; flow:established; threshold:type both, track by_src, count 2, seconds 30; classtype:trojan-activity; sid:4000001; rev:1;)
+
+# ---------------------------------------------------------------------------
+# UDP flows with small repeated packets (beacon pattern)
+# Threshold: 2+ packets (catches median UDP C2)
+# ---------------------------------------------------------------------------
+alert udp any any -> any any (msg:"BOTNET UDP repeated packet"; dsize:<100; threshold:type both, track by_src, count 2, seconds 20; classtype:trojan-activity; sid:4000002; rev:1;)
+
+# ---------------------------------------------------------------------------
+# TCP medium payload (200-1500 bytes) — covers Neris/Rbot/Virut median
+# Threshold: 3+ packets
+# ---------------------------------------------------------------------------
+alert tcp any any -> any any (msg:"BOTNET TCP medium payload aggressive"; flow:established; dsize:200<>1500; threshold:type both, track by_src, count 3, seconds 60; classtype:trojan-activity; sid:4000003; rev:1;)
+
+# ---------------------------------------------------------------------------
+# Large payload (still useful for bulk exfil)
+# Threshold: 2+ packets (lowered from 3)
+# ---------------------------------------------------------------------------
+alert tcp any any -> any any (msg:"BOTNET TCP large payload aggressive"; flow:established; dsize:>800; threshold:type both, track by_src, count 2, seconds 120; classtype:trojan-activity; sid:4000004; rev:1;)
+
+# ---------------------------------------------------------------------------
+# Very large single packet (unchanged from original)
+# ---------------------------------------------------------------------------
+alert tcp any any -> any any (msg:"BOTNET large single packet"; dsize:>1400; classtype:trojan-activity; sid:4000005; rev:1;)
+
+# ---------------------------------------------------------------------------
+# High packet rate (any size) — botnet chatter
+# Threshold: 6+ packets in 15s
+# ---------------------------------------------------------------------------
+alert tcp any any -> any any (msg:"BOTNET high packet rate aggressive"; flow:established; threshold:type both, track by_src, count 6, seconds 15; classtype:trojan-activity; sid:4000006; rev:1;)
+
+# ---------------------------------------------------------------------------
+# UDP medium payload (200-600 bytes)
+# Threshold: 2+ packets (lowered for Neris UDP)
+# ---------------------------------------------------------------------------
+alert udp any any -> any any (msg:"BOTNET UDP medium payload aggressive"; dsize:200<>600; threshold:type both, track by_src, count 2, seconds 30; classtype:trojan-activity; sid:4000007; rev:1;)
+
+# ---------------------------------------------------------------------------
+# TCP download direction (server -> client) large payload
+# Threshold: 2+ packets
+# ---------------------------------------------------------------------------
+alert tcp any any -> any any (msg:"BOTNET download aggressive"; flow:from_server,established; dsize:>1000; threshold:type both, track by_dst, count 2, seconds 120; classtype:trojan-activity; sid:4000008; rev:1;)
