@@ -49,11 +49,14 @@ htmlcov/
 # Logs & Models
 ai_agent/logs/
 ai_agent/c2_ppo_tensorboard/
+c2_ppo_tensorboard/
 models/*.zip
 *.pkl
 !data/label_encoder_*.pkl
 !data/surrogate_ids_ctu13.pkl
 !data/snort_surrogate.pkl
+!data/snort_surrogate_enhanced.pkl
+!data/snort_surrogate_v2.pkl
 
 # Large data files
 data/archive/
@@ -76,6 +79,10 @@ Thumbs.db
 *.log
 *.pcap
 *.csv
+
+# Feature-engineering artifacts ARE tracked (small, reviewed tables/reports)
+!snort_validation/data/*.csv
+!snort_validation/data/*.json
 
 # IDE & Code Tools
 .claude/
