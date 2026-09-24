@@ -2,12 +2,14 @@ import gymnasium as gym
 from gymnasium import spaces
 import numpy as np
 import joblib
+import os
 import warnings
 from config import (
     SURROGATE_PATH, PROTO_ENCODER_PATH, STATE_ENCODER_PATH,
     MAX_STEPS, FEATURE_BOUNDS,
     REWARD_EVASION, REWARD_DETECTION, STEP_PENALTY,
     CONFIDENCE_BONUS_SCALE, COST_BYTE, COST_JITTER,
+    SNORT_PENALTY_SCALE,
     OBSERVATION_FEATURES
 )
 
@@ -22,11 +24,17 @@ class C2EvasionEnv(gym.Env):
         model_path=SURROGATE_PATH,
         proto_encoder_path=PROTO_ENCODER_PATH,
         state_encoder_path=STATE_ENCODER_PATH,
-        max_steps=MAX_STEPS
+        max_steps=MAX_STEPS,
+        snort_surrogate_path=None,
+        snort_penalty_scale=SNORT_PENALTY_SCALE
     ):
         super(C2EvasionEnv, self).__init__()
 
         self.judge = joblib.load(model_path)
+        self.snort_surrogate = None
+        if snort_surrogate_path and os.path.exists(snort_surrogate_path):
+            self.snort_surrogate = joblib.load(snort_surrogate_path)
+        self.snort_penalty_scale = snort_penalty_scale
         self.protocol_encoder = joblib.load(proto_encoder_path)
         self.state_encoder = joblib.load(state_encoder_path)
 
@@ -144,6 +152,12 @@ class C2EvasionEnv(gym.Env):
 
         truncated = self.current_step >= self.max_steps
 
+        # Defense-aware: penalize flows the Snort surrogate expects to be flagged
+        snort_proba = None
+        if self.snort_surrogate is not None:
+            snort_proba = float(self.snort_surrogate.predict_proba(raw.reshape(1, -1))[0][1])
+            reward -= self.snort_penalty_scale * snort_proba
+
         info = {
             "initial_prediction": self.initial_pred,
             "final_prediction": prediction,
@@ -155,6 +169,7 @@ class C2EvasionEnv(gym.Env):
             "episode_length": self.current_step,
             "reward": reward,
             "confidence_reduction": confidence_reduction,
+            "snort_proba": snort_proba,
         }
 
         return self._normalize(raw), float(reward), terminated, truncated, info

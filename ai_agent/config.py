@@ -32,6 +32,10 @@ CONFIDENCE_BONUS_SCALE = 0.1
 COST_BYTE = 0.01
 COST_JITTER = 0.1
 
+# Defense-aware reward shaping (Snort surrogate)
+SNORT_SURROGATE_PATH = os.path.join(DATA_DIR, "snort_surrogate.pkl")
+SNORT_PENALTY_SCALE = 20.0   # < REWARD_EVASION (50); keep evasion net-positive
+
 # PPO Hyperparameters (tuned)
 PPO_LEARNING_RATE = 1e-4
 PPO_N_STEPS = 1024
