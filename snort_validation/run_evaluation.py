@@ -21,26 +21,16 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "ai_agent"))
 
 from stable_baselines3 import PPO
 from c2_evasion_env import C2EvasionEnv
+from pool_loader import load_malicious_pool
 
 
 def load_test_pool():
-    """Load malicious botnet flows from CTU-13 dataset."""
-    script_dir = Path(__file__).parent.parent
-    dataset_path = script_dir / 'data' / 'archive' / '*.parquet'
-    file_paths = glob.glob(str(dataset_path))
-    
-    df_list = [pd.read_parquet(file) for file in file_paths]
-    df = pd.concat(df_list, ignore_index=True)
-    
-    label_col = 'Label' if 'Label' in df.columns else 'label'
-    malicious_df = df[df[label_col].astype(str).str.lower().str.contains('botnet')].copy()
-    
-    feature_mapping = {
-        'Dur': 'dur', 'TotPkts': 'tot_pkts', 'TotBytes': 'tot_bytes',
-        'SrcBytes': 'src_bytes', 'Proto': 'proto', 'State': 'state'
-    }
-    malicious_df = malicious_df.rename(columns=feature_mapping)
-    return malicious_df.to_dict(orient='records')
+    """Load malicious botnet flows from CTU-13 dataset.
+
+    Uses the shared lean loader so evaluation and training see exactly the same
+    pool (and so eval does not balloon to ~2.7 GB).
+    """
+    return load_malicious_pool(verbose=True)
 
 
 def extract_flow_features(env):

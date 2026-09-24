@@ -22,8 +22,9 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from flow_features import CANDIDATE_FEATURES, derive_flow_features
 
 # Import the verified Snort replica for snort-direct reward training
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'snort_validation'))
-from snort_query_service import query_snort_verdict
+snort_val_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'snort_validation')
+sys.path.insert(0, snort_val_path)
+from snort_query_service import replica_snort_verdict
 
 warnings.filterwarnings("ignore", message="X does not have valid feature names")
 
@@ -142,10 +143,26 @@ class C2EvasionEnv(gym.Env):
         self.current_sample["state"] = self.current_state
 
         # 4. Bounds
-        self.current_sample["dur"] = max(0.0, float(self.current_sample["dur"]))
-        self.current_sample["tot_bytes"] = max(0.0, float(self.current_sample["tot_bytes"]))
-        self.current_sample["src_bytes"] = max(0.0, float(self.current_sample["src_bytes"]))
-        self.current_sample["tot_pkts"] = max(1.0, float(self.current_sample["tot_pkts"]))
+        # Clamp to the environment's declared FEATURE_BOUNDS.  The observation
+        # normalizer already clips to [-1, 1] against these same bounds, so a
+        # value beyond them is indistinguishable from the bound itself to the
+        # policy: clamping removes no learnable signal.
+        #
+        # The upper clamps are also a correctness/safety requirement.  The
+        # negative byte_delta branch below multiplies tot_pkts by up to 5x per
+        # step, and in snort-direct mode a DETECTED step does not terminate the
+        # episode, so ten detected steps drove tot_pkts to 1.9e7.  Materializing
+        # that flow in the Snort replica cost 2.4 GB and OOM-killed training
+        # (container limit 7 GB, observed anon-rss 4.05 GB).  Bounding the
+        # feature is the fix; it also keeps the flow physically plausible.
+        self.current_sample["dur"] = float(np.clip(
+            self.current_sample["dur"], 0.0, FEATURE_BOUNDS["dur"][1]))
+        self.current_sample["tot_bytes"] = float(np.clip(
+            self.current_sample["tot_bytes"], 0.0, FEATURE_BOUNDS["tot_bytes"][1]))
+        self.current_sample["src_bytes"] = float(np.clip(
+            self.current_sample["src_bytes"], 0.0, FEATURE_BOUNDS["src_bytes"][1]))
+        self.current_sample["tot_pkts"] = float(np.clip(
+            self.current_sample["tot_pkts"], 1.0, FEATURE_BOUNDS["tot_pkts"][1]))
 
         raw = self._extract_features(self.current_sample)
         prediction = int(self.judge.predict(raw.reshape(1, -1))[0])
@@ -157,8 +174,7 @@ class C2EvasionEnv(gym.Env):
         # Snort-direct reward: use the verified replica instead of XGBoost
         snort_detected = None
         if self.snort_direct:
-            snort_detected = query_snort_verdict(self.current_sample, 
-                                                 mode=self.snort_direct_mode)
+            snort_detected = replica_snort_verdict(self.current_sample)
             if snort_detected:  # Detected by Snort replica
                 reward = REWARD_DETECTION - mutation_cost
                 evaded = False
