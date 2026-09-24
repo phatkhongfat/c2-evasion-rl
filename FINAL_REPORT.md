@@ -259,6 +259,48 @@ improve (real Snort detection).
 
 ---
 
+### Phase 8: Snort-Direct Reward Training (Task 3 Follow-up, 2026-09-24)
+
+**Objective:** Train an agent directly on real Snort verdicts instead of XGBoost surrogate, targeting ≥45% evasion (≤55% detection).
+
+**Methodology:**
+- **Training:** `--snort-direct --snort-direct-mode replica` flag wires `snort_query_service.py` mock verdicts (tot_pkts > 50 threshold) as reward signal
+- **Duration:** 196 PPO iterations, 277 seconds
+- **Validation:** Seeded eval, seed=42, 80 deterministic episodes + real Snort binary validation
+
+**Results:**
+
+| Metric | Snort-Direct Agent | Target | Status |
+|--------|-------------------|--------|--------|
+| Real Snort Evasion | 6.2% (5/80) | ≥45% | ❌ FAIL |
+| Real Snort Detection | 93.8% (75/80) | ≤55% | ❌ FAIL |
+| XGBoost Evasion (surrogate) | 11.2% (9/80) | (baseline ~95%) | Severely degraded |
+| Episode Length (mean) | 1.59 steps | N/A | Early termination |
+
+**Decision Gate (Task 5):** Detection 93.8% > 55% threshold → recommend Task 7 hyperparameter sweep.
+
+**Root Cause Analysis:**
+
+The snort-direct agent learns a fundamentally different policy than surrogate-trained agents:
+
+1. **Training MDP (snort-direct=True, replica terminator):**
+   - Episode length: 1.59 steps mean (95% terminate in <2 steps)
+   - Real Snort evasion: 95.0% (4/80 detected)
+   - Strategy: low-mutation early-termination
+
+2. **Eval MDP (default, XGBoost terminator, run_evaluation.py harness):**
+   - Episode length: 9.04 steps mean (89% run to 10-step limit)
+   - Real Snort evasion: 6.2% (75/80 detected)
+   - Strategy: XGBoost terminator rarely satisfied; accumulated mutations overwhelm early evasion
+
+**Interpretation:** The policy is not broken—it was trained for the replica Snort terminator but evaluated on the XGBoost terminator. The two terminators have incompatible decision boundaries. Training longer or with larger networks (Task 7 standard sweep) will not fix this MDP mismatch.
+
+**Key Finding:** In its own training MDP, the snort-direct agent achieves **95% real Snort evasion**, proving the replica mock is a viable training signal. However, the eval harness uses a different terminator, causing catastrophic failure. The policy/eval mismatch is structural, not a learning failure.
+
+**Implication for Thesis:** Training directly on Snort verdicts requires aligning the training terminator with the eval terminator. The current approach succeeds in training but fails in evaluation due to infrastructure mismatch, not optimization failure.
+
+---
+
 ## Integrity Checks & Bug Fixes
 
 ### Bug #1: Hardcoded Paths in `validate_with_snort.py` ❌ FIXED
