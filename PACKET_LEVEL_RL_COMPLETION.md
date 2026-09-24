@@ -8,7 +8,7 @@
 
 Implemented packet-level RL environment where the agent modifies individual packets (TTL, fragmentation, padding, TCP overlaps) instead of flow-level aggregates. Training uses the real Snort replica as the reward function (no XGBoost surrogate mismatch).
 
-**Result**: Agent achieves **95.0% evasion** vs **93.8% random baseline** (+1.2% improvement).
+**Result**: Agent achieves **92.10% evasion** vs **90.90% random** on the full pool (+1.20 pp, 5 seeds). On the 10.4% of flows long enough to act on (≥10 packets) it is **30.87% vs 20.20%** (+10.67 pp), confirmed against the real Snort binary. The plan's >95% target is **not** met — see [Measured Results](#measured-results) below.
 
 ## Deliverables
 
@@ -55,27 +55,55 @@ Implemented packet-level RL environment where the agent modifies individual pack
 **Training**: 10,000 steps in 16.2 seconds  
 **Seed**: 42 (reproducible)
 
-**Evaluation** (80 episodes, seed=42):
+## Measured Results
+
+### Single seeded run (the plan's eval script, 80 episodes, seed=42)
+
 - **Agent**: 76/80 evaded (95.0%)
 - **Random**: 75/80 evaded (93.8%)
 - **Improvement**: +1.2% over random baseline
 
-**Artifacts**:
-- Model: `models/ppo_packet_level_agent.zip`
-- Checkpoints: `models/checkpoints_packet_level/` (1K–10K steps)
-- Report: `snort_validation/reports/packet_level_agent_evaluation.json`
-- Metadata: `logs/training_packet_level.json`
+This is the run that the plan's `eval_packet_level_agent.py` prints as `[✓] SUCCESS`.
+It is a **smoke test, not a result**: 80 episodes puts one episode at 1.25 pp,
+and the measured seed-to-seed standard deviation is ~1.1 pp. The +1.2 pp gap is
+one episode wide — inside the noise floor of the measurement.
+
+### Multi-seed measurement (5 seeds, 400 episodes/seed full pool, 300/seed subset)
+
+| Population | Agent evasion | Random evasion | Gap |
+|---|---|---|---|
+| Full pool (262,504 flows) | **92.10%** (std 1.12) | 90.90% (std 0.93) | **+1.20 pp** |
+| Flows with ≥10 planned packets (27,237 flows, 10.4%) | **30.87%** (std 1.29) | 20.20% (std 1.42) | **+10.67 pp** |
+
+Per-seed agent evasion on the subset: 28.3 / 31.3 / 31.3 / 32.0 / 31.3 — the gap
+holds on every seed. 10.67 pp against a ~1.3 pp seed std is roughly a 6-sigma
+effect, so the subset result is solid even though the full-pool result is not.
+
+### Real-Snort ground truth
+
+60 episodes per arm on the subset, each final flow written to a pcap and scored
+by the actual Snort 2.9 binary: agent **30.0%** real evasion vs random **21.7%**,
+with the replica agreeing on **60/60** flows in both arms. The agent's evasions
+survive the real detector at exactly the rate the replica predicts.
+
+These numbers were re-measured in a clean git worktree at commit `f632370`, so
+they are tied to the 6-rule reward the model actually trained against. A sibling
+change adding `sid:3000007`–`3000011` landed at 00:04:39 on 2026-09-25, after
+training (23:54:24); re-measure after any ruleset change.
 
 ## Key Findings
 
-### 1. Agent beats random baseline
+### 1. Agent beats random baseline, but only where there is room to act
 
-The agent learned to slightly outperform random actions (95.0% vs 93.8%), confirming that RL can improve evasion even when the random baseline is already high.
+On the full pool the margin is +1.20 pp. On the subset of flows that run ≥10
+packets — the only ones where the agent gets a real decision to make — the
+margin is +10.67 pp. The full-pool number is dominated by flows that already
+evade and by episodes averaging ~3 steps.
 
 ### 2. Measured throughput vs plan estimate
 
 - **Plan estimate**: "2–3 hours for 10K steps"
-- **Actual**: 16 seconds for 10K steps (~10,000 steps/s)
+- **Actual**: 16 seconds for 10K steps (~10,000 steps/s raw rollout, ~700–800 fps under PPO)
 - **Ratio**: Plan was ~1000× pessimistic
 
 The bottleneck is `load_malicious_pool()` (5s per process start), not the env itself. Multi-million-step overnight runs are feasible.
@@ -102,7 +130,8 @@ Unlike the flow-level agent (trained on XGBoost, evaluated on real Snort), this 
 
 | Metric | Flow-level (CTU-13) | Packet-level | Random |
 |--------|---------------------|--------------|--------|
-| Evasion rate | 82.5% | **95.0%** | 93.8% |
+| Evasion rate, full pool | 82.5% | **92.10%** | 90.90% |
+| Evasion rate, ≥10-pkt flows | n/a | **30.87%** | 20.20% |
 | Training time | 276s (50K steps) | 16s (10K steps) | N/A |
 | Reward source | XGBoost surrogate | Real Snort replica | N/A |
 | Action space | Flow aggregates | Packet-level tricks | N/A |
@@ -133,7 +162,9 @@ Unlike the flow-level agent (trained on XGBoost, evaluated on real Snort), this 
 ## Git Log
 
 ```
-141528e results: packet-level agent achieves 95.0% Snort evasion
+abf21ad docs: record measured packet-level results (5-seed, real-Snort verified)
+6f75e27 docs: add completion report for packet-level RL implementation
+141528e results: packet-level agent achieves 95.0% Snort evasion   <- single-run claim, corrected above
 f632370 docs: add packet-level RL documentation and README section
 a5f4729 feat: add evaluation script for packet-level agent
 52742dc feat: add training script for packet-level agent
@@ -142,9 +173,9 @@ a5f4729 feat: add evaluation script for packet-level agent
 cf388fe chore: create packet-level-rl branch
 ```
 
-**Base**: `snort-validation` branch (commit `2855321`)  
-**HEAD**: `packet-level-rl` branch (commit `141528e`)  
-**Commits**: 7 (1 setup + 4 implementation + 1 docs + 1 results)
+**Base**: `snort-validation` branch (commit `2855321`)
+**HEAD**: `packet-level-rl` branch (commit `abf21ad`)
+**Commits**: 9 (1 setup + 4 implementation + 4 docs/results)
 
 ## Test Coverage
 
@@ -176,15 +207,23 @@ The repo-local `.venv` has all dependencies (gymnasium, stable-baselines3, torch
 
 ## Success Criteria
 
-**Plan target**: Agent evasion rate > 95%  
-**Achieved**: 95.0% (exact target met)
+**Plan target**: Agent evasion rate > 95%
+**Achieved**: **92.10%** on the full pool, **30.87%** on ≥10-packet flows. **Target not met.**
+
+The earlier claim that this target was met ("95.0%, exact target met") rested on
+a single 80-episode run. Re-measured across 5 seeds the agent scores 92.10%, and
+the +1.2 pp edge over random is real but small. The 95.0% figure was a lucky
+draw inside a ~1.1 pp noise band, not a threshold crossing.
 
 **Plan hypothesis**: Packet-level agent should beat random baseline because:
 1. ✓ No surrogate mismatch (trains on real Snort replica)
 2. ✗ Packet-level primitives can exploit TTL/frag/padding (only padding is active)
 3. ✓ Fine-grained control (modifies each packet individually)
 
-**Outcome**: Hypothesis partially confirmed. The agent learned to beat random, but the margin (1.2%) is small because most flows already evade and only one action dimension reaches the reward.
+**Outcome**: Hypothesis partially confirmed. The agent does beat random — by
++10.67 pp on the flows where it has room to act, verified against real Snort —
+but only one action dimension reaches the reward, which caps what "packet-level"
+can mean here.
 
 ## Conclusion
 
@@ -198,4 +237,10 @@ Implementation complete. All 7 tasks from the plan are delivered:
 - ✓ Task 6: Documentation written (`docs/packet_level_rl.md`)
 - ✓ Task 7: README updated with packet-level RL section
 
-Agent achieves 95.0% Snort evasion (vs 93.8% random), meeting the plan's >95% target. The work is reproducible, tested, and documented.
+Agent achieves 92.10% evasion on the full pool (vs 90.90% random) and 30.87%
+(vs 20.20% random) on ≥10-packet flows, the latter verified against the real
+Snort 2.9 binary at 100% replica agreement. The plan's >95% target is not met.
+
+The highest-value next step is **not** more training — it is making TTL,
+fragmentation, and overlap actually influence the verdict, so the remaining
+three action dimensions become learnable.
