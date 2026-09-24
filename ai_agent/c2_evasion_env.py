@@ -3,6 +3,7 @@ from gymnasium import spaces
 import numpy as np
 import joblib
 import os
+import sys
 import warnings
 from config import (
     SURROGATE_PATH, PROTO_ENCODER_PATH, STATE_ENCODER_PATH,
@@ -12,6 +13,13 @@ from config import (
     SNORT_PENALTY_SCALE,
     OBSERVATION_FEATURES
 )
+
+# Derived (packet-size / IAT / rate / flag) features for the enhanced Snort
+# surrogate.  flow_features.py is the single definition of these features and
+# is also used by the extraction, validation and data-prep scripts, so the
+# reward path and the training path cannot drift apart.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from flow_features import CANDIDATE_FEATURES, derive_flow_features
 
 warnings.filterwarnings("ignore", message="X does not have valid feature names")
 
@@ -26,14 +34,18 @@ class C2EvasionEnv(gym.Env):
         state_encoder_path=STATE_ENCODER_PATH,
         max_steps=MAX_STEPS,
         snort_surrogate_path=None,
-        snort_penalty_scale=SNORT_PENALTY_SCALE
+        snort_penalty_scale=SNORT_PENALTY_SCALE,
+        snort_feature_names=None
     ):
         super(C2EvasionEnv, self).__init__()
 
         self.judge = joblib.load(model_path)
         self.snort_surrogate = None
+        self.snort_feature_names = None
         if snort_surrogate_path and os.path.exists(snort_surrogate_path):
             self.snort_surrogate = joblib.load(snort_surrogate_path)
+            self.snort_feature_names = self._resolve_snort_features(
+                self.snort_surrogate, snort_feature_names)
         self.snort_penalty_scale = snort_penalty_scale
         self.protocol_encoder = joblib.load(proto_encoder_path)
         self.state_encoder = joblib.load(state_encoder_path)
@@ -155,7 +167,8 @@ class C2EvasionEnv(gym.Env):
         # Defense-aware: penalize flows the Snort surrogate expects to be flagged
         snort_proba = None
         if self.snort_surrogate is not None:
-            snort_proba = float(self.snort_surrogate.predict_proba(raw.reshape(1, -1))[0][1])
+            snort_vec = self._snort_features(self.current_sample).reshape(1, -1)
+            snort_proba = float(self.snort_surrogate.predict_proba(snort_vec)[0][1])
             reward -= self.snort_penalty_scale * snort_proba
 
         info = {
@@ -170,6 +183,10 @@ class C2EvasionEnv(gym.Env):
             "reward": reward,
             "confidence_reduction": confidence_reduction,
             "snort_proba": snort_proba,
+            "snort_penalty_scale": (self.snort_penalty_scale
+                                    if self.snort_surrogate is not None else None),
+            "snort_feature_width": (len(self.snort_feature_names)
+                                    if self.snort_feature_names else None),
         }
 
         return self._normalize(raw), float(reward), terminated, truncated, info
@@ -190,6 +207,74 @@ class C2EvasionEnv(gym.Env):
             [dur, tot_pkts, tot_bytes, src_bytes, p_encoded, s_encoded],
             dtype=np.float32,
         )
+
+    def _snort_features(self, sample):
+        """Feature vector for the Snort surrogate, in its training order.
+
+        The blind (v1) surrogate was trained on the 6 raw flow features; the
+        enhanced (v2) surrogate on those 6 plus the selected derived features.
+        Which one to build is decided by the loaded model's own
+        ``n_features_in_``, so a stale or mismatched model can never be fed a
+        silently wrong vector width.
+        """
+        names = self.snort_feature_names
+        if not names:
+            return self._extract_features(sample)
+
+        base = self._extract_features(sample)
+        base_by_name = {
+            'dur': base[0], 'tot_pkts': base[1], 'tot_bytes': base[2],
+            'src_bytes': base[3], 'proto_encoded': base[4],
+            'state_encoded': base[5],
+        }
+        derived = derive_flow_features(sample)
+        base_by_name.update({k: float(v) for k, v in derived.items()})
+        return np.array([base_by_name.get(n, 0.0) for n in names],
+                        dtype=np.float32)
+
+    @staticmethod
+    def _resolve_snort_features(model, explicit_names):
+        """Decide the Snort surrogate's feature order.
+
+        Order of authority:
+          1. ``snort_feature_names`` passed by the caller;
+          2. the ``snort_feature_names_`` attribute the trainer stamps onto the
+             model before saving (authoritative — this is the real order);
+          3. the model's own width, but only when that width is the 6-feature
+             baseline.
+        If the model is wider than the baseline and carries no stamped names we
+        RAISE rather than guess: feeding a 16-feature model the wrong 10
+        derived features would produce plausible-but-wrong reward shaping, and
+        a loud failure is strictly better than a silent one.
+        """
+        baseline = ['dur', 'tot_pkts', 'tot_bytes', 'src_bytes',
+                    'proto_encoded', 'state_encoded']
+        width = int(getattr(model, 'n_features_in_', 0) or 0)
+
+        if explicit_names is not None:
+            explicit_names = list(explicit_names)
+            if width and len(explicit_names) != width:
+                raise ValueError(
+                    f"snort_feature_names has {len(explicit_names)} entries but "
+                    f"the model expects {width}")
+            return explicit_names
+
+        stamped = getattr(model, 'snort_feature_names_', None)
+        if stamped is not None:
+            stamped = list(stamped)
+            if width and len(stamped) != width:
+                raise ValueError(
+                    f"model carries snort_feature_names_ with {len(stamped)} "
+                    f"entries but expects {width}")
+            return stamped
+
+        if width in (0, len(baseline)):
+            return baseline
+
+        raise ValueError(
+            f"Snort surrogate expects {width} features but carries no "
+            f"snort_feature_names_ attribute; pass snort_feature_names "
+            f"explicitly so the feature order is not guessed")
 
     @staticmethod
     def _normalize(raw):

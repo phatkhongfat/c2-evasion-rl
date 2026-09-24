@@ -11,6 +11,7 @@ from c2_evasion_env import C2EvasionEnv
 from evasion_metrics_callback import EvasionMetricsCallback
 from config import (
     DATA_DIR, ARCHIVE_DIR, MODEL_DIR, SNORT_SURROGATE_PATH,
+    SNORT_SURROGATE_ENHANCED_PATH,
     PPO_LEARNING_RATE, PPO_N_STEPS, PPO_BATCH_SIZE,
     PPO_GAMMA, PPO_ENT_COEF, PPO_CLIP_RANGE,
     TOTAL_TIMESTEPS
@@ -63,16 +64,35 @@ def parse_args():
                     help="enable Snort-surrogate defense-aware reward")
     ap.add_argument("--snort-lambda", type=float, default=None,
                     help="override SNORT_PENALTY_SCALE for reward shaping (e.g. 10.0)")
+    ap.add_argument("--snort-surrogate", default=None,
+                    help="path to the Snort surrogate pickle; use "
+                         "data/snort_surrogate_enhanced.pkl for the 16-feature model")
+    ap.add_argument("--enhanced", action="store_true",
+                    help="shorthand for --snort --snort-surrogate <enhanced path>")
     return ap.parse_args()
 
 if __name__ == "__main__":
     args = parse_args()
     malicious_pool = load_malicious_pool()
 
+    # --enhanced implies defense-aware reward with the 16-feature surrogate.
+    snort_surrogate = args.snort_surrogate
+    if args.enhanced:
+        args.snort = True
+        if snort_surrogate is None:
+            snort_surrogate = SNORT_SURROGATE_ENHANCED_PATH
+    if snort_surrogate is None:
+        snort_surrogate = SNORT_SURROGATE_PATH
+    if args.snort and not os.path.exists(snort_surrogate):
+        raise SystemExit(
+            f"Snort surrogate not found: {snort_surrogate}\n"
+            f"  run snort_validation/train_snort_surrogate.py "
+            f"({'--enhanced' if args.enhanced else '--baseline'}) first")
+
     env_kwargs = dict(
         malicious_data_pool=malicious_pool,
         max_steps=10,
-        snort_surrogate_path=SNORT_SURROGATE_PATH if args.snort else None
+        snort_surrogate_path=snort_surrogate if args.snort else None
     )
     if args.snort and args.snort_lambda is not None:
         env_kwargs["snort_penalty_scale"] = args.snort_lambda

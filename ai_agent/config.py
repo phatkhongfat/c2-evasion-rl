@@ -34,6 +34,7 @@ COST_JITTER = 0.1
 
 # Defense-aware reward shaping (Snort surrogate)
 SNORT_SURROGATE_PATH = os.path.join(DATA_DIR, "snort_surrogate.pkl")
+SNORT_SURROGATE_ENHANCED_PATH = os.path.join(DATA_DIR, "snort_surrogate_enhanced.pkl")
 SNORT_PENALTY_SCALE = 20.0   # < REWARD_EVASION (50); keep evasion net-positive
 
 # PPO Hyperparameters (tuned)

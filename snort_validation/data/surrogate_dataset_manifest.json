@@ -1,0 +1,68 @@
+{
+  "task": "prepare_enhanced_surrogate_data",
+  "n_samples": 320,
+  "n_positive": 191,
+  "positive_rate": 0.596875,
+  "source_runs": {
+    "blind_agent": 80,
+    "random": 80,
+    "baseline": 80,
+    "agent_lambda10": 80
+  },
+  "baseline_features": [
+    "dur",
+    "tot_pkts",
+    "tot_bytes",
+    "src_bytes",
+    "proto_encoded",
+    "state_encoded"
+  ],
+  "selected_features": [
+    "payload_entropy_est",
+    "pkt_size_iqr",
+    "pkt_size_min",
+    "pkt_size_max",
+    "pkt_size_median",
+    "pkt_size_cv",
+    "pkt_size_std",
+    "pkt_size_mean",
+    "avg_pkt_size",
+    "rst_count"
+  ],
+  "enhanced_features": [
+    "dur",
+    "tot_pkts",
+    "tot_bytes",
+    "src_bytes",
+    "proto_encoded",
+    "state_encoded",
+    "payload_entropy_est",
+    "pkt_size_iqr",
+    "pkt_size_min",
+    "pkt_size_max",
+    "pkt_size_median",
+    "pkt_size_cv",
+    "pkt_size_std",
+    "pkt_size_mean",
+    "avg_pkt_size",
+    "rst_count"
+  ],
+  "n_baseline": 6,
+  "n_enhanced": 16,
+  "split": {
+    "seed": 42,
+    "test_size": 0.25,
+    "stratified": true,
+    "grouped": false,
+    "n_train": 240,
+    "n_test": 80,
+    "pos_train": 143,
+    "pos_test": 48
+  },
+  "leakage_note": "Split is stratified by verdict but NOT grouped by source flow: the four policy runs draw from the same CTU-13 flow pool, so near-duplicate flows can straddle the split and held-out AUC is optimistic relative to a grouped split.",
+  "artifacts": {
+    "surrogate_baseline.npz": "efa67d5723958114854a8ff8f62adc76f57710d5339298b56164a153ab6a7b5c",
+    "surrogate_enhanced.npz": "96bea4c582ee84f5c3a060a18492ee6694249207c5918b1950e455ef8348a976"
+  },
+  "feature_validation_report": "snort_validation/data/feature_validation_report.json"
+}

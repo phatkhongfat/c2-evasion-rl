@@ -1,0 +1,49 @@
+{
+  "task": "train_snort_surrogate",
+  "mode": "baseline",
+  "model_path": "data/snort_surrogate.pkl",
+  "n_features": 6,
+  "feature_names": [
+    "dur",
+    "tot_pkts",
+    "tot_bytes",
+    "src_bytes",
+    "proto_encoded",
+    "state_encoded"
+  ],
+  "n_train": 240,
+  "n_test": 80,
+  "pos_train": 143,
+  "pos_test": 48,
+  "xgb_params": {
+    "n_estimators": 200,
+    "max_depth": 4,
+    "learning_rate": 0.1,
+    "n_jobs": 1,
+    "eval_metric": "logloss",
+    "random_state": 42
+  },
+  "metrics": {
+    "auc": 0.9973958333333333,
+    "accuracy": 0.975,
+    "precision": 0.9791666666666666,
+    "recall": 0.9791666666666666,
+    "f1": 0.9791666666666666,
+    "average_precision": 0.9983404820261437,
+    "brier": 0.02260149084031582,
+    "tn": 31,
+    "fp": 1,
+    "fn": 1,
+    "tp": 47
+  },
+  "feature_importances": {
+    "tot_pkts": 0.7328290939331055,
+    "dur": 0.12128131091594696,
+    "proto_encoded": 0.06438346952199936,
+    "src_bytes": 0.039446134120225906,
+    "state_encoded": 0.0326225608587265,
+    "tot_bytes": 0.009437433443963528
+  },
+  "auc_gate": null,
+  "auc_gate_passed": null
+}
