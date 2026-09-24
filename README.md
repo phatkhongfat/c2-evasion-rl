@@ -243,6 +243,26 @@ Actually imported by the code:
 
 `environment.yml` is the authoritative list. It also pins some packages (`shap`, `lime`, `eli5`, `wandb`, `mlflow`, `lightgbm`, `featuretools`) that are not referenced anywhere in the code — leftovers from an earlier plan.
 
+## Packet-level RL
+
+`ai_agent/packet_level_env.py` is a second environment that works at the packet
+layer instead of the flow-feature layer. The agent acts on individual packets
+(TTL delta, fragmentation flag, padding, TCP overlap offset) and the reward
+comes from `replica_snort_verdict()`, the Python replica of the Snort rules in
+`snort_validation/rules/`, not from an XGBoost surrogate — so the
+surrogate-mismatch problem that caps the flow-level agent does not apply here.
+
+```bash
+.venv/bin/python ai_agent/train_packet_level_agent.py     # train (10K steps default)
+.venv/bin/python ai_agent/eval_packet_level_agent.py      # eval vs random baseline
+```
+
+The repo-local `.venv` carries gymnasium, stable-baselines3, torch and the rest;
+use it rather than the system `python3`.
+
+Full design, action/observation/reward tables, measured throughput and the
+current limitations are in [`docs/packet_level_rl.md`](docs/packet_level_rl.md).
+
 ## Limitations
 
 - The judge is easy to fool. A single action reaches 70–80% evasion, so the agent's margin over random is small and says more about the judge than the agent.
