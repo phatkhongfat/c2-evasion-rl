@@ -53,6 +53,7 @@ models/*.zip
 *.pkl
 !data/label_encoder_*.pkl
 !data/surrogate_ids_ctu13.pkl
+!data/snort_surrogate.pkl
 
 # Large data files
 data/archive/
