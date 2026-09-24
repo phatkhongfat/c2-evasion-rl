@@ -18,7 +18,7 @@ Real Snort IDS validation completed on seeded evaluation (80 deterministic episo
 - Snort Evasion Rate: 6.2%
 - **Status:** Overfitted to replica mock; failed to generalize to real Snort on full 80-episode set.
 
-**Key Result:** Training directly on real Snort verdicts did NOT improve generalization. The agent achieved 100% evasion on a small validation set (20 flows) but degraded to 6.2% evasion on the full 80-episode test, indicating overfitting to the replica mock's imperfect decision boundaries.
+**Key Result:** Training directly on Snort verdicts did NOT clear the gate. The plan's Task 5 harness measures **93.75% detection (6.25% evasion)** on the full 80-episode set — a FAIL against the ≤55% criterion. The apparent "100% evasion" was a 20-flow subset, and an intervening "42.5% @ H=10 → PASS" claim was a concurrency artifact (see `docs/SNORT_DIRECT_TASK5_CORRECTED.md`). The policy does evade real Snort **95%** when rolled in its own early-stopping MDP; the gate scores it over 10 steps, where its constant padding accumulates `tot_pkts` into detection.
 
 ---
 
@@ -52,9 +52,25 @@ Real Snort IDS validation completed on seeded evaluation (80 deterministic episo
 ||| Random policy | 66.2% (53/80) | 80.0% (64/80) | 20.0% | 80 |
 ||| Undefended baseline | 8.8% (7/80) | 6.2% (5/80) | 93.8% | 80 |
 
-**Key Finding:** Despite training with real Snort verdicts (`--snort-direct --snort-direct-mode replica`), the snort-direct agent achieves only **6.2% Snort evasion** on the full 80-episode validation set — **worse than the blind λ=10 agent (15% evasion)** and comparable to random (20% evasion). 
+**Key Finding:** Despite training with real Snort verdicts (`--snort-direct --snort-direct-mode replica`), the snort-direct agent achieves only **6.2% Snort evasion** on the full 80-episode validation set — **worse than the blind λ=10 agent (15% evasion)** and comparable to random (20% evasion).
 
-**Analysis:** The agent overfit to the replica mock's decision boundaries during training (100% evasion on 20 validation flows) but fails to generalize to real Snort's actual detection logic on the broader seeded evaluation set. This indicates the replica mock, while 100% accurate on small samples, does not capture the full complexity of Snort's IDS behavior or the agent learned spurious mutations that fooled the replica but not real Snort.
+**Analysis (CORRECTED — see `docs/SNORT_DIRECT_TASK5_CORRECTED.md`):** This is **not** replica overfitting. On these exact 80 eval flows the replica agrees with the real Snort binary **80/80 (100%)**, with **zero false negatives** — the replica is exonerated. The real cause is a **termination/horizon mismatch**:
+
+- The policy was trained in an MDP that ends the moment the *Snort replica* says "evaded" (mean episode length **1.59**). Rolled in that MDP it evades real Snort **95.0% (4/80 detected)**.
+- The plan's Task 5 gate rolls the same policy in the *default* env, which ends on the *XGBoost* judge. This policy almost never satisfies XGBoost (`xgb_evasion 11.2%`), so episodes run the full 10 steps (mean **9.04**) and the policy keeps emitting `padding ≈ +1.0` each step. Padding raises `tot_pkts` (median 4.3× over an episode) — exactly the aggregate Snort counts — so detection rises to 93.8%.
+- The reward gave the agent a cheap exit at step 1 that the gate then scores at step 10.
+
+Horizon-matched against the blind agent (real Snort, seed=42, 80 episodes):
+
+| H | blind detection / evasion | snort-direct detection / evasion |
+|---|---|---|
+| 0 | 6.2% / 93.8% | 6.2% / 93.8% |
+| 1 | 50.0% / 50.0% | 18.8% / 81.2% |
+| 3 | 67.5% / 32.5% | 63.7% / 36.3% |
+| 5 | 67.5% / 32.5% | 42.5% / 57.5% |
+| **10** | **67.5% / 32.5%** | **93.8% / 6.2%** |
+
+The snort-direct agent is genuinely better at short horizons (81% vs 50% evasion at H=1); at the gate's H=10 the ordering inverts because its unbounded padding walks it into detection. **The gate FAILS** (93.75% > 55%), so **Task 7 is required** — and it should resolve the horizon mismatch before tuning hyperparameters.
 
 ---
 

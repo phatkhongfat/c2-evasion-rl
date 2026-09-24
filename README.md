@@ -20,13 +20,14 @@ See [`snort_validation/README.md`](snort_validation/README.md) for usage and res
 
 **Measured** (80 episodes per policy, behavior rule subset, CTU-13 test pool):
 
-| Policy | XGBoost evasion | Snort detection |
-|---|---|---|
-| Agent (PPO) | 97.5% | 71.2% |
-| Random mutations | 65.0% | 60.0% |
-| No mutation (baseline) | 8.8% | 11.2% |
+|| Policy | XGBoost evasion | Snort detection |
+||---|---|---|
+|| Agent (blind λ=10, PPO) | 97.5% | 67.5% (H=10) |
+|| Agent (snort-direct, PPO) | 11.2% | 93.75% (H=10) — **GATE FAILED** |
+|| Random mutations | 65.0% | 60.0% |
+|| No mutation (baseline) | 8.8% | 6.2% |
 
-The result matches the surrogate-reality story, and in a harsher direction than expected: the agent's mutations that hide the flow from XGBoost *increase* Snort's detection (71.2% vs 60.0% for random). The XGBoost surrogate still catches 91.2% of unmutated botnet flows, so the playbook holds: an adaptive attacker can beat one detector (XGBoost evasion 97.5%) while a second, behavior-based detector still flags 71.2% of the same mutated flows. This is the surrogate-reality mismatch the validation layer exists to surface.
+**Key finding:** The snort-direct agent was trained in an MDP that ends on the Snort replica's verdict (mean episode length 1.59) and achieves **95.0% Snort evasion** in that MDP. However, the plan's Task 5 gate rolls it in the default eval env (which ends on XGBoost, mean 9.04), where it accumulates constant padding and hits **93.75% real Snort detection** — a FAIL against the ≤55% criterion. The policy does evade Snort; the gate scores it at the wrong horizon. See `docs/SNORT_DIRECT_TASK5_CORRECTED.md` for the full analysis. The blind agent remains the best real-world evader at the gate's horizon (32.5% Snort detection vs 6.2% baseline).
 
 ## How it works
 

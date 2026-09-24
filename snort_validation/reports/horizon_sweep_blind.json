@@ -1,0 +1,58 @@
+{
+  "agent_model": "models/ppo_c2_evasion_agent.zip",
+  "num_episodes": 80,
+  "seed": 42,
+  "horizons": [
+    {
+      "horizon": 0,
+      "detected": 5,
+      "total": 80,
+      "detection_rate": 0.0625,
+      "evasion_rate": 0.9375
+    },
+    {
+      "horizon": 1,
+      "detected": 40,
+      "total": 80,
+      "detection_rate": 0.5,
+      "evasion_rate": 0.5
+    },
+    {
+      "horizon": 2,
+      "detected": 53,
+      "total": 80,
+      "detection_rate": 0.6625,
+      "evasion_rate": 0.3375
+    },
+    {
+      "horizon": 3,
+      "detected": 54,
+      "total": 80,
+      "detection_rate": 0.675,
+      "evasion_rate": 0.32499999999999996
+    },
+    {
+      "horizon": 5,
+      "detected": 54,
+      "total": 80,
+      "detection_rate": 0.675,
+      "evasion_rate": 0.32499999999999996
+    },
+    {
+      "horizon": 10,
+      "detected": 54,
+      "total": 80,
+      "detection_rate": 0.675,
+      "evasion_rate": 0.32499999999999996
+    }
+  ],
+  "own_mdp_early_stop": {
+    "detected": 40,
+    "total": 80,
+    "detection_rate": 0.5,
+    "evasion_rate": 0.5,
+    "episode_length_mean": 5.5,
+    "episode_length_max": 10,
+    "frac_ran_to_max_steps": 0.5
+  }
+}

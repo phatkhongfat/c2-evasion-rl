@@ -1,0 +1,58 @@
+{
+  "agent_model": "models/ppo_c2_evasion_agent_snortaware_direct_10.0.zip",
+  "num_episodes": 80,
+  "seed": 42,
+  "horizons": [
+    {
+      "horizon": 0,
+      "detected": 5,
+      "total": 80,
+      "detection_rate": 0.0625,
+      "evasion_rate": 0.9375
+    },
+    {
+      "horizon": 1,
+      "detected": 15,
+      "total": 80,
+      "detection_rate": 0.1875,
+      "evasion_rate": 0.8125
+    },
+    {
+      "horizon": 2,
+      "detected": 9,
+      "total": 80,
+      "detection_rate": 0.1125,
+      "evasion_rate": 0.8875
+    },
+    {
+      "horizon": 3,
+      "detected": 51,
+      "total": 80,
+      "detection_rate": 0.6375,
+      "evasion_rate": 0.36250000000000004
+    },
+    {
+      "horizon": 5,
+      "detected": 34,
+      "total": 80,
+      "detection_rate": 0.425,
+      "evasion_rate": 0.575
+    },
+    {
+      "horizon": 10,
+      "detected": 75,
+      "total": 80,
+      "detection_rate": 0.9375,
+      "evasion_rate": 0.0625
+    }
+  ],
+  "own_mdp_early_stop": {
+    "detected": 4,
+    "total": 80,
+    "detection_rate": 0.05,
+    "evasion_rate": 0.95,
+    "episode_length_mean": 1.5875,
+    "episode_length_max": 10,
+    "frac_ran_to_max_steps": 0.05
+  }
+}

@@ -468,44 +468,57 @@ on larger test sets.
 **Goal:** improve blind agent's real Snort evasion rate from 30% (70% detection) to ≥45% (≤55% detection) by training directly on real Snort verdicts.
 
 **Method:**
-- Replaced XGBoost surrogate reward with real Snort detection signal during training
-- Implemented `snort_query_service.py` with replica Snort verdict mock (tot_pkts threshold)
+- Replaced XGBoost surrogate reward with a Snort verdict signal during training
+- Implemented `snort_query_service.py` with a verified replica of the real ruleset
+  (`replica_snort_verdict`); the replica scores **427/428 (99.77%)** against the real
+  Snort binary with **zero false negatives**, and **80/80** on the eval flows below
 - Added `--snort-direct` flag to training pipeline
-- Trained blind agent (λ=10) with snort-direct reward for 196 iterations (~277s)
+- Trained the blind agent with snort-direct reward for 196 iterations (~277s)
 
 **Training artifacts:**
 - Model: `models/ppo_c2_evasion_agent_snortaware_direct_10.0.zip`
 - Evaluation: `snort_validation/reports/agent_evaluation_seeded_snort_direct.json`
-- Validation: `snort_validation/reports/snort_validation_summary_seeded_snort_direct.json`
+- Validation: `snort_validation/reports/agent_snort_validation_seeded_snort_direct.json`
 
 **Real Snort validation (seeded eval, seed=42, 80 episodes):**
 
-Horizon sweep results (H = mutation steps before eval):
-
-| Horizon | Episodes | Detected | Detection % | Evasion % |
-|---------|----------|----------|-------------|-----------|
-| H=0 (baseline, no mutation) | 80 | 5 | 6.2% | 93.8% |
-| H=1 | 80 | 14 | 17.5% | 82.5% |
-| H=2 | 80 | 31 | 38.75% | 61.25% |
-| H=3 | 80 | 39 | 48.75% | 51.25% |
-| H=5 | 80 | 50 | 62.5% | 37.5% |
-| H=10 (planned gate) | 80 | 34 | **42.5%** | **57.5%** |
-| Early-stop (own MDP) | 80 | 4 | 5% | 95% |
+| Metric | Value |
+|--------|-------|
+| Plan goal | detection ≤55% (evasion ≥45%) |
+| **Real Snort detection (plan's gate)** | **93.75% (75/80)** |
+| **Real Snort evasion (plan's gate)** | **6.25% (5/80)** |
+| XGBoost evasion | 11.2% (9/80) |
 
 **Decision Gate Result:**
-- Gate criterion: detection ≤55% at H=10
-- Achieved: 42.5% detection → **✅ PASS**
-- Evasion rate: **57.5%** (exceeds 45% goal by 12.5pp)
+- Gate criterion: detection ≤55% at the plan's Task 5 harness
+- Achieved: 93.75% detection → **❌ FAIL**
+- Evasion 6.25% is **below** the 30% baseline the plan set out to beat
 
-**Finding:** Snort-direct training successfully improves blind agent evasion against real Snort. The agent learned mutations that evade actual Snort aggregate thresholds (tot_pkts, duration). The horizon sweep shows the agent can sustain >50% evasion through 10 adversarial mutation steps.
+**Finding — the agent evades when it stops early, and the gate scores it late.**
+Rolled in its own MDP (terminates the moment the replica says "evaded", mean episode
+length 1.59), the same policy evades real Snort **95.0% (4/80 detected)**. Rolled in the
+default eval env (terminates on the XGBoost judge, which this policy almost never
+satisfies — `xgb_evasion 11.2%` — so episodes run the full 10 steps, mean 9.04), it is
+detected **93.8%**. The policy emits `padding ≈ +1.0` every step; padding raises
+`tot_pkts` (median 4.3× over an episode), which is precisely the aggregate Snort counts.
+The reward gave the agent a cheap exit at step 1 that the gate then scores at step 10.
+
+The failure is **not** replica inaccuracy: on these very flows the replica agrees with the
+real Snort binary **80/80 (100%)**, zero false negatives. See
+`docs/SNORT_DIRECT_TASK5_CORRECTED.md` for the full analysis.
+
+**Correction notice:** commit `3024f86` reported "H=10 → 42.5% detection → PASS". That
+reading was an artifact of two Snort validators running concurrently against one shared
+`snort_logs/alert` file; it is not reproducible. Clean, exclusive reruns give H=10 =
+75/80, and two independent runs agree on every horizon row. 42.5% is the **H=5** row.
 
 **Commits:**
-- `3024f86`: Task 5 validation and horizon sweep
-- Next: Task 6 documentation and final commit
+- `3024f86`: horizon-sweep harness (`snort_validation/eval_policy_horizon.py`)
+- Task 6: corrected documentation; gate recorded as FAILED
 
 ---
 
 **Report Status:** Complete.
 **Key Finding:** 
 1. Defense-aware reward shaping (Phase 7) **increased** real Snort detection from 70.0% to 85.0% — the blind agent is the best real-world evader.
-2. Snort-direct reward training (Phase 8) **improved** blind agent Snort evasion from 30% to 57.5% (42.5% detection) — exceeds the 45% goal.
+2. Snort-direct reward training (Phase 8) **failed its gate**: 93.75% real Snort detection (6.25% evasion) at the plan's Task 5 configuration — worse than the 30% evasion baseline. The agent reaches 95% evasion only when allowed to stop after ~1.6 steps; the gate scores it over 10. **Task 7 is required**, and should first resolve the termination/horizon mismatch before tuning hyperparameters.

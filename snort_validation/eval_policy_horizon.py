@@ -71,6 +71,11 @@ def parse_args():
     ap.add_argument("--num-episodes", type=int, default=80)
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--horizons", type=int, nargs="+", default=[0, 1, 2, 3, 5, 10])
+    ap.add_argument("--own-mdp", choices=["auto", "snort_direct", "default"],
+                    default="auto",
+                    help="Which MDP to use for the 'own MDP' row. 'auto' picks "
+                         "snort_direct when the model name contains 'direct', "
+                         "else the default (XGBoost-terminated) env.")
     ap.add_argument("--suffix", default="")
     return ap.parse_args()
 
@@ -115,8 +120,18 @@ def main():
               f"= {res['overall_detection_rate']*100:5.1f}%  "
               f"evasion {100*(1-res['overall_detection_rate']):5.1f}%")
 
-    # The policy's own MDP: stop as soon as the Snort replica says "evaded"
-    env2 = _make_env(pool, snort_direct=True, snort_direct_mode="replica")
+    # The policy's own MDP: roll until ITS OWN terminator fires.
+    # A snort-direct policy was trained to stop when the Snort replica says
+    # "evaded"; a blind policy was trained to stop when the XGBoost judge says
+    # "evaded".  Scoring either in the other's MDP measures a horizon mismatch,
+    # not evasion ability, so the row must be labelled with the env actually used.
+    mode = args.own_mdp
+    if mode == "auto":
+        mode = "snort_direct" if "direct" in Path(args.agent_model).name else "default"
+    if mode == "snort_direct":
+        env2 = _make_env(pool, snort_direct=True, snort_direct_mode="replica")
+    else:
+        env2 = _make_env(pool)
     model2 = PPO.load(str(model_path), env=env2, device="cpu")
     eps = []
     lengths = []
@@ -133,6 +148,7 @@ def main():
         eps.append({'episode_id': i, 'original_features': f, 'mutated_features': f})
     res = validator.validate_episodes(eps)
     own = {
+        'mdp': mode,
         'detected': res['total_detected'],
         'total': res['total_flows'],
         'detection_rate': res['overall_detection_rate'],
