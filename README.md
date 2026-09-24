@@ -261,7 +261,15 @@ The repo-local `.venv` carries gymnasium, stable-baselines3, torch and the rest;
 use it rather than the system `python3`.
 
 Full design, action/observation/reward tables, measured throughput and the
-current limitations are in [`docs/packet_level_rl.md`](docs/packet_level_rl.md).
+current limitations are in [`docs/packet_level_rl.md`](docs/packet_level_rl.md),
+with the measured results and real-Snort verification in
+[`docs/packet_level_rl_results.md`](docs/packet_level_rl_results.md).
+
+Headline: the agent beats random by **+10.67 pp** (30.87% vs 20.20% evasion) on
+the 10.4% of flows long enough to act on, confirmed against the real Snort
+binary. On the full pool it is +1.20 pp. It does **not** reach the plan's 95%
+target — three of the four action dimensions never reach the reward function, so
+the policy can only learn padding and packet-count effects.
 
 ## Limitations
 

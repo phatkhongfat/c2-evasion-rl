@@ -97,6 +97,24 @@ cd /root/.hermes/c2-evasion-rl
 - Report: `snort_validation/reports/packet_level_agent_evaluation.json`
 - Comparison: agent vs random baseline
 
+## Measured Results
+
+See [`packet_level_rl_results.md`](packet_level_rl_results.md) for the full
+write-up. Headline, 5 seeds:
+
+| Population | Agent evasion | Random evasion | Gap |
+|---|---|---|---|
+| Full pool (262,504 flows) | **92.10%** | 90.90% | +1.20 pp |
+| Flows with ≥10 planned packets (10.4% of pool) | **30.87%** | 20.20% | **+10.67 pp** |
+
+The subset gap was confirmed against the **real Snort 2.9 binary** at 100%
+replica agreement (agent 30.0% real evasion vs random 21.7%).
+
+The plan's stated success criterion (agent evasion > 95%) is **not met** on the
+full pool. A single 80-episode seeded run reports 95.0% and prints SUCCESS, but
+the seed-to-seed std is ~1.1 pp, so that line is a smoke test rather than a
+threshold crossing.
+
 ## Expected Results
 
 **Hypothesis**: Packet-level agent should beat random baseline (93.8%) because:
@@ -104,22 +122,29 @@ cd /root/.hermes/c2-evasion-rl
 2. **Packet-level primitives**: Can exploit TTL, fragmentation, padding
 3. **Fine-grained control**: Modifies each packet individually
 
-**Success criterion**: Agent evasion rate > 95%
+**Reality**: hypotheses 1 and 3 hold; hypothesis 2 does not. Only `padding_bytes`
+actually reaches the reward function (see Limitations), so the agent learns a
+padding/timing policy, not a TTL/fragmentation/overlap policy.
 
 ## Comparison: Flow-level vs Packet-level
 
 | Metric | Flow-level (CTU-13) | Packet-level | Random |
 |--------|---------------------|--------------|--------|
-| Evasion rate | 82.5% | **TBD** | 93.8% |
-| Training time | 276s (50K steps) | see note below | N/A |
+| Evasion rate, full pool | 82.5% | **92.10%** | 90.90% |
+| Evasion rate, ≥10-pkt flows | n/a | **30.87%** | 20.20% |
 | Reward source | XGBoost surrogate | Real Snort replica | N/A |
 | Action space | Flow aggregates | Packet-level tricks | N/A |
 
-**Measured throughput**: this environment runs ~10,000 steps/s on the VPS
-(measured: 200 random episodes = 608 steps in 0.1s). The plan's "2-3 hours for
-10K steps" estimate is ~1000x pessimistic — a 10K-step run finishes in seconds,
-and a multi-million-step overnight run is feasible. The bottleneck is not the
-env; it is that `load_malicious_pool()` costs ~5s per process start.
+Note the full-pool column is not a like-for-like win over the flow-level agent:
+the 6-rule ruleset already misses ~91% of CTU-13 flows unmodified, so most of
+that 92.10% is the ruleset, not the agent. The subset column is the one that
+isolates the policy.
+
+**Measured throughput**: this environment runs ~10,000 steps/s for a raw
+rollout and ~700–800 fps under PPO (measured: 10K steps in 16.2s; 200 random
+episodes = 608 steps in 0.1s). The plan's "2-3 hours for 10K steps" estimate is
+~1000x pessimistic — a 1M-step run finishes in ~25 minutes. The bottleneck is
+not the env; it is that `load_malicious_pool()` costs ~5s per process start.
 
 ## Known Limitations
 
