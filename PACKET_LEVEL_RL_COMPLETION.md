@@ -174,8 +174,42 @@ cf388fe chore: create packet-level-rl branch
 ```
 
 **Base**: `snort-validation` branch (commit `2855321`)
-**HEAD**: `packet-level-rl` branch (commit `abf21ad`)
-**Commits**: 9 (1 setup + 4 implementation + 4 docs/results)
+**HEAD**: `packet-level-rl` branch (see `git log`)
+**Commits**: 10 (1 setup + 4 implementation + 5 docs/results)
+
+## Overnight Training
+
+Training was run at two scales. Both are complete; there is no job left running.
+
+| Run | Steps | Wall time | Model |
+|---|---|---|---|
+| Plan default | 10,000 | 16.2 s | `models/ppo_packet_level_agent.zip` |
+| Overnight-scale | 1,000,000 | 1380.7 s (23 min) | `models/ppo_packet_level_agent_1m.zip` |
+
+Command used for the long run (log: `/tmp/train_packet_level_1m.log`):
+
+```bash
+.venv/bin/python ai_agent/train_packet_level_agent.py \
+    --timesteps 1000000 --checkpoint-freq 100000 --tag "_1m"
+```
+
+The plan budgeted "2-3 hours" for 10K steps, so a 1M-step run would have been
+~100-300 h under that estimate. Actual throughput is ~700-800 fps under PPO, so
+it took 23 minutes and finished well inside the overnight slot.
+
+**Result: more training does not help.** On the same 5 seeds × 300 episodes of
+the ≥10-packet subset:
+
+| Model | Subset evasion | std |
+|---|---|---|
+| 10K steps | 30.87% | 1.29 |
+| 1M steps | 30.60% | 1.29 |
+| random | 21.60% | 1.42 |
+
+100x the optimisation budget moves the number by -0.27 pp. The 10K-step model is
+already at the ceiling this reward function imposes. Spending more of the
+overnight slot on training this environment would not change the outcome; the
+constraint is that three of the four action dimensions never reach the reward.
 
 ## Test Coverage
 

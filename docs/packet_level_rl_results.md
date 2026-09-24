@@ -77,6 +77,21 @@ The plan budgets **"2–3 hours"** for a 10,000-step run. Measured:
 
 The only real fixed cost is `load_malicious_pool()`, ~5 s per process start.
 
+## More training does not help
+
+A 1,000,000-step run (23 min, `models/ppo_packet_level_agent_1m.zip`) was
+measured against the 10,000-step model on the same 5 seeds × 300 episodes:
+
+| Model | Subset evasion | std | Per-seed |
+|---|---|---|---|
+| 10K steps | 30.87% | 1.29 | 28.3 / 31.3 / 31.3 / 32.0 / 31.3 |
+| 1M steps | 30.60% | 1.29 | 28.3 / 30.7 / 31.7 / 32.0 / 30.3 |
+| random | 21.60% | 1.42 | 23.0 / 22.0 / 22.7 / 21.3 / 19.0 |
+
+100x the training budget moves the result by -0.27 pp — indistinguishable from
+noise. The 10K-step model already sits at the ceiling this reward function
+imposes. More training is not the lever; the environment is.
+
 ## Known limitations (these bound what the numbers mean)
 
 1. **Three of the four action dimensions are inert.** `apply_actions` records
@@ -102,3 +117,7 @@ can act, verified against real Snort. It does not reach the plan's 95% target,
 and it cannot be expected to while three of the four action dimensions do not
 reach the reward function. The highest-value next step is not more training —
 it is making TTL, fragmentation, and overlap actually influence the verdict.
+
+**More training is confirmed useless here**: a 1M-step run scores 30.60% on the
+subset vs 30.87% for the 10K-step run. The bottleneck is the reward function's
+sensitivity to the action space, not the optimisation budget.
