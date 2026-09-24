@@ -13,9 +13,9 @@
       },
       {
         "episode": 1,
-        "detected": 1,
+        "detected": 0,
         "total": 1,
-        "detection_rate": 1.0
+        "detection_rate": 0.0
       },
       {
         "episode": 2,
@@ -55,9 +55,9 @@
       },
       {
         "episode": 8,
-        "detected": 1,
+        "detected": 0,
         "total": 1,
-        "detection_rate": 1.0
+        "detection_rate": 0.0
       },
       {
         "episode": 9,
@@ -139,9 +139,9 @@
       },
       {
         "episode": 22,
-        "detected": 1,
+        "detected": 0,
         "total": 1,
-        "detection_rate": 1.0
+        "detection_rate": 0.0
       },
       {
         "episode": 23,
@@ -157,9 +157,9 @@
       },
       {
         "episode": 25,
-        "detected": 0,
+        "detected": 1,
         "total": 1,
-        "detection_rate": 0.0
+        "detection_rate": 1.0
       },
       {
         "episode": 26,
@@ -175,9 +175,9 @@
       },
       {
         "episode": 28,
-        "detected": 1,
+        "detected": 0,
         "total": 1,
-        "detection_rate": 1.0
+        "detection_rate": 0.0
       },
       {
         "episode": 29,
@@ -199,9 +199,9 @@
       },
       {
         "episode": 32,
-        "detected": 0,
+        "detected": 1,
         "total": 1,
-        "detection_rate": 0.0
+        "detection_rate": 1.0
       },
       {
         "episode": 33,
@@ -235,9 +235,9 @@
       },
       {
         "episode": 38,
-        "detected": 1,
+        "detected": 0,
         "total": 1,
-        "detection_rate": 1.0
+        "detection_rate": 0.0
       },
       {
         "episode": 39,
@@ -259,15 +259,15 @@
       },
       {
         "episode": 42,
-        "detected": 0,
+        "detected": 1,
         "total": 1,
-        "detection_rate": 0.0
+        "detection_rate": 1.0
       },
       {
         "episode": 43,
-        "detected": 0,
+        "detected": 1,
         "total": 1,
-        "detection_rate": 0.0
+        "detection_rate": 1.0
       },
       {
         "episode": 44,
@@ -277,9 +277,9 @@
       },
       {
         "episode": 45,
-        "detected": 0,
+        "detected": 1,
         "total": 1,
-        "detection_rate": 0.0
+        "detection_rate": 1.0
       },
       {
         "episode": 46,
@@ -490,10 +490,10 @@
     "policy": "agent"
   },
   "random": {
-    "overall_detection_rate": 0.5875,
-    "total_detected": 47,
+    "overall_detection_rate": 0.6875,
+    "total_detected": 55,
     "total_flows": 80,
-    "avg_detected_per_episode": 0.5875,
+    "avg_detected_per_episode": 0.6875,
     "episode_results": [
       {
         "episode": 0,
@@ -509,9 +509,9 @@
       },
       {
         "episode": 2,
-        "detected": 0,
+        "detected": 1,
         "total": 1,
-        "detection_rate": 0.0
+        "detection_rate": 1.0
       },
       {
         "episode": 3,
@@ -521,9 +521,9 @@
       },
       {
         "episode": 4,
-        "detected": 0,
+        "detected": 1,
         "total": 1,
-        "detection_rate": 0.0
+        "detection_rate": 1.0
       },
       {
         "episode": 5,
@@ -581,9 +581,9 @@
       },
       {
         "episode": 14,
-        "detected": 0,
+        "detected": 1,
         "total": 1,
-        "detection_rate": 0.0
+        "detection_rate": 1.0
       },
       {
         "episode": 15,
@@ -593,9 +593,9 @@
       },
       {
         "episode": 16,
-        "detected": 1,
+        "detected": 0,
         "total": 1,
-        "detection_rate": 1.0
+        "detection_rate": 0.0
       },
       {
         "episode": 17,
@@ -605,9 +605,9 @@
       },
       {
         "episode": 18,
-        "detected": 0,
+        "detected": 1,
         "total": 1,
-        "detection_rate": 0.0
+        "detection_rate": 1.0
       },
       {
         "episode": 19,
@@ -623,9 +623,9 @@
       },
       {
         "episode": 21,
-        "detected": 0,
+        "detected": 1,
         "total": 1,
-        "detection_rate": 0.0
+        "detection_rate": 1.0
       },
       {
         "episode": 22,
@@ -659,9 +659,9 @@
       },
       {
         "episode": 27,
-        "detected": 1,
+        "detected": 0,
         "total": 1,
-        "detection_rate": 1.0
+        "detection_rate": 0.0
       },
       {
         "episode": 28,
@@ -683,21 +683,21 @@
       },
       {
         "episode": 31,
-        "detected": 1,
-        "total": 1,
-        "detection_rate": 1.0
-      },
-      {
-        "episode": 32,
-        "detected": 1,
-        "total": 1,
-        "detection_rate": 1.0
-      },
-      {
-        "episode": 33,
         "detected": 0,
         "total": 1,
         "detection_rate": 0.0
+      },
+      {
+        "episode": 32,
+        "detected": 0,
+        "total": 1,
+        "detection_rate": 0.0
+      },
+      {
+        "episode": 33,
+        "detected": 1,
+        "total": 1,
+        "detection_rate": 1.0
       },
       {
         "episode": 34,
@@ -731,9 +731,9 @@
       },
       {
         "episode": 39,
-        "detected": 0,
+        "detected": 1,
         "total": 1,
-        "detection_rate": 0.0
+        "detection_rate": 1.0
       },
       {
         "episode": 40,
@@ -767,9 +767,9 @@
       },
       {
         "episode": 45,
-        "detected": 1,
+        "detected": 0,
         "total": 1,
-        "detection_rate": 1.0
+        "detection_rate": 0.0
       },
       {
         "episode": 46,
@@ -779,9 +779,9 @@
       },
       {
         "episode": 47,
-        "detected": 0,
+        "detected": 1,
         "total": 1,
-        "detection_rate": 0.0
+        "detection_rate": 1.0
       },
       {
         "episode": 48,
@@ -803,9 +803,9 @@
       },
       {
         "episode": 51,
-        "detected": 1,
+        "detected": 0,
         "total": 1,
-        "detection_rate": 1.0
+        "detection_rate": 0.0
       },
       {
         "episode": 52,
@@ -821,9 +821,9 @@
       },
       {
         "episode": 54,
-        "detected": 0,
+        "detected": 1,
         "total": 1,
-        "detection_rate": 0.0
+        "detection_rate": 1.0
       },
       {
         "episode": 55,
@@ -833,9 +833,9 @@
       },
       {
         "episode": 56,
-        "detected": 0,
+        "detected": 1,
         "total": 1,
-        "detection_rate": 0.0
+        "detection_rate": 1.0
       },
       {
         "episode": 57,
@@ -857,15 +857,15 @@
       },
       {
         "episode": 60,
-        "detected": 1,
-        "total": 1,
-        "detection_rate": 1.0
-      },
-      {
-        "episode": 61,
         "detected": 0,
         "total": 1,
         "detection_rate": 0.0
+      },
+      {
+        "episode": 61,
+        "detected": 1,
+        "total": 1,
+        "detection_rate": 1.0
       },
       {
         "episode": 62,
@@ -899,9 +899,9 @@
       },
       {
         "episode": 67,
-        "detected": 0,
+        "detected": 1,
         "total": 1,
-        "detection_rate": 0.0
+        "detection_rate": 1.0
       },
       {
         "episode": 68,
@@ -911,21 +911,21 @@
       },
       {
         "episode": 69,
-        "detected": 0,
-        "total": 1,
-        "detection_rate": 0.0
-      },
-      {
-        "episode": 70,
         "detected": 1,
         "total": 1,
         "detection_rate": 1.0
       },
       {
-        "episode": 71,
+        "episode": 70,
         "detected": 0,
         "total": 1,
         "detection_rate": 0.0
+      },
+      {
+        "episode": 71,
+        "detected": 1,
+        "total": 1,
+        "detection_rate": 1.0
       },
       {
         "episode": 72,
@@ -953,9 +953,9 @@
       },
       {
         "episode": 76,
-        "detected": 0,
+        "detected": 1,
         "total": 1,
-        "detection_rate": 0.0
+        "detection_rate": 1.0
       },
       {
         "episode": 77,
@@ -971,12 +971,12 @@
       },
       {
         "episode": 79,
-        "detected": 0,
+        "detected": 1,
         "total": 1,
-        "detection_rate": 0.0
+        "detection_rate": 1.0
       }
     ],
-    "xgb_evasion_rate": 0.6875,
+    "xgb_evasion_rate": 0.6625,
     "policy": "random"
   },
   "baseline": {

@@ -1,0 +1,2634 @@
+[
+ {
+  "i": 0,
+  "set": "holdout",
+  "feat": {
+   "dur": 90.0,
+   "tot_pkts": 12,
+   "tot_bytes": 100,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 1,
+  "set": "holdout",
+  "feat": {
+   "dur": 5.0,
+   "tot_pkts": 2,
+   "tot_bytes": 20000,
+   "src_bytes": 15000,
+   "proto": "tcp",
+   "state": "CON"
+  },
+  "real": false,
+  "replica": true
+ },
+ {
+  "i": 2,
+  "set": "holdout",
+  "feat": {
+   "dur": 90.0,
+   "tot_pkts": 10,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 3,
+  "set": "holdout",
+  "feat": {
+   "dur": 0.0,
+   "tot_pkts": 10,
+   "tot_bytes": 20000,
+   "src_bytes": 3000,
+   "proto": "udp",
+   "state": "FIN"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 4,
+  "set": "holdout",
+  "feat": {
+   "dur": 1.0,
+   "tot_pkts": 5,
+   "tot_bytes": 100,
+   "src_bytes": 50,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 5,
+  "set": "holdout",
+  "feat": {
+   "dur": 0.0,
+   "tot_pkts": 20,
+   "tot_bytes": 2000,
+   "src_bytes": 50,
+   "proto": "tcp",
+   "state": "INT"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 6,
+  "set": "holdout",
+  "feat": {
+   "dur": 5.0,
+   "tot_pkts": 12,
+   "tot_bytes": 100,
+   "src_bytes": 3000,
+   "proto": "tcp",
+   "state": "FIN"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 7,
+  "set": "holdout",
+  "feat": {
+   "dur": 5.0,
+   "tot_pkts": 2,
+   "tot_bytes": 800,
+   "src_bytes": 80000,
+   "proto": "icmp",
+   "state": "CON"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 8,
+  "set": "holdout",
+  "feat": {
+   "dur": 20.0,
+   "tot_pkts": 9,
+   "tot_bytes": 2000,
+   "src_bytes": 80000,
+   "proto": "udp",
+   "state": "S_RA"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 9,
+  "set": "holdout",
+  "feat": {
+   "dur": 0.05,
+   "tot_pkts": 60,
+   "tot_bytes": 300,
+   "src_bytes": 900,
+   "proto": "icmp",
+   "state": "INT"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 10,
+  "set": "holdout",
+  "feat": {
+   "dur": 0.0,
+   "tot_pkts": 20,
+   "tot_bytes": 100,
+   "src_bytes": 0,
+   "proto": "udp",
+   "state": "S_"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 11,
+  "set": "holdout",
+  "feat": {
+   "dur": 20.0,
+   "tot_pkts": 12,
+   "tot_bytes": 20000,
+   "src_bytes": 900,
+   "proto": "tcp",
+   "state": "CON"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 12,
+  "set": "holdout",
+  "feat": {
+   "dur": 0.0,
+   "tot_pkts": 40,
+   "tot_bytes": 2000,
+   "src_bytes": 50,
+   "proto": "tcp",
+   "state": "FIN"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 13,
+  "set": "holdout",
+  "feat": {
+   "dur": 0.05,
+   "tot_pkts": 5,
+   "tot_bytes": 100,
+   "src_bytes": 200,
+   "proto": "tcp",
+   "state": "FIN"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 14,
+  "set": "holdout",
+  "feat": {
+   "dur": 0.05,
+   "tot_pkts": 60,
+   "tot_bytes": 800,
+   "src_bytes": 900,
+   "proto": "tcp",
+   "state": "FSPA_FSPA"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 15,
+  "set": "holdout",
+  "feat": {
+   "dur": 0.3,
+   "tot_pkts": 60,
+   "tot_bytes": 90000,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "S_RA"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 16,
+  "set": "holdout",
+  "feat": {
+   "dur": 0.05,
+   "tot_pkts": 9,
+   "tot_bytes": 90000,
+   "src_bytes": 50,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 17,
+  "set": "holdout",
+  "feat": {
+   "dur": 5.0,
+   "tot_pkts": 11,
+   "tot_bytes": 90000,
+   "src_bytes": 200,
+   "proto": "udp",
+   "state": "S_RA"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 18,
+  "set": "holdout",
+  "feat": {
+   "dur": 5.0,
+   "tot_pkts": 12,
+   "tot_bytes": 2000,
+   "src_bytes": 0,
+   "proto": "udp",
+   "state": "UNK"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 19,
+  "set": "holdout",
+  "feat": {
+   "dur": 90.0,
+   "tot_pkts": 40,
+   "tot_bytes": 300,
+   "src_bytes": 900,
+   "proto": "icmp",
+   "state": "UNK"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 20,
+  "set": "holdout",
+  "feat": {
+   "dur": 1.0,
+   "tot_pkts": 9,
+   "tot_bytes": 800,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "FSPA_FSPA"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 21,
+  "set": "holdout",
+  "feat": {
+   "dur": 1.0,
+   "tot_pkts": 300,
+   "tot_bytes": 100,
+   "src_bytes": 3000,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 22,
+  "set": "holdout",
+  "feat": {
+   "dur": 90.0,
+   "tot_pkts": 12,
+   "tot_bytes": 2000,
+   "src_bytes": 80000,
+   "proto": "udp",
+   "state": "INT"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 23,
+  "set": "holdout",
+  "feat": {
+   "dur": 0.05,
+   "tot_pkts": 10,
+   "tot_bytes": 100,
+   "src_bytes": 15000,
+   "proto": "tcp",
+   "state": "FIN"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 24,
+  "set": "holdout",
+  "feat": {
+   "dur": 0.3,
+   "tot_pkts": 5,
+   "tot_bytes": 90000,
+   "src_bytes": 80000,
+   "proto": "udp",
+   "state": "UNK"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 25,
+  "set": "holdout",
+  "feat": {
+   "dur": 90.0,
+   "tot_pkts": 12,
+   "tot_bytes": 20000,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "FSPA_FSPA"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 26,
+  "set": "holdout",
+  "feat": {
+   "dur": 0.05,
+   "tot_pkts": 2,
+   "tot_bytes": 800,
+   "src_bytes": 80000,
+   "proto": "tcp",
+   "state": "S_"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 27,
+  "set": "holdout",
+  "feat": {
+   "dur": 5.0,
+   "tot_pkts": 3,
+   "tot_bytes": 90000,
+   "src_bytes": 15000,
+   "proto": "udp",
+   "state": "S_RA"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 28,
+  "set": "holdout",
+  "feat": {
+   "dur": 1.0,
+   "tot_pkts": 3,
+   "tot_bytes": 5000,
+   "src_bytes": 200,
+   "proto": "tcp",
+   "state": "INT"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 29,
+  "set": "holdout",
+  "feat": {
+   "dur": 1.0,
+   "tot_pkts": 8,
+   "tot_bytes": 100,
+   "src_bytes": 900,
+   "proto": "tcp",
+   "state": "INT"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 30,
+  "set": "holdout",
+  "feat": {
+   "dur": 1.0,
+   "tot_pkts": 20,
+   "tot_bytes": 300,
+   "src_bytes": 80000,
+   "proto": "udp",
+   "state": "UNK"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 31,
+  "set": "holdout",
+  "feat": {
+   "dur": 0.05,
+   "tot_pkts": 20,
+   "tot_bytes": 20000,
+   "src_bytes": 900,
+   "proto": "tcp",
+   "state": "FIN"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 32,
+  "set": "holdout",
+  "feat": {
+   "dur": 0.05,
+   "tot_pkts": 9,
+   "tot_bytes": 100,
+   "src_bytes": 80000,
+   "proto": "udp",
+   "state": "FIN"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 33,
+  "set": "holdout",
+  "feat": {
+   "dur": 0.05,
+   "tot_pkts": 12,
+   "tot_bytes": 90000,
+   "src_bytes": 3000,
+   "proto": "udp",
+   "state": "S_RA"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 34,
+  "set": "holdout",
+  "feat": {
+   "dur": 0.05,
+   "tot_pkts": 5,
+   "tot_bytes": 100,
+   "src_bytes": 3000,
+   "proto": "tcp",
+   "state": "S_"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 35,
+  "set": "holdout",
+  "feat": {
+   "dur": 90.0,
+   "tot_pkts": 20,
+   "tot_bytes": 100,
+   "src_bytes": 15000,
+   "proto": "udp",
+   "state": "S_"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 36,
+  "set": "holdout",
+  "feat": {
+   "dur": 0.0,
+   "tot_pkts": 60,
+   "tot_bytes": 20000,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 37,
+  "set": "holdout",
+  "feat": {
+   "dur": 90.0,
+   "tot_pkts": 5,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "udp",
+   "state": "FSPA_FSPA"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 38,
+  "set": "holdout",
+  "feat": {
+   "dur": 20.0,
+   "tot_pkts": 10,
+   "tot_bytes": 300,
+   "src_bytes": 80000,
+   "proto": "udp",
+   "state": "UNK"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 39,
+  "set": "holdout",
+  "feat": {
+   "dur": 0.3,
+   "tot_pkts": 20,
+   "tot_bytes": 20000,
+   "src_bytes": 200,
+   "proto": "udp",
+   "state": "S_RA"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 40,
+  "set": "holdout",
+  "feat": {
+   "dur": 20.0,
+   "tot_pkts": 40,
+   "tot_bytes": 90000,
+   "src_bytes": 50,
+   "proto": "icmp",
+   "state": "CON"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 41,
+  "set": "holdout",
+  "feat": {
+   "dur": 90.0,
+   "tot_pkts": 9,
+   "tot_bytes": 800,
+   "src_bytes": 900,
+   "proto": "udp",
+   "state": "UNK"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 42,
+  "set": "holdout",
+  "feat": {
+   "dur": 5.0,
+   "tot_pkts": 9,
+   "tot_bytes": 5000,
+   "src_bytes": 0,
+   "proto": "udp",
+   "state": "S_RA"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 43,
+  "set": "holdout",
+  "feat": {
+   "dur": 0.05,
+   "tot_pkts": 9,
+   "tot_bytes": 20000,
+   "src_bytes": 80000,
+   "proto": "icmp",
+   "state": "FSPA_FSPA"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 44,
+  "set": "holdout",
+  "feat": {
+   "dur": 0.0,
+   "tot_pkts": 10,
+   "tot_bytes": 90000,
+   "src_bytes": 900,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 45,
+  "set": "holdout",
+  "feat": {
+   "dur": 1.0,
+   "tot_pkts": 5,
+   "tot_bytes": 2000,
+   "src_bytes": 200,
+   "proto": "tcp",
+   "state": "CON"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 46,
+  "set": "holdout",
+  "feat": {
+   "dur": 1.0,
+   "tot_pkts": 11,
+   "tot_bytes": 800,
+   "src_bytes": 900,
+   "proto": "udp",
+   "state": "S_"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 47,
+  "set": "holdout",
+  "feat": {
+   "dur": 1.0,
+   "tot_pkts": 60,
+   "tot_bytes": 2000,
+   "src_bytes": 50,
+   "proto": "udp",
+   "state": "FIN"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 48,
+  "set": "holdout",
+  "feat": {
+   "dur": 0.3,
+   "tot_pkts": 60,
+   "tot_bytes": 5000,
+   "src_bytes": 200,
+   "proto": "tcp",
+   "state": "S_"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 49,
+  "set": "holdout",
+  "feat": {
+   "dur": 5.0,
+   "tot_pkts": 40,
+   "tot_bytes": 2000,
+   "src_bytes": 80000,
+   "proto": "udp",
+   "state": "INT"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 50,
+  "set": "holdout",
+  "feat": {
+   "dur": 0.0,
+   "tot_pkts": 300,
+   "tot_bytes": 90000,
+   "src_bytes": 15000,
+   "proto": "udp",
+   "state": "INT"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 51,
+  "set": "holdout",
+  "feat": {
+   "dur": 90.0,
+   "tot_pkts": 3,
+   "tot_bytes": 100,
+   "src_bytes": 200,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 52,
+  "set": "holdout",
+  "feat": {
+   "dur": 0.05,
+   "tot_pkts": 40,
+   "tot_bytes": 800,
+   "src_bytes": 200,
+   "proto": "udp",
+   "state": "S_RA"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 53,
+  "set": "holdout",
+  "feat": {
+   "dur": 20.0,
+   "tot_pkts": 60,
+   "tot_bytes": 5000,
+   "src_bytes": 200,
+   "proto": "icmp",
+   "state": "S_RA"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 54,
+  "set": "holdout",
+  "feat": {
+   "dur": 5.0,
+   "tot_pkts": 8,
+   "tot_bytes": 5000,
+   "src_bytes": 80000,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 55,
+  "set": "holdout",
+  "feat": {
+   "dur": 5.0,
+   "tot_pkts": 120,
+   "tot_bytes": 5000,
+   "src_bytes": 50,
+   "proto": "udp",
+   "state": "FIN"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 56,
+  "set": "holdout",
+  "feat": {
+   "dur": 0.3,
+   "tot_pkts": 10,
+   "tot_bytes": 2000,
+   "src_bytes": 200,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 57,
+  "set": "holdout",
+  "feat": {
+   "dur": 5.0,
+   "tot_pkts": 40,
+   "tot_bytes": 5000,
+   "src_bytes": 3000,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 58,
+  "set": "holdout",
+  "feat": {
+   "dur": 0.05,
+   "tot_pkts": 9,
+   "tot_bytes": 800,
+   "src_bytes": 50,
+   "proto": "tcp",
+   "state": "FSPA_FSPA"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 59,
+  "set": "holdout",
+  "feat": {
+   "dur": 0.0,
+   "tot_pkts": 60,
+   "tot_bytes": 100,
+   "src_bytes": 50,
+   "proto": "tcp",
+   "state": "S_RA"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 60,
+  "set": "disc",
+  "feat": {
+   "dur": 0.5,
+   "tot_pkts": 9,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 61,
+  "set": "disc",
+  "feat": {
+   "dur": 30.0,
+   "tot_pkts": 9,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 62,
+  "set": "disc",
+  "feat": {
+   "dur": 120.0,
+   "tot_pkts": 9,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 63,
+  "set": "disc",
+  "feat": {
+   "dur": 600.0,
+   "tot_pkts": 9,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 64,
+  "set": "disc",
+  "feat": {
+   "dur": 0.5,
+   "tot_pkts": 10,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 65,
+  "set": "disc",
+  "feat": {
+   "dur": 30.0,
+   "tot_pkts": 10,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 66,
+  "set": "disc",
+  "feat": {
+   "dur": 120.0,
+   "tot_pkts": 10,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 67,
+  "set": "disc",
+  "feat": {
+   "dur": 600.0,
+   "tot_pkts": 10,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 68,
+  "set": "disc",
+  "feat": {
+   "dur": 0.5,
+   "tot_pkts": 11,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 69,
+  "set": "disc",
+  "feat": {
+   "dur": 30.0,
+   "tot_pkts": 11,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 70,
+  "set": "disc",
+  "feat": {
+   "dur": 120.0,
+   "tot_pkts": 11,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 71,
+  "set": "disc",
+  "feat": {
+   "dur": 600.0,
+   "tot_pkts": 11,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 72,
+  "set": "disc",
+  "feat": {
+   "dur": 0.5,
+   "tot_pkts": 12,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 73,
+  "set": "disc",
+  "feat": {
+   "dur": 30.0,
+   "tot_pkts": 12,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 74,
+  "set": "disc",
+  "feat": {
+   "dur": 120.0,
+   "tot_pkts": 12,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 75,
+  "set": "disc",
+  "feat": {
+   "dur": 600.0,
+   "tot_pkts": 12,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 76,
+  "set": "disc",
+  "feat": {
+   "dur": 0.5,
+   "tot_pkts": 14,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 77,
+  "set": "disc",
+  "feat": {
+   "dur": 30.0,
+   "tot_pkts": 14,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 78,
+  "set": "disc",
+  "feat": {
+   "dur": 120.0,
+   "tot_pkts": 14,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 79,
+  "set": "disc",
+  "feat": {
+   "dur": 600.0,
+   "tot_pkts": 14,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 80,
+  "set": "disc",
+  "feat": {
+   "dur": 0.5,
+   "tot_pkts": 16,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 81,
+  "set": "disc",
+  "feat": {
+   "dur": 30.0,
+   "tot_pkts": 16,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 82,
+  "set": "disc",
+  "feat": {
+   "dur": 120.0,
+   "tot_pkts": 16,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 83,
+  "set": "disc",
+  "feat": {
+   "dur": 600.0,
+   "tot_pkts": 16,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 84,
+  "set": "disc",
+  "feat": {
+   "dur": 0.5,
+   "tot_pkts": 20,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 85,
+  "set": "disc",
+  "feat": {
+   "dur": 30.0,
+   "tot_pkts": 20,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 86,
+  "set": "disc",
+  "feat": {
+   "dur": 120.0,
+   "tot_pkts": 20,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 87,
+  "set": "disc",
+  "feat": {
+   "dur": 600.0,
+   "tot_pkts": 20,
+   "tot_bytes": 300,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 88,
+  "set": "disc",
+  "feat": {
+   "dur": 0.5,
+   "tot_pkts": 7,
+   "tot_bytes": 200,
+   "src_bytes": 100,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 89,
+  "set": "disc",
+  "feat": {
+   "dur": 20.0,
+   "tot_pkts": 7,
+   "tot_bytes": 200,
+   "src_bytes": 100,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 90,
+  "set": "disc",
+  "feat": {
+   "dur": 60.0,
+   "tot_pkts": 7,
+   "tot_bytes": 200,
+   "src_bytes": 100,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 91,
+  "set": "disc",
+  "feat": {
+   "dur": 300.0,
+   "tot_pkts": 7,
+   "tot_bytes": 200,
+   "src_bytes": 100,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 92,
+  "set": "disc",
+  "feat": {
+   "dur": 0.5,
+   "tot_pkts": 8,
+   "tot_bytes": 200,
+   "src_bytes": 100,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 93,
+  "set": "disc",
+  "feat": {
+   "dur": 20.0,
+   "tot_pkts": 8,
+   "tot_bytes": 200,
+   "src_bytes": 100,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 94,
+  "set": "disc",
+  "feat": {
+   "dur": 60.0,
+   "tot_pkts": 8,
+   "tot_bytes": 200,
+   "src_bytes": 100,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 95,
+  "set": "disc",
+  "feat": {
+   "dur": 300.0,
+   "tot_pkts": 8,
+   "tot_bytes": 200,
+   "src_bytes": 100,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 96,
+  "set": "disc",
+  "feat": {
+   "dur": 0.5,
+   "tot_pkts": 9,
+   "tot_bytes": 200,
+   "src_bytes": 100,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 97,
+  "set": "disc",
+  "feat": {
+   "dur": 20.0,
+   "tot_pkts": 9,
+   "tot_bytes": 200,
+   "src_bytes": 100,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 98,
+  "set": "disc",
+  "feat": {
+   "dur": 60.0,
+   "tot_pkts": 9,
+   "tot_bytes": 200,
+   "src_bytes": 100,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 99,
+  "set": "disc",
+  "feat": {
+   "dur": 300.0,
+   "tot_pkts": 9,
+   "tot_bytes": 200,
+   "src_bytes": 100,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 100,
+  "set": "disc",
+  "feat": {
+   "dur": 0.5,
+   "tot_pkts": 12,
+   "tot_bytes": 200,
+   "src_bytes": 100,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 101,
+  "set": "disc",
+  "feat": {
+   "dur": 20.0,
+   "tot_pkts": 12,
+   "tot_bytes": 200,
+   "src_bytes": 100,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 102,
+  "set": "disc",
+  "feat": {
+   "dur": 60.0,
+   "tot_pkts": 12,
+   "tot_bytes": 200,
+   "src_bytes": 100,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 103,
+  "set": "disc",
+  "feat": {
+   "dur": 300.0,
+   "tot_pkts": 12,
+   "tot_bytes": 200,
+   "src_bytes": 100,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 104,
+  "set": "disc",
+  "feat": {
+   "dur": 0.5,
+   "tot_pkts": 20,
+   "tot_bytes": 200,
+   "src_bytes": 100,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 105,
+  "set": "disc",
+  "feat": {
+   "dur": 20.0,
+   "tot_pkts": 20,
+   "tot_bytes": 200,
+   "src_bytes": 100,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 106,
+  "set": "disc",
+  "feat": {
+   "dur": 60.0,
+   "tot_pkts": 20,
+   "tot_bytes": 200,
+   "src_bytes": 100,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 107,
+  "set": "disc",
+  "feat": {
+   "dur": 300.0,
+   "tot_pkts": 20,
+   "tot_bytes": 200,
+   "src_bytes": 100,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 108,
+  "set": "fresh",
+  "feat": {
+   "dur": 37.731,
+   "tot_pkts": 13,
+   "tot_bytes": 3000,
+   "src_bytes": 12000,
+   "proto": "tcp",
+   "state": "S_"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 109,
+  "set": "fresh",
+  "feat": {
+   "dur": 60.668,
+   "tot_pkts": 2,
+   "tot_bytes": 3000,
+   "src_bytes": 150,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 110,
+  "set": "fresh",
+  "feat": {
+   "dur": 66.886,
+   "tot_pkts": 90,
+   "tot_bytes": 120,
+   "src_bytes": 12000,
+   "proto": "tcp",
+   "state": "INT"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 111,
+  "set": "fresh",
+  "feat": {
+   "dur": 97.715,
+   "tot_pkts": 13,
+   "tot_bytes": 3000,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "FSPA_FSPA"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 112,
+  "set": "fresh",
+  "feat": {
+   "dur": 81.58,
+   "tot_pkts": 7,
+   "tot_bytes": 40000,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "CON"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 113,
+  "set": "fresh",
+  "feat": {
+   "dur": 82.031,
+   "tot_pkts": 25,
+   "tot_bytes": 1200,
+   "src_bytes": 2500,
+   "proto": "udp",
+   "state": "FSPA_FSPA"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 114,
+  "set": "fresh",
+  "feat": {
+   "dur": 71.083,
+   "tot_pkts": 2,
+   "tot_bytes": 40000,
+   "src_bytes": 40,
+   "proto": "udp",
+   "state": "INT"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 115,
+  "set": "fresh",
+  "feat": {
+   "dur": 74.831,
+   "tot_pkts": 7,
+   "tot_bytes": 40000,
+   "src_bytes": 12000,
+   "proto": "udp",
+   "state": "FSPA_FSPA"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 116,
+  "set": "fresh",
+  "feat": {
+   "dur": 55.424,
+   "tot_pkts": 3,
+   "tot_bytes": 120,
+   "src_bytes": 12000,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 117,
+  "set": "fresh",
+  "feat": {
+   "dur": 146.585,
+   "tot_pkts": 50,
+   "tot_bytes": 40000,
+   "src_bytes": 2500,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 118,
+  "set": "fresh",
+  "feat": {
+   "dur": 46.662,
+   "tot_pkts": 25,
+   "tot_bytes": 40000,
+   "src_bytes": 150,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 119,
+  "set": "fresh",
+  "feat": {
+   "dur": 67.021,
+   "tot_pkts": 13,
+   "tot_bytes": 40000,
+   "src_bytes": 12000,
+   "proto": "tcp",
+   "state": "FSPA_FSPA"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 120,
+  "set": "fresh",
+  "feat": {
+   "dur": 123.422,
+   "tot_pkts": 90,
+   "tot_bytes": 40000,
+   "src_bytes": 0,
+   "proto": "udp",
+   "state": "FSPA_FSPA"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 121,
+  "set": "fresh",
+  "feat": {
+   "dur": 127.173,
+   "tot_pkts": 3,
+   "tot_bytes": 8000,
+   "src_bytes": 12000,
+   "proto": "udp",
+   "state": "S_RA"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 122,
+  "set": "fresh",
+  "feat": {
+   "dur": 122.201,
+   "tot_pkts": 7,
+   "tot_bytes": 8000,
+   "src_bytes": 40,
+   "proto": "tcp",
+   "state": "S_"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 123,
+  "set": "fresh",
+  "feat": {
+   "dur": 39.655,
+   "tot_pkts": 17,
+   "tot_bytes": 8000,
+   "src_bytes": 40,
+   "proto": "tcp",
+   "state": "FSPA_FSPA"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 124,
+  "set": "fresh",
+  "feat": {
+   "dur": 49.948,
+   "tot_pkts": 6,
+   "tot_bytes": 40000,
+   "src_bytes": 700,
+   "proto": "udp",
+   "state": "FIN"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 125,
+  "set": "fresh",
+  "feat": {
+   "dur": 53.453,
+   "tot_pkts": 3,
+   "tot_bytes": 40000,
+   "src_bytes": 700,
+   "proto": "udp",
+   "state": "FIN"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 126,
+  "set": "fresh",
+  "feat": {
+   "dur": 5.983,
+   "tot_pkts": 4,
+   "tot_bytes": 400,
+   "src_bytes": 2500,
+   "proto": "udp",
+   "state": "INT"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 127,
+  "set": "fresh",
+  "feat": {
+   "dur": 139.503,
+   "tot_pkts": 25,
+   "tot_bytes": 40000,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "CON"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 128,
+  "set": "fresh",
+  "feat": {
+   "dur": 128.814,
+   "tot_pkts": 3,
+   "tot_bytes": 8000,
+   "src_bytes": 700,
+   "proto": "tcp",
+   "state": "FIN"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 129,
+  "set": "fresh",
+  "feat": {
+   "dur": 129.873,
+   "tot_pkts": 17,
+   "tot_bytes": 1200,
+   "src_bytes": 150,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 130,
+  "set": "fresh",
+  "feat": {
+   "dur": 141.061,
+   "tot_pkts": 25,
+   "tot_bytes": 8000,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "FIN"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 131,
+  "set": "fresh",
+  "feat": {
+   "dur": 51.004,
+   "tot_pkts": 7,
+   "tot_bytes": 1200,
+   "src_bytes": 0,
+   "proto": "udp",
+   "state": "UNK"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 132,
+  "set": "fresh",
+  "feat": {
+   "dur": 123.346,
+   "tot_pkts": 17,
+   "tot_bytes": 3000,
+   "src_bytes": 0,
+   "proto": "udp",
+   "state": "S_RA"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 133,
+  "set": "fresh",
+  "feat": {
+   "dur": 110.097,
+   "tot_pkts": 25,
+   "tot_bytes": 8000,
+   "src_bytes": 700,
+   "proto": "tcp",
+   "state": "UNK"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 134,
+  "set": "fresh",
+  "feat": {
+   "dur": 60.326,
+   "tot_pkts": 25,
+   "tot_bytes": 8000,
+   "src_bytes": 150,
+   "proto": "udp",
+   "state": "INT"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 135,
+  "set": "fresh",
+  "feat": {
+   "dur": 128.586,
+   "tot_pkts": 6,
+   "tot_bytes": 40000,
+   "src_bytes": 0,
+   "proto": "udp",
+   "state": "FIN"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 136,
+  "set": "fresh",
+  "feat": {
+   "dur": 115.544,
+   "tot_pkts": 6,
+   "tot_bytes": 1200,
+   "src_bytes": 2500,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 137,
+  "set": "fresh",
+  "feat": {
+   "dur": 67.744,
+   "tot_pkts": 50,
+   "tot_bytes": 40000,
+   "src_bytes": 2500,
+   "proto": "udp",
+   "state": "FSPA_FSPA"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 138,
+  "set": "fresh",
+  "feat": {
+   "dur": 143.224,
+   "tot_pkts": 17,
+   "tot_bytes": 400,
+   "src_bytes": 700,
+   "proto": "udp",
+   "state": "INT"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 139,
+  "set": "fresh",
+  "feat": {
+   "dur": 59.205,
+   "tot_pkts": 9,
+   "tot_bytes": 40000,
+   "src_bytes": 12000,
+   "proto": "tcp",
+   "state": "S_RA"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 140,
+  "set": "fresh",
+  "feat": {
+   "dur": 131.161,
+   "tot_pkts": 90,
+   "tot_bytes": 8000,
+   "src_bytes": 700,
+   "proto": "udp",
+   "state": "FIN"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 141,
+  "set": "fresh",
+  "feat": {
+   "dur": 31.364,
+   "tot_pkts": 50,
+   "tot_bytes": 120,
+   "src_bytes": 12000,
+   "proto": "tcp",
+   "state": "FIN"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 142,
+  "set": "fresh",
+  "feat": {
+   "dur": 94.645,
+   "tot_pkts": 13,
+   "tot_bytes": 40000,
+   "src_bytes": 150,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 143,
+  "set": "fresh",
+  "feat": {
+   "dur": 67.918,
+   "tot_pkts": 2,
+   "tot_bytes": 40000,
+   "src_bytes": 2500,
+   "proto": "udp",
+   "state": "FSPA_FSPA"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 144,
+  "set": "fresh",
+  "feat": {
+   "dur": 83.828,
+   "tot_pkts": 2,
+   "tot_bytes": 1200,
+   "src_bytes": 40,
+   "proto": "udp",
+   "state": "INT"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 145,
+  "set": "fresh",
+  "feat": {
+   "dur": 149.786,
+   "tot_pkts": 6,
+   "tot_bytes": 40000,
+   "src_bytes": 0,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 146,
+  "set": "fresh",
+  "feat": {
+   "dur": 82.06,
+   "tot_pkts": 13,
+   "tot_bytes": 3000,
+   "src_bytes": 150,
+   "proto": "udp",
+   "state": "UNK"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 147,
+  "set": "fresh",
+  "feat": {
+   "dur": 26.852,
+   "tot_pkts": 2,
+   "tot_bytes": 1200,
+   "src_bytes": 12000,
+   "proto": "tcp",
+   "state": "S_"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 148,
+  "set": "fresh",
+  "feat": {
+   "dur": 16.094,
+   "tot_pkts": 6,
+   "tot_bytes": 400,
+   "src_bytes": 700,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 149,
+  "set": "fresh",
+  "feat": {
+   "dur": 69.798,
+   "tot_pkts": 7,
+   "tot_bytes": 40000,
+   "src_bytes": 700,
+   "proto": "udp",
+   "state": "S_RA"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 150,
+  "set": "fresh",
+  "feat": {
+   "dur": 10.413,
+   "tot_pkts": 9,
+   "tot_bytes": 400,
+   "src_bytes": 700,
+   "proto": "udp",
+   "state": "S_RA"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 151,
+  "set": "fresh",
+  "feat": {
+   "dur": 139.277,
+   "tot_pkts": 13,
+   "tot_bytes": 40000,
+   "src_bytes": 700,
+   "proto": "udp",
+   "state": "INT"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 152,
+  "set": "fresh",
+  "feat": {
+   "dur": 4.183,
+   "tot_pkts": 2,
+   "tot_bytes": 3000,
+   "src_bytes": 150,
+   "proto": "udp",
+   "state": "INT"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 153,
+  "set": "fresh",
+  "feat": {
+   "dur": 66.186,
+   "tot_pkts": 7,
+   "tot_bytes": 1200,
+   "src_bytes": 2500,
+   "proto": "tcp",
+   "state": "S_RA"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 154,
+  "set": "fresh",
+  "feat": {
+   "dur": 56.329,
+   "tot_pkts": 9,
+   "tot_bytes": 3000,
+   "src_bytes": 12000,
+   "proto": "udp",
+   "state": "FSPA_FSPA"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 155,
+  "set": "fresh",
+  "feat": {
+   "dur": 37.607,
+   "tot_pkts": 50,
+   "tot_bytes": 120,
+   "src_bytes": 0,
+   "proto": "udp",
+   "state": "FIN"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 156,
+  "set": "fresh",
+  "feat": {
+   "dur": 84.238,
+   "tot_pkts": 11,
+   "tot_bytes": 120,
+   "src_bytes": 700,
+   "proto": "tcp",
+   "state": "FSPA_FSPA"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 157,
+  "set": "fresh",
+  "feat": {
+   "dur": 64.58,
+   "tot_pkts": 9,
+   "tot_bytes": 40000,
+   "src_bytes": 0,
+   "proto": "udp",
+   "state": "INT"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 158,
+  "set": "fresh",
+  "feat": {
+   "dur": 34.148,
+   "tot_pkts": 50,
+   "tot_bytes": 400,
+   "src_bytes": 700,
+   "proto": "udp",
+   "state": "INT"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 159,
+  "set": "fresh",
+  "feat": {
+   "dur": 127.094,
+   "tot_pkts": 6,
+   "tot_bytes": 120,
+   "src_bytes": 150,
+   "proto": "tcp",
+   "state": "INT"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 160,
+  "set": "fresh",
+  "feat": {
+   "dur": 102.85,
+   "tot_pkts": 3,
+   "tot_bytes": 1200,
+   "src_bytes": 700,
+   "proto": "tcp",
+   "state": "S_RA"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 161,
+  "set": "fresh",
+  "feat": {
+   "dur": 146.097,
+   "tot_pkts": 13,
+   "tot_bytes": 40000,
+   "src_bytes": 150,
+   "proto": "tcp",
+   "state": "INT"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 162,
+  "set": "fresh",
+  "feat": {
+   "dur": 4.176,
+   "tot_pkts": 13,
+   "tot_bytes": 400,
+   "src_bytes": 150,
+   "proto": "tcp",
+   "state": "FSPA_FSPA"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 163,
+  "set": "fresh",
+  "feat": {
+   "dur": 61.138,
+   "tot_pkts": 50,
+   "tot_bytes": 120,
+   "src_bytes": 12000,
+   "proto": "udp",
+   "state": "UNK"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 164,
+  "set": "fresh",
+  "feat": {
+   "dur": 99.01,
+   "tot_pkts": 4,
+   "tot_bytes": 8000,
+   "src_bytes": 150,
+   "proto": "udp",
+   "state": "CON"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 165,
+  "set": "fresh",
+  "feat": {
+   "dur": 109.309,
+   "tot_pkts": 7,
+   "tot_bytes": 400,
+   "src_bytes": 0,
+   "proto": "udp",
+   "state": "UNK"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 166,
+  "set": "fresh",
+  "feat": {
+   "dur": 31.444,
+   "tot_pkts": 2,
+   "tot_bytes": 40000,
+   "src_bytes": 40,
+   "proto": "udp",
+   "state": "S_RA"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 167,
+  "set": "fresh",
+  "feat": {
+   "dur": 25.484,
+   "tot_pkts": 50,
+   "tot_bytes": 8000,
+   "src_bytes": 40,
+   "proto": "tcp",
+   "state": "CON"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 168,
+  "set": "fresh",
+  "feat": {
+   "dur": 14.692,
+   "tot_pkts": 17,
+   "tot_bytes": 8000,
+   "src_bytes": 2500,
+   "proto": "udp",
+   "state": "UNK"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 169,
+  "set": "fresh",
+  "feat": {
+   "dur": 55.769,
+   "tot_pkts": 6,
+   "tot_bytes": 3000,
+   "src_bytes": 12000,
+   "proto": "tcp",
+   "state": "CON"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 170,
+  "set": "fresh",
+  "feat": {
+   "dur": 109.26,
+   "tot_pkts": 4,
+   "tot_bytes": 8000,
+   "src_bytes": 150,
+   "proto": "udp",
+   "state": "INT"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 171,
+  "set": "fresh",
+  "feat": {
+   "dur": 92.299,
+   "tot_pkts": 9,
+   "tot_bytes": 40000,
+   "src_bytes": 2500,
+   "proto": "tcp",
+   "state": "S_"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 172,
+  "set": "fresh",
+  "feat": {
+   "dur": 124.163,
+   "tot_pkts": 90,
+   "tot_bytes": 8000,
+   "src_bytes": 40,
+   "proto": "tcp",
+   "state": "S_RA"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 173,
+  "set": "fresh",
+  "feat": {
+   "dur": 78.557,
+   "tot_pkts": 4,
+   "tot_bytes": 3000,
+   "src_bytes": 0,
+   "proto": "tcp",
+   "state": "INT"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 174,
+  "set": "fresh",
+  "feat": {
+   "dur": 144.88,
+   "tot_pkts": 9,
+   "tot_bytes": 40000,
+   "src_bytes": 2500,
+   "proto": "udp",
+   "state": "FIN"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 175,
+  "set": "fresh",
+  "feat": {
+   "dur": 113.051,
+   "tot_pkts": 9,
+   "tot_bytes": 3000,
+   "src_bytes": 150,
+   "proto": "udp",
+   "state": "UNK"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 176,
+  "set": "fresh",
+  "feat": {
+   "dur": 144.92,
+   "tot_pkts": 6,
+   "tot_bytes": 8000,
+   "src_bytes": 12000,
+   "proto": "udp",
+   "state": "S_RA"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 177,
+  "set": "fresh",
+  "feat": {
+   "dur": 1.679,
+   "tot_pkts": 50,
+   "tot_bytes": 400,
+   "src_bytes": 12000,
+   "proto": "tcp",
+   "state": "S_"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 178,
+  "set": "fresh",
+  "feat": {
+   "dur": 38.827,
+   "tot_pkts": 6,
+   "tot_bytes": 1200,
+   "src_bytes": 12000,
+   "proto": "tcp",
+   "state": "S_"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 179,
+  "set": "fresh",
+  "feat": {
+   "dur": 14.812,
+   "tot_pkts": 50,
+   "tot_bytes": 400,
+   "src_bytes": 40,
+   "proto": "udp",
+   "state": "UNK"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 180,
+  "set": "fresh",
+  "feat": {
+   "dur": 81.687,
+   "tot_pkts": 11,
+   "tot_bytes": 120,
+   "src_bytes": 150,
+   "proto": "udp",
+   "state": "FIN"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 181,
+  "set": "fresh",
+  "feat": {
+   "dur": 90.586,
+   "tot_pkts": 90,
+   "tot_bytes": 3000,
+   "src_bytes": 150,
+   "proto": "tcp",
+   "state": "FIN"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 182,
+  "set": "fresh",
+  "feat": {
+   "dur": 128.737,
+   "tot_pkts": 6,
+   "tot_bytes": 120,
+   "src_bytes": 12000,
+   "proto": "udp",
+   "state": "S_RA"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 183,
+  "set": "fresh",
+  "feat": {
+   "dur": 35.486,
+   "tot_pkts": 7,
+   "tot_bytes": 1200,
+   "src_bytes": 40,
+   "proto": "udp",
+   "state": "UNK"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 184,
+  "set": "fresh",
+  "feat": {
+   "dur": 5.807,
+   "tot_pkts": 90,
+   "tot_bytes": 3000,
+   "src_bytes": 12000,
+   "proto": "udp",
+   "state": "UNK"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 185,
+  "set": "fresh",
+  "feat": {
+   "dur": 22.945,
+   "tot_pkts": 4,
+   "tot_bytes": 1200,
+   "src_bytes": 2500,
+   "proto": "tcp",
+   "state": "FIN"
+  },
+  "real": false,
+  "replica": false
+ },
+ {
+  "i": 186,
+  "set": "fresh",
+  "feat": {
+   "dur": 24.719,
+   "tot_pkts": 50,
+   "tot_bytes": 8000,
+   "src_bytes": 150,
+   "proto": "udp",
+   "state": "FIN"
+  },
+  "real": true,
+  "replica": true
+ },
+ {
+  "i": 187,
+  "set": "fresh",
+  "feat": {
+   "dur": 111.415,
+   "tot_pkts": 3,
+   "tot_bytes": 3000,
+   "src_bytes": 2500,
+   "proto": "udp",
+   "state": "UNK"
+  },
+  "real": false,
+  "replica": false
+ }
+]

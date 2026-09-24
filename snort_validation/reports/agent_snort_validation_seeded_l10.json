@@ -12,9 +12,9 @@
     },
     {
       "episode": 1,
-      "detected": 1,
+      "detected": 0,
       "total": 1,
-      "detection_rate": 1.0
+      "detection_rate": 0.0
     },
     {
       "episode": 2,
@@ -54,9 +54,9 @@
     },
     {
       "episode": 8,
-      "detected": 1,
+      "detected": 0,
       "total": 1,
-      "detection_rate": 1.0
+      "detection_rate": 0.0
     },
     {
       "episode": 9,
@@ -138,9 +138,9 @@
     },
     {
       "episode": 22,
-      "detected": 1,
+      "detected": 0,
       "total": 1,
-      "detection_rate": 1.0
+      "detection_rate": 0.0
     },
     {
       "episode": 23,
@@ -156,9 +156,9 @@
     },
     {
       "episode": 25,
-      "detected": 0,
+      "detected": 1,
       "total": 1,
-      "detection_rate": 0.0
+      "detection_rate": 1.0
     },
     {
       "episode": 26,
@@ -174,9 +174,9 @@
     },
     {
       "episode": 28,
-      "detected": 1,
+      "detected": 0,
       "total": 1,
-      "detection_rate": 1.0
+      "detection_rate": 0.0
     },
     {
       "episode": 29,
@@ -198,9 +198,9 @@
     },
     {
       "episode": 32,
-      "detected": 0,
+      "detected": 1,
       "total": 1,
-      "detection_rate": 0.0
+      "detection_rate": 1.0
     },
     {
       "episode": 33,
@@ -234,9 +234,9 @@
     },
     {
       "episode": 38,
-      "detected": 1,
+      "detected": 0,
       "total": 1,
-      "detection_rate": 1.0
+      "detection_rate": 0.0
     },
     {
       "episode": 39,
@@ -258,15 +258,15 @@
     },
     {
       "episode": 42,
-      "detected": 0,
+      "detected": 1,
       "total": 1,
-      "detection_rate": 0.0
+      "detection_rate": 1.0
     },
     {
       "episode": 43,
-      "detected": 0,
+      "detected": 1,
       "total": 1,
-      "detection_rate": 0.0
+      "detection_rate": 1.0
     },
     {
       "episode": 44,
@@ -276,9 +276,9 @@
     },
     {
       "episode": 45,
-      "detected": 0,
+      "detected": 1,
       "total": 1,
-      "detection_rate": 0.0
+      "detection_rate": 1.0
     },
     {
       "episode": 46,
