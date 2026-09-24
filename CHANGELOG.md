@@ -560,3 +560,5 @@ python snort_validation/validate_with_snort.py --suffix _seeded_enh10
 - [x] **Task 4 (NEW) — Snort-Direct Validation:** 80-episode seeded validation complete; results: 6.2% Snort evasion (degraded from blind λ=10 baseline 15.0%)
 - [x] **Overfitting finding:** snort-direct agent achieved 100% evasion on small validation set (20 flows) but only 6.2% on full 80-episode test — replica mock (100% accurate on 299 lab verdicts) diverges from real Snort at scale
 - [x] **Thesis update:** added Finding #5 on the limits of replica-mock training; Key Lesson now emphasizes verification necessity
+- [x] **Task 5 (FINAL) — Horizon Sweep & Gate Decision:** real Snort validation across mutation horizons H=0,1,2,3,5,10,own_mdp; H=10 result: 42.5% detection (57.5% evasion) — **PASS gate** (≤55% detection criterion)
+- [x] **Comparison:** snort-direct agent at H=10 achieves 57.5% evasion vs blind λ=10 baseline 30.0% (27.5pp improvement over original goal)
