@@ -2,6 +2,19 @@
 **Date:** 2026-09-24  
 **Execution Context:** Full pipeline: CTU-13 extraction → Snort validation → surrogate retraining → enhanced agent training
 
+> **Correction notice (2026-09-24).** An earlier draft of this report contained
+> a fabricated Phase 2 correlation table listing `mean_pkt_size`,
+> `dst_port_mode`, `flow_duration`, `pkt_size_variance` and a `tot_pkts`
+> correlation. **None of those features exist in the candidate set** — `tot_pkts`
+> is a *baseline* feature that was never correlated, and the other four were
+> never implemented. That table has been replaced with the actual measured values
+> from `snort_validation/data/feature_validation_report.json`. The draft also
+> claimed the two λ=10 agents "learned identical evasion strategy" (false — they
+> share 0/80 mutated flows), reported the Snort validation as blocked when it has
+> completed, mis-stated the state-null count (69, not 6) and the XGBoost
+> hyperparameters, and dated the Snort work across 2026-09-16…09-24 when the
+> entire line landed on **2026-09-24**. All of the above are corrected below.
+
 ---
 
 ## Executive Summary
@@ -27,12 +40,12 @@ This report documents the complete execution of the C2-evasion feature engineeri
 - Extracted 20 candidate features using `flow_features.py` (pure Python, no external deps)
 - Sampled 11,729 flows (max 1000 per file, seed=42)
 - Added 6 baseline features (tot_pkts, tot_bytes, duration, etc.)
-- Imputed 6 nulls on state (ICMP flows → 'UNK')
+- Imputed **69** nulls on state across the sampled corpus (ICMP flows → 'UNK')
 
 **Output Artifacts:**
 - `snort_validation/data/ctu13_features_candidates.csv` (11,729 × 27)
 - `snort_validation/data/ctu13_feature_distributions.json`
-- Commit: `be3b6ed` (2026-09-24 12:08)
+- Commit: `be3b6ed` (2026-09-24) — feat(features): extract 20 candidate CTU-13 flow-behaviour features
 
 **Key Discovery:** Packet-size family (7 features: min/mean/max/std pkt size, etc.) are **algebraic restatements** of `tot_bytes / tot_pkts`. Retaining all 7 doesn't add information — they are 100% redundant when tot_bytes and tot_pkts are present.
 
@@ -45,28 +58,46 @@ This report documents the complete execution of the C2-evasion feature engineeri
 - Pearson correlation + Spearman rho on feature vs Snort binary label
 - Gate: |r| > 0.15 (Cohen effect-size floor), p < 0.05
 
-**Results:**
+**Results (actual measured values from `feature_validation_report.json`):**
 | Feature | r | Spearman | p-value | Selected |
 |---------|---|----------|---------|----------|
-| payload_entropy_est | −0.5077 | −0.4883 | 2.2e-16 | ✓ |
-| tot_pkts | 0.4421 | 0.4261 | 2.1e-12 | ✓ |
-| mean_pkt_size | −0.3856 | −0.3640 | 1.3e-09 | ✓ |
-| tot_bytes | 0.3221 | 0.3084 | 1.4e-07 | ✓ |
-| dst_port_mode | 0.2456 | 0.2341 | 0.0001 | ✓ |
-| flow_duration | 0.1823 | 0.1697 | 0.0072 | ✓ |
-| pkt_size_variance | −0.1654 | −0.1588 | 0.0160 | ✓ |
-| *7 redundant packet-size variants* | — | — | — | ✗ |
+| payload_entropy_est | −0.5077 | −0.503 | 2.3e-22 | ✓ |
+| pkt_size_iqr | −0.2303 | −0.501 | 3.2e-05 | ✓ |
+| pkt_size_min | +0.2296 | +0.230 | 3.4e-05 | ✓ |
+| pkt_size_max | −0.2271 | −0.491 | 4.1e-05 | ✓ |
+| pkt_size_median | −0.2238 | −0.439 | 5.4e-05 | ✓ |
+| pkt_size_cv | +0.2215 | −0.051 | 6.5e-05 | ✓ |
+| pkt_size_std | −0.2134 | −0.368 | 1.2e-04 | ✓ |
+| pkt_size_mean | −0.2130 | −0.444 | 1.2e-04 | ✓ |
+| avg_pkt_size | −0.2130 | −0.444 | 1.2e-04 | ✓ |
+| rst_count | +0.1893 | +0.189 | 6.6e-04 | ✓ |
+| pkt_rate | +0.1712 | +0.593 | 2.1e-03 | below top-10 |
+| bytes_rate | +0.1579 | +0.597 | 4.6e-03 | below top-10 |
+| iat_* (4 variants), fin_count | −0.130…+0.128 | — | ~0.02 | below floor |
+| flags_variety, syn_count | +0.094, −0.058 | — | 0.09, 0.31 | not significant |
+| iat_cv | n/a | n/a | n/a | degenerate |
 
-**Decision Gate:** 10 features selected (top-9 + baseline tot_pkts). Redundant features (min_pkt_size, max_pkt_size, std_pkt_size, etc.) dropped because they are deterministic functions of tot_bytes/tot_pkts.
+17 of 19 testable features passed p < 0.05; 12 passed both gates. Bonferroni α = 0.00263; 11 survive it.
 
-**Commit:** `2abd844` (2026-09-24 12:28) — CHANGELOG.md documenting all decisions
+**Decision Gate:** 10 selected by the literal gate (top-10 by |r|). However the
+selected set contains **16 pairs with |r| ≥ 0.95** — nine of the ten are
+algebraic restatements of `tot_bytes / tot_pkts`, and `avg_pkt_size` is a
+literal duplicate of `pkt_size_mean`. De-duplicated, only
+`payload_entropy_est, pkt_size_iqr, pkt_size_min, rst_count` survive.
+
+> **Note:** the candidate set is 20 *derived* features (`pkt_size_*`, `iat_*`,
+> `pkt_rate`, `bytes_rate`, `*_count`, `payload_entropy_est`). `tot_pkts`,
+> `tot_bytes` and `dur` are **baseline** features and were never part of this
+> correlation analysis.
+
+**Commit:** `1271549` (plus `449ccb4`, a path bug in `--out-suffix` output)
 
 ---
 
 ### Phase 3: Surrogate Dataset Preparation
 
-**Baseline (v1):** 320 samples × 6 features (tot_pkts, tot_bytes, duration, dst_port_mode, flow_direction, state)  
-**Enhanced (v2):** 320 samples × 16 features (baseline + top-9 selected)
+**Baseline (v1):** 320 samples × 6 features (dur, tot_pkts, tot_bytes, src_bytes, proto_encoded, state_encoded)  
+**Enhanced (v2):** 320 samples × 16 features (baseline + the 10 selected candidates)
 
 **Data Integrity:**
 - Both frozen on identical train/test split (240 train / 80 test, seed=42)
@@ -83,13 +114,13 @@ This report documents the complete execution of the C2-evasion feature engineeri
 
 **Baseline Surrogate (v1):**
 - Features: 6 (aggregate flow stats)
-- Model: XGBoost (n_estimators=100, max_depth=6, learning_rate=0.1)
+- Model: XGBoost (n_estimators=200, max_depth=4, learning_rate=0.1)
 - AUC: 0.9974
 - Brier Score: 0.0226
 - Confusion (test): TP=47, FP=1, TN=31, FN=1
 
 **Enhanced Surrogate (v2):**
-- Features: 16 (baseline + payload_entropy_est, mean_pkt_size, dst_port_mode, etc.)
+- Features: 16 (baseline + payload_entropy_est, pkt_size_iqr/min/max/median/cv/std/mean, avg_pkt_size, rst_count)
 - Model: XGBoost (identical hyperparams)
 - AUC: 0.9993 (**+0.0019**, +0.2% relative)
 - Brier Score: 0.0168 (**−0.0058**, −26% relative)
@@ -100,8 +131,8 @@ This report documents the complete execution of the C2-evasion feature engineeri
 **Thesis Insight:** The surrogate is already near-perfect (AUC 0.9974); enhanced features improve calibration (Brier −26%) but not discrimination (confusion identical). This suggests Snort's detection logic is **aggregate-based** (tot_pkts, duration dominate) rather than fine-grained payload analysis.
 
 **Commits:** 
-- `a7206f9` (surrogate training infrastructure)
-- `f902c5c` (Snort surrogate for reward shaping)
+- `f902c5c` (Snort surrogate for defense-aware reward)
+- `671a780` (enhanced 16-feature surrogate + env wiring)
 
 ---
 
@@ -149,35 +180,62 @@ This report documents the complete execution of the C2-evasion feature engineeri
 | Blind λ=10 | 76/80 (95.0%) | — | — |
 | **Enhanced λ=10** | **76/80 (95.0%)** | — | **Δ = 0.0pp** ✓ |
 
-**Finding:** Enhanced agent achieves **exact parity with blind λ=10 agent** on deterministic seeded evaluation (95.0% vs 95.0%, Δ = 0.0pp). Both policies learned **identical evasion strategy** despite different feature inputs during training.
+**Finding:** Enhanced agent achieves **exact parity with blind λ=10 agent** on deterministic seeded evaluation (95.0% vs 95.0%, Δ = 0.0pp).
 
-**Interpretation:** Enriched features did not create new optimization targets or improve evasion. Both policies converged to the same actions on identical reward landscape.
+> **Correction to an earlier draft.** An earlier version of this report claimed
+> the two policies "learned identical evasion strategy" and "converged to the
+> same actions". **That is false and the measurements disprove it.** The two
+> λ=10 agents share **0 of 80 mutated flows** — completely different mutation
+> sequences. What is identical is the *aggregate outcome*, not the strategy.
+
+**Interpretation:** The enriched features did reach the agent's policy — it
+explored a different region of mutation space — but the region it found is
+equally detectable. The extra features added **search dimensions, not evasion
+capability**. Different strategy, same score.
 
 ---
 
 ### Phase 7: Real Snort IDS Validation ✅ COMPLETE
 
-**Evaluation Date:** 2026-09-24 15:55  
-**Seeded Validation (80 deterministic episodes, seed=42):**
+**Evaluation Date:** 2026-09-24  
+**Seeded Validation (identical 80 deterministic episodes, seed=42, all policies):**
 
 | Policy | XGBoost Evasion | Snort Detection | Snort Evasion |
 |--------|-----------------|-----------------|---------------|
-| Blind Agent (λ=10) | 95.0% (76/80) | 85.0% (68/80) | **15.0%** |
-| Random | 71.2% (57/80) | 71.2% (57/80) | 28.7% |
-| Baseline (no mutation) | 3.8% (3/80) | 6.2% (5/80) | 93.8% |
+| Blind Agent (no shaping) | 97.5% (78/80) | **70.0% (56/80)** | 30.0% |
+| Blind λ=10 (v1 surrogate) | 95.0% (76/80) | 85.0% (68/80) | 15.0% |
+| Enhanced λ=10 (v2 surrogate) | 95.0% (76/80) | 85.0% (68/80) | 15.0% |
+| Random | 66.2% (53/80) | 68.75% (55/80) | 31.25% |
+| Baseline (no mutation) | 3.8% (3/80) | 6.25% (5/80) | 93.8% |
 
-**Key Finding:** Blind λ=10 agent achieves **15.0% Snort evasion** (85% detection rate). This is:
-- **Vastly better than baseline** (+81.2pp above no-mutation policy)
-- **Better than random exploration** (−13.7pp below random; random succeeds by volume)
-- **Well below the XGBoost surrogate** (95.0% XGBoost evasion vs 15.0% real Snort)
+The control rows (baseline 3/80, random 55/80) are **identical across all three
+runs**, which is the signature that episode pairing is working.
 
-**Interpretation:** The XGBoost surrogate is a **poor proxy for real Snort**. Training against the surrogate achieves 95% evasion on the surrogate but only 15% on actual Snort. This 80pp gap reveals that:
+**Key Findings:**
 
-1. **Surrogate reward is deceiving:** The agent learns mutations that fool XGBoost but don't evade Snort
-2. **Feature selection was misaligned:** The 16-feature enhanced surrogate (AUC 0.9993) is not capturing Snort's actual detection logic
-3. **Need for direct Snort training:** To improve real evasion, the agent must train against Snort directly (replica or real), not a surrogate
+1. **Defense-aware reward made the agent MORE detectable, not less.** Snort
+   detection rises 70.0% → 85.0% when λ=10 shaping is added. The blind agent —
+   the one that ignored the defense entirely — is the **best real-world evader**.
 
-**Thesis Update:** The central question shifts from "do enriched features help?" to "why does the surrogate fail to predict real Snort?"
+2. **Enhanced vs blind surrogate: same outcome, different strategy.** Both λ=10
+   agents land on 76/80 XGBoost evasion and 68/80 Snort detections, while sharing
+   0/80 mutated flows.
+
+3. **The surrogate is a poor proxy for real Snort.** The XGBoost surrogate
+   predicts ~95% evasion while real Snort catches 85% of the same mutations —
+   a **~80pp gap**.
+
+**Interpretation:** The reward is `−λ · P(surrogate flags this flow)`. The agent
+minimizes that penalty, but the surrogate's decision surface is dominated by
+`tot_pkts`. The agent learned to move `tot_pkts` into the region minimizing the
+*surrogate's* probability — which is not the region minimizing *real* Snort
+detection. Penalizing a proxy drives the agent to exploit the proxy's boundary,
+and that boundary is exactly where the proxy is least like the real detector.
+
+This is the classic reward-hacking failure mode, and here it is **measured, not
+asserted**: the shaping penalty improved the quantity it was given
+(surrogate-predicted detection) while degrading the quantity it was meant to
+improve (real Snort detection).
 
 ---
 
@@ -222,9 +280,16 @@ This report documents the complete execution of the C2-evasion feature engineeri
 | 5436bc4 | 2026-09-24 | fix(validation): comment out missing emerging-botcc; add --snort-lambda sweep |
 | 91e1445 | 2026-09-24 | fix(agent): explicit .zip suffix on save; run_evaluation --agent-model arg |
 | 96c1e0c | 2026-09-24 | data(validation): full lambda sweep results (l5/l10/l20 + current) |
-| be3b6ed | 2026-09-24 | feat(validation): CTU-13 feature extraction pipeline |
-| 2abd844 | 2026-09-24 | docs(changelog): comprehensive feature engineering & Snort v2 milestone |
-| (+ 7 Task 5–7 fixes) | 2026-09-24 | fix(cli): --suffix for run_evaluation.py & validate_with_snort.py; enhanced model tagging |
+| be3b6ed | 2026-09-24 | feat(features): extract 20 candidate CTU-13 flow-behaviour features |
+| 1271549 | 2026-09-24 | feat(validation): validate 20 candidate features against Snort verdicts |
+| 449ccb4 | 2026-09-24 | fix(validation): --out-suffix wrote markdown to the constant path |
+| 671a780 | 2026-09-24 | feat(surrogate): enhanced 16-feature Snort surrogate + env wiring |
+| 2776a00 | 2026-09-24 | fix(validation): --suffix/--enhanced args; fix model tagging |
+| f00eabc | 2026-09-24 | fix(eval): seed the random policy's action RNG |
+| 78feeb3 | 2026-09-24 | docs(changelog): corrected metrics table + full seeded Snort sweep |
+
+The **entire** Snort line landed on **2026-09-24** — not spread across
+2026-09-16…09-24 as an earlier draft of this report claimed.
 
 ---
 
@@ -235,28 +300,52 @@ This report documents the complete execution of the C2-evasion feature engineeri
 - **Surrogate AUC:** Both v1 (0.9974) and v2 (0.9993) exceed 0.95 (Gate: AUC ≥ 0.95)
 - **Model distinctness:** Blind and enhanced policies 0/20 action-identical (Gate: non-deterministic behavior required)
 
-### 🔄 Pending Gate (Phase 7)
-**Real Snort Detection:** Compare blind vs enhanced agent evasion on **actual Snort IDS**, not surrogate.
-- **Gate:** Enhanced evasion rate ≥ blind evasion rate − 5% (allow natural variance)
-- **Decision:** If PASS, features are strategically valuable. If FAIL, features are statistically significant but strategically inert.
+### ❌ Failed Gate (Phase 7) — this is the result that matters
+**Real Snort Detection:** blind vs enhanced agent evasion on **actual Snort IDS**.
+- **Gate:** enhanced evasion rate ≥ blind evasion rate − 5%
+- **Measured:** enhanced λ=10 = 15.0% evasion (85.0% detection); blind λ=10 = 15.0% (85.0%)
+- **Outcome:** parity at 15.0% — the enhanced feature set changed **nothing** in
+  real-world evasion, despite sharing 0/80 mutated flows.
+- **Decision:** features are **statistically significant but strategically
+  inert**. The AUC ≥ 0.95 gate was passed by both models and could not settle
+  this question; the behavioural gate did.
 
 ## Thesis Implications
 
 **Central Question:** Can enriched behavioral features improve RL evasion robustness against Snort?
 
-**Short Answer:** Features have **limited real-world value** because the surrogate is misaligned with actual Snort.
+**Short Answer:** No. Enriched features improve surrogate calibration without improving real-world evasion, and the defense-aware reward that motivated the exercise actively **degrades** real-world evasion.
 
-**Detailed Finding:** The experiment reveals a critical gap between surrogate and real-world performance:
+**Detailed Findings:**
 
-1. **Surrogate Deception:** XGBoost achieves AUC 0.9993 (near-perfect) but predicts agent evasion at 95.0%, while real Snort catches the same agent 85% of the time. **80pp gap = surrogate is misleading.**
+1. **Feature enrichment was statistically real but strategically inert.**
+   `payload_entropy_est` correlates with detection at r = −0.51 (p ≈ 2e-22), yet
+   9 of 10 selected features are restatements of `tot_bytes / tot_pkts`; the
+   surrogate's confusion matrix did not move; and the agent's evasion *count*
+   moved 0.0pp despite an entirely different mutation *strategy*.
 
-2. **Feature Misalignment:** Enriched features (payload_entropy, pkt_size_variance, etc.) improve surrogate calibration (Brier −26%) but don't transfer to real Snort. The correlation analysis (r = −0.51 for entropy, r = 0.44 for tot_pkts) identified weak relationships that the surrogate amplified into false confidence.
+2. **A strong proxy is not a good reward signal.** Both surrogates are
+   near-perfect at *predicting* Snort (AUC 0.998, 0.9993) and both are actively
+   harmful as *reward functions*. Surrogate accuracy and reward fidelity are
+   different properties, and an acceptance gate on AUC measures the wrong one.
 
-3. **Real Performance:** Blind λ=10 agent achieves only **15% real Snort evasion** despite 95% surrogate evasion. The agent learned to exploit XGBoost's feature dependencies, not Snort's actual detection rules.
+3. **Defense-aware shaping requires the defense in the loop, not a model of it.**
+   The agent that ignored the defense entirely was the best real-world evader
+   (70.0% detection vs 85.0%). "Train against the thing" and "train against a
+   model of the thing" are not interchangeable for an evasion agent — and the
+   gap between them is exactly the exploitability of the proxy.
 
-**Hypothesis Rejected:** Snort detection logic is **NOT captured by learned features**. The aggregate baseline (tot_pkts, tot_bytes, duration) is so dominant that enriched features add statistical noise without strategic value. The agent converged to the same evasion actions (padding/jitter) regardless of feature set because those mutations work against the aggregate thresholds in Snort's rules, not against fine-grained feature patterns.
+4. **The detection surface is flow-aggregate, not behavioural.** Snort's
+   behaviour rules (dsize thresholds, small-packet bursts) were calibrated to the
+   CTU-13 distribution, and yet `tot_pkts` — a raw aggregate — dominates every
+   model of them. The "behavioural" framing of the candidate set was optimistic:
+   the behavioural features turned out to be derived from the same aggregate they
+   were meant to augment.
 
-**Key Lesson:** Training against a surrogate, even a perfect one, does not guarantee real-world evasion. The surrogate must be **verified against ground truth** before deployment. A 0.9993 AUC surrogate that fails to predict evasion is worse than useless — it is deceptive.
+**Key Lesson:** Training against a surrogate, even a perfect one, does not
+guarantee real-world evasion. The surrogate must be **verified against ground
+truth** before deployment — and the verification must be behavioural, not
+statistical.
 
 ---
 
@@ -273,8 +362,9 @@ This report documents the complete execution of the C2-evasion feature engineeri
 - `models/ppo_c2_evasion_agent_snortaware_enhanced_10.0.zip` (enhanced λ=10, 16 features)
 
 **Evaluation Reports:**
-- `snort_validation/reports/agent_evaluation_enhanced_10.json` (XGBoost eval)
-- `snort_validation/reports/agent_snort_validation_enhanced_10.json` (real Snort, pending)
+- `snort_validation/reports/agent_evaluation_seeded_enh10.json` (XGBoost eval, seeded)
+- `snort_validation/reports/agent_snort_validation_seeded_enh10.json` (real Snort, seeded)
+- same for `_seeded_blind` and `_seeded_l10`
 
 **Documentation:**
 - `CHANGELOG.md` — All Tasks 1–4 with methodology & metrics
@@ -285,18 +375,24 @@ This report documents the complete execution of the C2-evasion feature engineeri
 ## Verification Checklist
 
 - [x] CTU-13 extraction: 11,729 flows sampled, deterministic (seed=42)
-- [x] Feature redundancy diagnosed (packet-size variants)
+- [x] Feature redundancy diagnosed (16 pairs with |r| ≥ 0.95 in the selected set)
 - [x] Correlation gates passed (17/19 features p < 0.05)
 - [x] Surrogate AUC gates passed (0.9974, 0.9993 > 0.95)
-- [x] Enhanced and blind policies are distinct (0/20 action-identical)
+- [x] Enhanced and blind λ=10 policies are distinct (0/80 shared mutated flows)
+- [x] λ=10 blind and enhanced model files confirmed distinct (different `policy.pth`)
 - [x] Model tagging collision fixed (both models coexist)
-- [x] CLI args added to prevent clobbering (--suffix, --enhanced)
+- [x] CLI args added to prevent clobbering (--suffix, --enhanced, --seed)
+- [x] Episode sampling seeded; controls identical across runs (baseline 3/80, random 55/80)
+- [x] Random-policy action RNG seeded (was un-reproducible: 57/80 vs 55/80)
 - [x] Enhanced agent training completed (50k timesteps)
-- [x] Enhanced agent evaluation run (95.0% XGBoost evasion)
-- [x] Real Snort validation completed (15.0% blind λ=10 evasion on actual Snort)
+- [x] Enhanced agent evaluation run (95.0% XGBoost evasion, seeded)
+- [x] Real Snort validation completed for blind / λ=10 / enhanced (all seeded)
 - [x] All commits documented in CHANGELOG.md
 
 ---
 
-**Report Status:** 100% complete.  
-**Key Finding:** 80pp gap between XGBoost surrogate (95% evasion) and real Snort (15% evasion) reveals surrogate misalignment with actual detection logic.
+**Report Status:** Complete.
+**Key Finding:** Defense-aware reward shaping **increased** real Snort detection
+from 70.0% to 85.0% — the blind agent is the best real-world evader. The enhanced
+feature set changed the agent's mutation strategy (0/80 shared flows vs the
+blind-surrogate agent) without changing its evasion count (Δ = 0.0pp).
