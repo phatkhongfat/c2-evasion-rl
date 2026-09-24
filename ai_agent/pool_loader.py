@@ -34,8 +34,16 @@ READ_COLS = ["dur", "Dur", "proto", "Proto", "state", "State",
 
 def load_malicious_pool(archive_dir: str = ARCHIVE_DIR,
                         verbose: bool = True) -> List[Dict]:
-    """Return the botnet flow pool as a list of compact dicts."""
-    files = sorted(glob.glob(os.path.join(archive_dir, "*.parquet")))
+    """Return the botnet flow pool as a list of compact dicts.
+
+    File order is deliberately ``glob.glob`` order, NOT sorted order.  The
+    seeded evaluation indexes into this pool (``env.reset(seed=42+i)``), so the
+    order decides which flows the 80 episodes use.  The original loader used
+    glob order; sorting the files silently reassigned the episodes and made
+    every new measurement incomparable to the committed reports (measured: the
+    blind agent moved 78/80 -> 76/80 from ordering alone).
+    """
+    files = glob.glob(os.path.join(archive_dir, "*.parquet"))
     if not files:
         raise FileNotFoundError(f"No .parquet files found in {archive_dir}")
 
