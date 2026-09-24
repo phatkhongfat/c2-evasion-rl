@@ -556,3 +556,7 @@ python snort_validation/validate_with_snort.py --suffix _seeded_enh10
 - [x] Seeded evaluation: no-mutation baseline identical (3/80) across all runs
 - [x] λ=10 blind and λ=10 enhanced models confirmed distinct on disk
 - [x] Snort validation run for blind / λ=10 / enhanced on identical episodes
+- [x] **Task 3 (NEW) — Snort-Direct Agent Training:** trained with `--snort-direct --snort-direct-mode replica` (196 iterations, 277s total, deterministic seeded)
+- [x] **Task 4 (NEW) — Snort-Direct Validation:** 80-episode seeded validation complete; results: 6.2% Snort evasion (degraded from blind λ=10 baseline 15.0%)
+- [x] **Overfitting finding:** snort-direct agent achieved 100% evasion on small validation set (20 flows) but only 6.2% on full 80-episode test — replica mock (100% accurate on 299 lab verdicts) diverges from real Snort at scale
+- [x] **Thesis update:** added Finding #5 on the limits of replica-mock training; Key Lesson now emphasizes verification necessity
