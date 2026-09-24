@@ -267,9 +267,11 @@ def main():
 
     # Markdown table
     lines = [
-        "# Feature validation vs Snort verdicts",
+        "# Feature validation vs " + ("Snort verdicts" if args.target == "detected"
+                                       else "the XGBoost judge verdict"),
         "",
-        f"- Samples: **{len(df)}** ({int(y.sum())} Snort-detected, {y.mean():.1%})",
+        f"- Samples: **{len(df)}** ({int(y.sum())} positive on `{args.target}`, "
+        f"{y.mean():.1%})",
         f"- Target: `{args.target}`",
         f"- Gate: |Pearson r| > {args.r_floor}, p < {args.p_max}, top {args.top_k}",
         f"- Tested {n_tested} features; {n_sig} passed p < {args.p_max}; "
@@ -317,7 +319,7 @@ def main():
               "```", json.dumps(BASELINE_ENCODED), "```", "",
               "## Selected-feature correlation matrix", "",
               "```json", json.dumps(sel_corr, indent=2), "```"]
-    OUT_MD.write_text("\n".join(lines) + "\n")
+    out_md.write_text("\n".join(lines) + "\n")
     print(f"[+] Wrote {out_md.relative_to(REPO)}")
 
     return 0 if selected else 1
