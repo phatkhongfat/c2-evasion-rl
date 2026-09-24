@@ -1,0 +1,1074 @@
+{
+  "model": "models/ppo_c2_evasion_agent_directional_10feat.zip",
+  "seed": 42,
+  "n_episodes": 80,
+  "episodes": [
+    {
+      "episode": 0,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.136941528320314,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 1,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13444900512695,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 2,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.134429931640625,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 3,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 48.25641058444977,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 4,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13469696044922,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 5,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13687957763672,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 6,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.149622192382814,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 7,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.14952301025391,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 8,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13446807861328,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 9,
+      "steps": [
+        {
+          "step": 0,
+          "reward": -6.629531555175781,
+          "evaded": false
+        },
+        {
+          "step": 1,
+          "reward": -6.61921501159668,
+          "evaded": false
+        },
+        {
+          "step": 2,
+          "reward": -6.60955322265625,
+          "evaded": false
+        },
+        {
+          "step": 3,
+          "reward": -6.598844528198242,
+          "evaded": false
+        },
+        {
+          "step": 4,
+          "reward": -6.589291076660156,
+          "evaded": false
+        },
+        {
+          "step": 5,
+          "reward": 45.4807014465332,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 10,
+      "steps": [
+        {
+          "step": 0,
+          "reward": -6.863452453613281,
+          "evaded": false
+        },
+        {
+          "step": 1,
+          "reward": -6.854215393066406,
+          "evaded": false
+        },
+        {
+          "step": 2,
+          "reward": -6.844910583496094,
+          "evaded": false
+        },
+        {
+          "step": 3,
+          "reward": -6.835537719726562,
+          "evaded": false
+        },
+        {
+          "step": 4,
+          "reward": -6.826097106933593,
+          "evaded": false
+        },
+        {
+          "step": 5,
+          "reward": 45.183411560058595,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 11,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.136915893554686,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 12,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13468933105469,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 13,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.1494790649414,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 14,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.134246826171875,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 15,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.1493716430664,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 16,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 48.25673294067383,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 17,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.150624389648435,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 18,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13786697387695,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 19,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.138963317871095,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 20,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13434600830078,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 21,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13910614013672,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 22,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13426971435547,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 23,
+      "steps": [
+        {
+          "step": 0,
+          "reward": -6.566336631774902,
+          "evaded": false
+        },
+        {
+          "step": 1,
+          "reward": -6.51971435546875,
+          "evaded": false
+        },
+        {
+          "step": 2,
+          "reward": 45.51332092285156,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 24,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.14927917480468,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 25,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.14962097167969,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 26,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.134761810302734,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 27,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.149620056152344,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 28,
+      "steps": [
+        {
+          "step": 0,
+          "reward": -6.631697387695312,
+          "evaded": false
+        },
+        {
+          "step": 1,
+          "reward": 45.37921295166016,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 29,
+      "steps": [
+        {
+          "step": 0,
+          "reward": -6.862959899902344,
+          "evaded": false
+        },
+        {
+          "step": 1,
+          "reward": -6.853721313476562,
+          "evaded": false
+        },
+        {
+          "step": 2,
+          "reward": -6.844415283203125,
+          "evaded": false
+        },
+        {
+          "step": 3,
+          "reward": -6.835040588378906,
+          "evaded": false
+        },
+        {
+          "step": 4,
+          "reward": -6.825598449707031,
+          "evaded": false
+        },
+        {
+          "step": 5,
+          "reward": 45.18391204833984,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 30,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.14964813232422,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 31,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.134334564208984,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 32,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.14956329345703,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 33,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13420104980469,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 34,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13426971435547,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 35,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.134403228759766,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 36,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13447570800781,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 37,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.14951995849609,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 38,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13422393798828,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 39,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.14954376220703,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 40,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13425064086914,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 41,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.14945068359375,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 42,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.134193420410156,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 43,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.134300231933594,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 44,
+      "steps": [
+        {
+          "step": 0,
+          "reward": -6.863205871582031,
+          "evaded": false
+        },
+        {
+          "step": 1,
+          "reward": -6.853969116210937,
+          "evaded": false
+        },
+        {
+          "step": 2,
+          "reward": -6.84466552734375,
+          "evaded": false
+        },
+        {
+          "step": 3,
+          "reward": -6.835293884277344,
+          "evaded": false
+        },
+        {
+          "step": 4,
+          "reward": -6.825854187011719,
+          "evaded": false
+        },
+        {
+          "step": 5,
+          "reward": 45.183653869628905,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 45,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.134315490722656,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 46,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13446807861328,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 47,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.134273529052734,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 48,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.14962280273437,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 49,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13430404663086,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 50,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.134544372558594,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 51,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13560272216797,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 52,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13429260253906,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 53,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13455581665039,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 54,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13441467285156,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 55,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.14954559326171,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 56,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13420104980469,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 57,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.514856567382814,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 58,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.134727478027344,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 59,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13434783935546,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 60,
+      "steps": [
+        {
+          "step": 0,
+          "reward": -6.790816650390624,
+          "evaded": false
+        },
+        {
+          "step": 1,
+          "reward": -6.7810378074646,
+          "evaded": false
+        },
+        {
+          "step": 2,
+          "reward": -6.771787414550781,
+          "evaded": false
+        },
+        {
+          "step": 3,
+          "reward": -6.7615838050842285,
+          "evaded": false
+        },
+        {
+          "step": 4,
+          "reward": -6.752481994628906,
+          "evaded": false
+        },
+        {
+          "step": 5,
+          "reward": 45.3170051574707,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 61,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13426971435547,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 62,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13429260253906,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 63,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13426971435547,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 64,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.134361267089844,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 65,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.136876831054686,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 66,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13512420654297,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 67,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.14962310791015,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 68,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13435363769531,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 69,
+      "steps": [
+        {
+          "step": 0,
+          "reward": -6.863706665039063,
+          "evaded": false
+        },
+        {
+          "step": 1,
+          "reward": 45.145528869628905,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 70,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13454818725586,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 71,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13450622558594,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 72,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13566467285156,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 73,
+      "steps": [
+        {
+          "step": 0,
+          "reward": -6.844681701660156,
+          "evaded": false
+        },
+        {
+          "step": 1,
+          "reward": -6.835302429199219,
+          "evaded": false
+        },
+        {
+          "step": 2,
+          "reward": -6.825855102539062,
+          "evaded": false
+        },
+        {
+          "step": 3,
+          "reward": 45.18365997314453,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 74,
+      "steps": [
+        {
+          "step": 0,
+          "reward": -6.847137451171875,
+          "evaded": false
+        },
+        {
+          "step": 1,
+          "reward": -6.8371901512146,
+          "evaded": false
+        },
+        {
+          "step": 2,
+          "reward": -6.828438720703125,
+          "evaded": false
+        },
+        {
+          "step": 3,
+          "reward": -6.818121433258057,
+          "evaded": false
+        },
+        {
+          "step": 4,
+          "reward": -6.8094677734374995,
+          "evaded": false
+        },
+        {
+          "step": 5,
+          "reward": 45.26762008666992,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 75,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.1493115234375,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 76,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.149611206054686,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 77,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13461685180664,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 78,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13424301147461,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    },
+    {
+      "episode": 79,
+      "steps": [
+        {
+          "step": 0,
+          "reward": 45.13636779785156,
+          "evaded": false
+        }
+      ],
+      "final_evasion": false
+    }
+  ],
+  "evasion_rate": 0.0,
+  "evasion_count": 0
+}

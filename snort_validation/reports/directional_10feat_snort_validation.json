@@ -1,0 +1,16 @@
+{
+  "seed": 42,
+  "n_episodes": 80,
+  "model": "ppo_c2_evasion_agent_directional_10feat.zip",
+  "judge": "xgboost_judge_directional_10feat (10 features)",
+  "agent": {
+    "detected": 14,
+    "evaded": 66,
+    "evasion_rate": 82.5
+  },
+  "random_baseline": {
+    "detected": 5,
+    "evaded": 75,
+    "evasion_rate": 93.75
+  }
+}
