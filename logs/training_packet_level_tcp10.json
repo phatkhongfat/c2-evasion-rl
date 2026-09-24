@@ -1,0 +1,11 @@
+{
+  "model": "ppo_packet_level_agent_tcp10.zip",
+  "environment": "PacketLevelEnv",
+  "subset": "tcp_pkt>=10",
+  "subset_size": 26772,
+  "reward_source": "replica_snort_verdict",
+  "total_timesteps": 50000,
+  "training_time_s": 58.50809025764465,
+  "seed": 42,
+  "max_packets_per_flow": 50
+}
