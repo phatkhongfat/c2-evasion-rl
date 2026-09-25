@@ -1,0 +1,118 @@
+{
+  "capture": "botnet-capture-20110819-bot",
+  "flows": 24,
+  "rounds": 10,
+  "batch": 96,
+  "history": [
+    {
+      "round": 0,
+      "evaded": 96,
+      "batch": 96,
+      "evasion_pct": 100.0,
+      "mean_reward": -0.312,
+      "mean_corrupt_all": 17.19,
+      "mean_corrupt_when_evaded": 17.19
+    },
+    {
+      "round": 1,
+      "evaded": 96,
+      "batch": 96,
+      "evasion_pct": 100.0,
+      "mean_reward": 0.463,
+      "mean_corrupt_all": 15.9,
+      "mean_corrupt_when_evaded": 15.9
+    },
+    {
+      "round": 2,
+      "evaded": 86,
+      "batch": 96,
+      "evasion_pct": 89.6,
+      "mean_reward": 0.1,
+      "mean_corrupt_all": 14.52,
+      "mean_corrupt_when_evaded": 14.76
+    },
+    {
+      "round": 3,
+      "evaded": 79,
+      "batch": 96,
+      "evasion_pct": 82.3,
+      "mean_reward": -0.065,
+      "mean_corrupt_all": 13.41,
+      "mean_corrupt_when_evaded": 13.44
+    },
+    {
+      "round": 4,
+      "evaded": 74,
+      "batch": 96,
+      "evasion_pct": 77.1,
+      "mean_reward": 0.044,
+      "mean_corrupt_all": 12.27,
+      "mean_corrupt_when_evaded": 12.35
+    },
+    {
+      "round": 5,
+      "evaded": 63,
+      "batch": 96,
+      "evasion_pct": 65.6,
+      "mean_reward": -0.858,
+      "mean_corrupt_all": 11.55,
+      "mean_corrupt_when_evaded": 11.78
+    },
+    {
+      "round": 6,
+      "evaded": 52,
+      "batch": 96,
+      "evasion_pct": 54.2,
+      "mean_reward": -1.09,
+      "mean_corrupt_all": 9.8,
+      "mean_corrupt_when_evaded": 9.73
+    },
+    {
+      "round": 7,
+      "evaded": 44,
+      "batch": 96,
+      "evasion_pct": 45.8,
+      "mean_reward": -1.098,
+      "mean_corrupt_all": 8.22,
+      "mean_corrupt_when_evaded": 8.11
+    },
+    {
+      "round": 8,
+      "evaded": 35,
+      "batch": 96,
+      "evasion_pct": 36.5,
+      "mean_reward": -2.071,
+      "mean_corrupt_all": 7.9,
+      "mean_corrupt_when_evaded": 7.94
+    },
+    {
+      "round": 9,
+      "evaded": 96,
+      "batch": 96,
+      "evasion_pct": 100.0,
+      "mean_reward": 6.1,
+      "mean_corrupt_all": 6.5,
+      "mean_corrupt_when_evaded": 6.5
+    }
+  ],
+  "deterministic_evaded": 19,
+  "deterministic_pct": 79.17,
+  "deterministic_mean_corrupt": 0.0,
+  "random_evaded": 0,
+  "random_pct": 0.0,
+  "corrupt_all_evaded": 24,
+  "corrupt_all_pct": 100.0,
+  "snort_stats": {
+    "mode": "resident",
+    "iface": "lo",
+    "available": true,
+    "error": null,
+    "snort_calls": 14,
+    "flows": 1056,
+    "seconds": 8.8,
+    "send_seconds": 2.291,
+    "last_send_s": 0.0487,
+    "last_total_s": 0.6087,
+    "ms_per_flow": 8.32
+  }
+}

@@ -144,17 +144,33 @@ def main():
                          "to make 'corrupt everything' suboptimal; at 0.25 the "
                          "argmax simply corrupts all 32 packets.")
     ap.add_argument("--capture", default="botnet-capture-20110819-bot")
+    ap.add_argument("--resident", action="store_true",
+                    help="use the resident Snort service (IDS on lo) instead of "
+                         "one process per batch; removes the ~9.9s rule-load "
+                         "floor per batch")
     ap.add_argument("--out", default=str(REPO / "snort_validation/reports/snort_bandit.json"))
     args = ap.parse_args()
 
     env = RealPacketEnv(n_flows=args.flows, batch_size=args.batch,
                         capture=args.capture, max_mutations=12, seed=11)
+    svc = env._svc
+    resident = None
+    if args.resident:
+        from snort_resident_service import ResidentSnortService
+        resident = ResidentSnortService()
+        if not resident.start():
+            print(f"[!] resident snort unavailable ({resident.error}); "
+                  f"falling back to per-batch service")
+            resident = None
+        else:
+            svc = resident
+            print("[*] using RESIDENT snort (no per-batch rule reload)")
     flows = env.flows
     n = len(flows)
     print(f"[*] {n} real positive flows from {args.capture}")
 
     # baseline verdicts (no mutation)
-    base = env._svc.alert_counts_chunked(
+    base = svc.alert_counts_chunked(
         [(pkts, i) for i, (_k, pkts) in enumerate(flows)])
     print(f"[*] baseline detected: {sum(1 for v in base.values() if v > 0)}/{n}")
 
@@ -185,7 +201,7 @@ def main():
             m = masks[b].numpy()
             pkts = apply_corrupt_mask(flows[fi][1], m)
             items.append((pkts, b))
-        counts = env._svc.alert_counts_chunked(items)
+        counts = svc.alert_counts_chunked(items)
 
         rewards = np.zeros(args.batch, dtype=np.float32)
         n_corrupt = masks.sum(dim=1).numpy()
@@ -230,7 +246,7 @@ def main():
     items = []
     for fi, (_k, pkts) in enumerate(flows):
         items.append((apply_corrupt_mask(pkts, det_masks[fi].numpy()), fi))
-    dc = env._svc.alert_counts_chunked(items)
+    dc = svc.alert_counts_chunked(items)
     det_evaded = sum(1 for v in dc.values() if v == 0)
     det_corrupt = det_masks.sum(dim=1).numpy()
     print(f"\n[*] DETERMINISTIC (argmax): evaded {det_evaded}/{n} "
@@ -242,7 +258,7 @@ def main():
     for fi, (_k, pkts) in enumerate(flows):
         m = (rng.random(ACTION_MAX_PACKETS) < 0.5).astype(np.float32)
         items.append((apply_corrupt_mask(pkts, m), fi))
-    rc = env._svc.alert_counts_chunked(items)
+    rc = svc.alert_counts_chunked(items)
     r_evaded = sum(1 for v in rc.values() if v == 0)
     print(f"[*] random control:        evaded {r_evaded}/{n} "
           f"({100*r_evaded/n:.1f}%)")
@@ -252,7 +268,7 @@ def main():
     for fi, (_k, pkts) in enumerate(flows):
         m = np.ones(ACTION_MAX_PACKETS, dtype=np.float32)
         items.append((apply_corrupt_mask(pkts, m), fi))
-    ac = env._svc.alert_counts_chunked(items)
+    ac = svc.alert_counts_chunked(items)
     a_evaded = sum(1 for v in ac.values() if v == 0)
     print(f"[*] corrupt-all control:   evaded {a_evaded}/{n} "
           f"({100*a_evaded/n:.1f}%)")
@@ -269,9 +285,11 @@ def main():
             "random_pct": round(100 * r_evaded / n, 2),
             "corrupt_all_evaded": int(a_evaded),
             "corrupt_all_pct": round(100 * a_evaded / n, 2),
-            "snort_stats": env.service_stats(),
+            "snort_stats": (svc.stats() if resident else env.service_stats()),
         }, f, indent=2)
     print(f"[+] report: {args.out}")
+    if resident is not None:
+        resident.stop()
     return 0
 
 

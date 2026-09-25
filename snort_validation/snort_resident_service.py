@@ -53,9 +53,34 @@ REPO = Path(__file__).resolve().parent.parent
 DEFAULT_CONF = REPO / "snort_validation/et_open_c2/snort_et_c2.conf"
 IFACE = "lo"
 
-QUERY_NET = "198.51.100."
-MAX_QUERIES_PER_BATCH = 250
-_QUERY_IP_RE = re.compile(re.escape(QUERY_NET) + r"(\d{1,3})\b")
+# Documentation range (RFC 5737).  Each query gets its OWN address AND port, and
+# ids are NEVER reused within a run.  This is not cosmetic: ET content rules
+# commonly carry `threshold: type limit, track by_src, count 1` (the ruleset even
+# warns in-rule thresholds are deprecated), so a repeated source address inside
+# the time window is THROTTLED and silently produces no alert.  Measured: the
+# first injection of 24 flows gave 35 alert lines covering all 24 flows, and an
+# immediate second injection of the SAME flows gave ZERO -- which made every
+# later batch read as "no alert" (and produced impossible numbers such as
+# "baseline detected 0/24" and a 100% evasion rate for a random policy).
+QUERY_NET = "198.51."
+QUERY_PORT_BASE = 40000
+MAX_QUERIES_PER_BATCH = 250      # keeps one batch inside a single /24
+UID_PER_NET = 200                # addresses per /24 before moving to the next
+
+
+def _uid_to_addr_port(uid: int):
+    """Map a globally unique query id to a unique (ip, port) pair."""
+    hi = (uid // UID_PER_NET) % 250
+    lo = (uid % UID_PER_NET) + 1
+    return f"{QUERY_NET}{hi}.{lo}", QUERY_PORT_BASE + (uid % 20000)
+
+
+def _uid_from_alert(text: str):
+    """Recover the unique query id from an alert line, if present."""
+    m = re.search(re.escape(QUERY_NET) + r"(\d{1,3})\.(\d{1,3})\b", text)
+    if not m:
+        return None
+    return int(m.group(1)) * UID_PER_NET + (int(m.group(2)) - 1)
 
 
 class ResidentSnortService:
@@ -88,6 +113,7 @@ class ResidentSnortService:
         self.last_total_s: Optional[float] = None
         self._tmp = Path(tempfile.mkdtemp(prefix="snortres_"))
         self._alert_path = self._tmp / "alert"
+        self._uid_base = 0        # never reuse an id: ET rules throttle by_src
         self._started = False
         self.error: Optional[str] = None
 
@@ -97,10 +123,6 @@ class ResidentSnortService:
             return True
         try:
             self._alert_path.write_text("")
-            fd = os.open(str(self._alert_path), os.O_RDWR)
-            self._alert_fd = fd
-            os.set_blocking(fd, False)
-
             self._proc = subprocess.Popen(
                 ["snort", "-c", str(self.conf), "-i", self.iface,
                  "-A", "fast", "-l", str(self._tmp), "-q"],
@@ -110,48 +132,51 @@ class ResidentSnortService:
             self.error = f"spawn failed: {e}"
             return False
 
-        self._reader = threading.Thread(target=self._read_loop, daemon=True)
-        self._reader.start()
-
+        self._reader = None
+        self._started = False
         t0 = time.time()
         while time.time() - t0 < self.startup_timeout:
             if self._proc.poll() is not None:
                 self.error = "snort exited during startup"
                 return False
-            # ready once it has been alive long enough to load rules and the
-            # alert file is open for appends
-            if time.time() - t0 > 3.0:
+            # Ready only once it can actually INSPECT traffic.  A fixed sleep is
+            # not enough: the service is used immediately by callers, and any
+            # frames injected while Snort is still loading its 21k rules are
+            # silently missed.  (That produced "baseline detected 0/24" in one
+            # caller and 24/24 in another, purely depending on how much time
+            # elapsed between start() and the first query.)
+            if time.time() - t0 > 2.0 and self._probe_ready():
                 self._started = True
                 return True
             time.sleep(0.5)
-        self.error = "startup timed out"
+        self.error = "startup timed out (readiness probe never alerted)"
         return False
+
+    def _probe_ready(self) -> bool:
+        """Inject one frame that must alert, and wait for its alert line."""
+        try:
+            from scapy.all import DNS, DNSQR, Ether, IP, UDP
+            probe_ip, probe_port = _uid_to_addr_port(999999)
+            probe = (Ether(dst="ff:ff:ff:ff:ff:ff")
+                     / IP(src=probe_ip, dst="10.0.0.53")
+                     / UDP(sport=probe_port, dport=53)
+                     / DNS(rd=1, qd=DNSQR(qname="readiness-probe.su")))
+            pos = self._file_size()
+            self._sock.send(bytes(probe))
+            deadline = time.time() + 3.0
+            marker = probe_ip
+            while time.time() < deadline:
+                time.sleep(0.05)
+                pos, data = self._read_from(pos)
+                if data and marker in data.decode("utf-8", "ignore"):
+                    return True
+            return False
+        except Exception:
+            return False
 
     def available(self) -> bool:
         return self._started and self._proc is not None and \
             self._proc.poll() is None
-
-    def _read_loop(self) -> None:
-        """Drain the alert FIFO and record query ids."""
-        while not self._stop.is_set():
-            try:
-                data = os.read(self._alert_fd, 65536)
-            except BlockingIOError:
-                time.sleep(0.002)
-                continue
-            except OSError:
-                break
-            if not data:
-                time.sleep(0.002)
-                continue
-            text = data.decode("utf-8", "ignore")
-            for line in text.splitlines():
-                if QUERY_NET not in line:
-                    continue
-                m = _QUERY_IP_RE.search(line)
-                if m:
-                    with self._lock:
-                        self._seen.add(int(m.group(1)) - 1)
 
     def stop(self) -> None:
         self._stop.set()
@@ -175,7 +200,8 @@ class ResidentSnortService:
         self._sock.bind((self.iface, 0))
         return self._sock
 
-    def _build_frames(self, batch: Sequence[Tuple[List, int]]) -> List[bytes]:
+    def _build_frames(self, batch: Sequence[Tuple[List, int]],
+                      uid_base: int = 0) -> List[bytes]:
         """Rewrite each flow onto its own query address, as raw frame bytes.
 
         The real CTU-13 packets ALREADY carry an Ether layer.  Wrapping them in
@@ -187,7 +213,8 @@ class ResidentSnortService:
 
         blobs: List[bytes] = []
         for packets, qid in batch:
-            src_ip = f"{QUERY_NET}{1 + (qid % 254)}"
+            uid = uid_base + qid
+            src_ip, src_port = _uid_to_addr_port(uid)
             for pkt in (packets if self.max_pkts_per_flow <= 0
                         else packets[:self.max_pkts_per_flow]):
                 p = pkt.copy()
@@ -195,8 +222,10 @@ class ResidentSnortService:
                     continue
                 p[IP].src = src_ip
                 if UDP in p:
+                    p[UDP].sport = src_port
                     del p[UDP].chksum
                 elif TCP in p:
+                    p[TCP].sport = src_port
                     del p[TCP].chksum
                 del p[IP].chksum
                 if Ether not in p:
@@ -204,46 +233,81 @@ class ResidentSnortService:
                 blobs.append(bytes(p))
         return blobs
 
-    def _write_frames(self, batch: Sequence[Tuple[List, int]]) -> None:
-        for blob in self._build_frames(batch):
+    def _write_frames(self, batch: Sequence[Tuple[List, int]],
+                      uid_base: int = 0) -> None:
+        for blob in self._build_frames(batch, uid_base):
             self._sock.send(blob)
+
+    def _read_from(self, pos: int):
+        """Read alert bytes written after ``pos``; return (new_pos, bytes).
+
+        Reads by PATH, not through a persistent fd.  Measured: opening the file
+        once with O_RDWR and reading from it returned nothing at all, while
+        reading the same bytes by path returned the full alert text -- so the
+        long-lived descriptor was the bug that made every verdict look like
+        "no alert" (observed as an impossible "baseline detected 0/24" and a
+        100% evasion rate for a random policy).
+        """
+        try:
+            with open(self._alert_path, "rb") as fh:
+                fh.seek(pos)
+                data = fh.read()
+        except OSError:
+            return pos, b""
+        return pos + len(data), data
+
+    def _file_size(self) -> int:
+        try:
+            return self._alert_path.stat().st_size
+        except OSError:
+            return 0
 
     def alert_counts_chunked(
             self, items: Sequence[Tuple[List, int]]) -> Dict[int, int]:
+        """Score a batch from the alert bytes written after the send.
+
+        No reader thread and no shared mutable state: the offset is taken from
+        the file itself, so alerts can never be attributed to the wrong batch
+        (a threaded version raced and produced nonsense verdicts).
+        """
         if not self.available():
             raise RuntimeError(f"resident snort unavailable: {self.error}")
 
         out: Dict[int, int] = {}
         for i in range(0, len(items), MAX_QUERIES_PER_BATCH):
             chunk = items[i:i + MAX_QUERIES_PER_BATCH]
+            uid_base = self._uid_base
+            self._uid_base += MAX_QUERIES_PER_BATCH   # never reuse ids
             t0 = time.time()
-            with self._lock:
-                self._seen.clear()
-            t_send = time.time()
-            self._write_frames(chunk)
-            send_s = time.time() - t_send
-            # Settle.  Measured: alerts appear up to ~0.25 s after injection,
-            # so a quiet window that starts immediately would expire BEFORE the
-            # first alert and return an empty snapshot (that produced a bogus
-            # 0/12 result).  Require a minimum elapsed time before allowing the
-            # quiet-window break.
-            quiet_needed = 0.30
-            min_elapsed = 0.60
+            pos = self._file_size()          # everything before is old
+            self._write_frames(chunk, uid_base)
+            send_s = time.time() - t0
+
+            counts: Dict[int, int] = {qid: 0 for _p, qid in chunk}
+            buf = b""
+            quiet_needed, min_elapsed = 0.35, 0.60
+            last_change = time.time()
             deadline = time.time() + 8.0
-            last = time.time()
-            prev = -1
-            snapshot = set()
             while time.time() < deadline:
                 time.sleep(0.01)
-                with self._lock:
-                    cur = len(self._seen)
-                    snapshot = set(self._seen)
-                if cur != prev:
-                    prev = cur
-                    last = time.time()
-                elif (time.time() - last > quiet_needed
-                      and time.time() - t0 > min_elapsed):
+                pos, data = self._read_from(pos)
+                if data:
+                    buf += data
+                    last_change = time.time()
+                    continue
+                if (time.time() - last_change > quiet_needed
+                        and time.time() - t0 > min_elapsed):
                     break
+
+            for line in buf.decode("utf-8", "ignore").splitlines():
+                if QUERY_NET not in line:
+                    continue
+                uid = _uid_from_alert(line)
+                if uid is None:
+                    continue
+                qid = uid - uid_base
+                if qid in counts:
+                    counts[qid] += 1
 
             self.n_calls += 1
             self.n_flows += len(chunk)
@@ -251,8 +315,7 @@ class ResidentSnortService:
             self.send_seconds += send_s
             self.last_send_s = send_s
             self.last_total_s = time.time() - t0
-            for _pkts, qid in chunk:
-                out[qid] = 1 if qid in snapshot else 0
+            out.update(counts)
         return out
 
     def verdicts_chunked(self, items) -> Dict[int, bool]:
