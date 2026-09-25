@@ -182,15 +182,76 @@ argmax here (5.2% vs 100%), which is the opposite of the step-by-step result and
 suggests the stochastic exploration is simply too noisy at this batch size —
 more rounds would be needed before reading anything into it.
 
-## 10. Open items / next steps
+## 10. Socket / resident mode: attempted, partially working
 
-1. **Persistent Snort process** (socket mode) to remove the 9.9 s rule-load
-   floor. Measured: 1 packet = 9.93 s, 120k packets = 11.8 s, so the load
-   dominates and would make every future experiment ~100× cheaper.
+Goal: remove the ~9.9 s rule-load cost per verdict. Measured baseline: **1 packet
+= 9.93 s, 120k packets = 11.8 s**, so the load dominates and batching only
+amortised it (one call per batch).
+
+### What does NOT work
+
+`snort --pcap-dir <dir> --pcap-reset` is **not resident** in Snort 2.9 — it
+scans the directory once and exits, so it removes nothing.
+
+### What does work
+
+`snort -i lo` (IDS mode on loopback) is genuinely resident: rules load once, then
+frames replayed onto `lo` are inspected live, with fast-alerts written to a file.
+`snort_validation/snort_resident_service.py` implements this and is **verified
+correct: 12/12 agreement with the one-shot batch service** on a mixed set
+(6 positives from `bot`, 6 negatives from `neris`, 9 detected).
+
+### Six bugs found by measurement
+
+1. **Double Ether.** Real CTU-13 packets already carry an Ether layer; wrapping
+   them again produced `Ether/Ether/IP`, which Snort ignores — measured
+   `double = 0 alerts`, `original preserved = 41`.
+2. **Persistent fd returned nothing.** A long-lived `O_RDWR` descriptor on the
+   alert file read back empty while reading the same bytes **by path** returned
+   the full text.
+3. **Fixed-sleep readiness.** Frames injected while Snort is still loading its
+   21k rules are silently dropped. Replaced with an active readiness probe that
+   injects a known-alerting DNS frame and waits for its alert line.
+4. **The big one — ET rules throttle `by_src`.** Content rules carry
+   `threshold: type limit, track by_src, count 1`, so a query source address
+   reused inside the window is **throttled and produces no alert**. Measured:
+   first injection of 24 flows → 35 alert lines covering all 24 flows; an
+   immediate *second* injection of the same flows → **zero**. Ids must be unique
+   for the whole run (unique `ip:port` per query, never reused).
+5. **Off-by-stride.** `_uid_base` was incremented before the parser subtracted
+   it, shifting every id out of range.
+6. **Wrong injection socket.** scapy `L2socket.send` costs ~0.4 ms/pkt vs
+   ~0.003 ms/pkt for a raw `AF_PACKET` socket; the per-packet Python build cost
+   (7907 frames = 3.95 s to build, 0.02 s to send) is what made a batch slow.
+
+### Honest status
+
+The **standalone service is verified**. The **bandit integration is NOT
+correct**: `snort_bandit.py --resident` still reports an impossible
+`baseline detected 0/24` (unmutated flows are detected in file mode) and
+implausible round-to-round swings, because all batches share one alert stream and
+the uid stride does not isolate a batch's alerts from the previous batch's
+still-in-flight frames.
+
+Controls in the resident run are at least sane — random policy **0%** (matching
+file mode) and corrupt-all **100%** — but the agent numbers from `--resident` are
+**not trustworthy**. Use the per-batch service for bandit results; the file-mode
+numbers (100% argmax at 5.17/32 packets) remain the reference.
+
+Next step for resident mode: give each batch its own interface or stop/start
+Snort between batches, or add a generation marker to the frames so a batch can
+unambiguously separate its own alerts.
+
+## 11. Open items / next steps
+
+1. **Fix the resident/bandit integration** (see §10). The service itself is
+   verified; the integration is not. Highest-value next step, and the only thing
+   standing between here and ~100× cheaper experiments.
 2. **More flows and more captures.** 24 flows from one capture is a proof of
    concept. The bandit's 5.17-packet result should be re-run cross-capture
    (as the surrogate work did) before any generalisation claim.
 3. **Sweep `--corrupt-cost`** to trace the evasion-vs-payload-damage frontier.
    The interesting quantity is the minimum damage that still evades, and the
    current single point (0.6 → 5.17 packets) does not pin it down.
+
 
