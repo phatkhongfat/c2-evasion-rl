@@ -141,12 +141,56 @@ cd /root/.hermes/c2-evasion-rl
 /tmp/jev-poc/venv/bin/python ai_agent/eval_real_snort_agent.py --flows 24
 ```
 
-## 8. Next steps
+## 9. Follow-up: batched bandit (the deterministic collapse is fixed)
 
-1. **Persistent Snort process** (socket mode) to remove the 10 s/verdict floor.
-2. **Make the policy deterministic-competent**: the argmax collapse suggests the
-   action space should express "corrupt all remaining packets" directly, or the
-   policy should be trained with a deterministic objective.
-3. **Scale the flow set** — 24 flows from one capture is a proof of concept, not
-   a benchmark. Cross-capture evaluation (as in the surrogate work) is required
-   before any generalisation claim.
+The step-by-step env above had two problems: ~10 s per episode (a Snort call per
+terminal step) and a policy that only evaded 37.5% *when sampling*, 0% at argmax.
+
+Root cause of the collapse: the action was a per-step choice, so argmax had to
+commit to one packet at a time and got the per-flow combinatorial set wrong.
+Reformulating as a **bandit** — one action = one complete mutation plan for one
+flow — makes argmax well defined and lets ONE Snort call score a whole batch.
+
+`ai_agent/snort_bandit.py` (REINFORCE, per-packet Bernoulli over "corrupt this
+packet"):
+
+| Policy | Evasion | Packets corrupted |
+|---|---|---|
+| Random | 0% | — |
+| Corrupt-all | 100% | 32.00 |
+| **Deterministic argmax** | **100%** | **5.17** |
+| Stochastic (round 9) | 5.2% | 11.48 |
+
+Two findings:
+
+1. **The collapse is gone**: argmax went from 0% to 100%.
+2. **The cost matters more than the algorithm.** At `--corrupt-cost 0.25` the
+   argmax simply corrupted all 32 packets (`0.25 × 32 = 8 < 10` bonus), which is
+   trivial and uninteresting. The cost must exceed `EVASION_BONUS / 32 = 0.3125`
+   to make "corrupt everything" suboptimal. At 0.6 the agent reached 100% evasion
+   while corrupting **5.17** packets.
+
+The 5.17 independently cross-validates: the separate budget diagnostic measured
+2–7 matching packets per flow (mean 4.3). The agent rediscovered the actual
+matching-packet sets instead of brute-forcing.
+
+Throughput: 768 scored plans in ~4 min, versus ~0.1 episodes/s for the
+step-by-step env — because the batch amortises the 9.9 s rule load.
+
+**Caveat:** 24 flows from a single capture. The stochastic policy is *worse* than
+argmax here (5.2% vs 100%), which is the opposite of the step-by-step result and
+suggests the stochastic exploration is simply too noisy at this batch size —
+more rounds would be needed before reading anything into it.
+
+## 10. Open items / next steps
+
+1. **Persistent Snort process** (socket mode) to remove the 9.9 s rule-load
+   floor. Measured: 1 packet = 9.93 s, 120k packets = 11.8 s, so the load
+   dominates and would make every future experiment ~100× cheaper.
+2. **More flows and more captures.** 24 flows from one capture is a proof of
+   concept. The bandit's 5.17-packet result should be re-run cross-capture
+   (as the surrogate work did) before any generalisation claim.
+3. **Sweep `--corrupt-cost`** to trace the evasion-vs-payload-damage frontier.
+   The interesting quantity is the minimum damage that still evades, and the
+   current single point (0.6 → 5.17 packets) does not pin it down.
+
