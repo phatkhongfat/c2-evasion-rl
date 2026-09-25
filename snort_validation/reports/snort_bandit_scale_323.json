@@ -1,0 +1,23 @@
+{
+  "n_flows": 323,
+  "flows_available": 323,
+  "rounds": 8,
+  "corrupt_cost": 0.6,
+  "capture": "botnet-capture-20110819-bot",
+  "deterministic_evaded": 69,
+  "mean_corrupt": 0.00,
+  "note": "Requested 500 flows but capture only has 323 available. Agent failed to learn (mean_corrupt=0).",
+  "rounds_history": [
+    {"round": 0, "evaded": "?", "mean_reward": "?"},
+    {"round": 1, "evaded": "?", "mean_reward": "?"},
+    {"round": 2, "evaded": "?", "mean_reward": "?"},
+    {"round": 3, "evaded": "?", "mean_reward": "?"},
+    {"round": 4, "evaded": "?", "mean_reward": "?"},
+    {"round": 5, "evaded": "?", "mean_reward": "?"},
+    {"round": 6, "evaded": "?", "mean_reward": "?"},
+    {"round": 7, "evaded": "?", "mean_reward": "?"}
+  ],
+  "baseline_detected": 323,
+  "random_control": {"evaded": "?", "pct": "?"},
+  "corrupt_all_control": {"evaded": "?", "pct": "?"}
+}
