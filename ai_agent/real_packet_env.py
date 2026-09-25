@@ -117,6 +117,11 @@ class RealPacketEnv(gym.Env):
         self._corrupted: set = set()
         self._pending: List[Tuple[List, int]] = []
         self._pending_keys: List[int] = []
+        self._last_verdicts: Dict[int, bool] = {}
+        self._episode_qid: Optional[int] = None
+        self._verdict_cache: Dict[Tuple, bool] = {}
+        self._cache_hits = 0
+        self._cache_misses = 0
         self._next_qid = 0
 
     # -- data -------------------------------------------------------------
@@ -309,27 +314,55 @@ class RealPacketEnv(gym.Env):
         self._cur_packets = [p.copy() for p in packets]
         self._mutations = 0
         self._corrupted = set()
+        self._episode_qid = None
         return self._obs(self._cur_packets), {"flow_index": int(self._idx)}
 
     def step(self, action: np.ndarray):
         self._cur_packets = self._apply_mutation(self._cur_packets, action)
         self._mutations += 1
 
-        # queue for a batched real-Snort verdict
-        qid = self._next_qid
-        self._next_qid += 1
-        self._pending.append((self._cur_packets, qid))
-        self._pending_keys.append(qid)
-
+        # The Snort verdict is only needed ONCE per episode -- on the FINAL
+        # mutation.  Queuing every intermediate step (as an earlier version
+        # did) meant the batch never filled and each episode cost its own
+        # ~10 s Snort call (measured: 0 fps).
         terminated = self._mutations >= self.max_mutations
-        # Interim reward is 0: the authoritative signal is the real Snort
-        # verdict, delivered by resolve_batch().  Shaping here would risk the
-        # agent optimising the shaping instead of the detector.
         reward = 0.0
-        info = {"qid": qid, "pending": len(self._pending)}
-        if terminated and len(self._pending) >= self.batch_size:
-            info["verdicts"] = self.resolve_batch()
+        info = {"pending": len(self._pending)}
+
+        if terminated:
+            # Resolve THIS episode's verdict so the reward is never lost, but
+            # serve it from a cache keyed by (flow, corrupted packet set).
+            # A Snort call costs ~10 s of rule loading regardless of pcap size,
+            # so caching is what makes per-episode rewards affordable: the
+            # agent revisits the same (flow, corruption) combinations and those
+            # repeat visits cost nothing.
+            cache_key = (int(self._idx), tuple(sorted(self._corrupted)))
+            if cache_key in self._verdict_cache:
+                detected = self._verdict_cache[cache_key]
+                self._cache_hits += 1
+                hit = True
+            else:
+                qid = 0
+                v = self._svc.verdicts_chunked([(self._cur_packets, qid)])
+                detected = v.get(qid, True)
+                self._verdict_cache[cache_key] = detected
+                self._cache_misses += 1
+                hit = False
+
+            reward = -1.0 if detected else 1.0
+            info["detected"] = bool(detected)
+            info["evaded"] = bool(not detected)
+            info["cache_hit"] = hit
+
         return self._obs(self._cur_packets), reward, terminated, False, info
+
+    def flush_pending(self) -> Dict[int, bool]:
+        """Force a Snort flush of everything queued (kept for batch callers)."""
+        if not self._pending:
+            return {}
+        v = self.resolve_batch()
+        self._last_verdicts = v
+        return v
 
     def resolve_batch(self) -> Dict[int, bool]:
         """Flush queued flows through real Snort and return their verdicts."""
@@ -341,7 +374,11 @@ class RealPacketEnv(gym.Env):
         return verdicts
 
     def service_stats(self) -> Dict:
-        return self._svc.stats()
+        s = dict(self._svc.stats())
+        s["cache_hits"] = self._cache_hits
+        s["cache_misses"] = self._cache_misses
+        s["cache_entries"] = len(self._verdict_cache)
+        return s
 
 
 # ---------------------------------------------------------------------------
