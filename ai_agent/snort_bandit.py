@@ -25,16 +25,40 @@ Reward:
 The small per-packet cost is deliberate: without it the optimal policy is
 trivially "corrupt everything" (measured 100% evasion at k=8).  With it the
 agent is pushed toward the MINIMAL set of packets that still evades, which is
-the actually interesting question.
+the actually interesting question.  ``n_corrupt`` counts packets a plan
+ACTUALLY corrupts (a mask slot with no payload is free) -- counting raw mask
+bits charged flows for packets they do not have and made the cost sweep
+incomparable across captures with different flow lengths.
+
+THREE EXPERIMENTS, ONE CODE PATH
+--------------------------------
+``--sweep-cost``, ``--scale-flows`` and ``--captures`` are all loops around the
+SAME ``run_bandit`` call.  Earlier versions shelled out to a per-experiment
+script that re-parsed this file's stdout, which duplicated the argument set,
+lost the JSON on any extra print, and let the experiments drift apart.
 
 Usage:
-    /tmp/jev-poc/venv/bin/python ai_agent/snort_bandit.py --flows 24 --rounds 8 --batch 96
+    # single run
+    python ai_agent/snort_bandit.py --flows 24 --rounds 8 --batch 96 --resident
+
+    # corrupt-cost sweep on one capture
+    python ai_agent/snort_bandit.py --flows 24 --rounds 8 --resident \
+        --sweep-cost 0.2,0.4,0.6,0.8,1.0 --out reports/sweep_corrupt_cost.json
+
+    # flow scale-up
+    python ai_agent/snort_bandit.py --rounds 8 --resident --corrupt-cost 0.6 \
+        --scale-flows 24,50,100,200 --out reports/scale_flows.json
+
+    # cross-capture validation (one report per capture)
+    python ai_agent/snort_bandit.py --flows 24 --rounds 8 --resident \
+        --captures cap-a,cap-b --out-dir reports/cross_capture
 """
 from __future__ import annotations
 
 import argparse
 import json
 import sys
+import time
 from pathlib import Path
 
 import numpy as np
@@ -52,9 +76,30 @@ CORRUPT_COST = 0.25
 MAX_PKT_FEAT = 8
 
 
+def write_json_atomic(path, payload) -> None:
+    """Write JSON via a temp file + rename, so a crash cannot leave a partial."""
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(json.dumps(payload, indent=2))
+    tmp.replace(path)
+
+
 # ---------------------------------------------------------------------------
 # packet-level plan application
 # ---------------------------------------------------------------------------
+def corrupt_targets(packets: list, mask: np.ndarray) -> list:
+    """Indices of packets a mask actually corrupts (needs a payload).
+
+    Single definition of "corrupted": the mutator and the cost accounting must
+    agree, or the reported cost is not the cost that was paid.
+    """
+    from scapy.all import Raw
+
+    return [i for i, pkt in enumerate(packets)
+            if i < len(mask) and mask[i] > 0.5 and Raw in pkt]
+
+
 def apply_corrupt_mask(packets: list, mask: np.ndarray) -> list:
     """Corrupt the payload start of every packet selected by ``mask``.
 
@@ -65,10 +110,11 @@ def apply_corrupt_mask(packets: list, mask: np.ndarray) -> list:
     """
     from scapy.all import IP, Raw, TCP, UDP
 
+    hit = set(corrupt_targets(packets, mask))
     out = []
     for i, pkt in enumerate(packets):
         p = pkt.copy()
-        if i < len(mask) and mask[i] > 0.5 and Raw in p:
+        if i in hit:
             pl = bytearray(bytes(p[Raw].load))
             if pl:
                 k = max(1, int(len(pl) * 0.5))
@@ -87,16 +133,13 @@ def apply_corrupt_mask(packets: list, mask: np.ndarray) -> list:
 
 def packet_features(packets: list) -> np.ndarray:
     """(max_packets, MAX_PKT_FEAT) per-packet features for the policy."""
-    from scapy.all import IP, TCP, UDP
+    from scapy.all import IP, Raw, TCP, UDP
 
     n = len(packets)
     feats = np.zeros((ACTION_MAX_PACKETS, MAX_PKT_FEAT), dtype=np.float32)
     for i, p in enumerate(packets[:ACTION_MAX_PACKETS]):
         dsize = len(bytes(p[IP].payload)) if IP in p else 0
-        raw = 0
-        from scapy.all import Raw
-        if Raw in p:
-            raw = len(bytes(p[Raw].load))
+        raw = len(bytes(p[Raw].load)) if Raw in p else 0
         feats[i] = np.array([
             dsize / 1500.0,
             raw / 1500.0,
@@ -133,60 +176,59 @@ class PacketPolicy(nn.Module):
         return a, dist.log_prob(a).sum(dim=1)
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--flows", type=int, default=24)
-    ap.add_argument("--rounds", type=int, default=8)
-    ap.add_argument("--batch", type=int, default=96)
-    ap.add_argument("--lr", type=float, default=3e-3)
-    ap.add_argument("--corrupt-cost", type=float, default=0.25,
-                    help="per-packet cost. Must exceed EVASION_BONUS/32 = 0.3125 "
-                         "to make 'corrupt everything' suboptimal; at 0.25 the "
-                         "argmax simply corrupts all 32 packets.")
-    ap.add_argument("--capture", default="botnet-capture-20110819-bot")
-    ap.add_argument("--resident", action="store_true",
-                    help="use the resident Snort service (IDS on lo) instead of "
-                         "one process per batch; removes the ~9.9s rule-load "
-                         "floor per batch")
-    ap.add_argument("--out", default=str(REPO / "snort_validation/reports/snort_bandit.json"))
-    args = ap.parse_args()
+def score(svc, items, label=""):
+    """Alert counts with ONE retry, then skip (plan: handle Snort crashes)."""
+    try:
+        return svc.alert_counts_chunked(items)
+    except Exception as exc:  # noqa: BLE001 - service may die mid-sweep
+        print(f"[!] snort failed on {label} ({exc}); restarting and retrying")
+        if hasattr(svc, "restart"):
+            svc.restart()
+        try:
+            return svc.alert_counts_chunked(items)
+        except Exception as exc2:  # noqa: BLE001
+            print(f"[!] snort failed again on {label} ({exc2}); skipping")
+            return {q: 1 for _p, q in items}   # assume detected, never "evaded"
 
-    env = RealPacketEnv(n_flows=args.flows, batch_size=args.batch,
-                        capture=args.capture, max_mutations=12, seed=11)
-    svc = env._svc
-    resident = None
-    if args.resident:
-        from snort_resident_service import ResidentSnortService
-        resident = ResidentSnortService()
-        if not resident.start():
-            print(f"[!] resident snort unavailable ({resident.error}); "
-                  f"falling back to per-batch service")
-            resident = None
-        else:
-            svc = resident
-            print("[*] using RESIDENT snort (no per-batch rule reload)")
-    flows = env.flows
+
+def control_evasion(svc, flows, mask_fn, label):
+    """Score one control policy over every flow. Returns (evaded, mean_corrupt)."""
+    masks = [mask_fn(pkts) for _k, pkts in flows]
+    items = [(apply_corrupt_mask(pkts, m), i)
+             for i, ((_k, pkts), m) in enumerate(zip(flows, masks))]
+    counts = score(svc, items, label)
+    evaded = sum(1 for v in counts.values() if v == 0)
+    n_corrupt = [len(corrupt_targets(pkts, m))
+                 for (_k, pkts), m in zip(flows, masks)]
+    return evaded, float(np.mean(n_corrupt)), masks
+
+
+def run_bandit(flows, svc, *, capture, rounds, batch, corrupt_cost,
+               lr=3e-3, seed=0, verbose=True) -> dict:
+    """Train + evaluate ONE bandit configuration against real Snort.
+
+    ``flows`` is the env's flow list, so several configs can share one flow set
+    (the corrupt-cost sweep must compare costs on IDENTICAL flows).
+    """
     n = len(flows)
-    print(f"[*] {n} real positive flows from {args.capture}")
-
-    # baseline verdicts (no mutation)
-    base = svc.alert_counts_chunked(
-        [(pkts, i) for i, (_k, pkts) in enumerate(flows)])
-    print(f"[*] baseline detected: {sum(1 for v in base.values() if v > 0)}/{n}")
-
-    # cache all packet features once
     feats_all = torch.tensor(
-        np.stack([packet_features(pkts) for _k, pkts in flows]), dtype=torch.float32)
+        np.stack([packet_features(pkts) for _k, pkts in flows]),
+        dtype=torch.float32)
 
-    torch.manual_seed(0)
+    # Baseline: unmutated flows must be DETECTED, or "evasion" is vacuous.
+    base = score(svc, [(pkts, i) for i, (_k, pkts) in enumerate(flows)],
+                 f"{capture} baseline")
+    base_det = sum(1 for v in base.values() if v > 0)
+
+    torch.manual_seed(seed)
     policy = PacketPolicy()
-    opt = torch.optim.Adam(policy.parameters(), lr=args.lr)
+    opt = torch.optim.Adam(policy.parameters(), lr=lr)
     baseline = 0.0
     history = []
 
-    for rnd in range(args.rounds):
+    for rnd in range(rounds):
         # --- sample a batch of (flow, mask) plans -------------------------
-        idxs = np.random.default_rng(rnd).integers(0, n, size=args.batch)
+        idxs = np.random.default_rng(seed + rnd).integers(0, n, size=batch)
         # Sample WITHOUT no_grad: REINFORCE needs log_prob to stay attached to
         # the parameters (only the sampled action itself is detached).
         feats = feats_all[idxs]
@@ -196,18 +238,18 @@ def main():
         logps = dist.log_prob(masks).sum(dim=1)
 
         # --- ONE Snort call scores the whole batch ------------------------
-        items = []
+        items, n_corrupt = [], np.zeros(batch, dtype=np.float32)
         for b, fi in enumerate(idxs):
             m = masks[b].numpy()
-            pkts = apply_corrupt_mask(flows[fi][1], m)
-            items.append((pkts, b))
-        counts = svc.alert_counts_chunked(items)
+            pkts = flows[fi][1]
+            n_corrupt[b] = len(corrupt_targets(pkts, m))
+            items.append((apply_corrupt_mask(pkts, m), b))
+        counts = score(svc, items, f"{capture} round {rnd}")
 
-        rewards = np.zeros(args.batch, dtype=np.float32)
-        n_corrupt = masks.sum(dim=1).numpy()
-        for b in range(args.batch):
+        rewards = np.zeros(batch, dtype=np.float32)
+        for b in range(batch):
             alerts = int(counts.get(b, 1))
-            r = -float(alerts) - args.corrupt_cost * float(n_corrupt[b])
+            r = -float(alerts) - corrupt_cost * float(n_corrupt[b])
             if alerts == 0:
                 r += EVASION_BONUS
             rewards[b] = r
@@ -220,76 +262,220 @@ def main():
         opt.step()
         baseline = 0.9 * baseline + 0.1 * float(rewards.mean())
 
-        evaded = int(sum(1 for b in range(args.batch)
-                         if int(counts.get(b, 1)) == 0))
-        mean_corrupt_evaded = (
-            float(n_corrupt[[b for b in range(args.batch)
-                             if int(counts.get(b, 1)) == 0]].mean())
-            if evaded else float("nan"))
-        row = {"round": rnd, "evaded": evaded, "batch": args.batch,
-               "evasion_pct": round(100 * evaded / args.batch, 1),
+        evaded_idx = [b for b in range(batch) if int(counts.get(b, 1)) == 0]
+        evaded = len(evaded_idx)
+        row = {"round": rnd, "evaded": evaded, "batch": batch,
+               "evasion_pct": round(100 * evaded / batch, 1),
                "mean_reward": round(float(rewards.mean()), 3),
                "mean_corrupt_all": round(float(n_corrupt.mean()), 2),
                "mean_corrupt_when_evaded": (
-                   None if np.isnan(mean_corrupt_evaded)
-                   else round(mean_corrupt_evaded, 2))}
+                   round(float(n_corrupt[evaded_idx].mean()), 2)
+                   if evaded else None)}
         history.append(row)
-        print(f"[round {rnd}] evaded {evaded}/{args.batch} "
-              f"({row['evasion_pct']}%)  mean_reward={row['mean_reward']}  "
-              f"corrupt/plan={row['mean_corrupt_all']}  "
-              f"corrupt|evaded={row['mean_corrupt_when_evaded']}")
+        if verbose:
+            print(f"[round {rnd}] evaded {evaded}/{batch} "
+                  f"({row['evasion_pct']}%)  mean_reward={row['mean_reward']}  "
+                  f"corrupt/plan={row['mean_corrupt_all']}  "
+                  f"corrupt|evaded={row['mean_corrupt_when_evaded']}")
 
     # --- deterministic evaluation (argmax mask) ---------------------------
     with torch.no_grad():
         lg = policy.logits(feats_all)
         det_masks = (lg > 0).float()
-    items = []
-    for fi, (_k, pkts) in enumerate(flows):
-        items.append((apply_corrupt_mask(pkts, det_masks[fi].numpy()), fi))
-    dc = svc.alert_counts_chunked(items)
+    items = [(apply_corrupt_mask(pkts, det_masks[fi].numpy()), fi)
+             for fi, (_k, pkts) in enumerate(flows)]
+    dc = score(svc, items, f"{capture} argmax")
     det_evaded = sum(1 for v in dc.values() if v == 0)
-    det_corrupt = det_masks.sum(dim=1).numpy()
-    print(f"\n[*] DETERMINISTIC (argmax): evaded {det_evaded}/{n} "
-          f"({100*det_evaded/n:.1f}%)  mean_corrupt={det_corrupt.mean():.2f}")
+    det_corrupt = [len(corrupt_targets(pkts, det_masks[fi].numpy()))
+                   for fi, (_k, pkts) in enumerate(flows)]
 
-    # random control
-    rng = np.random.default_rng(3)
-    items = []
-    for fi, (_k, pkts) in enumerate(flows):
-        m = (rng.random(ACTION_MAX_PACKETS) < 0.5).astype(np.float32)
-        items.append((apply_corrupt_mask(pkts, m), fi))
-    rc = svc.alert_counts_chunked(items)
-    r_evaded = sum(1 for v in rc.values() if v == 0)
-    print(f"[*] random control:        evaded {r_evaded}/{n} "
-          f"({100*r_evaded/n:.1f}%)")
+    # --- controls: random plan, and corrupt-everything --------------------
+    rng = np.random.default_rng(seed + 3)
+    r_evaded, r_corrupt, _ = control_evasion(
+        svc, flows, lambda _p: (rng.random(ACTION_MAX_PACKETS) < 0.5)
+        .astype(np.float32), f"{capture} random")
+    a_evaded, a_corrupt, _ = control_evasion(
+        svc, flows, lambda _p: np.ones(ACTION_MAX_PACKETS, dtype=np.float32),
+        f"{capture} corrupt-all")
 
-    # all-packets control
-    items = []
-    for fi, (_k, pkts) in enumerate(flows):
-        m = np.ones(ACTION_MAX_PACKETS, dtype=np.float32)
-        items.append((apply_corrupt_mask(pkts, m), fi))
-    ac = svc.alert_counts_chunked(items)
-    a_evaded = sum(1 for v in ac.values() if v == 0)
-    print(f"[*] corrupt-all control:   evaded {a_evaded}/{n} "
-          f"({100*a_evaded/n:.1f}%)")
+    if verbose:
+        print(f"[*] baseline detected:  {base_det}/{n}")
+        print(f"[*] DETERMINISTIC (argmax): evaded {det_evaded}/{n} "
+              f"({100*det_evaded/n:.1f}%)  "
+              f"mean_corrupt={float(np.mean(det_corrupt)):.2f}")
+        print(f"[*] random control:        evaded {r_evaded}/{n} "
+              f"({100*r_evaded/n:.1f}%)")
+        print(f"[*] corrupt-all control:   evaded {a_evaded}/{n} "
+              f"({100*a_evaded/n:.1f}%)")
 
-    Path(args.out).parent.mkdir(parents=True, exist_ok=True)
-    with open(args.out, "w") as f:
-        json.dump({
-            "capture": args.capture, "flows": n, "rounds": args.rounds,
-            "batch": args.batch, "history": history,
-            "deterministic_evaded": int(det_evaded),
-            "deterministic_pct": round(100 * det_evaded / n, 2),
-            "deterministic_mean_corrupt": round(float(det_corrupt.mean()), 2),
-            "random_evaded": int(r_evaded),
-            "random_pct": round(100 * r_evaded / n, 2),
-            "corrupt_all_evaded": int(a_evaded),
-            "corrupt_all_pct": round(100 * a_evaded / n, 2),
-            "snort_stats": (svc.stats() if resident else env.service_stats()),
-        }, f, indent=2)
-    print(f"[+] report: {args.out}")
-    if resident is not None:
-        resident.stop()
+    return {
+        "capture": capture, "flows": n, "rounds": rounds, "batch": batch,
+        "corrupt_cost": corrupt_cost,
+        "baseline_detected": int(base_det),
+        "history": history,
+        "deterministic_evaded": int(det_evaded),
+        "deterministic_pct": round(100 * det_evaded / n, 2),
+        "deterministic_mean_corrupt": round(float(np.mean(det_corrupt)), 2),
+        "random_evaded": int(r_evaded),
+        "random_pct": round(100 * r_evaded / n, 2),
+        "random_mean_corrupt": round(r_corrupt, 2),
+        "corrupt_all_evaded": int(a_evaded),
+        "corrupt_all_pct": round(100 * a_evaded / n, 2),
+        "corrupt_all_mean_corrupt": round(a_corrupt, 2),
+    }
+
+
+def load_env(capture, n_flows, batch, dataset, seed=11):
+    """Build a RealPacketEnv, resolving ``n_flows='auto'`` to what is available."""
+    env = RealPacketEnv(n_flows=1 if n_flows == "auto" else n_flows,
+                        batch_size=batch, capture=capture, max_mutations=12,
+                        seed=seed, dataset=dataset)
+    if n_flows == "auto":
+        n_flows = env.n_loaded
+        env = RealPacketEnv(n_flows=n_flows, batch_size=batch, capture=capture,
+                            max_mutations=12, seed=seed, dataset=dataset)
+    return env, env.flows, len(env.flows)
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--flows", default="24",
+                    help="flow count, or 'auto' for every usable flow")
+    ap.add_argument("--rounds", type=int, default=8)
+    ap.add_argument("--batch", type=int, default=96)
+    ap.add_argument("--lr", type=float, default=3e-3)
+    ap.add_argument("--corrupt-cost", type=float, default=CORRUPT_COST,
+                    help="per-packet cost. Must exceed EVASION_BONUS/32 = "
+                         "0.3125 to make 'corrupt everything' suboptimal.")
+    ap.add_argument("--sweep-cost", default=None,
+                    help="comma list of costs; one run per cost on ONE flow set")
+    ap.add_argument("--scale-flows", default=None,
+                    help="comma list of flow counts; one run per count")
+    ap.add_argument("--captures", default=None,
+                    help="comma list of captures; one run per capture")
+    ap.add_argument("--capture", default="botnet-capture-20110819-bot")
+    ap.add_argument("--dataset", default="ctu13", choices=["ctu13", "stratosphere"])
+    ap.add_argument("--resident", action="store_true",
+                    help="use the resident Snort service (IDS on lo) instead of "
+                         "one process per batch; removes the ~9.9s rule-load "
+                         "floor per batch")
+    ap.add_argument("--out", default=str(REPO / "snort_validation/reports/snort_bandit.json"))
+    ap.add_argument("--out-dir", default=None,
+                    help="with --captures: write cross_capture_<name>.json here")
+    ap.add_argument("--seed", type=int, default=0)
+    args = ap.parse_args()
+
+    svc = None
+    resident = None
+    if args.resident:
+        from snort_resident_service import ResidentSnortService
+        resident = ResidentSnortService()
+        if not resident.start():
+            print(f"[!] resident snort unavailable ({resident.error}); "
+                  f"falling back to per-batch service")
+            resident = None
+        else:
+            svc = resident
+            print("[*] using RESIDENT snort (no per-batch rule reload)")
+
+    def get_svc():
+        """The scoring service: resident if available, else per-batch."""
+        if svc is not None:
+            return svc
+        from snort_batch_service import SnortBatchService
+        return SnortBatchService(batch_size=args.batch)
+
+    try:
+        if args.sweep_cost:
+            costs = [float(c) for c in args.sweep_cost.split(",")]
+            _env, flows, n = load_env(args.capture, args.flows, args.batch,
+                                      args.dataset)
+            print(f"[*] sweep: {n} real flows from {args.capture}, costs {costs}")
+            s = get_svc()
+            results = []
+            for cost in costs:
+                print(f"\n=== corrupt_cost={cost} ===")
+                r = run_bandit(flows, s, capture=args.capture, rounds=args.rounds,
+                               batch=args.batch, corrupt_cost=cost, lr=args.lr,
+                               seed=args.seed)
+                results.append({
+                    "corrupt_cost": cost,
+                    "deterministic_evaded": r["deterministic_evaded"],
+                    "evasion_pct": r["deterministic_pct"],
+                    "mean_corrupt": r["deterministic_mean_corrupt"],
+                    "baseline_detected": r["baseline_detected"],
+                    "random_evaded": r["random_evaded"],
+                    "corrupt_all_evaded": r["corrupt_all_evaded"],
+                    "corrupt_all_mean_corrupt": r["corrupt_all_mean_corrupt"],
+                    "history": r["history"]})
+            payload = {"capture": args.capture, "dataset": args.dataset,
+                       "flows": n, "rounds": args.rounds, "batch": args.batch,
+                       "sweep_results": results,
+                       "snort_stats": (s.stats() if resident else None)}
+
+        elif args.scale_flows:
+            counts = [int(c) for c in args.scale_flows.split(",")]
+            print(f"[*] scale: flow counts {counts} on {args.capture}")
+            s = get_svc()
+            results = []
+            for nf in counts:
+                print(f"\n=== n_flows={nf} ===")
+                _env, flows, n = load_env(args.capture, nf, args.batch,
+                                          args.dataset)
+                r = run_bandit(flows, s, capture=args.capture, rounds=args.rounds,
+                               batch=args.batch, corrupt_cost=args.corrupt_cost,
+                               lr=args.lr, seed=args.seed)
+                results.append({
+                    "n_flows": n,
+                    "deterministic_evaded": r["deterministic_evaded"],
+                    "evasion_pct": r["deterministic_pct"],
+                    "mean_corrupt": r["deterministic_mean_corrupt"],
+                    "baseline_detected": r["baseline_detected"],
+                    "random_evaded": r["random_evaded"],
+                    "corrupt_all_evaded": r["corrupt_all_evaded"],
+                    "history": r["history"]})
+            payload = {"capture": args.capture, "dataset": args.dataset,
+                       "corrupt_cost": args.corrupt_cost, "rounds": args.rounds,
+                       "batch": args.batch, "scale_results": results,
+                       "snort_stats": (s.stats() if resident else None)}
+
+        elif args.captures:
+            caps = [c.strip() for c in args.captures.split(",") if c.strip()]
+            out_dir = Path(args.out_dir or Path(args.out).parent)
+            print(f"[*] cross-capture: {caps}")
+            s = get_svc()
+            for cap in caps:
+                print(f"\n=== {cap} ===")
+                _env, flows, n = load_env(cap, args.flows, args.batch,
+                                          args.dataset)
+                r = run_bandit(flows, s, capture=cap, rounds=args.rounds,
+                               batch=args.batch,
+                               corrupt_cost=args.corrupt_cost, lr=args.lr,
+                               seed=args.seed)
+                r["dataset"] = args.dataset
+                r["snort_stats"] = (s.stats() if resident else None)
+                write_json_atomic(out_dir / f"cross_capture_{cap}.json", r)
+                print(f"[+] report: {out_dir}/cross_capture_{cap}.json")
+            payload = None
+
+        else:
+            _env, flows, n = load_env(args.capture, args.flows, args.batch,
+                                      args.dataset)
+            print(f"[*] {n} real positive flows from {args.capture}")
+            s = get_svc()
+            payload = run_bandit(flows, s, capture=args.capture,
+                                 rounds=args.rounds, batch=args.batch,
+                                 corrupt_cost=args.corrupt_cost, lr=args.lr,
+                                 seed=args.seed)
+            payload["dataset"] = args.dataset
+            payload["snort_stats"] = (s.stats() if resident else None)
+
+        if payload is not None:
+            write_json_atomic(args.out, payload)
+            print(f"[+] report: {args.out}")
+    finally:
+        if resident is not None:
+            resident.stop()
     return 0
 
 

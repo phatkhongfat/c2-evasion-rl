@@ -347,6 +347,20 @@ class ResidentSnortService:
         return {q: (c > 0)
                 for q, c in self.alert_counts_chunked(items).items()}
 
+    def restart(self) -> bool:
+        """Kill and relaunch Snort, keeping the query-id counter.
+
+        The plan requires sweep/scale/cross-capture loops to survive a Snort
+        crash.  Reusing ``self._uid_base`` matters: ET rules throttle
+        ``by_src``, so a restarted process that reused query addresses would
+        silently report "no alert" for flows that do alert.
+        """
+        self.stop()
+        self._started = False
+        self._proc = None
+        self.error = None
+        return self.start()
+
     def stats(self) -> Dict:
         return {"mode": "resident", "iface": self.iface,
                 "available": self.available(), "error": self.error,

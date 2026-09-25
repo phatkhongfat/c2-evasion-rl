@@ -35,11 +35,14 @@ def main():
     ap.add_argument("--root", default="data/stratosphere/CTU-13-Dataset")
     ap.add_argument("--features", default="data/ctu13_real_features.parquet")
     ap.add_argument("--out", default="data/ctu13_snort_labeled.parquet")
+    ap.add_argument("--pattern", default="*/botnet-capture-*.pcap",
+                    help="glob for the pcaps under --root; widen it for MCFP "
+                         "captures, whose pcaps are not all 'botnet-capture-*'.")
     args = ap.parse_args()
 
     df = pd.read_parquet(args.features)
     root = Path(args.root)
-    captures = sorted(root.glob("*/botnet-capture-*.pcap"))
+    captures = sorted(root.glob(args.pattern))
     if not captures:
         print(f"[-] no captures under {root}", file=sys.stderr)
         return 1

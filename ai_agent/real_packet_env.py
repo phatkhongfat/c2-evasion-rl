@@ -59,7 +59,29 @@ sys.path.insert(0, str(REPO / "snort_validation"))
 from snort_batch_service import SnortBatchService  # noqa: E402
 
 LABELED = REPO / "data" / "ctu13_snort_labeled.parquet"
+# Stratosphere / MCFP captures are labelled into their own table (same schema:
+# measured features joined to real Snort verdicts by 5-tuple).
+MCFP_LABELED = REPO / "data" / "mcfp_snort_labeled.parquet"
 CAPTURE_DIR = REPO / "data" / "stratosphere" / "CTU-13-Dataset"
+# MCFP = Stratosphere's Malware Capture Facility, the publisher of CTU-13.
+# Its newer captures live outside CTU-13-Dataset, and their pcaps are not all
+# named ``botnet-capture-*`` (e.g. ``2014-04-07_capture-win14.pcap``), so a
+# capture is located by searching every root for ``<capture>.pcap``.
+CAPTURE_ROOTS = [CAPTURE_DIR, REPO / "data" / "stratosphere" / "mcfp"]
+DATASETS = {"ctu13": 0, "stratosphere": 1}
+
+
+def _capture_pcap(capture: str, dataset: str = "ctu13") -> Optional[Path]:
+    """Locate ``<capture>.pcap`` under the dataset's root (then the others)."""
+    roots = list(CAPTURE_ROOTS)
+    if dataset in DATASETS:
+        first = roots.pop(DATASETS[dataset])
+        roots.insert(0, first)
+    for root in roots:
+        for d in sorted(root.glob("*")):
+            if d.is_dir() and (d / f"{capture}.pcap").exists():
+                return d / f"{capture}.pcap"
+    return None
 
 # Actions
 N_ACTIONS = 6
@@ -77,10 +99,8 @@ OBS_MAX_PACKETS = 32
 
 def _capture_dir_for(capture: str) -> Optional[Path]:
     """Map a capture name to its extraction subdirectory."""
-    for d in sorted(CAPTURE_DIR.glob("*")):
-        if d.is_dir() and (d / f"{capture}.pcap").exists():
-            return d
-    return None
+    pcap = _capture_pcap(capture)
+    return pcap.parent if pcap else None
 
 
 class RealPacketEnv(gym.Env):
@@ -97,10 +117,12 @@ class RealPacketEnv(gym.Env):
         seed: int = 42,
         max_mutations: int = 8,
         snort_service: Optional[SnortBatchService] = None,
+        dataset: str = "ctu13",
     ):
         super().__init__()
         self.n_flows = n_flows
         self.capture = capture
+        self.dataset = dataset
         self.positives_only = positives_only
         self.batch_size = batch_size
         self.max_mutations = max_mutations
@@ -149,17 +171,26 @@ class RealPacketEnv(gym.Env):
         import pandas as pd
         from scapy.all import IP, PcapReader, TCP, UDP
 
-        if not LABELED.exists():
+        # The MCFP table is a superset-shaped copy of the CTU-13 one; fall back
+        # to CTU-13 when it is absent so existing runs keep working.
+        table = MCFP_LABELED if (self.dataset == "stratosphere"
+                                 and MCFP_LABELED.exists()) else LABELED
+        if not table.exists():
             raise FileNotFoundError(
-                f"{LABELED} missing -- run build_real_snort_dataset.py first")
+                f"{table} missing -- run build_real_snort_dataset.py "
+                f"(CTU-13) or build_mcfp_snort_dataset.py (Stratosphere) first")
 
-        df = pd.read_parquet(LABELED)
+        df = pd.read_parquet(table)
         df = df[df["capture"] == self.capture]
         if self.positives_only:
             df = df[df["snort_alert"] == 1]
         df = df[df["tot_pkts"] >= 4]
         if len(df) == 0:
-            raise ValueError(f"no flows for capture {self.capture}")
+            raise ValueError(f"no flows for capture {self.capture} in {table.name}")
+        # Every usable flow of this capture, so a caller can ask how many
+        # exist (``--flows auto``) instead of guessing a number that silently
+        # truncates the pool.
+        self.n_loaded = int(len(df))
 
         wanted = {(r.src, int(r.sport), r.dst, int(r.dport), r.proto)
                   for r in df.head(self.n_flows * 20).itertuples()}

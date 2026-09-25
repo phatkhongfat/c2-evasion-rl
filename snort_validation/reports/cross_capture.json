@@ -1,0 +1,39 @@
+{
+  "capture_set": [
+    "botnet-capture-20110810-neris",
+    "botnet-capture-20110815-rbot-dos",
+    "botnet-capture-20110816-qvod",
+    "botnet-capture-20110819-bot"
+  ],
+  "flows": 24,
+  "results": [
+    {
+      "capture": "botnet-capture-20110810-neris",
+      "n_flows": 24,
+      "evasion_pct": 32.0,
+      "mean_corrupt": 3.84,
+      "deterministic_evaded": 7
+    },
+    {
+      "capture": "botnet-capture-20110815-rbot-dos",
+      "n_flows": 24,
+      "evasion_pct": 25.0,
+      "mean_corrupt": 3.7,
+      "deterministic_evaded": 6
+    },
+    {
+      "capture": "botnet-capture-20110816-qvod",
+      "n_flows": 24,
+      "evasion_pct": 20.0,
+      "mean_corrupt": 3.6,
+      "deterministic_evaded": 4
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "n_flows": 24,
+      "evasion_pct": 35.0,
+      "mean_corrupt": 3.9,
+      "deterministic_evaded": 8
+    }
+  ]
+}

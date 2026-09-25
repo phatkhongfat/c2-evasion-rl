@@ -1,0 +1,30 @@
+{
+  "capture": "botnet-capture-20110819-bot",
+  "corrupt_cost": 0.6,
+  "scale_results": [
+    {
+      "n_flows": 24,
+      "evasion_pct": 35.0,
+      "mean_corrupt": 2.5,
+      "deterministic_evaded": 8
+    },
+    {
+      "n_flows": 50,
+      "evasion_pct": 27.8,
+      "mean_corrupt": 1.98,
+      "deterministic_evaded": 13
+    },
+    {
+      "n_flows": 100,
+      "evasion_pct": 19.9,
+      "mean_corrupt": 1.42,
+      "deterministic_evaded": 19
+    },
+    {
+      "n_flows": 200,
+      "evasion_pct": 12.7,
+      "mean_corrupt": 0.91,
+      "deterministic_evaded": 25
+    }
+  ]
+}

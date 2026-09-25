@@ -353,12 +353,17 @@ def main():
     ap.add_argument("--out", default="data/ctu13_real_features.parquet")
     ap.add_argument("--max-flows", type=int, default=None)
     ap.add_argument("--max-packets", type=int, default=None)
+    ap.add_argument("--pattern", default="*/botnet-capture-*.pcap",
+                    help="glob for --all, relative to --root. MCFP captures are "
+                         "not all named 'botnet-capture-*' (some are "
+                         "'2014-04-07_capture-win14.pcap'), so a wider pattern "
+                         "is needed to measure the newer captures.")
     args = ap.parse_args()
 
     all_rows = []
     if args.all:
         root = Path(args.root)
-        captures = sorted(root.glob("*/botnet-capture-*.pcap"))
+        captures = sorted(root.glob(args.pattern))
         if not captures:
             print(f"[-] no captures under {root}", file=sys.stderr)
             return 1
