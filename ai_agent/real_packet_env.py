@@ -110,7 +110,7 @@ class RealPacketEnv(gym.Env):
 
     def __init__(
         self,
-        n_flows: int = 64,
+        n_flows: Optional[int] = 64,
         capture: str = "botnet-capture-20110819-bot",
         positives_only: bool = True,
         batch_size: int = 64,
@@ -189,11 +189,13 @@ class RealPacketEnv(gym.Env):
             raise ValueError(f"no flows for capture {self.capture} in {table.name}")
         # Every usable flow of this capture, so a caller can ask how many
         # exist (``--flows auto``) instead of guessing a number that silently
-        # truncates the pool.
-        self.n_loaded = int(len(df))
+        # truncates the pool.  Set BEFORE the candidate scan: the scan needs a
+        # candidate budget, and ``n_flows=None`` (auto) means "all of them".
+        self.n_available = int(len(df))
+        n_take = self.n_flows if self.n_flows is not None else self.n_available
 
         wanted = {(r.src, int(r.sport), r.dst, int(r.dport), r.proto)
-                  for r in df.head(self.n_flows * 20).itertuples()}
+                  for r in df.head(n_take * 20).itertuples()}
         # A flow is BIDIRECTIONAL.  Collecting only the exact forward tuple (as
         # this did before) drops the responder's packets, and the ET Open C2
         # set is built on ``flow:established``: without the SYN-ACK/handshake
@@ -235,7 +237,8 @@ class RealPacketEnv(gym.Env):
 
         usable = [(k, v) for k, v in found.items() if len(v) >= 4]
         usable.sort(key=lambda kv: kv[0])
-        self.flows = usable[: self.n_flows]
+        self.flows = (usable if self.n_flows is None
+                      else usable[: self.n_flows])
         if not self.flows:
             raise ValueError("no usable multi-packet flows loaded")
         self.n_loaded = len(self.flows)

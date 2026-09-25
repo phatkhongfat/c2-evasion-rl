@@ -1,0 +1,34 @@
+{
+  "n_captures": 3,
+  "corrupt_cost": 0.6,
+  "summary": [
+    {
+      "capture": "botnet-capture-20110810-neris",
+      "n_flows": 24,
+      "deterministic_evaded": 21,
+      "evasion_pct": 87.5,
+      "mean_corrupt": 0.62,
+      "baseline_detected": 23
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "n_flows": 24,
+      "deterministic_evaded": 24,
+      "evasion_pct": 100.0,
+      "mean_corrupt": 2.88,
+      "baseline_detected": 24
+    },
+    {
+      "capture": "capture-win13",
+      "n_flows": 24,
+      "deterministic_evaded": 0,
+      "evasion_pct": 0.0,
+      "mean_corrupt": 0.0,
+      "baseline_detected": 24
+    }
+  ],
+  "mean_evasion_pct": 62.5,
+  "std_evasion_pct": 44.49,
+  "min_evasion_pct": 0.0,
+  "max_evasion_pct": 100.0
+}

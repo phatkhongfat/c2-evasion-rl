@@ -326,16 +326,12 @@ def run_bandit(flows, svc, *, capture, rounds, batch, corrupt_cost,
 
 
 def load_env(capture, n_flows, batch, dataset, seed=11):
-    """Build a RealPacketEnv, resolving ``n_flows='auto'`` to what is available."""
+    """Build a RealPacketEnv; ``n_flows='auto'`` loads every usable flow."""
     if n_flows != "auto":
         n_flows = int(n_flows)   # argparse hands --flows over as a string
-    env = RealPacketEnv(n_flows=1 if n_flows == "auto" else n_flows,
+    env = RealPacketEnv(n_flows=None if n_flows == "auto" else n_flows,
                         batch_size=batch, capture=capture, max_mutations=12,
                         seed=seed, dataset=dataset)
-    if n_flows == "auto":
-        n_flows = env.n_loaded
-        env = RealPacketEnv(n_flows=n_flows, batch_size=batch, capture=capture,
-                            max_mutations=12, seed=seed, dataset=dataset)
     return env, env.flows, len(env.flows)
 
 

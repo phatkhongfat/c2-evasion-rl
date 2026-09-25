@@ -1,0 +1,105 @@
+{
+  "capture": "botnet-capture-20110810-neris",
+  "flows": 24,
+  "rounds": 8,
+  "batch": 96,
+  "corrupt_cost": 0.6,
+  "baseline_detected": 23,
+  "history": [
+    {
+      "round": 0,
+      "evaded": 7,
+      "batch": 96,
+      "evasion_pct": 7.3,
+      "mean_reward": -6.304,
+      "mean_corrupt_all": 0.44,
+      "mean_corrupt_when_evaded": 3.43
+    },
+    {
+      "round": 1,
+      "evaded": 17,
+      "batch": 96,
+      "evasion_pct": 17.7,
+      "mean_reward": -4.225,
+      "mean_corrupt_all": 0.38,
+      "mean_corrupt_when_evaded": 1.35
+    },
+    {
+      "round": 2,
+      "evaded": 10,
+      "batch": 96,
+      "evasion_pct": 10.4,
+      "mean_reward": -5.65,
+      "mean_corrupt_all": 0.3,
+      "mean_corrupt_when_evaded": 1.7
+    },
+    {
+      "round": 3,
+      "evaded": 7,
+      "batch": 96,
+      "evasion_pct": 7.3,
+      "mean_reward": -6.954,
+      "mean_corrupt_all": 0.38,
+      "mean_corrupt_when_evaded": 2.57
+    },
+    {
+      "round": 4,
+      "evaded": 3,
+      "batch": 96,
+      "evasion_pct": 3.1,
+      "mean_reward": -6.235,
+      "mean_corrupt_all": 0.22,
+      "mean_corrupt_when_evaded": 1.0
+    },
+    {
+      "round": 5,
+      "evaded": 6,
+      "batch": 96,
+      "evasion_pct": 6.2,
+      "mean_reward": -5.546,
+      "mean_corrupt_all": 0.51,
+      "mean_corrupt_when_evaded": 3.83
+    },
+    {
+      "round": 6,
+      "evaded": 29,
+      "batch": 96,
+      "evasion_pct": 30.2,
+      "mean_reward": -2.423,
+      "mean_corrupt_all": 0.43,
+      "mean_corrupt_when_evaded": 1.1
+    },
+    {
+      "round": 7,
+      "evaded": 5,
+      "batch": 96,
+      "evasion_pct": 5.2,
+      "mean_reward": -5.65,
+      "mean_corrupt_all": 0.41,
+      "mean_corrupt_when_evaded": 2.8
+    }
+  ],
+  "deterministic_evaded": 21,
+  "deterministic_pct": 87.5,
+  "deterministic_mean_corrupt": 0.62,
+  "random_evaded": 2,
+  "random_pct": 8.33,
+  "random_mean_corrupt": 0.21,
+  "corrupt_all_evaded": 8,
+  "corrupt_all_pct": 33.33,
+  "corrupt_all_mean_corrupt": 0.62,
+  "dataset": "stratosphere",
+  "snort_stats": {
+    "mode": "resident",
+    "iface": "lo",
+    "available": true,
+    "error": null,
+    "snort_calls": 24,
+    "flows": 1728,
+    "seconds": 638.3,
+    "send_seconds": 613.304,
+    "last_send_s": 18.2556,
+    "last_total_s": 18.649,
+    "ms_per_flow": 369.39
+  }
+}

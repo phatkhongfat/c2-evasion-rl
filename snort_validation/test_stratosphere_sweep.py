@@ -133,10 +133,87 @@ def test_aggregator_rejects_missing_values():
     print("OK  aggregator fails (rc=1, no output) on missing values")
 
 
+def test_rewrite_keeps_the_session_coherent():
+    """Only the initiator's src may be rewritten; the responder's dst must move.
+
+    Both Snort services used to rewrite ``src`` on EVERY packet.  That makes
+    the responder appear to answer a different host, so every ET Open C2 rule
+    carrying ``flow:established`` silently stops firing -- measured on a real
+    flow that alerts when replayed unmodified.  This check fails if the
+    direction-aware rewrite is reverted.
+    """
+    from snort_batch_service import SnortBatchService
+    from snort_resident_service import ResidentSnortService
+
+    # client -> server SYN, server -> client SYN-ACK
+    pkts = [
+        Ether() / IP(src="10.0.0.1", dst="10.0.0.2") / TCP(sport=1111, dport=80,
+                                                          flags="S"),
+        Ether() / IP(src="10.0.0.2", dst="10.0.0.1") / TCP(sport=80, dport=1111,
+                                                          flags="SA"),
+        Ether() / IP(src="10.0.0.1", dst="10.0.0.2") / TCP(sport=1111, dport=80,
+                                                          flags="A") / Raw(b"x"),
+    ]
+
+    batch = SnortBatchService(batch_size=1)
+    batch_pcap = batch._tmp / "probe.pcap"
+    batch._write_batch_pcap([(pkts, 0)], batch_pcap)
+    from scapy.all import Ether as E, IP as I2, rdpcap
+    from scapy.all import TCP as T2
+
+    parsed = rdpcap(str(batch_pcap))
+    assert len(parsed) == 3, len(parsed)
+    # forward packets: source rewritten, destination preserved
+    assert parsed[0][I2].src == parsed[2][I2].src != "10.0.0.1"
+    assert parsed[0][I2].dst == "10.0.0.2", parsed[0][I2].dst
+    # reverse packet: DESTINATION rewritten (this is the regression guard)
+    assert parsed[1][I2].dst == parsed[0][I2].src, (
+        parsed[1][I2].dst, parsed[0][I2].src)
+    assert parsed[1][I2].src == "10.0.0.2", parsed[1][I2].src
+    assert parsed[1][T2].dport == parsed[0][T2].sport
+
+    # the resident service builds raw frames; check its own rewrite too
+    svc = ResidentSnortService()
+    parsed = [E(f) for f in svc._build_frames([(pkts, 0)], 0)]
+    assert len(parsed) == 3, len(parsed)
+    assert parsed[1][I2].dst == parsed[0][I2].src, (
+        parsed[1][I2].dst, parsed[0][I2].src)
+    assert parsed[1][I2].src == "10.0.0.2", parsed[1][I2].src
+    print("OK  rewrite is direction-aware (flow:established stays coherent)")
+
+
+def test_env_loads_both_directions():
+    """A loaded flow must carry the responder's packets, not just the initiator's.
+
+    Collecting only the forward tuple drops the handshake half, which is what
+    made ``baseline detected 0`` on captures whose flows do alert.
+    """
+    from real_packet_env import RealPacketEnv
+    try:
+        env = RealPacketEnv(n_flows=24, batch_size=1,
+                            capture="botnet-capture-20110811-neris",
+                            dataset="stratosphere")
+    except (FileNotFoundError, ValueError) as exc:
+        print(f"SKIP env check ({exc})")
+        return
+    keys = {k for k, _p in env.flows}
+    both = 0
+    for k, pkts in env.flows:
+        srcs = {p[IP].src for p in pkts if IP in p}
+        if len(srcs) > 1:
+            both += 1
+    assert both >= len(env.flows) // 2, (both, len(env.flows))
+    assert len(keys) == len(env.flows), "duplicate flow keys"
+    print(f"OK  env loads bidirectional flows ({both}/{len(env.flows)} "
+          f"have both directions)")
+
+
 if __name__ == "__main__":
     test_corrupt_accounting_matches_mutation()
     test_partial_mask_selects_only_those_packets()
     test_capture_routing()
+    test_rewrite_keeps_the_session_coherent()
+    test_env_loads_both_directions()
     test_registry_shape()
     test_aggregator_rejects_missing_values()
     print("\nAll stratosphere sweep checks passed.")

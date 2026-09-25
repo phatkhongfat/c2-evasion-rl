@@ -40,6 +40,7 @@ def rows_from_sweep(data, dataset):
         "corrupt_cost": r.get("corrupt_cost"),
         "evasion_pct": r.get("evasion_pct"),
         "mean_corrupt": r.get("mean_corrupt"),
+        "deterministic_evaded": r.get("deterministic_evaded"),
         "source": "sweep"} for r in data.get("sweep_results", [])]
 
 
@@ -51,6 +52,7 @@ def rows_from_scale(data, dataset):
         "corrupt_cost": data.get("corrupt_cost"),
         "evasion_pct": r.get("evasion_pct"),
         "mean_corrupt": r.get("mean_corrupt"),
+        "deterministic_evaded": r.get("deterministic_evaded"),
         "source": "scale"} for r in data.get("scale_results", [])]
 
 
@@ -65,6 +67,7 @@ def rows_from_cross(paths, dataset):
             "corrupt_cost": d.get("corrupt_cost"),
             "evasion_pct": d.get("deterministic_pct"),
             "mean_corrupt": d.get("deterministic_mean_corrupt"),
+            "deterministic_evaded": d.get("deterministic_evaded"),
             "baseline_detected": d.get("baseline_detected"),
             "random_evaded": d.get("random_evaded"),
             "corrupt_all_evaded": d.get("corrupt_all_evaded"),
@@ -96,7 +99,8 @@ def main() -> int:
     cross_paths = [p for p in cross_paths if "summary" not in Path(p).name]
     rows += rows_from_cross(cross_paths, args.dataset)
 
-    required = ("evasion_pct", "mean_corrupt", "n_flows", "corrupt_cost", "capture")
+    required = ("evasion_pct", "mean_corrupt", "n_flows", "corrupt_cost",
+                "capture", "deterministic_evaded")
     bad = [r for r in rows if any(r.get(k) is None for k in required)]
     if bad:
         print(f"[-] {len(bad)} row(s) missing required fields "
