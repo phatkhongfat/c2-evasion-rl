@@ -1,0 +1,629 @@
+{
+  "n_flows": 30440,
+  "features": [
+    "fwd_pkts",
+    "bwd_pkts",
+    "fwd_bytes",
+    "bwd_bytes",
+    "byte_ratio",
+    "pkt_size_mean",
+    "pkt_size_std",
+    "pkt_size_min",
+    "pkt_size_max",
+    "pkt_size_median",
+    "pkt_size_iqr",
+    "pkt_size_cv",
+    "iat_mean",
+    "iat_std",
+    "iat_min",
+    "iat_max",
+    "iat_cv",
+    "pkt_rate",
+    "bytes_rate",
+    "flow_duration",
+    "syn_count",
+    "fin_count",
+    "rst_count",
+    "psh_count",
+    "ack_count",
+    "urg_count",
+    "flags_variety",
+    "payload_bytes",
+    "payload_fraction",
+    "hdr_bytes",
+    "payload_mean_len",
+    "payload_max_len",
+    "payload_entropy",
+    "proto_id",
+    "is_well_known_port",
+    "n_distinct_pkt_sizes",
+    "dominant_pkt_size_frac",
+    "tot_pkts",
+    "tot_bytes"
+  ],
+  "rule_composition": {
+    "botnet-capture-20110810-neris": {
+      "n_alert_flows": 52,
+      "rules": [
+        {
+          "sid": 2014169,
+          "flows": 48,
+          "msg": "ET DNS Query for .su TLD (Soviet Union) Often Malware Related"
+        },
+        {
+          "sid": 2012533,
+          "flows": 4,
+          "msg": "ET TROJAN Win32/Virut.BN Checkin"
+        }
+      ]
+    },
+    "botnet-capture-20110819-bot": {
+      "n_alert_flows": 3386,
+      "rules": [
+        {
+          "sid": 2008581,
+          "flows": 3192,
+          "msg": "ET P2P BitTorrent DHT ping request"
+        },
+        {
+          "sid": 2008585,
+          "flows": 234,
+          "msg": "ET P2P BitTorrent DHT announce_peers request"
+        },
+        {
+          "sid": 2008583,
+          "flows": 204,
+          "msg": "ET P2P BitTorrent DHT nodes reply"
+        }
+      ]
+    },
+    "botnet-capture-20110815-rbot-dos": {
+      "n_alert_flows": 2,
+      "rules": [
+        {
+          "sid": 2019486,
+          "flows": 2,
+          "msg": "ET TROJAN Possible IRC Bot Common PRIVMSG Commands"
+        },
+        {
+          "sid": 2019471,
+          "flows": 2,
+          "msg": "ET TROJAN Possible IRCBot.DDOS Common Commands"
+        }
+      ]
+    },
+    "botnet-capture-20110815-fast-flux": {
+      "n_alert_flows": 4,
+      "rules": [
+        {
+          "sid": 2014635,
+          "flows": 3,
+          "msg": "ET TROJAN Possible Variant.Kazy.53640 Malformed Client Hello SSL 3.0 (Cipher_Suite length greater than Client_Hello Length)"
+        },
+        {
+          "sid": 2012533,
+          "flows": 1,
+          "msg": "ET TROJAN Win32/Virut.BN Checkin"
+        }
+      ]
+    },
+    "botnet-capture-20110816-sogou": {
+      "n_alert_flows": 0,
+      "rules": []
+    },
+    "botnet-capture-20110816-qvod": {
+      "n_alert_flows": 0,
+      "rules": []
+    }
+  },
+  "fingerprint_eta2": [
+    {
+      "feature": "pkt_size_min",
+      "eta2": 0.622
+    },
+    {
+      "feature": "payload_fraction",
+      "eta2": 0.6183
+    },
+    {
+      "feature": "payload_entropy",
+      "eta2": 0.5647
+    },
+    {
+      "feature": "proto_id",
+      "eta2": 0.5105
+    },
+    {
+      "feature": "is_well_known_port",
+      "eta2": 0.4413
+    },
+    {
+      "feature": "pkt_rate",
+      "eta2": 0.4147
+    },
+    {
+      "feature": "syn_count",
+      "eta2": 0.4091
+    },
+    {
+      "feature": "bytes_rate",
+      "eta2": 0.393
+    },
+    {
+      "feature": "pkt_size_median",
+      "eta2": 0.2811
+    },
+    {
+      "feature": "pkt_size_mean",
+      "eta2": 0.2573
+    },
+    {
+      "feature": "flags_variety",
+      "eta2": 0.2128
+    },
+    {
+      "feature": "dominant_pkt_size_frac",
+      "eta2": 0.1159
+    },
+    {
+      "feature": "payload_mean_len",
+      "eta2": 0.1056
+    },
+    {
+      "feature": "pkt_size_iqr",
+      "eta2": 0.0949
+    },
+    {
+      "feature": "pkt_size_std",
+      "eta2": 0.0813
+    },
+    {
+      "feature": "payload_max_len",
+      "eta2": 0.0657
+    },
+    {
+      "feature": "fin_count",
+      "eta2": 0.0639
+    },
+    {
+      "feature": "iat_cv",
+      "eta2": 0.0616
+    },
+    {
+      "feature": "pkt_size_max",
+      "eta2": 0.0603
+    },
+    {
+      "feature": "byte_ratio",
+      "eta2": 0.0457
+    },
+    {
+      "feature": "pkt_size_cv",
+      "eta2": 0.0295
+    },
+    {
+      "feature": "rst_count",
+      "eta2": 0.0254
+    },
+    {
+      "feature": "bwd_bytes",
+      "eta2": 0.0158
+    },
+    {
+      "feature": "n_distinct_pkt_sizes",
+      "eta2": 0.0134
+    },
+    {
+      "feature": "bwd_pkts",
+      "eta2": 0.0067
+    },
+    {
+      "feature": "payload_bytes",
+      "eta2": 0.0061
+    },
+    {
+      "feature": "tot_bytes",
+      "eta2": 0.0061
+    },
+    {
+      "feature": "fwd_bytes",
+      "eta2": 0.0059
+    },
+    {
+      "feature": "fwd_pkts",
+      "eta2": 0.0053
+    },
+    {
+      "feature": "tot_pkts",
+      "eta2": 0.0049
+    },
+    {
+      "feature": "hdr_bytes",
+      "eta2": 0.0043
+    },
+    {
+      "feature": "flow_duration",
+      "eta2": 0.0023
+    },
+    {
+      "feature": "iat_max",
+      "eta2": 0.0022
+    },
+    {
+      "feature": "ack_count",
+      "eta2": 0.0018
+    },
+    {
+      "feature": "iat_std",
+      "eta2": 0.0015
+    },
+    {
+      "feature": "iat_min",
+      "eta2": 0.0014
+    },
+    {
+      "feature": "iat_mean",
+      "eta2": 0.0007
+    },
+    {
+      "feature": "psh_count",
+      "eta2": 0.0002
+    },
+    {
+      "feature": "urg_count",
+      "eta2": 0.0
+    }
+  ],
+  "remedies": [
+    {
+      "label": "A baseline",
+      "pooled_auc": 0.53,
+      "macro_auc": 0.7632,
+      "pooled_pr_auc": 0.2003,
+      "folds": [
+        {
+          "capture": "botnet-capture-20110810-neris",
+          "n_test": 14520,
+          "n_pos": 52,
+          "auc": 0.7814,
+          "pr_auc": 0.0325
+        },
+        {
+          "capture": "botnet-capture-20110815-fast-flux",
+          "n_test": 872,
+          "n_pos": 4,
+          "auc": 0.7422,
+          "pr_auc": 0.2574
+        },
+        {
+          "capture": "botnet-capture-20110815-rbot-dos",
+          "n_test": 167,
+          "n_pos": 2,
+          "auc": 0.9394,
+          "pr_auc": 0.127
+        },
+        {
+          "capture": "botnet-capture-20110816-qvod",
+          "n_test": 8672,
+          "n_pos": 0,
+          "auc": null,
+          "note": "single-class or empty train"
+        },
+        {
+          "capture": "botnet-capture-20110816-sogou",
+          "n_test": 47,
+          "n_pos": 0,
+          "auc": null,
+          "note": "single-class or empty train"
+        },
+        {
+          "capture": "botnet-capture-20110819-bot",
+          "n_test": 6162,
+          "n_pos": 3381,
+          "auc": 0.5897,
+          "pr_auc": 0.5665
+        }
+      ]
+    },
+    {
+      "label": "B drop fingerprints (35f)",
+      "pooled_auc": 0.7355,
+      "macro_auc": 0.8069,
+      "pooled_pr_auc": 0.282,
+      "folds": [
+        {
+          "capture": "botnet-capture-20110810-neris",
+          "n_test": 14520,
+          "n_pos": 52,
+          "auc": 0.8298,
+          "pr_auc": 0.0189
+        },
+        {
+          "capture": "botnet-capture-20110815-fast-flux",
+          "n_test": 872,
+          "n_pos": 4,
+          "auc": 0.7425,
+          "pr_auc": 0.2575
+        },
+        {
+          "capture": "botnet-capture-20110815-rbot-dos",
+          "n_test": 167,
+          "n_pos": 2,
+          "auc": 0.9667,
+          "pr_auc": 0.2576
+        },
+        {
+          "capture": "botnet-capture-20110816-qvod",
+          "n_test": 8672,
+          "n_pos": 0,
+          "auc": null,
+          "note": "single-class or empty train"
+        },
+        {
+          "capture": "botnet-capture-20110816-sogou",
+          "n_test": 47,
+          "n_pos": 0,
+          "auc": null,
+          "note": "single-class or empty train"
+        },
+        {
+          "capture": "botnet-capture-20110819-bot",
+          "n_test": 6162,
+          "n_pos": 3381,
+          "auc": 0.6885,
+          "pr_auc": 0.6323
+        }
+      ]
+    },
+    {
+      "label": "C regularised (d3, l10)",
+      "pooled_auc": 0.883,
+      "macro_auc": 0.8311,
+      "pooled_pr_auc": 0.4663,
+      "folds": [
+        {
+          "capture": "botnet-capture-20110810-neris",
+          "n_test": 14520,
+          "n_pos": 52,
+          "auc": 0.8577,
+          "pr_auc": 0.0159
+        },
+        {
+          "capture": "botnet-capture-20110815-fast-flux",
+          "n_test": 872,
+          "n_pos": 4,
+          "auc": 0.7955,
+          "pr_auc": 0.025
+        },
+        {
+          "capture": "botnet-capture-20110815-rbot-dos",
+          "n_test": 167,
+          "n_pos": 2,
+          "auc": 0.9697,
+          "pr_auc": 0.2262
+        },
+        {
+          "capture": "botnet-capture-20110816-qvod",
+          "n_test": 8672,
+          "n_pos": 0,
+          "auc": null,
+          "note": "single-class or empty train"
+        },
+        {
+          "capture": "botnet-capture-20110816-sogou",
+          "n_test": 47,
+          "n_pos": 0,
+          "auc": null,
+          "note": "single-class or empty train"
+        },
+        {
+          "capture": "botnet-capture-20110819-bot",
+          "n_test": 6162,
+          "n_pos": 3381,
+          "auc": 0.7013,
+          "pr_auc": 0.6435
+        }
+      ]
+    },
+    {
+      "label": "D per-capture rank norm",
+      "pooled_auc": 0.2142,
+      "macro_auc": 0.6315,
+      "pooled_pr_auc": 0.1125,
+      "folds": [
+        {
+          "capture": "botnet-capture-20110810-neris",
+          "n_test": 14520,
+          "n_pos": 52,
+          "auc": 0.8832,
+          "pr_auc": 0.018
+        },
+        {
+          "capture": "botnet-capture-20110815-fast-flux",
+          "n_test": 872,
+          "n_pos": 4,
+          "auc": 0.2581,
+          "pr_auc": 0.0037
+        },
+        {
+          "capture": "botnet-capture-20110815-rbot-dos",
+          "n_test": 167,
+          "n_pos": 2,
+          "auc": 0.9636,
+          "pr_auc": 0.2
+        },
+        {
+          "capture": "botnet-capture-20110816-qvod",
+          "n_test": 8672,
+          "n_pos": 0,
+          "auc": null,
+          "note": "single-class or empty train"
+        },
+        {
+          "capture": "botnet-capture-20110816-sogou",
+          "n_test": 47,
+          "n_pos": 0,
+          "auc": null,
+          "note": "single-class or empty train"
+        },
+        {
+          "capture": "botnet-capture-20110819-bot",
+          "n_test": 6162,
+          "n_pos": 3381,
+          "auc": 0.421,
+          "pr_auc": 0.5538
+        }
+      ]
+    },
+    {
+      "label": "E scale_pos_weight",
+      "pooled_auc": 0.7294,
+      "macro_auc": 0.7734,
+      "pooled_pr_auc": 0.2708,
+      "folds": [
+        {
+          "capture": "botnet-capture-20110810-neris",
+          "n_test": 14520,
+          "n_pos": 52,
+          "auc": 0.7995,
+          "pr_auc": 0.058
+        },
+        {
+          "capture": "botnet-capture-20110815-fast-flux",
+          "n_test": 872,
+          "n_pos": 4,
+          "auc": 0.7687,
+          "pr_auc": 0.2582
+        },
+        {
+          "capture": "botnet-capture-20110815-rbot-dos",
+          "n_test": 167,
+          "n_pos": 2,
+          "auc": 0.9667,
+          "pr_auc": 0.2576
+        },
+        {
+          "capture": "botnet-capture-20110816-qvod",
+          "n_test": 8672,
+          "n_pos": 0,
+          "auc": null,
+          "note": "single-class or empty train"
+        },
+        {
+          "capture": "botnet-capture-20110816-sogou",
+          "n_test": 47,
+          "n_pos": 0,
+          "auc": null,
+          "note": "single-class or empty train"
+        },
+        {
+          "capture": "botnet-capture-20110819-bot",
+          "n_test": 6162,
+          "n_pos": 3381,
+          "auc": 0.5587,
+          "pr_auc": 0.5564
+        }
+      ]
+    },
+    {
+      "label": "F covered-captures-only (4)",
+      "pooled_auc": 0.317,
+      "macro_auc": 0.7643,
+      "pooled_pr_auc": 0.1123,
+      "folds": [
+        {
+          "capture": "botnet-capture-20110810-neris",
+          "n_test": 14520,
+          "n_pos": 52,
+          "auc": 0.8972,
+          "pr_auc": 0.0297
+        },
+        {
+          "capture": "botnet-capture-20110815-fast-flux",
+          "n_test": 872,
+          "n_pos": 4,
+          "auc": 0.7607,
+          "pr_auc": 0.2579
+        },
+        {
+          "capture": "botnet-capture-20110815-rbot-dos",
+          "n_test": 167,
+          "n_pos": 2,
+          "auc": 0.9545,
+          "pr_auc": 0.1623
+        },
+        {
+          "capture": "botnet-capture-20110816-qvod",
+          "n_test": 8672,
+          "n_pos": 0,
+          "auc": null,
+          "note": "single-class or empty train"
+        },
+        {
+          "capture": "botnet-capture-20110816-sogou",
+          "n_test": 47,
+          "n_pos": 0,
+          "auc": null,
+          "note": "single-class or empty train"
+        },
+        {
+          "capture": "botnet-capture-20110819-bot",
+          "n_test": 6162,
+          "n_pos": 3381,
+          "auc": 0.4449,
+          "pr_auc": 0.4861
+        }
+      ]
+    },
+    {
+      "label": "G combined (B+C+D+E+F)",
+      "pooled_auc": 0.0721,
+      "macro_auc": 0.4515,
+      "pooled_pr_auc": 0.0887,
+      "folds": [
+        {
+          "capture": "botnet-capture-20110810-neris",
+          "n_test": 14520,
+          "n_pos": 52,
+          "auc": 0.4359,
+          "pr_auc": 0.0045
+        },
+        {
+          "capture": "botnet-capture-20110815-fast-flux",
+          "n_test": 872,
+          "n_pos": 4,
+          "auc": 0.273,
+          "pr_auc": 0.0038
+        },
+        {
+          "capture": "botnet-capture-20110815-rbot-dos",
+          "n_test": 167,
+          "n_pos": 2,
+          "auc": 0.7788,
+          "pr_auc": 0.0384
+        },
+        {
+          "capture": "botnet-capture-20110816-qvod",
+          "n_test": 8672,
+          "n_pos": 0,
+          "auc": null,
+          "note": "single-class or empty train"
+        },
+        {
+          "capture": "botnet-capture-20110816-sogou",
+          "n_test": 47,
+          "n_pos": 0,
+          "auc": null,
+          "note": "single-class or empty train"
+        },
+        {
+          "capture": "botnet-capture-20110819-bot",
+          "n_test": 6162,
+          "n_pos": 3381,
+          "auc": 0.3184,
+          "pr_auc": 0.5128
+        }
+      ]
+    }
+  ]
+}
