@@ -34,7 +34,8 @@
 | 24 flows (baseline) | 100.0% (24/24) | 5.17 | ✅ Perfect |
 | 100 flows | 94.0% (94/100) | 8.69 | ✅ Good |
 | 300 flows | **95.7% (287/300)** | **7.71** | ✅ **Peak** |
-| 323 flows (max) | 21.4% (69/323) | 0.00 | ❌ Failed |
+| 323 flows (max) | 21.4% (69/323) [det] | 0.00 [det] | ⚠️ Extraction failed |
+|  | **50.5% avg [stoch]** | **2.38–3.87 [stoch]** | ✅ Learning worked |
 
 ### Critical Discovery: Non-Monotonic Learning Curve
 
@@ -48,8 +49,10 @@
 
 **Interpretation**:
 1. Larger batches (up to 300) help: more diverse flows → better generalization
-2. Hard limit around 300 flows: beyond this, agent cannot learn
-3. At 323 (full capture), agent gives up (mean_corrupt=0)
+2. Hard limit around 300 flows: beyond this, policy extraction fails
+3. At 323 (full capture), stochastic learning still works (50.5% avg) but argmax fails (21.4%)
+4. **Key insight**: Algorithm learns well in stochastic mode but cannot extract stable deterministic policy at scale
+5. Suggests algorithmic limitation in converting learned weights to deterministic actions, not just a data problem
 
 ---
 
