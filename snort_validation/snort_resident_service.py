@@ -303,6 +303,13 @@ class ResidentSnortService:
             # ~2x the measured maximum.  A batch that genuinely evades emits no
             # alerts at all, so the floor (not a "saw data" test) is what
             # terminates the read in that case.
+            #
+            # CONCURRENCY HAZARD: every instance shares iface ``lo``, so two
+            # resident services running at once INSPECT EACH OTHER'S frames and
+            # both read nonsense (measured: one run's controls inverted to
+            # argmax 0% / random 100% while an identical run in isolation
+            # reproduced file mode exactly).  Run one resident bandit at a time,
+            # or give each run its own interface.
             quiet_needed, min_elapsed = 0.35, 2.5
             last_change = time.time()
             deadline = time.time() + 8.0
