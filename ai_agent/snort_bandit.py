@@ -70,10 +70,38 @@ sys.path.insert(0, str(REPO / "ai_agent"))
 sys.path.insert(0, str(REPO / "snort_validation"))
 
 from real_packet_env import ACTION_MAX_PACKETS, RealPacketEnv  # noqa: E402
+from control_gate import policy_beats_control  # noqa: E402,F401 - re-exported
 
 EVASION_BONUS = 10.0
-CORRUPT_COST = 0.25
+
+# Per-packet corruption cost.  A flow that evades nets
+# ``EVASION_BONUS - cost * n_corrupted``, so corrupting MORE is only rational
+# while that stays positive.  The old default (0.25) was derived against
+# ``EVASION_BONUS / ACTION_MAX_PACKETS`` = 0.3125, i.e. it assumed every one of
+# the 32 action slots held a corruptable payload packet.  They do not: on real
+# captures only 0.6-10.5 packets per flow carry a payload, so the real
+# break-even is ``EVASION_BONUS / n_corruptable`` = 0.95-3.45, not 0.3125.
+# At 0.25 corrupting everything netted +3.70 .. +9.63, making the corrupt-all
+# control the reward-optimal action and leaving the policy nothing to learn.
+# See ``break_even_cost`` and tests/test_beats_control.py.
+CORRUPT_COST = 1.0
 MAX_PKT_FEAT = 8
+
+
+def break_even_cost(n_corruptable: float) -> float:
+    """Corruption cost at which corrupting every reachable packet breaks even.
+
+    ``n_corruptable`` is how many packets in the flow can actually be mutated
+    (payload present, index < ACTION_MAX_PACKETS) -- NOT the action-space width.
+    Above this cost, evicting by blanket corruption nets less than doing
+    nothing, so a sparse plan is the only reward-maximising choice.
+
+    Returns ``inf`` for a flow with no reachable packet: nothing can be gained
+    at any price, which keeps callers from dividing by zero.
+    """
+    if n_corruptable <= 0:
+        return float("inf")
+    return EVASION_BONUS / n_corruptable
 
 
 def write_json_atomic(path, payload) -> None:
@@ -396,8 +424,13 @@ def main():
     ap.add_argument("--batch", type=int, default=96)
     ap.add_argument("--lr", type=float, default=3e-3)
     ap.add_argument("--corrupt-cost", type=float, default=CORRUPT_COST,
-                    help="per-packet cost. Must exceed EVASION_BONUS/32 = "
-                         "0.3125 to make 'corrupt everything' suboptimal.")
+                    help="per-packet cost. For a flow with N reachable "
+                         "payload packets, 'corrupt everything' nets "
+                         "EVASION_BONUS - cost*N, so the cost must exceed "
+                         "break_even_cost(N) = EVASION_BONUS/N to make a "
+                         "sparse plan preferable. Measured N is 0.6-10.5 per "
+                         "flow, i.e. break-even 0.95-3.45 -- not the 0.3125 "
+                         "you get from the 32-wide action space.")
     ap.add_argument("--sweep-cost", default=None,
                     help="comma list of costs; one run per cost on ONE flow set")
     ap.add_argument("--scale-flows", default=None,

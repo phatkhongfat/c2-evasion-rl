@@ -26,6 +26,11 @@ import statistics
 import sys
 from pathlib import Path
 
+# The gate is stdlib-only on purpose: this reporting tool must stay runnable
+# without torch/scapy, so it must not import anything from the ML stack.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from control_gate import policy_beats_control  # noqa: E402
+
 
 def _load(path):
     with open(path) as fh:
@@ -60,6 +65,13 @@ def rows_from_cross(paths, dataset):
     rows = []
     for p in paths:
         d = _load(p)
+        # NOTE: deterministic_evaded / corrupt_all_evaded are carried through as
+        # the MEASURED integers.  An earlier version recomputed them as
+        # round(evasion_pct * n_flows / 100), which re-derives a count from an
+        # already-rounded percentage: with 50 flows a 1-count difference is 2
+        # percentage points, and float rounding then disagrees with the report
+        # the row was built from.  The percentage is a display field; the count
+        # is the measurement.
         rows.append({
             "dataset": d.get("dataset", dataset),
             "capture": d.get("capture"),
@@ -71,6 +83,8 @@ def rows_from_cross(paths, dataset):
             "baseline_detected": d.get("baseline_detected"),
             "random_evaded": d.get("random_evaded"),
             "corrupt_all_evaded": d.get("corrupt_all_evaded"),
+            "corrupt_all_mean_corrupt": d.get("corrupt_all_mean_corrupt"),
+            "corrupt_all_pct": d.get("corrupt_all_pct"),
             "source": "cross_capture"})
     return rows
 
@@ -123,28 +137,49 @@ def main() -> int:
     cross = [r for r in rows if r["source"] == "cross_capture"]
     if cross:
         ev = [r["evasion_pct"] for r in cross]
+        # The control travels with every row, so the summary can answer the
+        # only question that matters: did the policy beat corrupt-all?
+        summary_rows = []
+        for r in cross:
+            entry = {"capture": r["capture"], "n_flows": r["n_flows"],
+                     "deterministic_evaded": r["deterministic_evaded"],
+                     "evasion_pct": r["evasion_pct"],
+                     "mean_corrupt": r["mean_corrupt"],
+                     "baseline_detected": r.get("baseline_detected"),
+                     "corrupt_all_evaded": r.get("corrupt_all_evaded"),
+                     "corrupt_all_mean_corrupt": r.get("corrupt_all_mean_corrupt")}
+            ctrl_n = r.get("corrupt_all_mean_corrupt")
+            if (ctrl_n is not None and r["deterministic_evaded"] is not None):
+                entry["vs_control"] = policy_beats_control(
+                    policy_evaded=r["deterministic_evaded"],
+                    n_flows=r["n_flows"],
+                    policy_mean_corrupt=r["mean_corrupt"],
+                    control_mean_corrupt=ctrl_n,
+                    control_evaded=r.get("corrupt_all_evaded"))
+            summary_rows.append(entry)
         summary = {
             "n_captures": len(cross),
             "corrupt_cost": cross[0]["corrupt_cost"],
-            "summary": [{"capture": r["capture"], "n_flows": r["n_flows"],
-                         "deterministic_evaded": round(
-                             r["evasion_pct"] * r["n_flows"] / 100),
-                         "evasion_pct": r["evasion_pct"],
-                         "mean_corrupt": r["mean_corrupt"],
-                         "baseline_detected": r.get("baseline_detected")}
-                        for r in cross],
+            "summary": summary_rows,
             "mean_evasion_pct": round(statistics.mean(ev), 2),
             "std_evasion_pct": round(statistics.pstdev(ev), 2),
             "min_evasion_pct": min(ev),
             "max_evasion_pct": max(ev),
         }
+        # How many captures the policy actually beat the control on.
+        verdicts = [e["vs_control"]["verdict"] for e in summary_rows
+                    if "vs_control" in e]
+        summary["vs_control_counts"] = {
+            v: verdicts.count(v) for v in ("beats", "tie", "loses")
+            if verdicts.count(v)}
         s_out = Path(args.summary_out)
         s_out.parent.mkdir(parents=True, exist_ok=True)
-        s_tmp = s_out.with_suffix(".json.tmp")
+        s_tmp = s_out.with_suffix(s_out.suffix + ".tmp")
         s_tmp.write_text(json.dumps(summary, indent=2))
         s_tmp.replace(s_out)
         print(f"[+] wrote {s_out}: mean {summary['mean_evasion_pct']}% "
-              f"std {summary['std_evasion_pct']}% over {len(cross)} captures")
+              f"std {summary['std_evasion_pct']}% over {len(cross)} captures; "
+              f"vs corrupt-all: {summary['vs_control_counts']}")
 
     print(f"[+] wrote {out}: {len(rows)} rows")
     print(f"\n{'dataset':<14}{'capture':<34}{'src':<14}{'flows':>6}"
