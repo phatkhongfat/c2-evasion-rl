@@ -43,4 +43,20 @@ alert tcp any any -> any any (msg:"BOTNET connect-back FIN burst"; flags:F; thre
 # Generic large-flow heuristic: single packet carrying very large payload
 # (any protocol) — typical of CnC data staging.
 # ---------------------------------------------------------------------------
-alert tcp any any -> any any (msg:"BOTNET large single-packet exfil"; flow:established; dsize:>1400; classtype:trojan-activity; sid:3000006; rev:1;)
+alert tcp any any -> any any (msg:"BOTNET large single-packet exfil"; dsize:>1400; classtype:trojan-activity; sid:3000006; rev:1;)
+
+# ---------------------------------------------------------------------------
+# FAMILY-SPECIFIC RULES (2026-09-24): Based on CTU-13 botnet behavior analysis
+# Neris: UDP beacon (med 2 pkts, 276 bytes) + TCP medium (med 6 pkts, 366 bytes)
+# Rbot: TCP chatty (med 10 pkts, 1218 bytes)
+# Virut: TCP medium (med 6 pkts, 412 bytes)
+# ---------------------------------------------------------------------------
+
+# Neris-like: UDP keep-alive pattern (2+ packets, 200-400 bytes typical)
+alert udp any any -> any any (msg:"BOTNET Neris-style UDP beacon"; dsize:200<>400; threshold:type both, track by_src, count 2, seconds 10; classtype:trojan-activity; sid:3000007; rev:1;)
+
+# Neris/Virut-like: TCP medium flow (4+ packets in established, 300-600 byte payloads)
+alert tcp any any -> any any (msg:"BOTNET Neris/Virut-style TCP flow"; flow:established; dsize:300<>600; threshold:type both, track by_src, count 4, seconds 60; classtype:trojan-activity; sid:3000008; rev:1;)
+
+# Rbot-like: TCP chatty C2 (8+ packets with medium payloads 600-1500 bytes)
+alert tcp any any -> any any (msg:"BOTNET Rbot-style chatty C2"; flow:established; dsize:600<>1500; threshold:type both, track by_src, count 6, seconds 60; classtype:trojan-activity; sid:3000009; rev:1;)
