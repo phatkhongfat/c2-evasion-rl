@@ -1,0 +1,142 @@
+{
+  "source": "https://mcfp.felk.cvut.cz/publicDatasets",
+  "n_captures": 15,
+  "note": "packets/flows are MEASURED by extract_ctu13_real_features.extract_pcap over each pcap, not copied from metadata",
+  "captures": [
+    {
+      "name": "capture-win19",
+      "dataset_dir": "CTU-Malware-Capture-Botnet-11",
+      "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-11/capture-win19.pcap",
+      "pcap_bytes": 1687333,
+      "family": "",
+      "flows": 72,
+      "packets": 1895
+    },
+    {
+      "name": "2013-10-18_capture-win15",
+      "dataset_dir": "CTU-Malware-Capture-Botnet-14",
+      "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-14/2013-10-18_capture-win15.pcap",
+      "pcap_bytes": 477318,
+      "family": "",
+      "flows": 13,
+      "packets": 93
+    },
+    {
+      "name": "2013-11-06_capture-win8",
+      "dataset_dir": "CTU-Malware-Capture-Botnet-22",
+      "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-22/2013-11-06_capture-win8.pcap",
+      "pcap_bytes": 2917270,
+      "family": "",
+      "flows": 52,
+      "packets": 1594
+    },
+    {
+      "name": "botnet-capture-20110810-neris",
+      "dataset_dir": "CTU-Malware-Capture-Botnet-42",
+      "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-42/botnet-capture-20110810-neris.pcap",
+      "pcap_bytes": 58266506,
+      "family": "Neris",
+      "flows": 14520,
+      "packets": 322244
+    },
+    {
+      "name": "botnet-capture-20110811-neris",
+      "dataset_dir": "CTU-Malware-Capture-Botnet-43",
+      "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-43/botnet-capture-20110811-neris.pcap",
+      "pcap_bytes": 36261479,
+      "family": "Neris",
+      "flows": 19521,
+      "packets": 175609
+    },
+    {
+      "name": "botnet-capture-20110812-rbot",
+      "dataset_dir": "CTU-Malware-Capture-Botnet-44",
+      "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-44/botnet-capture-20110812-rbot.pcap",
+      "pcap_bytes": 128575191,
+      "family": "Rbot",
+      "flows": 32805,
+      "packets": 482378
+    },
+    {
+      "name": "botnet-capture-20110815-fast-flux",
+      "dataset_dir": "CTU-Malware-Capture-Botnet-46",
+      "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-46/botnet-capture-20110815-fast-flux.pcap",
+      "pcap_bytes": 30941919,
+      "family": "Virut",
+      "flows": 872,
+      "packets": 45780
+    },
+    {
+      "name": "botnet-capture-20110816-donbot",
+      "dataset_dir": "CTU-Malware-Capture-Botnet-47",
+      "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-47/botnet-capture-20110816-donbot.pcap",
+      "pcap_bytes": 5284095,
+      "family": "DonBot",
+      "flows": 4540,
+      "packets": 24407
+    },
+    {
+      "name": "botnet-capture-20110816-sogou",
+      "dataset_dir": "CTU-Malware-Capture-Botnet-48",
+      "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-48/botnet-capture-20110816-sogou.pcap",
+      "pcap_bytes": 18868213,
+      "family": "Sogou",
+      "flows": 47,
+      "packets": 20614
+    },
+    {
+      "name": "botnet-capture-20110816-qvod",
+      "dataset_dir": "CTU-Malware-Capture-Botnet-49",
+      "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-49/botnet-capture-20110816-qvod.pcap",
+      "pcap_bytes": 21366192,
+      "family": "Murlo",
+      "flows": 8672,
+      "packets": 81134
+    },
+    {
+      "name": "capture-win13",
+      "dataset_dir": "CTU-Malware-Capture-Botnet-55",
+      "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-55/capture-win13.pcap",
+      "pcap_bytes": 722897,
+      "family": "Neris",
+      "flows": 1865,
+      "packets": 5824
+    },
+    {
+      "name": "2014-03-12_capture-win15",
+      "dataset_dir": "CTU-Malware-Capture-Botnet-59",
+      "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-59/2014-03-12_capture-win15.pcap",
+      "pcap_bytes": 41558788,
+      "family": "",
+      "flows": 42,
+      "packets": 33122
+    },
+    {
+      "name": "2014-04-07_capture-win6",
+      "dataset_dir": "CTU-Malware-Capture-Botnet-64",
+      "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-64/2014-04-07_capture-win6.pcap",
+      "pcap_bytes": 1666587,
+      "family": "",
+      "flows": 11,
+      "packets": 229
+    },
+    {
+      "name": "2014-04-07_capture-win11",
+      "dataset_dir": "CTU-Malware-Capture-Botnet-65",
+      "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-65/2014-04-07_capture-win11.pcap",
+      "pcap_bytes": 37016646,
+      "family": "",
+      "flows": 1695,
+      "packets": 33611
+    },
+    {
+      "name": "2013-08-20_captureWin5",
+      "dataset_dir": "CTU-Malware-Capture-Botnet-9",
+      "url": "https://mcfp.felk.cvut.cz/publicDatasets/CTU-Malware-Capture-Botnet-9/2013-08-20_captureWin5.pcap",
+      "pcap_bytes": 295199,
+      "family": "",
+      "flows": 25,
+      "packets": 479
+    }
+  ]
+}

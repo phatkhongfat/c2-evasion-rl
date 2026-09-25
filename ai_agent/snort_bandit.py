@@ -327,6 +327,8 @@ def run_bandit(flows, svc, *, capture, rounds, batch, corrupt_cost,
 
 def load_env(capture, n_flows, batch, dataset, seed=11):
     """Build a RealPacketEnv, resolving ``n_flows='auto'`` to what is available."""
+    if n_flows != "auto":
+        n_flows = int(n_flows)   # argparse hands --flows over as a string
     env = RealPacketEnv(n_flows=1 if n_flows == "auto" else n_flows,
                         batch_size=batch, capture=capture, max_mutations=12,
                         seed=seed, dataset=dataset)
@@ -335,6 +337,48 @@ def load_env(capture, n_flows, batch, dataset, seed=11):
         env = RealPacketEnv(n_flows=n_flows, batch_size=batch, capture=capture,
                             max_mutations=12, seed=seed, dataset=dataset)
     return env, env.flows, len(env.flows)
+
+
+def run_configs(configs, get_svc, resident, args, out_dir=None, verbose=True):
+    """Run every ``(capture, n_flows, corrupt_cost)`` config, in order.
+
+    ONE loop for sweep / scale / cross-capture.  The three experiments differ
+    only in which field varies, so three loops meant three copies of
+    load-env / run / collect, and the per-experiment wrapper scripts that used
+    to hold those copies had to re-parse this file's stdout to get the numbers
+    back.  Envs are cached because the corrupt-cost sweep must compare costs on
+    IDENTICAL flows, and re-loading a pcap per cost would both change the flow
+    set and pay the pcap scan again.
+    """
+    svc = get_svc()
+    env_cache, rows = {}, []
+    for capture, n_flows, cost in configs:
+        key = (capture, n_flows)
+        if key not in env_cache:
+            env_cache[key] = load_env(capture, n_flows, args.batch, args.dataset)
+        _env, flows, n = env_cache[key]
+        if verbose:
+            print(f"\n=== {capture} | n_flows={n} | corrupt_cost={cost} ===")
+        r = run_bandit(flows, svc, capture=capture, rounds=args.rounds,
+                       batch=args.batch, corrupt_cost=cost, lr=args.lr,
+                       seed=args.seed)
+        row = {"capture": capture, "dataset": args.dataset, "n_flows": n,
+               "corrupt_cost": cost,
+               "deterministic_evaded": r["deterministic_evaded"],
+               "evasion_pct": r["deterministic_pct"],
+               "mean_corrupt": r["deterministic_mean_corrupt"],
+               "baseline_detected": r["baseline_detected"],
+               "random_evaded": r["random_evaded"],
+               "corrupt_all_evaded": r["corrupt_all_evaded"],
+               "corrupt_all_mean_corrupt": r["corrupt_all_mean_corrupt"],
+               "history": r["history"]}
+        rows.append(row)
+        if out_dir is not None:
+            r["dataset"] = args.dataset
+            r["snort_stats"] = svc.stats() if resident else None
+            write_json_atomic(out_dir / f"cross_capture_{capture}.json", r)
+            print(f"[+] report: {out_dir}/cross_capture_{capture}.json")
+    return svc, rows
 
 
 def main():
@@ -352,21 +396,23 @@ def main():
     ap.add_argument("--scale-flows", default=None,
                     help="comma list of flow counts; one run per count")
     ap.add_argument("--captures", default=None,
-                    help="comma list of captures; one run per capture")
+                    help="comma list of captures; one report per capture")
     ap.add_argument("--capture", default="botnet-capture-20110819-bot")
-    ap.add_argument("--dataset", default="ctu13", choices=["ctu13", "stratosphere"])
+    ap.add_argument("--dataset", default="ctu13",
+                    choices=["ctu13", "stratosphere"])
     ap.add_argument("--resident", action="store_true",
                     help="use the resident Snort service (IDS on lo) instead of "
                          "one process per batch; removes the ~9.9s rule-load "
                          "floor per batch")
-    ap.add_argument("--out", default=str(REPO / "snort_validation/reports/snort_bandit.json"))
+    ap.add_argument("--out",
+                    default=str(REPO / "snort_validation/reports/snort_bandit.json"))
     ap.add_argument("--out-dir", default=None,
                     help="with --captures: write cross_capture_<name>.json here")
     ap.add_argument("--seed", type=int, default=0)
     args = ap.parse_args()
 
-    svc = None
     resident = None
+    svc = None
     if args.resident:
         from snort_resident_service import ResidentSnortService
         resident = ResidentSnortService()
@@ -385,94 +431,44 @@ def main():
         from snort_batch_service import SnortBatchService
         return SnortBatchService(batch_size=args.batch)
 
+    # mode -> (configs, out_dir); exactly one mode may be selected
+    if args.sweep_cost:
+        costs = [float(c) for c in args.sweep_cost.split(",")]
+        configs = [(args.capture, args.flows, c) for c in costs]
+        mode, out_dir = "sweep", None
+    elif args.scale_flows:
+        configs = [(args.capture, int(n), args.corrupt_cost)
+                   for n in args.scale_flows.split(",")]
+        mode, out_dir = "scale", None
+    elif args.captures:
+        caps = [c.strip() for c in args.captures.split(",") if c.strip()]
+        configs = [(c, args.flows, args.corrupt_cost) for c in caps]
+        mode, out_dir = "cross", Path(args.out_dir or Path(args.out).parent)
+    else:
+        configs = [(args.capture, args.flows, args.corrupt_cost)]
+        mode, out_dir = "single", None
+
     try:
-        if args.sweep_cost:
-            costs = [float(c) for c in args.sweep_cost.split(",")]
-            _env, flows, n = load_env(args.capture, args.flows, args.batch,
-                                      args.dataset)
-            print(f"[*] sweep: {n} real flows from {args.capture}, costs {costs}")
-            s = get_svc()
-            results = []
-            for cost in costs:
-                print(f"\n=== corrupt_cost={cost} ===")
-                r = run_bandit(flows, s, capture=args.capture, rounds=args.rounds,
-                               batch=args.batch, corrupt_cost=cost, lr=args.lr,
-                               seed=args.seed)
-                results.append({
-                    "corrupt_cost": cost,
-                    "deterministic_evaded": r["deterministic_evaded"],
-                    "evasion_pct": r["deterministic_pct"],
-                    "mean_corrupt": r["deterministic_mean_corrupt"],
-                    "baseline_detected": r["baseline_detected"],
-                    "random_evaded": r["random_evaded"],
-                    "corrupt_all_evaded": r["corrupt_all_evaded"],
-                    "corrupt_all_mean_corrupt": r["corrupt_all_mean_corrupt"],
-                    "history": r["history"]})
-            payload = {"capture": args.capture, "dataset": args.dataset,
-                       "flows": n, "rounds": args.rounds, "batch": args.batch,
-                       "sweep_results": results,
-                       "snort_stats": (s.stats() if resident else None)}
-
-        elif args.scale_flows:
-            counts = [int(c) for c in args.scale_flows.split(",")]
-            print(f"[*] scale: flow counts {counts} on {args.capture}")
-            s = get_svc()
-            results = []
-            for nf in counts:
-                print(f"\n=== n_flows={nf} ===")
-                _env, flows, n = load_env(args.capture, nf, args.batch,
-                                          args.dataset)
-                r = run_bandit(flows, s, capture=args.capture, rounds=args.rounds,
-                               batch=args.batch, corrupt_cost=args.corrupt_cost,
-                               lr=args.lr, seed=args.seed)
-                results.append({
-                    "n_flows": n,
-                    "deterministic_evaded": r["deterministic_evaded"],
-                    "evasion_pct": r["deterministic_pct"],
-                    "mean_corrupt": r["deterministic_mean_corrupt"],
-                    "baseline_detected": r["baseline_detected"],
-                    "random_evaded": r["random_evaded"],
-                    "corrupt_all_evaded": r["corrupt_all_evaded"],
-                    "history": r["history"]})
-            payload = {"capture": args.capture, "dataset": args.dataset,
-                       "corrupt_cost": args.corrupt_cost, "rounds": args.rounds,
-                       "batch": args.batch, "scale_results": results,
-                       "snort_stats": (s.stats() if resident else None)}
-
-        elif args.captures:
-            caps = [c.strip() for c in args.captures.split(",") if c.strip()]
-            out_dir = Path(args.out_dir or Path(args.out).parent)
-            print(f"[*] cross-capture: {caps}")
-            s = get_svc()
-            for cap in caps:
-                print(f"\n=== {cap} ===")
-                _env, flows, n = load_env(cap, args.flows, args.batch,
-                                          args.dataset)
-                r = run_bandit(flows, s, capture=cap, rounds=args.rounds,
-                               batch=args.batch,
-                               corrupt_cost=args.corrupt_cost, lr=args.lr,
-                               seed=args.seed)
-                r["dataset"] = args.dataset
-                r["snort_stats"] = (s.stats() if resident else None)
-                write_json_atomic(out_dir / f"cross_capture_{cap}.json", r)
-                print(f"[+] report: {out_dir}/cross_capture_{cap}.json")
-            payload = None
-
+        svc, rows = run_configs(configs, get_svc, resident, args, out_dir)
+        if mode == "cross":
+            return 0
+        payload = {
+            "dataset": args.dataset, "capture": args.capture,
+            "rounds": args.rounds, "batch": args.batch,
+            "snort_stats": svc.stats() if resident else None,
+        }
+        if mode == "sweep":
+            payload["flows"] = rows[0]["n_flows"]
+            payload["sweep_results"] = rows
+        elif mode == "scale":
+            payload["corrupt_cost"] = args.corrupt_cost
+            payload["scale_results"] = rows
         else:
-            _env, flows, n = load_env(args.capture, args.flows, args.batch,
-                                      args.dataset)
-            print(f"[*] {n} real positive flows from {args.capture}")
-            s = get_svc()
-            payload = run_bandit(flows, s, capture=args.capture,
-                                 rounds=args.rounds, batch=args.batch,
-                                 corrupt_cost=args.corrupt_cost, lr=args.lr,
-                                 seed=args.seed)
-            payload["dataset"] = args.dataset
-            payload["snort_stats"] = (s.stats() if resident else None)
-
-        if payload is not None:
-            write_json_atomic(args.out, payload)
-            print(f"[+] report: {args.out}")
+            payload.update(rows[0])
+            payload.pop("capture")
+            payload["capture"] = args.capture
+        write_json_atomic(args.out, payload)
+        print(f"[+] report: {args.out}")
     finally:
         if resident is not None:
             resident.stop()
