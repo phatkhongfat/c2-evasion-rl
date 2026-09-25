@@ -212,46 +212,69 @@ correct: 12/12 agreement with the one-shot batch service** on a mixed set
 3. **Fixed-sleep readiness.** Frames injected while Snort is still loading its
    21k rules are silently dropped. Replaced with an active readiness probe that
    injects a known-alerting DNS frame and waits for its alert line.
-4. **The big one — ET rules throttle `by_src`.** Content rules carry
+4. **ET rules throttle `by_src`.** Content rules carry
    `threshold: type limit, track by_src, count 1`, so a query source address
    reused inside the window is **throttled and produces no alert**. Measured:
    first injection of 24 flows → 35 alert lines covering all 24 flows; an
    immediate *second* injection of the same flows → **zero**. Ids must be unique
-   for the whole run (unique `ip:port` per query, never reused).
+   for the whole run (unique `ip:port` per query, never reused). This is why ids
+   are never reused — it was **not**, as once believed here, the cause of the
+   bandit's `baseline 0/24`; that was the read-window bug in §10.
 5. **Off-by-stride.** `_uid_base` was incremented before the parser subtracted
    it, shifting every id out of range.
 6. **Wrong injection socket.** scapy `L2socket.send` costs ~0.4 ms/pkt vs
    ~0.003 ms/pkt for a raw `AF_PACKET` socket; the per-packet Python build cost
    (7907 frames = 3.95 s to build, 0.02 s to send) is what made a batch slow.
+7. **Alert-read window closed before Snort's flush (the real bandit bug).**
+   Snort writes its fast-alert file through a *buffered* stream, so a batch's
+   alerts arrive in one flush that can be late (measured first-alert latency
+   0.28–1.25 s over 25 batches of 96 flows). The 0.60 s floor broke the read
+   *before* the flush and scored every flow as "no alert". See §10.
 
 ### Honest status
 
-The **standalone service is verified**. The **bandit integration is NOT
-correct**: `snort_bandit.py --resident` still reports an impossible
-`baseline detected 0/24` (unmutated flows are detected in file mode) and
-implausible round-to-round swings, because all batches share one alert stream and
-the uid stride does not isolate a batch's alerts from the previous batch's
-still-in-flight frames.
+**Fixed.** The **standalone service is verified** and the **bandit integration
+now reproduces file mode exactly**.
 
-Controls in the resident run are at least sane — random policy **0%** (matching
-file mode) and corrupt-all **100%** — but the agent numbers from `--resident` are
-**not trustworthy**. Use the per-batch service for bandit results; the file-mode
-numbers (100% argmax at 5.17/32 packets) remain the reference.
+The previous diagnosis in this section was **wrong**. The failure was *not*
+alert cross-talk between batches: the per-batch uid stride already isolates
+correctly (alerts from an earlier batch carry an earlier `uid_base`, so they fall
+outside `counts` and are discarded, not misattributed). The real cause was the
+**read window**: Snort flushes its fast-alert file through a *buffered* stream, so
+a batch's alerts arrive in one flush that can be late. Measured over 25 batches
+of 96 flows, the first-alert latency was **0.28–1.25 s (mean 0.77 s)**, while
+`alert_counts_chunked()` closed its window at a **0.60 s** floor — so it broke
+*before* the flush and scored every flow as "no alert". That is what produced the
+impossible `baseline detected 0/24`.
 
-Next step for resident mode: give each batch its own interface or stop/start
-Snort between batches, or add a generation marker to the frames so a batch can
-unambiguously separate its own alerts.
+The fix raises the floor to **2.5 s** (~2× the measured worst case). A batch that
+genuinely evades emits no alerts, so the floor — not a "saw data" test — is what
+terminates the read.
+
+Two further notes from getting this right:
+
+* The plan's proposed fix (stop/start Snort between rounds) **does not work and
+  crashes**: `stop()` leaves `_started=True` with `_proc=None`, so the restart's
+  `alert_counts_chunked()` raises `RuntimeError: resident snort unavailable`. It
+  is also aimed at the wrong cause. Not needed.
+* **Concurrency hazard.** All instances share iface `lo`, so two resident
+  services running at once inspect each other's frames and both read nonsense.
+  Observed live: one run's controls inverted to argmax 0% / random 100% while an
+  identical run in isolation reproduced file mode exactly. Run one resident
+  bandit at a time.
+
+Verified in isolation (`--flows 24 --rounds 10 --batch 96 --corrupt-cost 0.6
+--resident`), matching the file-mode reference **exactly** — per-round evasion
+5.2/7.3/8.3/7.3/11.5/13.5/8.3/11.5/10.4/5.2%, argmax **100%** at **5.17/32**
+packets, random **0%**, corrupt-all **100%**. Report:
+`snort_validation/reports/snort_bandit_resident_fixed.json`.
 
 ## 11. Open items / next steps
 
-1. **Fix the resident/bandit integration** (see §10). The service itself is
-   verified; the integration is not. Highest-value next step, and the only thing
-   standing between here and ~100× cheaper experiments.
-2. **More flows and more captures.** 24 flows from one capture is a proof of
+1. **More flows and more captures.** 24 flows from one capture is a proof of
    concept. The bandit's 5.17-packet result should be re-run cross-capture
    (as the surrogate work did) before any generalisation claim.
-3. **Sweep `--corrupt-cost`** to trace the evasion-vs-payload-damage frontier.
+2. **Sweep `--corrupt-cost`** to trace the evasion-vs-payload-damage frontier.
    The interesting quantity is the minimum damage that still evades, and the
    current single point (0.6 → 5.17 packets) does not pin it down.
-
 
