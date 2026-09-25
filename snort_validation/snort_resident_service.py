@@ -285,7 +285,25 @@ class ResidentSnortService:
 
             counts: Dict[int, int] = {qid: 0 for _p, qid in chunk}
             buf = b""
-            quiet_needed, min_elapsed = 0.35, 0.60
+            # Snort writes its fast-alert file through a BUFFERED stream, so a
+            # batch's alerts do not appear until the stream is flushed.  The
+            # whole batch lands in ONE flush (measured: 1 size-growth event per
+            # batch), but the first flush can be late: over 25 batches of 96
+            # flows the first-alert latency was 0.28-1.25 s (mean 0.77 s).
+            #
+            # The previous floor of 0.60 s therefore closed the window BEFORE
+            # the flush and scored every flow as "no alert".  That is the true
+            # cause of the impossible "baseline detected 0/24" -- NOT alert
+            # cross-talk between batches: the per-batch uid stride already
+            # isolates alerts correctly (alerts from an earlier batch carry an
+            # earlier uid_base, so they fall outside ``counts`` and are
+            # discarded rather than misattributed).
+            #
+            # The floor must exceed the worst observed flush latency; 2.5 s is
+            # ~2x the measured maximum.  A batch that genuinely evades emits no
+            # alerts at all, so the floor (not a "saw data" test) is what
+            # terminates the read in that case.
+            quiet_needed, min_elapsed = 0.35, 2.5
             last_change = time.time()
             deadline = time.time() + 8.0
             while time.time() < deadline:
