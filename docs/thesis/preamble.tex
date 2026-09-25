@@ -4,7 +4,11 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T5]{fontenc}   % Vietnamese glyph repertoire (vntex); required for thesis_vi
 \usepackage{lmodern}       % Latin Modern ships T5-encoded fonts
-\usepackage[vietnamese,english]{babel}
+% Vietnamese must be the LAST (main) babel language: T5 font encoding is only
+% activated for the main language. With [vietnamese,english] the Vietnamese
+% glyph macros (\ohorn, \ecircumflex, ...) stay bound to OT1 and the build
+% dies with "Command \ohorn unavailable in encoding OT1". Keep this order.
+\usepackage[english,vietnamese]{babel}
 \usepackage{amsmath, amssymb, amsfonts}
 \usepackage{graphicx}
 \usepackage{hyperref}

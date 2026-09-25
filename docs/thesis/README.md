@@ -1,30 +1,56 @@
 # Thesis Directory
 
-This folder contains full academic theses in English and Vietnamese.
+Full academic theses in LaTeX, in English and Vietnamese, built to PDF with `make`.
 
 ## Contents
 
-- **thesis_en.md** — Full English thesis (1650 lines)
-  - For: Peer review, English-speaking audience
-  - Sections: Intro, threat model, architecture, math, experiments, challenges, results
-  - Includes: References (~30), appendices, formal notation
+| File | Purpose |
+|---|---|
+| `thesis_vi.tex` | Vietnamese thesis (KMA cybersecurity submission) — 9 chapters, 23 sections |
+| `thesis_en.tex` | English thesis (peer review) — same structure in English |
+| `preamble.tex` | Shared preamble: packages, Vietnamese (T5) encoding, macros, listing/hyperref config |
+| `references.bib` | 30 BibTeX entries (articles, inproceedings, dataset, book, misc) |
+| `Makefile` | Build targets (`thesis_vi`, `thesis_en`, `all`, `clean`, `help`) |
+| `.gitignore` | Excludes `build/` and generated PDFs |
+| `build/` | Generated PDFs and LaTeX auxiliaries (gitignored) |
 
-- **thesis_vi.md** — Full Vietnamese thesis (1660 lines)
-  - For: KMA cybersecurity program submission
-  - Sections: Giới thiệu, mô hình mối đe dọa, kiến trúc, toán học, thực nghiệm, thách thức, kết quả
-  - Includes: Tài liệu tham khảo (~30), phụ lục, ký hiệu toán học
+## Structure (both theses)
 
-> Both theses are produced in Phase 3 of the documentation plan. This README
-> describes the intended contents so the directory is navigable now.
+1. Introduction — motivation, problem statement, contributions
+2. Threat Model & Scope — adversarial setting, assumptions
+3. System Architecture — pipeline, components, data flow
+4. Mathematical Formulation — MDP, PPO objective, reward function
+5. Experiments — datasets, phases, measurements
+6. Challenges & Lessons — the two critical bugs and how they were found
+7. Related Work — adversarial ML, RL foundations, detectors/datasets
+8. Conclusion — findings, limitations, future work
+9. Appendix — implementation details
 
-## How to Use
+## Building
 
-1. **For submission**: Use `thesis_vi.md` (Vietnamese thesis)
-2. **For peer review**: Use `thesis_en.md` (English thesis)
-3. **For quick reference**: See `/README.md` or `/README.vi.md` at repo root
+```bash
+cd docs/thesis
+make thesis_vi    # -> build/thesis_vi.pdf
+make thesis_en    # -> build/thesis_en.pdf
+make all          # both
+make clean        # remove build/
+```
+
+Each target runs 3 × `pdflatex` with `bibtex` in between, so citations and
+cross-references resolve. Requires TeX Live with `texlive-lang-other`
+(vntex / `vietnamese.ldf`) for the Vietnamese thesis.
+
+## Notes
+
+- Vietnamese typesetting needs the T5 font encoding; `preamble.tex` loads
+  `fontenc` with `T5` and declares babel as `[english,vietnamese]` — Vietnamese
+  must be the **main** language or the T5 glyph macros stay bound to OT1 and the
+  build fails with `Command \ohorn unavailable in encoding OT1`.
+- `references.bib` uses `@dataset` for the CTU-13 entry; `plainnat.bst` has no
+  driver for that type and emits one cosmetic warning. The entry still renders.
 
 ## References & Links
 
-- `../02-technical/system-architecture.md` (Phase 3)
 - [Root Cause Analysis](../04-challenges/root-cause-analysis.md)
 - [Final Measurements](../03-experiments/results-final.md)
+- [System Architecture Details](../02-technical/)

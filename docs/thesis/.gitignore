@@ -1,0 +1,14 @@
+# LaTeX build output — never commit generated PDFs or auxiliaries
+build/
+*.pdf
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz

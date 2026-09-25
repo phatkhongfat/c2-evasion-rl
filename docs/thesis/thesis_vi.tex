@@ -57,7 +57,7 @@ Mục tiêu: Huấn luyện một agent PPO để biến đổi luồng sao cho:
   
   \item \textbf{Quy mô hóa không đơn điệu}: Xác định một đường cong học tập đáng ngạc nhiên: né tránh cải thiện từ 24 đến 300 luồng (100\% $\to$ 95.7\%), sau đó thất bại thảm hại ở 323+ luồng, gợi ý một giới hạn khó khăn trong khả năng trích xuất chính sách.
   
-  \item \textbf{Phân tích khoảng cách proxy}: Đo lường khoảng cách 80 điểm phần trăm giữa hiệu suất proxy và Snort thực tế, chỉ ra rằng huấn luyện dựa trên XGBoost không nắm bắt được các ranh giới quyết định của Snort.
+  \item \textbf{Phân tích khoảng cách proxy}: Đo lường khoảng cách 62,5 điểm phần trăm giữa hiệu suất proxy và Snort thực tế, chỉ ra rằng huấn luyện dựa trên XGBoost không nắm bắt được các ranh giới quyết định của Snort.
   
   \item \textbf{Các phép đo lường tái lập được}: Ghi chép và sửa chữa hai lỗi tới hạn (trích xuất luồng một chiều, viết lại gói tin thiếu suy nghĩ) đã làm cho tất cả các phát hiện trước đó trở nên bất khả thi; kết quả cuối cùng được xác minh đối với những phán quyết Snort thực tế.
 \end{enumerate}
@@ -182,7 +182,7 @@ Chúng tôi sử dụng Tối Ưu Hóa Chính Sách Gần Đúng (PPO) với m�
 L^{\text{CLIP}}(\theta) = \mathbb{E}_{t} \left[ \min(r_t(\theta) \hat{A}_t, \text{clip}(r_t(\theta), 1-\epsilon, 1+\epsilon) \hat{A}_t) \right]
 \end{equation}
 
-nơi $r_t(\theta) = \pi_\theta(a_t | s_t) / \pi_{\theta_{\text{old}}}(a_t | s_t)$ là tỉ lệ xác suất, và $\hat{A}_t$ là ước tính ưu điểm tổng quát hóa (GAE).
+nơi $r_t(\theta) = \pi_\theta(a_t | s_t) / \pi_{\theta_{\text{old}}}(a_t | s_t)$ là tỉ lệ xác suất, và $\hat{A}_t$ là ước tính ưu điểm tổng quát hóa (GAE). \citet{schulman2017proximal} giới thiệu PPO như một phương pháp ổn định và hiệu quả về mẫu so với các phương pháp gradient chính sách trước đó \citep{sutton2000policy}; chúng tôi tối ưu mục tiêu này bằng Adam \citep{kingma2014adam}.
 
 \section{Huấn Luyện Proxy}
 
@@ -192,15 +192,17 @@ Proxy XGBoost được huấn luyện trên CTU-13 với 6 đặc trưng:
 \hat{P}(\text{mal} | s) = \text{XGBoost}(s; 100 \text{ cây}, \text{max\_depth}=6)
 \end{equation}
 
-Dữ liệu huấn luyện: 324.078 luồng (huấn luyện) / 81.020 luồng (kiểm tra), được lấy mẫu dưới để cân bằng các lớp lành tính và độc hại.
+Dữ liệu huấn luyện: 324.078 luồng (huấn luyện) / 81.020 luồng (kiểm tra), được lấy mẫu dưới để cân bằng các lớp lành tính và độc hại. \citet{chen2016xgboost} là mô tả gốc của thuật toán.
 
 Số liệu xác thực: Độ Chính Xác 0.913, Chính Xác 0.921, Ghi Lại 0.904, F1 0.912, ROC AUC 0.972.
+
+Mô hình thay thế không phải là bộ phát hiện mà chúng tôi quan tâm cuối cùng. \citet{demetrio2020intriguing} cho thấy tấn công trong không gian bài toán không hành xử giống tấn công trong không gian đặc trưng, nên một bộ phân loại huấn luyện trên chính các đặc trưng tổng hợp mà agent biến đổi không thể tự nó chứng minh agent tổng quát hóa tới \IDS{} thật. Đó là lý do pipeline mang thêm một lớp \Snort{} độc lập.
 
 \chapter{Thực Nghiệm}
 
 \section{Bộ Dữ Liệu: CTU-13 \& Stratosphere IPS}
 
-CTU-13 bao gồm 13 bộ dữ liệu botnet (Neris, Rbot, Virut, \ldots) với tổng cộng 10.6 triệu luồng. Chúng tôi sử dụng một tập hợp con sau khi loại bỏ lưu lượng ``Background'' (nhãn không xác định):
+CTU-13 \cite{stratosphere_ctu13} bao gồm 13 bộ dữ liệu botnet (Neris, Rbot, Virut, \ldots) với tổng cộng 10.6 triệu luồng. Chúng tôi sử dụng một tập hợp con sau khi loại bỏ lưu lượng ``Background'' (nhãn không xác định):
 
 \begin{table}[h]
 \centering
@@ -216,7 +218,7 @@ Chia Huấn Luyện / Kiểm Tra & 324.078 / 81.020 \\
 \end{tabular}
 \end{table}
 
-Để xác thực cuối cùng, chúng tôi sử dụng các bộ dữ liệu MCFP của Stratosphere (pcaps thực tế, không tổng hợp) với Snort 2.9 và bộ quy tắc C2 ET Open (21.374 quy tắc sau khi lọc).
+Để xác thực cuối cùng, chúng tôi sử dụng các bộ dữ liệu MCFP của Stratosphere \cite{ctu_datasets} (pcaps thực tế, không tổng hợp) với \Snort{} 2.9 \cite{snort_project} và bộ quy tắc C2 ET Open \cite{emerging_threats} (21.374 quy tắc sau khi lọc).
 
 \section{Các Giai Đoạn Thử Nghiệm}
 
@@ -239,7 +241,7 @@ Biến Đổi Ngẫu Nhiên & 71.2\% & 71.2\% & 28.8\% \\
 \end{tabular}
 \end{table}
 
-Quan Sát Chính: Khoảng cách 80 điểm phần trăm giữa proxy (95\% né tránh) và Snort thực tế (32.5\% né tránh).
+Quan Sát Chính: Khoảng cách 62,5 điểm phần trăm giữa proxy (95\% né tránh) và Snort thực tế (32.5\% né tránh).
 
 \subsection{Giai Đoạn 3: Xác Thực Stratosphere}
 
@@ -339,23 +341,91 @@ Viết lại có nhận thức về hướng trên cùng một luồng 10 gói t
   
   \item \textbf{Lưu Lượng Hai Chiều Không Rõ Ràng}: Các luồng mạng vốn dĩ là hai chiều; chỉ tổng hợp một hướng phá vỡ các giả định giao thức cơ bản.
   
-  \item \textbf{Khoảng Cách Proxy Là Lớn}: Khoảng cách 80pp giữa XGBoost (95\% né tránh) và Snort thực tế (32.5\% né tránh) gợi ý huấn luyện XGBoost không nắm bắt được ranh giới quyết định thực sự của đối thủ. Công việc trong tương lai nên (a) huấn luyện trên những phán quyết Snort trực tiếp, hoặc (b) sử dụng phân tích tầm quan trọng đặc trưng để xác định tại sao khoảng cách tồn tại.
+  \item \textbf{Khoảng Cách Proxy Là Lớn}: Khoảng cách 62,5pp giữa XGBoost (95\% né tránh) và Snort thực tế (32.5\% né tránh) gợi ý huấn luyện XGBoost không nắm bắt được ranh giới quyết định thực sự của đối thủ. Công việc trong tương lai nên (a) huấn luyện trên những phán quyết Snort trực tiếp, hoặc (b) sử dụng phân tích tầm quan trọng đặc trưng để xác định tại sao khoảng cách tồn tại.
 \end{enumerate}
 
 \chapter{Công Trình Liên Quan}
 
-Học máy đối kháng trên lưu lượng mạng đã được nghiên cứu rộng rãi:
+Học máy đối kháng trên lưu lượng mạng đã được nghiên cứu rộng rãi.
+
+\subsection{Nền Tảng của Học Máy Đối Kháng}
 
 \begin{itemize}
   \item \citet{biggio2013evasion} là người tiên phong trong các cuộc tấn công né tránh trên các bộ phân loại ML, giới thiệu khung công tác tấn công dựa trên gradient.
   
   \item \citet{goodfellow2014explaining} đề xuất FGSM và tạo ví dụ đối kháng, nền tảng cho hiểu biết về sự mạnh mẽ đối kháng.
   
-  \item \citet{mosli2018towards} nghiên cứu né tránh phần mềm độc hại đối với các bộ phân loại học sâu, cho thấy cả khả năng và hạn chế của phần mềm độc hại đối kháng.
+  \item \citet{papernot2016limits} chỉ ra giới hạn của học sâu trong bối cảnh đối kháng và giới thiệu thuật toán tấn công có định hướng, đòi hỏi ít nhiễu hơn FGSM đáng kể.
   
+  \item \citet{carlini2016towards} đưa ra tiêu chuẩn đánh giá mạnh hơn cho tính vững chắc, cho thấy nhiều phòng thủ công bố trước đó bị phá vỡ.
+  
+  \item \citet{roli2018wild} tổng kết mười năm học máy đối kháng và liệt kê các thách thức còn mở, bao gồm khả năng chuyển giao tấn công giữa các mô hình.
+  
+  \item \citet{carlini2019certified} giới thiệu tính vững chắc có chứng nhận qua làm mịn ngẫu nhiên, đưa ra bảo đảm thay vì tuyên bố thực nghiệm.
+  
+  \item \citet{bruckner2021machine} phân tích tương tác giữa tính vững chắc đối kháng và an ninh học máy nói chung.
+\end{itemize}
+
+\subsection{Học Máy Đối Kháng trong Không Gian Bài Toán}
+
+\begin{itemize}
   \item \citet{demetrio2021adversarial} cung cấp phân loại toàn diện của các cuộc tấn công học máy đối kháng trong bảo mật, bao gồm né tránh trong không gian vấn đề (cài đặt của chúng tôi).
   
+  \item \citet{demetrio2020intriguing} cho thấy tấn công trong không gian bài toán hành xử khác với trong không gian đặc trưng; đây chính là lý do chúng tôi xác thực trên bộ phát hiện thật thay vì tin vào mô hình thay thế.
+  
+  \item \citet{pierazzi2019intriguing} xem xét điều gì khiến mẫu đối kháng có ý nghĩa trong không gian bài toán của phát hiện mã độc.
+  
+  \item \citet{demetrio2019adversarial} né tránh bộ phát hiện mã độc dùng học sâu ở dạng tệp thực thi trong khi vẫn giữ chức năng của tệp.
+  
+  \item \citet{melis2016poisoning} nghiên cứu tấn công đầu độc chống lại máy vector hỗ trợ -- đối tác ở thời điểm huấn luyện của tấn công né tránh mà chúng tôi nghiên cứu.
+  
+  \item \citet{anderson2018deep} áp dụng học đối kháng cho phát hiện trang web lừa đảo.
+\end{itemize}
+
+\subsection{Phát Hiện Mã Độc và IDS}
+
+\begin{itemize}
+  \item \citet{arp2016drebin} xây dựng DREBIN, bộ phát hiện mã độc Android có thể giải thích được, minh họa những đánh đổi trong thiết kế đặc trưng cũng định hình các đặc trưng tổng hợp của chúng tôi.
+  
+  \item \citet{saxe2015deep} đánh giá mạng nơ-ron sâu cho phân loại mã độc dùng đặc trưng tĩnh.
+  
+  \item \citet{severi2018exploring} khảo sát mẫu đối kháng trong phát hiện mã độc.
+  
+  \item \citet{mosli2018towards} nghiên cứu né tránh phần mềm độc hại đối với các bộ phân loại học sâu, cho thấy cả khả năng và hạn chế của phần mềm độc hại đối kháng.
+  
   \item \citet{silva2017ids} áp dụng học máy để né tránh IDS, nghiên cứu cách những kẻ tấn công thích ứng với logic phát hiện.
+  
+  \item \citet{reuben2021adversarial} khảo sát học máy đối kháng ở quy mô lớn.
+\end{itemize}
+
+\subsection{Nền Tảng Học Tăng Cường}
+
+\begin{itemize}
+  \item \citet{puterman1994markov} hình thức hóa quá trình quyết định Markov, khuôn khổ mà môi trường của chúng tôi được đúc vào.
+  
+  \item \citet{sutton2000policy} chứng minh định lý gradient chính sách, cơ sở của PPO.
+  
+  \item \citet{schulman2017proximal} giới thiệu Proximal Policy Optimization, thuật toán chúng tôi dùng để huấn luyện.
+  
+  \item \citet{kingma2014adam} giới thiệu bộ tối ưu Adam dùng cho mạng chính sách.
+  
+  \item \citet{stable_baselines3} cung cấp bản triển khai PPO mà chúng tôi xây dựng trên đó.
+  
+  \item \citet{gymnasium} định nghĩa API môi trường mà môi trường huấn luyện của chúng tôi tuân theo.
+\end{itemize}
+
+\subsection{Bộ Phát Hiện và Bộ Dữ Liệu}
+
+\begin{itemize}
+  \item \citet{snort_project} là mô tả gốc của Snort, IDS dựa trên chữ ký mà chúng tôi xác thực.
+  
+  \item \citet{emerging_threats} phát hành bộ luật Emerging Threats Open, kho luật độc lập dùng cho tập con C2 của chúng tôi.
+  
+  \item \citet{stratosphere_ctu13} phát hành các phiên bắt botnet CTU-13 dùng cho huấn luyện.
+  
+  \item \citet{ctu_datasets} duy trì kênh phân phối bộ dữ liệu Stratosphere IPS, bao gồm các phiên bắt MCFP dùng cho xác thực chéo.
+  
+  \item \citet{chen2016xgboost} giới thiệu XGBoost, bộ phát hiện thay thế mà chúng tôi huấn luyện.
 \end{itemize}
 
 Công việc của chúng tôi mở rộng dòng này bằng cách kết hợp RL (PPO) với xác thực IDS thế giới thực (Snort), thay vì các bộ phát hiện tổng hợp. Tập trung vào các biến đổi mức gói tin và khám phá quy mô hóa không đơn điệu là mới.
@@ -369,7 +439,7 @@ Công việc của chúng tôi mở rộng dòng này bằng cách kết hợp R
   
   \item Các đường cong học tập không đơn điệu: né tránh đạt cực đại ở 300 luồng (95.7\%), sau đó thất bại ở 323+, gợi ý các giới hạn khó khăn trong khả năng chính sách.
   
-  \item Huấn luyện dựa trên proxy thể hiện khoảng cách chuyển giao khổng lồ (80pp) so với Snort thực tế, chỉ ra rằng các đặc trưng XGBoost không phù hợp với logic phát hiện của Snort.
+  \item Huấn luyện dựa trên proxy thể hiện khoảng cách chuyển giao lớn (62,5 điểm phần trăm: 95,0\% né tránh XGBoost so với 32,5\% né tránh Snort của agent cơ sở tại horizon của gate) so với Snort thực tế, chỉ ra rằng các đặc trưng XGBoost không phù hợp với logic phát hiện của Snort.
   
   \item Các lỗi cơ sở hạ tầng tới hạn (trích xuất một chiều, viết lại thiếu suy nghĩ) đã làm cho các phép đo lường trước đó trở nên bất khả thi; các phép đo lường tái lập được bây giờ xác thực phương pháp.
 \end{enumerate}
@@ -414,10 +484,11 @@ Những phát hiện gợi ý:
 \section{Cài Đặt Môi Trường}
 
 \begin{itemize}
-  \item Python 3.10, PyTorch 2.0, Stable-Baselines3 2.0
-  \item XGBoost 1.7 (100 cây, max\_depth=6)
-  \item Snort 2.9.20, quy tắc Emerging Threats Open (cập nhật 2023)
-  \item Bộ dữ liệu CTU-13: 13 bộ dữ liệu botnet, tổng cộng 1.9 GB
+  \item Python 3.10, PyTorch 2.0, Stable-Baselines3 2.0 \cite{stable_baselines3}
+  \item XGBoost 1.7 (100 cây, max\_depth=6) \cite{chen2016xgboost}
+  \item Snort 2.9.20 \cite{snort_project}, quy tắc Emerging Threats Open \cite{emerging_threats}
+  \item Bộ dữ liệu CTU-13 \cite{stratosphere_ctu13}: 13 bộ dữ liệu botnet, tổng cộng 1.9 GB
+  \item Gymnasium làm giao diện môi trường \cite{gymnasium}
 \end{itemize}
 
 \section{Siêu Tham Số}

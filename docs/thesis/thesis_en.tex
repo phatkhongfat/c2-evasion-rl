@@ -13,7 +13,7 @@
 \maketitle
 
 \begin{abstract}
-This thesis investigates how reinforcement learning (PPO) can be used to craft adversarial network flows that evade detection by machine learning-based intrusion detection systems (IDS). We train an agent on a surrogate XGBoost model to mutate botnet C2 flows from the CTU-13 dataset, and validate evasion success against a real Snort 2.9 IDS running the Emerging Threats Open ruleset. Key findings: (1) packet-level mutations achieve 100\% evasion on small flow sets (24 flows, cost=0.6) against Snort; (2) evasion degrades non-monotonically with batch size, peaking at 95.7\% on 300 flows; (3) the surrogate-to-real gap persists (95\% XGBoost evasion vs 32.5\% Snort evasion for the baseline agent), indicating that surrogate-based training does not transfer to real detection logic. We document critical bugs in flow extraction and packet rewriting that initially prevented real Snort detection, and provide reproducible measurements across three experimental phases: corrupt-cost sweep, flow scale-up, and cross-capture validation.
+This thesis investigates how reinforcement learning (PPO) can be used to craft adversarial network flows that evade detection by machine learning-based intrusion detection systems (IDS). We train an agent on a surrogate XGBoost model to mutate botnet C2 flows from the CTU-13 dataset, and validate evasion success against a real Snort 2.9 IDS running the Emerging Threats Open ruleset. Key findings: (1) packet-level mutations achieve 100\% evasion on small flow sets (24 flows, cost=0.6) against Snort; (2) evasion degrades non-monotonically with batch size, peaking at 95.7\% on 300 flows; (3) the surrogate-to-real gap persists (95\% XGBoost evasion vs 32.5\% Snort evasion for the blind agent at the gate horizon, a 62.5 percentage point gap), indicating that surrogate-based training does not transfer to real detection logic. We document critical bugs in flow extraction and packet rewriting that initially prevented real Snort detection, and provide reproducible measurements across three experimental phases: corrupt-cost sweep, flow scale-up, and cross-capture validation.
 \end{abstract}
 
 \tableofcontents
@@ -57,7 +57,7 @@ Goal: Train a PPO agent to mutate flows such that:
   
   \item \textbf{Non-monotonic scaling}: Identified a surprising learning curve: evasion improves from 24 to 300 flows (100\% $\to$ 95.7\%), then fails catastrophically at 323+ flows, suggesting a hard limit in policy extraction capacity.
   
-  \item \textbf{Surrogate gap analysis}: Measured an 80 percentage point gap between surrogate and real Snort performance, indicating that XGBoost-based training does not capture Snort's decision boundaries.
+  \item \textbf{Surrogate gap analysis}: Measured a 62.5 percentage point gap between surrogate and real Snort performance (95.0\% vs 32.5\% evasion), indicating that XGBoost-based training does not capture Snort's decision boundaries.
   
   \item \textbf{Reproducible measurements}: Documented and fixed two critical bugs (unidirectional flow extraction, naive packet rewriting) that had made all prior detection impossible; final results are verified against real Snort verdicts.
 \end{enumerate}
@@ -182,7 +182,7 @@ Bidirectional flow extraction and direction-aware packet rewriting ensure that T
 
 \section{Markov Decision Process}
 
-The RL environment is formulated as an MDP $(\mathcal{S}, \mathcal{A}, P, r, \gamma)$:
+The RL environment is formulated as an MDP $(\mathcal{S}, \mathcal{A}, P, r, \gamma)$ \citep{puterman1994markov}:
 
 \begin{itemize}
   \item $\mathcal{S} \in \mathbb{R}^6$: observation space (normalized flow aggregates)
@@ -200,7 +200,7 @@ We use Proximal Policy Optimization (PPO) with the objective:
 L^{\text{CLIP}}(\theta) = \mathbb{E}_{t} \left[ \min(r_t(\theta) \hat{A}_t, \text{clip}(r_t(\theta), 1-\epsilon, 1+\epsilon) \hat{A}_t) \right]
 \end{equation}
 
-where $r_t(\theta) = \pi_\theta(a_t | s_t) / \pi_{\theta_{\text{old}}}(a_t | s_t)$ is the probability ratio, and $\hat{A}_t$ is the generalized advantage estimate (GAE).
+where $r_t(\theta) = \pi_\theta(a_t | s_t) / \pi_{\theta_{\text{old}}}(a_t | s_t)$ is the probability ratio, and $\hat{A}_t$ is the generalized advantage estimate (GAE). \citet{schulman2017proximal} introduced PPO as a stable, sample-efficient alternative to earlier policy gradient methods \citep{sutton2000policy}; we optimize the objective with Adam \citep{kingma2014adam}.
 
 \section{Surrogate Training}
 
@@ -210,9 +210,11 @@ The XGBoost surrogate is trained on CTU-13 with 6 features:
 \hat{P}(\text{mal} | s) = \text{XGBoost}(s; 100 \text{ trees}, \text{max\_depth}=6)
 \end{equation}
 
-Training data: 324,078 flows (train) / 81,020 flows (test), undersampled to balance benign and malicious classes.
+Training data: 324,078 flows (train) / 81,020 flows (test), undersampled to balance benign and malicious classes. \citet{chen2016xgboost} is the original description of the algorithm.
 
 Validation metrics: Accuracy 0.913, Precision 0.921, Recall 0.904, F1 0.912, ROC AUC 0.972.
+
+The surrogate is not the defender we ultimately care about. \citet{demetrio2020intriguing} show that problem-space attacks do not behave like feature-space ones, so a classifier trained on the same aggregates the agent manipulates cannot by itself establish that the agent generalizes to a real IDS. That is why the pipeline carries an independent \Snort{} layer.
 
 \chapter{Experiments}
 
@@ -257,7 +259,7 @@ Baseline (no mutation) & 3.8\% & 6.2\% & 93.8\% \\
 \end{tabular}
 \end{table}
 
-Key observation: 80 percentage point gap between surrogate (95\% evasion) and real Snort (32.5\% evasion).
+Key observation: 62.5 percentage point gap between surrogate (95\% evasion) and real Snort (32.5\% evasion).
 
 \subsection{Phase 3: Stratosphere Validation}
 
@@ -357,23 +359,91 @@ Direction-aware rewrite on same 10-packet flow → 1 alert (matches both directi
   
   \item \textbf{Bidirectional traffic is non-obvious}: Network flows are inherently bidirectional; synthesizing only one direction breaks fundamental protocol assumptions.
   
-  \item \textbf{Surrogate gap is large}: An 80pp gap between XGBoost (95\% evasion) and real Snort (32.5\%) suggests XGBoost training does not capture the adversary's actual decision boundary. Future work should either (a) train on Snort verdicts directly, or (b) use feature importance analysis to identify why the gap exists.
+  \item \textbf{Surrogate gap is large}: A 62.5pp gap between XGBoost (95\% evasion) and real Snort (32.5\%) suggests XGBoost training does not capture the adversary's actual decision boundary. Future work should either (a) train on Snort verdicts directly, or (b) use feature importance analysis to identify why the gap exists.
 \end{enumerate}
 
 \chapter{Related Work}
 
-Adversarial machine learning on network traffic has been studied extensively:
+Adversarial machine learning on network traffic has been studied extensively.
+
+\subsection{Foundations of Adversarial ML}
 
 \begin{itemize}
   \item \citet{biggio2013evasion} pioneered evasion attacks on ML classifiers, introducing the gradient-based attack framework.
   
   \item \citet{goodfellow2014explaining} proposed FGSM and adversarial example generation, foundational for understanding adversarial robustness.
   
+  \item \citet{papernot2016limits} showed the limitations of deep learning in adversarial settings and introduced a directional attack algorithm that requires far fewer perturbations than FGSM.
+  
+  \item \citet{carlini2016towards} proposed a stronger evaluation standard for robustness, demonstrating that many defenses published before it could be broken.
+  
+  \item \citet{roli2018wild} surveyed ten years of adversarial ML and catalogued the field's open challenges, including the transferability of attacks across models.
+  
+  \item \citet{carlini2019certified} introduced certified robustness via randomized smoothing, providing guarantees rather than empirical robustness claims.
+  
+  \item \citet{bruckner2021machine} analysed the interaction between adversarial robustness and ML security more broadly.
+\end{itemize}
+
+\subsection{Adversarial ML in the Problem Space}
+
+\begin{itemize}
+  \item \citet{demetrio2021adversarial} provided a comprehensive taxonomy of adversarial ML attacks in security, including evasion in problem space -- our setting.
+  
+  \item \citet{demetrio2020intriguing} showed that problem-space attacks behave differently from feature-space ones, which is exactly why we validate against a real detector rather than trusting the surrogate.
+  
+  \item \citet{pierazzi2019intriguing} examined what makes adversarial examples meaningful for malware detection in problem space.
+  
+  \item \citet{demetrio2019adversarial} evaded deep learning malware detectors in executables while preserving file functionality.
+  
+  \item \citet{melis2016poisoning} studied poisoning attacks against support vector machines, the training-time counterpart to the evasion attacks studied here.
+  
+  \item \citet{anderson2018deep} applied adversarial learning to phishing page detection.
+\end{itemize}
+
+\subsection{Malware and IDS Detection}
+
+\begin{itemize}
+  \item \citet{arp2016drebin} built DREBIN, an explainable Android malware detector, illustrating the feature-engineering trade-offs that also shape our flow aggregates.
+  
+  \item \citet{saxe2015deep} evaluated deep neural networks for malware classification using static features.
+  
+  \item \citet{severi2018exploring} explored adversarial examples in malware detection.
+  
   \item \citet{mosli2018towards} studied malware evasion against deep learning classifiers, showing both the possibility and limits of adversarial malware.
   
-  \item \citet{demetrio2021adversarial} provided comprehensive taxonomy of adversarial ML attacks in security, including evasion in problem space (our setting).
-  
   \item \citet{silva2017ids} applied machine learning to IDS evasion, studying how attackers adapt to detection logic.
+  
+  \item \citet{reuben2021adversarial} examined adversarial ML at scale.
+\end{itemize}
+
+\subsection{Reinforcement Learning Foundations}
+
+\begin{itemize}
+  \item \citet{puterman1994markov} formalized Markov decision processes, the framework our environment is cast in.
+  
+  \item \citet{sutton2000policy} derived the policy gradient theorem, the basis for PPO.
+  
+  \item \citet{schulman2017proximal} introduced Proximal Policy Optimization, the algorithm we train with.
+  
+  \item \citet{kingma2014adam} introduced the Adam optimizer used for the policy network.
+  
+  \item \citet{stable_baselines3} provided the PPO implementation we build on.
+  
+  \item \citet{gymnasium} defines the environment API our training environment conforms to.
+\end{itemize}
+
+\subsection{Detectors and Datasets}
+
+\begin{itemize}
+  \item \citet{snort_project} is the original description of Snort, the signature-based IDS we validate against.
+  
+  \item \citet{emerging_threats} publishes the Emerging Threats Open ruleset, the independent rule corpus used in our C2 subset.
+  
+  \item \citet{stratosphere_ctu13} released the CTU-13 botnet captures used for training.
+  
+  \item \citet{ctu_datasets} maintains the Stratosphere IPS dataset distribution, including the MCFP captures used for cross-capture validation.
+  
+  \item \citet{chen2016xgboost} introduced XGBoost, the surrogate detector we train.
 \end{itemize}
 
 Our work extends this line by combining RL (PPO) with real-world IDS validation (Snort), rather than synthetic detectors. The focus on packet-level mutations and the discovery of non-monotonic scaling is novel.
@@ -387,7 +457,7 @@ Our work extends this line by combining RL (PPO) with real-world IDS validation 
   
   \item Learning curves are non-monotonic: evasion peaks at 300 flows (95.7\%), then fails at 323+, suggesting hard limits in policy capacity.
   
-  \item Surrogate-based training exhibits massive transfer gap (80pp) compared to real Snort, indicating that XGBoost features do not align with Snort's detection logic.
+  \item Surrogate-based training exhibits a large transfer gap (62.5pp) compared to real Snort, indicating that XGBoost features do not align with Snort's detection logic.
   
   \item Critical infrastructure bugs (unidirectional extraction, naive rewriting) made prior measurements impossible; reproducible measurements now validate the approach.
 \end{enumerate}
@@ -432,10 +502,11 @@ The findings suggest:
 \section{Environment Setup}
 
 \begin{itemize}
-  \item Python 3.10, PyTorch 2.0, Stable-Baselines3 2.0
-  \item XGBoost 1.7 (100 trees, max\_depth=6)
-  \item Snort 2.9.20, Emerging Threats Open rules (updated 2023)
-  \item CTU-13 dataset: 13 botnet captures, 1.9 GB total
+  \item Python 3.10, PyTorch 2.0, Stable-Baselines3 2.0 \cite{stable_baselines3}
+  \item XGBoost 1.7 (100 trees, max\_depth=6) \cite{chen2016xgboost}
+  \item Snort 2.9.20 \cite{snort_project}, Emerging Threats Open rules \cite{emerging_threats}
+  \item CTU-13 dataset \cite{stratosphere_ctu13}: 13 botnet captures, 1.9 GB total
+  \item Gymnasium as the environment API \cite{gymnasium}
 \end{itemize}
 
 \section{Hyperparameters}
