@@ -155,7 +155,6 @@ ground truth the previous hand-written rules could not provide.
 ## 3. Measured effects on the model
 
 ### 3.1 Reward shaping
-
 The reward term is `reward -= λ · P(Snort alert)`, applied per step, opt-in
 (default off, so existing models are bit-identical). λ=20 is below
 `REWARD_EVASION = 50`, so evasion remains net-positive in principle — but at
@@ -179,18 +178,95 @@ argument for measuring against real Snort and training on measured features.
 
 ---
 
-## 4. Open items / next steps
+## 4. Results on the new (real) data
 
-1. **Finish real-feature extraction** across the 6 retained captures
-   (`extract_ctu13_real_features.py --all`).
-2. **Re-train the surrogate on measured features** and compare AUC against the
-   reconstructed-feature surrogate on a held-out capture (cross-capture split,
-   so the surrogate cannot memorise one botnet).
-3. **Re-run the λ sweep** against the real-ET-Open surrogate.
-4. **Report the honest comparison**, including the negative result if the
-   transfer gap persists — that is a legitimate finding.
+### 4.1 Real Snort labels per capture
 
-## 5. Reproduce
+Real Snort + ET Open C2 over each capture, alerts joined to flows by 5-tuple:
+
+| Capture | Flows | Alerted | Rate |
+|---|---|---|---|
+| `botnet-capture-20110819-bot` | 6,162 | 3,381 | **54.87%** |
+| `botnet-capture-20110815-rbot-dos` | 167 | 2 | 1.20% |
+| `botnet-capture-20110815-fast-flux` | 872 | 4 | 0.46% |
+| `botnet-capture-20110810-neris` | 14,520 | 52 | 0.36% |
+| `botnet-capture-20110816-qvod` | 8,672 | 0 | 0.00% |
+| `botnet-capture-20110816-sogou` | 47 | 0 | 0.00% |
+| **total** | **30,440** | **3,439** | **11.30%** |
+
+The 150× spread between captures is itself the headline: ET Open C2 catches
+one botnet family heavily and others not at all. Any single-capture metric is
+therefore misleading, and cross-capture validation is mandatory.
+
+### 4.2 Which measured features track Snort's rules
+
+Per-feature separation on real verdicts (rank AUC; 0.5 = no information):
+
+| Feature | AUC | Cohen's d | Reading |
+|---|---|---|---|
+| `n_distinct_pkt_sizes` | 0.949 | +9.10 | alerted flows have far more size variety |
+| `dominant_pkt_size_frac` | 0.047 | −2.90 | alerted flows are *not* uniform (inverted) |
+| `bwd_bytes` | 0.941 | +1.75 | alerted flows carry more reply volume |
+| `bwd_pkts` | 0.934 | +1.25 | more reply packets |
+| `pkt_size_iqr` | 0.906 | +1.01 | wider size spread |
+| `syn_count` | 0.109 | −1.51 | alerted flows have *fewer* SYNs (inverted) |
+| `pkt_size_max` | 0.880 | +0.39 | larger max segment |
+| `tot_bytes` | 0.879 | +1.58 | bigger flows |
+| `proto_id` | 0.868 | +1.88 | protocol is a strong predictor |
+| `iat_cv` | 0.825 | **+5.06** | largest effect size — burstiness |
+| `flags_variety` | 0.161 | −0.77 | fewer flag classes (inverted) |
+
+**Feature-selection decision (validated, not guessed):** the surrogate keeps
+the 27 features with usable effect size and drops everything with
+|AUC − 0.5| below ~0.25. Identifiers (IPs, ports) are excluded deliberately so
+the surrogate cannot key on a specific botnet.
+
+Interpretation: Snort's C2 rules fire on flows that look like *real
+application traffic* — varied packet sizes, bidirectional payload, bursty
+timing. The uniform, single-size, one-directional flows that dominate the
+captures are exactly the ones ET Open ignores. That is a concrete,
+actionable evasion direction for the RL agent.
+
+### 4.3 Surrogate on real features: the generalisation gap
+
+| Metric | Value |
+|---|---|
+| In-sample AUC (all data) | **0.9999** |
+| Pooled out-of-fold AUC (leave-one-capture-out) | **0.6781** |
+| Folds | neris 0.930 · fast-flux 0.764 · rbot-dos 0.982 · **bot 0.650** |
+
+This is the most important number in the project so far. A surrogate that
+scores 0.9999 on data it has seen scores **0.678** on a botnet capture it has
+not. The previous surrogate's 0.997 was the same illusion: high in-sample
+score, no transfer — which is exactly why the λ=5/λ=10 agents evaded real
+Snort *worse* than a blind agent.
+
+The `bot` capture (0.650) is where the surrogate fails, and it is the capture
+with 55% of flows alerted. The model is being asked to generalise across
+botnet families with fundamentally different traffic, and it cannot.
+
+**Consequence for the plan:** no amount of λ tuning fixes this. The next real
+lever is either (a) a per-family surrogate with a family-detection gate, or
+(b) accepting the surrogate as a *weak* prior and keeping real Snort in the
+loop during training. Both are honest options; neither is a hyperparameter.
+
+---
+
+## 5. Open items / next steps
+
+1. ~~Finish real-feature extraction across the 6 retained captures~~ **DONE**
+   — 30,440 flows, 48 columns.
+2. ~~Re-train the surrogate on measured features~~ **DONE**
+   — pooled cross-capture AUC 0.678 (vs 0.9999 in-sample).
+3. **Decide the fix for the generalisation gap** (see 4.3): per-family
+   surrogate + family gate, or real Snort in the training loop.
+4. **Re-run the λ sweep** against the real-ET-Open surrogate once (3) is
+   chosen, and report the honest comparison including negative results.
+5. **Consider more captures.** Only 6 of 13 were extracted (the 19 GB capture
+   10 was dropped for disk). More families would make the cross-capture number
+   more trustworthy; the current 0.678 rests on 4 usable folds.
+
+## 6. Reproduce
 
 ```bash
 # ruleset

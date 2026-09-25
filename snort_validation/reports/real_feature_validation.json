@@ -1,0 +1,346 @@
+{
+  "capture": "botnet-capture-20110810-neris",
+  "pcap": "data/stratosphere/CTU-13-Dataset/1/botnet-capture-20110810-neris.pcap",
+  "n_flows": 14520,
+  "n_alert_flows": 52,
+  "alert_flow_rate": 0.0036,
+  "n_alert_lines": 298,
+  "n_distinct_rules_fired": 2,
+  "top_rules": [
+    {
+      "sid": 2014169,
+      "count": 290,
+      "msg": "ET DNS Query for .su TLD (Soviet Union) Often Malware Related"
+    },
+    {
+      "sid": 2012533,
+      "count": 8,
+      "msg": "ET TROJAN Win32/Virut.BN Checkin"
+    }
+  ],
+  "ruleset": "ET Open C2 subset (21,374 rules)",
+  "snort_conf": "/root/.hermes/c2-evasion-rl/snort_validation/et_open_c2/snort_et_c2.conf",
+  "feature_ranking": [
+    {
+      "feature": "dominant_pkt_size_frac",
+      "auc": 0.0474,
+      "auc_dist_from_random": 0.4526,
+      "cohens_d": -2.9043,
+      "mean_alerted": 0.2571,
+      "mean_clean": 0.8686
+    },
+    {
+      "feature": "n_distinct_pkt_sizes",
+      "auc": 0.9486,
+      "auc_dist_from_random": 0.4486,
+      "cohens_d": 9.0962,
+      "mean_alerted": 52.9615,
+      "mean_clean": 2.2763
+    },
+    {
+      "feature": "bwd_bytes",
+      "auc": 0.9408,
+      "auc_dist_from_random": 0.4408,
+      "cohens_d": 1.7535,
+      "mean_alerted": 40403.8077,
+      "mean_clean": 1524.2262
+    },
+    {
+      "feature": "bwd_pkts",
+      "auc": 0.9339,
+      "auc_dist_from_random": 0.4339,
+      "cohens_d": 1.2517,
+      "mean_alerted": 254.5769,
+      "mean_clean": 4.8293
+    },
+    {
+      "feature": "pkt_size_iqr",
+      "auc": 0.9059,
+      "auc_dist_from_random": 0.4059,
+      "cohens_d": 1.0142,
+      "mean_alerted": 178.0048,
+      "mean_clean": 31.6526
+    },
+    {
+      "feature": "syn_count",
+      "auc": 0.1093,
+      "auc_dist_from_random": 0.3907,
+      "cohens_d": -1.512,
+      "mean_alerted": 0.2308,
+      "mean_clean": 4.6516
+    },
+    {
+      "feature": "pkt_size_max",
+      "auc": 0.8805,
+      "auc_dist_from_random": 0.3805,
+      "cohens_d": 0.3855,
+      "mean_alerted": 516.0192,
+      "mean_clean": 248.6774
+    },
+    {
+      "feature": "tot_bytes",
+      "auc": 0.8795,
+      "auc_dist_from_random": 0.3795,
+      "cohens_d": 1.5751,
+      "mean_alerted": 78263.0385,
+      "mean_clean": 3384.8314
+    },
+    {
+      "feature": "pkt_size_median",
+      "auc": 0.8687,
+      "auc_dist_from_random": 0.3687,
+      "cohens_d": 0.0942,
+      "mean_alerted": 74.0865,
+      "mean_clean": 67.7445
+    },
+    {
+      "feature": "proto_id",
+      "auc": 0.8681,
+      "auc_dist_from_random": 0.3681,
+      "cohens_d": 1.8815,
+      "mean_alerted": 16.1538,
+      "mean_clean": 8.0341
+    },
+    {
+      "feature": "pkt_size_mean",
+      "auc": 0.8594,
+      "auc_dist_from_random": 0.3594,
+      "cohens_d": 0.7821,
+      "mean_alerted": 158.6097,
+      "mean_clean": 91.571
+    },
+    {
+      "feature": "pkt_size_std",
+      "auc": 0.8534,
+      "auc_dist_from_random": 0.3534,
+      "cohens_d": 0.5582,
+      "mean_alerted": 141.5013,
+      "mean_clean": 51.6527
+    },
+    {
+      "feature": "pkt_size_cv",
+      "auc": 0.8499,
+      "auc_dist_from_random": 0.3499,
+      "cohens_d": 0.9721,
+      "mean_alerted": 0.7242,
+      "mean_clean": 0.242
+    },
+    {
+      "feature": "flags_variety",
+      "auc": 0.1608,
+      "auc_dist_from_random": 0.3392,
+      "cohens_d": -0.7715,
+      "mean_alerted": 0.3077,
+      "mean_clean": 1.2162
+    },
+    {
+      "feature": "iat_cv",
+      "auc": 0.8245,
+      "auc_dist_from_random": 0.3245,
+      "cohens_d": 5.0599,
+      "mean_alerted": 8.8988,
+      "mean_clean": 1.6522
+    },
+    {
+      "feature": "tot_pkts",
+      "auc": 0.8166,
+      "auc_dist_from_random": 0.3166,
+      "cohens_d": 1.2651,
+      "mean_alerted": 775.2308,
+      "mean_clean": 19.4866
+    },
+    {
+      "feature": "fwd_pkts",
+      "auc": 0.7894,
+      "auc_dist_from_random": 0.2894,
+      "cohens_d": 1.2717,
+      "mean_alerted": 520.6538,
+      "mean_clean": 14.6573
+    },
+    {
+      "feature": "hdr_bytes",
+      "auc": 0.7883,
+      "auc_dist_from_random": 0.2883,
+      "cohens_d": 0.8876,
+      "mean_alerted": 21724.4615,
+      "mean_clean": 740.9887
+    },
+    {
+      "feature": "fwd_bytes",
+      "auc": 0.786,
+      "auc_dist_from_random": 0.286,
+      "cohens_d": 1.2176,
+      "mean_alerted": 37859.2308,
+      "mean_clean": 1860.6052
+    },
+    {
+      "feature": "byte_ratio",
+      "auc": 0.786,
+      "auc_dist_from_random": 0.286,
+      "cohens_d": 0.0995,
+      "mean_alerted": 0.772,
+      "mean_clean": 0.5226
+    },
+    {
+      "feature": "iat_min",
+      "auc": 0.217,
+      "auc_dist_from_random": 0.283,
+      "cohens_d": -0.0122,
+      "mean_alerted": 0.0028,
+      "mean_clean": 0.3257
+    },
+    {
+      "feature": "pkt_size_min",
+      "auc": 0.7769,
+      "auc_dist_from_random": 0.2769,
+      "cohens_d": 0.3511,
+      "mean_alerted": 67.1731,
+      "mean_clean": 63.994
+    },
+    {
+      "feature": "flow_duration",
+      "auc": 0.7676,
+      "auc_dist_from_random": 0.2676,
+      "cohens_d": 3.8324,
+      "mean_alerted": 8608.8258,
+      "mean_clean": 512.8193
+    },
+    {
+      "feature": "iat_max",
+      "auc": 0.7422,
+      "auc_dist_from_random": 0.2422,
+      "cohens_d": 2.2582,
+      "mean_alerted": 4127.4311,
+      "mean_clean": 402.2166
+    },
+    {
+      "feature": "iat_std",
+      "auc": 0.7304,
+      "auc_dist_from_random": 0.2304,
+      "cohens_d": 0.5108,
+      "mean_alerted": 335.5106,
+      "mean_clean": 103.234
+    },
+    {
+      "feature": "pkt_rate",
+      "auc": 0.2935,
+      "auc_dist_from_random": 0.2065,
+      "cohens_d": -0.0979,
+      "mean_alerted": 7.6337,
+      "mean_clean": 2569.0333
+    },
+    {
+      "feature": "iat_mean",
+      "auc": 0.6985,
+      "auc_dist_from_random": 0.1985,
+      "cohens_d": 0.1486,
+      "mean_alerted": 67.7703,
+      "mean_clean": 39.2512
+    },
+    {
+      "feature": "bytes_rate",
+      "auc": 0.3127,
+      "auc_dist_from_random": 0.1873,
+      "cohens_d": -0.0954,
+      "mean_alerted": 1395.6782,
+      "mean_clean": 166970.0205
+    },
+    {
+      "feature": "dst_port",
+      "auc": 0.6762,
+      "auc_dist_from_random": 0.1762,
+      "cohens_d": -0.2104,
+      "mean_alerted": 86.1538,
+      "mean_clean": 1930.9126
+    },
+    {
+      "feature": "is_well_known_port",
+      "auc": 0.5728,
+      "auc_dist_from_random": 0.0728,
+      "cohens_d": 0.4135,
+      "mean_alerted": 1.0,
+      "mean_clean": 0.8544
+    },
+    {
+      "feature": "ack_count",
+      "auc": 0.4688,
+      "auc_dist_from_random": 0.0312,
+      "cohens_d": -0.0177,
+      "mean_alerted": 1.3462,
+      "mean_clean": 11.6951
+    },
+    {
+      "feature": "fin_count",
+      "auc": 0.4747,
+      "auc_dist_from_random": 0.0253,
+      "cohens_d": -0.1607,
+      "mean_alerted": 0.1154,
+      "mean_clean": 0.2741
+    },
+    {
+      "feature": "payload_entropy",
+      "auc": 0.4798,
+      "auc_dist_from_random": 0.0202,
+      "cohens_d": -0.1333,
+      "mean_alerted": 0.3898,
+      "mean_clean": 0.635
+    },
+    {
+      "feature": "psh_count",
+      "auc": 0.4834,
+      "auc_dist_from_random": 0.0166,
+      "cohens_d": -0.0171,
+      "mean_alerted": 0.2692,
+      "mean_clean": 3.6579
+    },
+    {
+      "feature": "rst_count",
+      "auc": 0.4837,
+      "auc_dist_from_random": 0.0163,
+      "cohens_d": -0.1007,
+      "mean_alerted": 0.0769,
+      "mean_clean": 0.2219
+    },
+    {
+      "feature": "payload_bytes",
+      "auc": 0.4845,
+      "auc_dist_from_random": 0.0155,
+      "cohens_d": -0.0594,
+      "mean_alerted": 458.3077,
+      "mean_clean": 2060.2129
+    },
+    {
+      "feature": "payload_mean_len",
+      "auc": 0.4851,
+      "auc_dist_from_random": 0.0149,
+      "cohens_d": 0.0074,
+      "mean_alerted": 75.2967,
+      "mean_clean": 73.2044
+    },
+    {
+      "feature": "payload_max_len",
+      "auc": 0.4856,
+      "auc_dist_from_random": 0.0144,
+      "cohens_d": 0.0047,
+      "mean_alerted": 162.9231,
+      "mean_clean": 159.6769
+    },
+    {
+      "feature": "payload_fraction",
+      "auc": 0.4859,
+      "auc_dist_from_random": 0.0141,
+      "cohens_d": -0.0341,
+      "mean_alerted": 0.0623,
+      "mean_clean": 0.0695
+    },
+    {
+      "feature": "urg_count",
+      "auc": 0.5,
+      "auc_dist_from_random": 0.0,
+      "cohens_d": 0.0,
+      "mean_alerted": 0.0,
+      "mean_clean": 0.0
+    }
+  ],
+  "note": "Snort ran over the REAL capture (real payloads), and alerts were joined to measured per-flow features by 5-tuple. AUC is rank-based and symmetric: 0.5 = no information, 1.0/0.0 = perfect separation."
+}

@@ -1,0 +1,188 @@
+{
+  "data": "data/ctu13_snort_labeled.parquet",
+  "n_flows": 30440,
+  "n_features": 27,
+  "features": [
+    "n_distinct_pkt_sizes",
+    "dominant_pkt_size_frac",
+    "bwd_bytes",
+    "bwd_pkts",
+    "pkt_size_iqr",
+    "syn_count",
+    "pkt_size_max",
+    "tot_bytes",
+    "pkt_size_median",
+    "proto_id",
+    "pkt_size_mean",
+    "pkt_size_std",
+    "pkt_size_cv",
+    "flags_variety",
+    "iat_cv",
+    "tot_pkts",
+    "fwd_pkts",
+    "fwd_bytes",
+    "hdr_bytes",
+    "byte_ratio",
+    "iat_mean",
+    "iat_std",
+    "pkt_rate",
+    "bytes_rate",
+    "flow_duration",
+    "payload_entropy",
+    "payload_fraction"
+  ],
+  "positive_rate": 0.113,
+  "validation": "leave-one-capture-out (cross-capture)",
+  "pooled_out_of_fold_auc": 0.6781,
+  "in_sample_auc_reference_only": 0.9999,
+  "folds": [
+    {
+      "capture": "botnet-capture-20110810-neris",
+      "n_test": 14520,
+      "n_pos_test": 52,
+      "auc": 0.9299,
+      "accuracy@0.5": 0.9964,
+      "precision@0.5": 0.0,
+      "recall@0.5": 0.0
+    },
+    {
+      "capture": "botnet-capture-20110815-fast-flux",
+      "n_test": 872,
+      "n_pos_test": 4,
+      "auc": 0.7638,
+      "accuracy@0.5": 0.9966,
+      "precision@0.5": 1.0,
+      "recall@0.5": 0.25
+    },
+    {
+      "capture": "botnet-capture-20110815-rbot-dos",
+      "n_test": 167,
+      "n_pos_test": 2,
+      "auc": 0.9818,
+      "accuracy@0.5": 0.988,
+      "precision@0.5": 0.0,
+      "recall@0.5": 0.0
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "n_test": 6162,
+      "n_pos_test": 3381,
+      "auc": 0.6498,
+      "accuracy@0.5": 0.4513,
+      "precision@0.5": 0.0,
+      "recall@0.5": 0.0
+    }
+  ],
+  "feature_importance": [
+    {
+      "feature": "pkt_size_median",
+      "importance": 0.56739
+    },
+    {
+      "feature": "payload_fraction",
+      "importance": 0.061
+    },
+    {
+      "feature": "proto_id",
+      "importance": 0.055
+    },
+    {
+      "feature": "flags_variety",
+      "importance": 0.05398
+    },
+    {
+      "feature": "pkt_size_max",
+      "importance": 0.05166
+    },
+    {
+      "feature": "fwd_bytes",
+      "importance": 0.0376
+    },
+    {
+      "feature": "pkt_rate",
+      "importance": 0.02867
+    },
+    {
+      "feature": "n_distinct_pkt_sizes",
+      "importance": 0.01986
+    },
+    {
+      "feature": "fwd_pkts",
+      "importance": 0.01619
+    },
+    {
+      "feature": "iat_mean",
+      "importance": 0.01135
+    },
+    {
+      "feature": "byte_ratio",
+      "importance": 0.0111
+    },
+    {
+      "feature": "payload_entropy",
+      "importance": 0.00987
+    },
+    {
+      "feature": "bwd_bytes",
+      "importance": 0.00877
+    },
+    {
+      "feature": "pkt_size_std",
+      "importance": 0.00796
+    },
+    {
+      "feature": "tot_pkts",
+      "importance": 0.00745
+    },
+    {
+      "feature": "pkt_size_mean",
+      "importance": 0.00631
+    },
+    {
+      "feature": "tot_bytes",
+      "importance": 0.00603
+    },
+    {
+      "feature": "dominant_pkt_size_frac",
+      "importance": 0.00594
+    },
+    {
+      "feature": "pkt_size_iqr",
+      "importance": 0.00493
+    },
+    {
+      "feature": "pkt_size_cv",
+      "importance": 0.00475
+    },
+    {
+      "feature": "bytes_rate",
+      "importance": 0.00446
+    },
+    {
+      "feature": "bwd_pkts",
+      "importance": 0.00359
+    },
+    {
+      "feature": "flow_duration",
+      "importance": 0.00355
+    },
+    {
+      "feature": "syn_count",
+      "importance": 0.00351
+    },
+    {
+      "feature": "hdr_bytes",
+      "importance": 0.00323
+    },
+    {
+      "feature": "iat_std",
+      "importance": 0.00323
+    },
+    {
+      "feature": "iat_cv",
+      "importance": 0.00261
+    }
+  ],
+  "ruleset": "ET Open C2 subset (21,374 rules)",
+  "note": "In-sample AUC is reported only to expose overfitting: the honest number is pooled_out_of_fold_auc, measured on captures the model never trained on."
+}

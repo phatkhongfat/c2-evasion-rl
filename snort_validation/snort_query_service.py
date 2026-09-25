@@ -64,8 +64,15 @@ RULES = [
     # sid 3000005: FIN burst -- measured never to fire on these synthesized
     # flows (the FIN pairs are emitted at most once per flow and carry no
     # payload), so it is intentionally not modelled.
-    # sid 3000006: single very large payload, no threshold, no flow keyword
+    # sid 3000006: single very large payload, no threshold
     (3000006, "tcp", 1400, None, 1, 0, False, None),
+    # FAMILY-SPECIFIC RULES (2026-09-24): Based on CTU-13 analysis
+    # sid 3000007: Neris-style UDP beacon (200-400 bytes, 2 in 10s)
+    (3000007, "udp", 200, 400, 2, 10, False, "by_src"),
+    # sid 3000008: Neris/Virut TCP medium flow (300-600 bytes, 4 in 60s)
+    (3000008, "tcp", 300, 600, 4, 60, True, "by_src"),
+    # sid 3000009: Rbot chatty C2 (600-1500 bytes, 6 in 60s)
+    (3000009, "tcp", 600, 1500, 6, 60, True, "by_src"),
 ]
 
 

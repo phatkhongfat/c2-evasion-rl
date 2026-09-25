@@ -1,0 +1,16 @@
+{
+  "seed": 42,
+  "n_episodes": 80,
+  "model": "ppo_c2_evasion_agent_snortaware.zip",
+  "judge": "xgboost_enhanced_judge_v2.pkl",
+  "agent": {
+    "detected": 74,
+    "evaded": 6,
+    "evasion_rate": 7.5
+  },
+  "random_baseline": {
+    "detected": 5,
+    "evaded": 75,
+    "evasion_rate": 93.75
+  }
+}
