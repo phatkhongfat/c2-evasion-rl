@@ -62,6 +62,10 @@ models/*.zip
 data/archive/
 data/*.parquet
 
+# Stratosphere IPS / CTU-13 raw captures (1.9 GB archive + extracted pcaps).
+# Re-fetch with snort_validation/fetch_stratosphere.sh; never commit captures.
+data/stratosphere/
+
 # Weights & Biases
 wandb/
 *.wandb

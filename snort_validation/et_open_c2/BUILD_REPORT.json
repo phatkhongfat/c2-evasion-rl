@@ -1,0 +1,378 @@
+{
+  "et_source_dir": "/tmp/etopen/rules",
+  "output_rules": "/root/.hermes/c2-evasion-rl/snort_validation/et_open_c2/et_open_c2.rules",
+  "counts": {
+    "alert_rules_seen": 52363,
+    "skipped_not_c2": 29344,
+    "skipped_blacklist_file": 652,
+    "skipped_no_content": 957,
+    "included": 21374,
+    "skipped_orphan_flowbit": 36
+  },
+  "included_rules": 21374,
+  "included_by_file": {
+    "emerging-attack_response.rules": 12,
+    "emerging-current_events.rules": 56,
+    "emerging-dns.rules": 54,
+    "emerging-dos.rules": 1,
+    "emerging-exploit.rules": 18,
+    "emerging-games.rules": 1,
+    "emerging-info.rules": 17,
+    "emerging-malware.rules": 624,
+    "emerging-mobile_malware.rules": 1144,
+    "emerging-p2p.rules": 85,
+    "emerging-policy.rules": 4,
+    "emerging-retired.rules": 231,
+    "emerging-scan.rules": 3,
+    "emerging-telnet.rules": 2,
+    "emerging-trojan.rules": 19064,
+    "emerging-user_agents.rules": 4,
+    "emerging-web_client.rules": 1,
+    "emerging-web_server.rules": 43,
+    "emerging-web_specific_apps.rules": 9,
+    "emerging-worm.rules": 1
+  },
+  "per_file_detail": {
+    "emerging-activex.rules": {
+      "alert": 185,
+      "skipped_not_c2": 185
+    },
+    "emerging-attack_response.rules": {
+      "alert": 688,
+      "skipped_not_c2": 676
+    },
+    "emerging-botcc.rules": {
+      "alert": 10,
+      "skipped_blacklist_file": 10
+    },
+    "emerging-chat.rules": {
+      "alert": 54,
+      "skipped_not_c2": 54
+    },
+    "emerging-ciarmy.rules": {
+      "alert": 596,
+      "skipped_blacklist_file": 596
+    },
+    "emerging-compromised.rules": {
+      "alert": 44,
+      "skipped_blacklist_file": 44
+    },
+    "emerging-current_events.rules": {
+      "alert": 5662,
+      "skipped_not_c2": 5606
+    },
+    "emerging-dns.rules": {
+      "alert": 54
+    },
+    "emerging-dos.rules": {
+      "alert": 58,
+      "skipped_no_content": 1,
+      "skipped_not_c2": 56
+    },
+    "emerging-drop.rules": {
+      "alert": 69,
+      "skipped_no_content": 69
+    },
+    "emerging-dshield.rules": {
+      "alert": 2,
+      "skipped_blacklist_file": 2
+    },
+    "emerging-exploit.rules": {
+      "alert": 1638,
+      "skipped_not_c2": 1620
+    },
+    "emerging-ftp.rules": {
+      "alert": 60,
+      "skipped_not_c2": 60
+    },
+    "emerging-games.rules": {
+      "alert": 23,
+      "skipped_not_c2": 22
+    },
+    "emerging-icmp_info.rules": {
+      "alert": 15,
+      "skipped_not_c2": 15
+    },
+    "emerging-imap.rules": {
+      "alert": 17,
+      "skipped_not_c2": 17
+    },
+    "emerging-inappropriate.rules": {
+      "alert": 1,
+      "skipped_not_c2": 1
+    },
+    "emerging-info.rules": {
+      "alert": 11378,
+      "skipped_not_c2": 11360,
+      "skipped_orphan_flowbit": 1
+    },
+    "emerging-malware.rules": {
+      "alert": 624
+    },
+    "emerging-misc.rules": {
+      "alert": 21,
+      "skipped_not_c2": 21
+    },
+    "emerging-mobile_malware.rules": {
+      "alert": 1144
+    },
+    "emerging-netbios.rules": {
+      "alert": 393,
+      "skipped_not_c2": 393
+    },
+    "emerging-p2p.rules": {
+      "alert": 85
+    },
+    "emerging-policy.rules": {
+      "alert": 866,
+      "skipped_not_c2": 859,
+      "skipped_no_content": 3
+    },
+    "emerging-pop3.rules": {
+      "alert": 9,
+      "skipped_not_c2": 9
+    },
+    "emerging-retired.rules": {
+      "alert": 416,
+      "skipped_not_c2": 181,
+      "skipped_no_content": 1,
+      "skipped_orphan_flowbit": 3
+    },
+    "emerging-rpc.rules": {
+      "alert": 82,
+      "skipped_not_c2": 82
+    },
+    "emerging-scada.rules": {
+      "alert": 90,
+      "skipped_not_c2": 89,
+      "skipped_no_content": 1
+    },
+    "emerging-scan.rules": {
+      "alert": 285,
+      "skipped_not_c2": 265,
+      "skipped_no_content": 17
+    },
+    "emerging-shellcode.rules": {
+      "alert": 57,
+      "skipped_not_c2": 57
+    },
+    "emerging-smtp.rules": {
+      "alert": 23,
+      "skipped_not_c2": 23
+    },
+    "emerging-snmp.rules": {
+      "alert": 16,
+      "skipped_not_c2": 16
+    },
+    "emerging-sql.rules": {
+      "alert": 191,
+      "skipped_not_c2": 191
+    },
+    "emerging-telnet.rules": {
+      "alert": 11,
+      "skipped_not_c2": 9
+    },
+    "emerging-tftp.rules": {
+      "alert": 13,
+      "skipped_not_c2": 13
+    },
+    "emerging-tor.rules": {
+      "alert": 814,
+      "skipped_no_content": 814
+    },
+    "emerging-trojan.rules": {
+      "alert": 19103,
+      "skipped_no_content": 7,
+      "skipped_orphan_flowbit": 32
+    },
+    "emerging-user_agents.rules": {
+      "alert": 262,
+      "skipped_not_c2": 258
+    },
+    "emerging-voip.rules": {
+      "alert": 16,
+      "skipped_not_c2": 16
+    },
+    "emerging-web_client.rules": {
+      "alert": 487,
+      "skipped_not_c2": 486
+    },
+    "emerging-web_server.rules": {
+      "alert": 708,
+      "skipped_not_c2": 665
+    },
+    "emerging-web_specific_apps.rules": {
+      "alert": 6040,
+      "skipped_not_c2": 6031
+    },
+    "emerging-worm.rules": {
+      "alert": 9,
+      "skipped_not_c2": 8
+    },
+    "threatview_CS_c2.rules": {
+      "alert": 44,
+      "skipped_no_content": 44
+    }
+  },
+  "excluded_orphan_flowbit_sample": [
+    {
+      "sid": 2063020,
+      "msg": "ET INFO Dotted Quad Host Suspected IoT Botnet Loader Shell Script",
+      "missing_flowbits": [
+        "http.dottedquadhost"
+      ]
+    },
+    {
+      "sid": 2047760,
+      "msg": "ET RETIRED ZenRAT Request Module CnC Response",
+      "missing_flowbits": [
+        "ET.ZenRATModuleRequest"
+      ]
+    },
+    {
+      "sid": 2047762,
+      "msg": "ET RETIRED ZenRAT Update CnC Response (Already Actual)",
+      "missing_flowbits": [
+        "ET.ZenRATUpdate"
+      ]
+    },
+    {
+      "sid": 2047755,
+      "msg": "ET RETIRED ZenRAT CnC OK Response",
+      "missing_flowbits": [
+        "ET.ZenRATPing"
+      ]
+    },
+    {
+      "sid": 2011162,
+      "msg": "ET TROJAN IRC Potential bot update/download via ftp command",
+      "missing_flowbits": [
+        "is_proto_irc"
+      ]
+    },
+    {
+      "sid": 2002029,
+      "msg": "ET TROJAN IRC Channel topic scan/exploit command",
+      "missing_flowbits": [
+        "is_proto_irc"
+      ]
+    },
+    {
+      "sid": 2002030,
+      "msg": "ET TROJAN IRC Potential bot scan/exploit command",
+      "missing_flowbits": [
+        "is_proto_irc"
+      ]
+    },
+    {
+      "sid": 2013036,
+      "msg": "ET TROJAN Java EXE Download by Vulnerable Version - Likely Driveby",
+      "missing_flowbits": [
+        "ET.http.javaclient.vulnerable"
+      ]
+    },
+    {
+      "sid": 2002386,
+      "msg": "ET TROJAN IRC channel topic misc bot commands",
+      "missing_flowbits": [
+        "is_proto_irc"
+      ]
+    },
+    {
+      "sid": 2025065,
+      "msg": "ET TROJAN Backdoor.Perl.Shellbot.cd IRC Bot that have DoS/DDoS functions",
+      "missing_flowbits": [
+        "is_proto_irc"
+      ]
+    },
+    {
+      "sid": 2019896,
+      "msg": "ET TROJAN Backdoor.Linux.Turla Download",
+      "missing_flowbits": [
+        "ET.ELFDownload"
+      ]
+    },
+    {
+      "sid": 2020170,
+      "msg": "ET TROJAN Possible Office Doc with Embedded VBA containing Reverse Meterpreter Shell",
+      "missing_flowbits": [
+        "et.DocVBAProject"
+      ]
+    },
+    {
+      "sid": 2020569,
+      "msg": "ET TROJAN Unknown Trojan Downloading PE via MSSQL Connection to Non-Standard Port",
+      "missing_flowbits": [
+        "ET.MSSQL"
+      ]
+    },
+    {
+      "sid": 2020700,
+      "msg": "ET TROJAN MWI Maldoc Exploit Kit Stats Callout",
+      "missing_flowbits": [
+        "ETPRO.RTF"
+      ]
+    },
+    {
+      "sid": 2022303,
+      "msg": "ET TROJAN ASCII Executable Inside of MSCOFF File DL Over HTTP",
+      "missing_flowbits": [
+        "et.MCOFF"
+      ]
+    },
+    {
+      "sid": 2019165,
+      "msg": "ET TROJAN Possible Banload Downloading Executable",
+      "missing_flowbits": [
+        "ET.autoit.ua"
+      ]
+    },
+    {
+      "sid": 2023671,
+      "msg": "ET TROJAN JS/WSF Downloader Dec 08 2016 M3",
+      "missing_flowbits": [
+        "et.IE7.NoRef.NoCookie"
+      ]
+    },
+    {
+      "sid": 2023672,
+      "msg": "ET TROJAN JS/WSF Downloader Dec 08 2016 M4",
+      "missing_flowbits": [
+        "et.IE7.NoRef.NoCookie"
+      ]
+    },
+    {
+      "sid": 2023679,
+      "msg": "ET TROJAN JS/WSF Downloader Dec 08 2016 M6",
+      "missing_flowbits": [
+        "et.IE7.NoRef.NoCookie"
+      ]
+    },
+    {
+      "sid": 2023711,
+      "msg": "ET TROJAN JS/WSF Downloader Dec 08 2016 M7",
+      "missing_flowbits": [
+        "min.gethttp"
+      ]
+    }
+  ],
+  "unique_sids": 21374,
+  "classtype_counts": {
+    "trojan-activity": 20929,
+    "bad-unknown": 109,
+    "policy-violation": 102,
+    "attempted-admin": 83,
+    "web-application-attack": 51,
+    "misc-activity": 48,
+    "web-application-activity": 17,
+    "attempted-user": 15,
+    "attempted-recon": 7,
+    "successful-user": 5,
+    "not-suspicious": 2,
+    "protocol-command-decode": 2,
+    "attempted-dos": 1,
+    "default-login-attempt": 1,
+    "network-scan": 1,
+    "successful-admin": 1
+  }
+}
