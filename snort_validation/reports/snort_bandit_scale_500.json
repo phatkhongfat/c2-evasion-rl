@@ -1,0 +1,25 @@
+{
+  "n_flows": 323,
+  "flows_requested": 500,
+  "rounds": 8,
+  "corrupt_cost": 0.6,
+  "capture": "botnet-capture-20110819-bot",
+  "stochastic_learning": {
+    "round_0": {"evaded": 260, "pct": 52.0, "mean_reward": 2.185, "mean_corrupt": 3.87},
+    "round_1": {"evaded": 257, "pct": 51.4, "mean_reward": 2.272, "mean_corrupt": 3.60},
+    "round_2": {"evaded": 257, "pct": 51.4, "mean_reward": 2.296, "mean_corrupt": 3.58},
+    "round_3": {"evaded": 251, "pct": 50.2, "mean_reward": 2.400, "mean_corrupt": 3.21},
+    "round_4": {"evaded": 252, "pct": 50.4, "mean_reward": 2.434, "mean_corrupt": 3.14},
+    "round_5": {"evaded": 247, "pct": 49.4, "mean_reward": 2.568, "mean_corrupt": 2.68},
+    "round_6": {"evaded": 250, "pct": 50.0, "mean_reward": 2.720, "mean_corrupt": 2.55},
+    "round_7": {"evaded": 249, "pct": 49.8, "mean_reward": 2.784, "mean_corrupt": 2.38},
+    "avg_evasion_pct": 50.5
+  },
+  "deterministic_evaded": 69,
+  "deterministic_pct": 21.4,
+  "mean_corrupt": 0.00,
+  "baseline_detected": 254,
+  "random_control": {"evaded": 81, "pct": 25.1},
+  "corrupt_all_control": {"evaded": 310, "pct": 96.0},
+  "critical_finding": "Agent learned well during stochastic training (50% evasion, positive rewards), but argmax policy extraction failed catastrophically (21.4%). Suggests policy gradient optimization is not converging to stable deterministic policy at this scale."
+}

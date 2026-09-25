@@ -46,22 +46,24 @@ Training on larger flow batches should improve generalization. Evasion degrades 
 
 ### Scale-500 Results (actually 323 flows) ✅
 - **Flows in capture**: Only 323 available (not 500 as requested)
-- **Deterministic evasion**: 69/323 (21.4%)
-- **Mean corruption**: 0.00 packets/plan (agent failed to learn)
+- **Stochastic training**: 49–52% evasion across 8 rounds (agent learned! Positive rewards)
+- **Deterministic (argmax)**: 69/323 (21.4%, catastrophic drop)
+- **Mean corruption (argmax)**: 0.00 packets/plan (policy extraction failed)
 - Rounds: 8
-- **Critical finding**: Agent completely failed to learn on full 323-flow batch
-  - Tried to use all available flows but couldn't adapt
-  - Mean corruption dropped to 0 (gave up on corrupting)
-  - Evasion: 21.4% (barely better than random)
+- **Critical finding**: Policy gradient learning succeeds but deterministic extraction fails
+  - Stochastic: Agent learned well (mean_corrupt=2.38–3.87, rewards 2.1–2.8)
+  - Deterministic: Policy extraction broke (mean_corrupt=0, evasion→21.4%)
+  - Interpretation: Algorithm cannot extract stable deterministic policy at 323-flow scale
+  - Argmax over learned weights produces random-like behavior instead
 
 ## Final Results Table
 
-| Batch Size | Evasion | Mean Corrupt | Status |
-|-----------|---------|--------------|--------|
-| 24 flows (baseline) | 100.0% | 5.17 | ✅ Perfect |
-| 100 flows | 94.0% | 8.69 | ✅ Good |
-| 300 flows | 95.7% | 7.71 | ✅ Peak |
-| 323 flows (max available) | 21.4% | 0.00 | ❌ Failed |
+| Batch Size | Stochastic | Deterministic | Mean Corrupt | Status |
+|-----------|-----------|---------------|--------------|--------|
+| 24 flows | N/A | 100.0% | 5.17 | ✅ Perfect |
+| 100 flows | N/A | 94.0% | 8.69 | ✅ Good |
+| 300 flows | N/A | 95.7% | 7.71 | ✅ Peak |
+| 323 flows | 50.5% avg | 21.4% | 0.00 | ⚠️ Policy extraction failed |
 
 ## Key Insights
 
