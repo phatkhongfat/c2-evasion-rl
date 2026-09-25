@@ -58,6 +58,15 @@
       "dataset": "ctu13",
       "capture": "botnet-capture-20110819-bot",
       "n_flows": 24,
+      "corrupt_cost": 0.6,
+      "evasion_pct": 100.0,
+      "mean_corrupt": 5.17,
+      "deterministic_evaded": 24
+    },
+    {
+      "dataset": "ctu13",
+      "capture": "botnet-capture-20110819-bot",
+      "n_flows": 24,
       "corrupt_cost": 0.7,
       "evasion_pct": 66.0,
       "mean_corrupt": 4.1,
@@ -71,15 +80,6 @@
       "evasion_pct": 74.0,
       "mean_corrupt": 4.4,
       "deterministic_evaded": 17
-    },
-    {
-      "dataset": "ctu13",
-      "capture": "botnet-capture-20110819-bot",
-      "n_flows": 24,
-      "corrupt_cost": 0.6,
-      "evasion_pct": 35.0,
-      "mean_corrupt": 2.5,
-      "deterministic_evaded": 8
     },
     {
       "dataset": "ctu13",

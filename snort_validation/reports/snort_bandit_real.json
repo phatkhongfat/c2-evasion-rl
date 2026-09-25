@@ -1,0 +1,96 @@
+{
+  "capture": "botnet-capture-20110819-bot",
+  "flows": 24,
+  "rounds": 8,
+  "batch": 96,
+  "history": [
+    {
+      "round": 0,
+      "evaded": 5,
+      "batch": 96,
+      "evasion_pct": 5.2,
+      "mean_reward": -11.021,
+      "mean_corrupt_all": 17.19,
+      "mean_corrupt_when_evaded": 18.2
+    },
+    {
+      "round": 1,
+      "evaded": 7,
+      "batch": 96,
+      "evasion_pct": 7.3,
+      "mean_reward": -10.51,
+      "mean_corrupt_all": 16.72,
+      "mean_corrupt_when_evaded": 17.14
+    },
+    {
+      "round": 2,
+      "evaded": 8,
+      "batch": 96,
+      "evasion_pct": 8.3,
+      "mean_reward": -9.9,
+      "mean_corrupt_all": 15.88,
+      "mean_corrupt_when_evaded": 17.5
+    },
+    {
+      "round": 3,
+      "evaded": 7,
+      "batch": 96,
+      "evasion_pct": 7.3,
+      "mean_reward": -9.929,
+      "mean_corrupt_all": 15.8,
+      "mean_corrupt_when_evaded": 17.14
+    },
+    {
+      "round": 4,
+      "evaded": 11,
+      "batch": 96,
+      "evasion_pct": 11.5,
+      "mean_reward": -8.948,
+      "mean_corrupt_all": 14.95,
+      "mean_corrupt_when_evaded": 16.73
+    },
+    {
+      "round": 5,
+      "evaded": 13,
+      "batch": 96,
+      "evasion_pct": 13.5,
+      "mean_reward": -8.654,
+      "mean_corrupt_all": 14.82,
+      "mean_corrupt_when_evaded": 15.54
+    },
+    {
+      "round": 6,
+      "evaded": 8,
+      "batch": 96,
+      "evasion_pct": 8.3,
+      "mean_reward": -8.598,
+      "mean_corrupt_all": 13.84,
+      "mean_corrupt_when_evaded": 13.12
+    },
+    {
+      "round": 7,
+      "evaded": 11,
+      "batch": 96,
+      "evasion_pct": 11.5,
+      "mean_reward": -7.696,
+      "mean_corrupt_all": 12.95,
+      "mean_corrupt_when_evaded": 14.27
+    }
+  ],
+  "deterministic_evaded": 24,
+  "deterministic_pct": 100.0,
+  "deterministic_mean_corrupt": 5.17,
+  "random_evaded": 0,
+  "random_pct": 0.0,
+  "corrupt_all_evaded": 24,
+  "corrupt_all_pct": 100.0,
+  "snort_stats": {
+    "snort_calls": 12,
+    "flows": 864,
+    "seconds": 146.8,
+    "ms_per_flow": 169.93,
+    "cache_hits": 0,
+    "cache_misses": 0,
+    "cache_entries": 0
+  }
+}
