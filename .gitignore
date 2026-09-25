@@ -96,3 +96,6 @@ codegraph.json
 skills-lock.json
 *.bundle
 *.tar.gz
+
+# Model checkpoints (large, regenerable)
+models/checkpoints_*/
