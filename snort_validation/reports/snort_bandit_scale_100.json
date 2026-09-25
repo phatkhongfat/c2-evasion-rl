@@ -1,0 +1,90 @@
+{
+  "dataset": "ctu13",
+  "rounds": 8,
+  "batch": 200,
+  "snort_stats": null,
+  "n_flows": 100,
+  "corrupt_cost": 0.6,
+  "deterministic_evaded": 94,
+  "evasion_pct": 94.0,
+  "mean_corrupt": 8.69,
+  "baseline_detected": 100,
+  "random_evaded": 3,
+  "corrupt_all_evaded": 94,
+  "corrupt_all_mean_corrupt": 8.69,
+  "history": [
+    {
+      "round": 0,
+      "evaded": 12,
+      "batch": 200,
+      "evasion_pct": 6.0,
+      "mean_reward": -3.451,
+      "mean_corrupt_all": 4.64,
+      "mean_corrupt_when_evaded": 4.17
+    },
+    {
+      "round": 1,
+      "evaded": 15,
+      "batch": 200,
+      "evasion_pct": 7.5,
+      "mean_reward": -3.409,
+      "mean_corrupt_all": 4.91,
+      "mean_corrupt_when_evaded": 4.73
+    },
+    {
+      "round": 2,
+      "evaded": 21,
+      "batch": 200,
+      "evasion_pct": 10.5,
+      "mean_reward": -3.391,
+      "mean_corrupt_all": 5.51,
+      "mean_corrupt_when_evaded": 4.52
+    },
+    {
+      "round": 3,
+      "evaded": 26,
+      "batch": 200,
+      "evasion_pct": 13.0,
+      "mean_reward": -3.461,
+      "mean_corrupt_all": 6.14,
+      "mean_corrupt_when_evaded": 4.27
+    },
+    {
+      "round": 4,
+      "evaded": 37,
+      "batch": 200,
+      "evasion_pct": 18.5,
+      "mean_reward": -2.731,
+      "mean_corrupt_all": 5.89,
+      "mean_corrupt_when_evaded": 4.68
+    },
+    {
+      "round": 5,
+      "evaded": 47,
+      "batch": 200,
+      "evasion_pct": 23.5,
+      "mean_reward": -2.427,
+      "mean_corrupt_all": 6.34,
+      "mean_corrupt_when_evaded": 4.62
+    },
+    {
+      "round": 6,
+      "evaded": 65,
+      "batch": 200,
+      "evasion_pct": 32.5,
+      "mean_reward": -1.717,
+      "mean_corrupt_all": 6.89,
+      "mean_corrupt_when_evaded": 4.68
+    },
+    {
+      "round": 7,
+      "evaded": 62,
+      "batch": 200,
+      "evasion_pct": 31.0,
+      "mean_reward": -1.706,
+      "mean_corrupt_all": 6.61,
+      "mean_corrupt_when_evaded": 4.71
+    }
+  ],
+  "capture": "botnet-capture-20110819-bot"
+}
