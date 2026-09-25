@@ -48,8 +48,8 @@ def main():
         for i, (_key, packets) in enumerate(env.flows):
             pkts = [p.copy() for p in packets]
             for t in range(k):
-                frac = t / max(len(pkts) - 1, 1)
-                act = np.array([float(A_CORRUPT), frac, 1.0], dtype=np.float32)
+                act = np.array([min(t, len(pkts) - 1), int(A_CORRUPT), 2],
+                               dtype=np.int64)
                 pkts = env._apply_mutation(pkts, act)
             items.append((pkts, i))
         v = env._svc.verdicts_chunked(items)

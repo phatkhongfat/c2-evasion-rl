@@ -160,6 +160,60 @@ class SnortBatchService:
                 f.unlink()
         return {qid: (qid in detected) for _pkts, qid in batch}
 
+    def alert_counts_chunked(self, items: Sequence[Tuple[List, int]]) -> Dict[int, int]:
+        """Like ``verdicts_chunked`` but returns the ALERT COUNT per flow.
+
+        The binary verdict is all-or-nothing, so a policy that corrupts only
+        some matching packets gets no gradient at all (measured: the policy
+        collapsed to one pattern and stalled at 0% evasion).  The alert count
+        is a dense, equally REAL signal -- it still comes from the Snort
+        binary, and it decreases as more matching packets are corrupted, which
+        gives the agent a path to follow.
+        """
+        out: Dict[int, int] = {}
+        for i in range(0, len(items), self.batch_size):
+            out.update(self._alert_counts(items[i:i + self.batch_size]))
+        return out
+
+    def _alert_counts(self, batch: Sequence[Tuple[List, int]]) -> Dict[int, int]:
+        import tempfile as _tf
+        from pathlib import Path as _P
+
+        logdir = self._tmp / f"l{self.n_calls}"
+        logdir.mkdir(exist_ok=True, parents=True)
+        pcap = self._tmp / f"b{self.n_calls}.pcap"
+        for stale in logdir.glob("alert*"):
+            stale.unlink()
+
+        self._write_batch_pcap(batch, pcap)
+        t0 = time.time()
+        subprocess.run(
+            ["snort", "-c", str(self.conf), "-r", str(pcap),
+             "-l", str(logdir), "-q", "-A", "fast"],
+            capture_output=True, text=True, timeout=600)
+        self.seconds += time.time() - t0
+        self.n_calls += 1
+        self.n_flows += len(batch)
+
+        counts: Dict[int, int] = {qid: 0 for _p, qid in batch}
+        for af in logdir.glob("alert*"):
+            with open(af, errors="ignore") as fh:
+                for line in fh:
+                    if QUERY_NET not in line:
+                        continue
+                    m = _QUERY_IP_RE.search(line)
+                    if not m:
+                        continue
+                    qid = int(m.group(1)) - 1
+                    if qid in counts:
+                        counts[qid] += 1
+
+        if not self.keep:
+            pcap.unlink(missing_ok=True)
+            for f in logdir.glob("alert*"):
+                f.unlink()
+        return counts
+
     @staticmethod
     def _qid_from_sport(sport: int) -> Optional[int]:
         if sport < QUERY_PORT_BASE:

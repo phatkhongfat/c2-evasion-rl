@@ -65,6 +65,10 @@ CAPTURE_DIR = REPO / "data" / "stratosphere" / "CTU-13-Dataset"
 N_ACTIONS = 6
 (A_PAD, A_SPLIT, A_TTL, A_REORDER, A_DROP, A_CORRUPT) = range(N_ACTIONS)
 
+# Bonus added to the (negative) alert-count reward when Snort fires zero times,
+# so "fully evaded" always outranks "fewer alerts but still detected".
+REWARD_EVASION_BONUS = 10.0
+
 
 def _capture_dir_for(capture: str) -> Optional[Path]:
     """Map a capture name to its extraction subdirectory."""
@@ -99,17 +103,20 @@ class RealPacketEnv(gym.Env):
 
         self._svc = snort_service or SnortBatchService(batch_size=batch_size)
 
-        # action: (action_id, target_packet_index_normalised, strength)
-        self.action_space = spaces.Box(
-            low=np.array([0.0, 0.0, 0.0], dtype=np.float32),
-            high=np.array([N_ACTIONS - 1e-3, 1.0, 1.0], dtype=np.float32),
-        )
-        # observation: per-flow summary + mutation progress
-        self.observation_space = spaces.Box(
-            low=-5.0, high=5.0, shape=(10,), dtype=np.float32)
-
         self.flows: List[Tuple[Tuple, List]] = []
         self._load_flows()
+
+        # Discrete per-packet control.  A continuous `frac` that is rounded to a
+        # packet index is a lossy interface for what is really a combinatorial
+        # choice ("corrupt these specific packets"), and measured PPO stalled at
+        # ~1.17 alerts without ever reaching 0.  MultiDiscrete lets the agent
+        # name the packet and the action directly.
+        self.max_packets = max(len(p) for _k, p in self.flows)
+        self.action_space = spaces.MultiDiscrete(
+            [self.max_packets, N_ACTIONS, 3])  # (packet_idx, action, strength)
+        # observation: per-flow summary + mutation progress + coverage mask
+        self.observation_space = spaces.Box(
+            low=-5.0, high=5.0, shape=(10 + self.max_packets,), dtype=np.float32)
 
         self._idx = 0
         self._mutations = 0
@@ -119,7 +126,7 @@ class RealPacketEnv(gym.Env):
         self._pending_keys: List[int] = []
         self._last_verdicts: Dict[int, bool] = {}
         self._episode_qid: Optional[int] = None
-        self._verdict_cache: Dict[Tuple, bool] = {}
+        self._verdict_cache: Dict[Tuple, int] = {}
         self._cache_hits = 0
         self._cache_misses = 0
         self._next_qid = 0
@@ -174,15 +181,26 @@ class RealPacketEnv(gym.Env):
         self.n_loaded = len(self.flows)
 
     # -- mutation ---------------------------------------------------------
-    def _apply_mutation(self, packets: List, action: np.ndarray) -> List:
+    def _apply_mutation(self, packets: List, action) -> List:
         from scapy.all import IP, Raw, TCP, UDP
 
-        aid = int(np.clip(action[0], 0, N_ACTIONS - 1e-3))
-        frac = float(np.clip(action[1], 0.0, 1.0))
-        strength = float(np.clip(action[2], 0.0, 1.0))
+        action = np.asarray(action)
+        if action.shape == (3,) and action.dtype.kind in "iu":
+            # MultiDiscrete: (packet_idx, action_id, strength)
+            pkt_idx = int(action[0])
+            aid = int(action[1])
+            strength = float(action[2]) / 2.0
+            n = len(packets)
+            target = int(np.clip(pkt_idx, 0, n - 1))
+            frac = target / max(n - 1, 1)
+        else:
+            # legacy continuous Box action (kept for the diagnostic scripts)
+            aid = int(np.clip(action[0], 0, N_ACTIONS - 1e-3))
+            frac = float(np.clip(action[1], 0.0, 1.0))
+            strength = float(np.clip(action[2], 0.0, 1.0))
+            n = len(packets)
+            target = int(frac * (n - 1))
 
-        n = len(packets)
-        target = int(frac * (n - 1))
         out = [p.copy() for p in packets]
         if aid == A_CORRUPT:
             self._corrupted.add(target)
@@ -293,6 +311,11 @@ class RealPacketEnv(gym.Env):
         # requires EVERY matching packet to be corrupted, so coverage is the
         # signal that tells the agent when it is done.
         coverage = len(self._corrupted) / n
+        # per-packet mask: which packets still need corrupting.  Evasion needs
+        # EVERY matching packet corrupted, so this is the actionable state.
+        mask = np.zeros(self.max_packets, dtype=np.float32)
+        for i in range(min(len(packets), self.max_packets)):
+            mask[i] = 1.0 if i in self._corrupted else 0.0
         obs = np.array([
             len(packets) / 20.0,
             sizes_a.mean() / 500.0,
@@ -305,7 +328,7 @@ class RealPacketEnv(gym.Env):
             self._mutations / max(self.max_mutations, 1),
             coverage,
         ], dtype=np.float32)
-        return np.clip(obs, -5.0, 5.0)
+        return np.clip(np.concatenate([obs, mask]), -5.0, 5.0)
 
     def reset(self, *, seed=None, options=None):
         super().reset(seed=seed)
@@ -338,20 +361,30 @@ class RealPacketEnv(gym.Env):
             # repeat visits cost nothing.
             cache_key = (int(self._idx), tuple(sorted(self._corrupted)))
             if cache_key in self._verdict_cache:
-                detected = self._verdict_cache[cache_key]
+                alerts = self._verdict_cache[cache_key]
                 self._cache_hits += 1
                 hit = True
             else:
                 qid = 0
-                v = self._svc.verdicts_chunked([(self._cur_packets, qid)])
-                detected = v.get(qid, True)
-                self._verdict_cache[cache_key] = detected
+                c = self._svc.alert_counts_chunked([(self._cur_packets, qid)])
+                alerts = int(c.get(qid, 1))
+                self._verdict_cache[cache_key] = alerts
                 self._cache_misses += 1
                 hit = False
 
-            reward = -1.0 if detected else 1.0
+            # Dense, real reward.  Snort reports how many times it fired, and
+            # that count falls as more matching packets are corrupted (measured
+            # 7 -> 2 -> 1).  A binary -1/+1 reward gave no gradient for partial
+            # progress and the policy stalled at 0% evasion; the count is
+            # equally real (same Snort binary) but shaped toward evasion.
+            detected = alerts > 0
+            reward = -float(alerts)
+            if not detected:
+                reward += REWARD_EVASION_BONUS
+
             info["detected"] = bool(detected)
             info["evaded"] = bool(not detected)
+            info["alerts"] = alerts
             info["cache_hit"] = hit
 
         return self._obs(self._cur_packets), reward, terminated, False, info

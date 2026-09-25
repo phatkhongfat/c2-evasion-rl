@@ -40,11 +40,11 @@ def run(env: RealPacketEnv, action_id: int, strength: float, frac: float):
     n_pkts = max(len(p) for _k, p in env.flows)
     best = None
     for t in range(n_pkts):
-        fr = t / max(n_pkts - 1, 1)
         items = []
         for i, (_key, packets) in enumerate(env.flows):
             pkts = [p.copy() for p in packets]
-            act = np.array([float(action_id), fr, strength], dtype=np.float32)
+            act = np.array([min(t, len(pkts) - 1), int(action_id),
+                            int(round(strength * 2))], dtype=np.int64)
             pkts = env._apply_mutation(pkts, act)
             items.append((pkts, i))
         v = env._svc.verdicts_chunked(items)
