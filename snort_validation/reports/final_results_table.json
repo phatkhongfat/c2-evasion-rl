@@ -1,0 +1,110 @@
+{
+  "count": 11,
+  "results": [
+    {
+      "dataset": "stratosphere",
+      "capture": "botnet-capture-20110810-neris",
+      "n_flows": 24,
+      "corrupt_cost": 0.6,
+      "evasion_pct": 16.67,
+      "mean_corrupt": 0.62,
+      "baseline_detected": 14,
+      "random_evaded": 2,
+      "corrupt_all_evaded": 4,
+      "source": "cross_capture"
+    },
+    {
+      "dataset": "stratosphere",
+      "capture": "botnet-capture-20110811-neris",
+      "n_flows": 24,
+      "corrupt_cost": 0.6,
+      "evasion_pct": 100.0,
+      "mean_corrupt": 2.88,
+      "baseline_detected": 24,
+      "random_evaded": 10,
+      "corrupt_all_evaded": 24,
+      "source": "cross_capture"
+    },
+    {
+      "dataset": "stratosphere",
+      "capture": "botnet-capture-20110811-neris",
+      "n_flows": 24,
+      "corrupt_cost": 0.6,
+      "evasion_pct": 100.0,
+      "mean_corrupt": 2.88,
+      "source": "scale"
+    },
+    {
+      "dataset": "stratosphere",
+      "capture": "botnet-capture-20110811-neris",
+      "n_flows": 50,
+      "corrupt_cost": 0.6,
+      "evasion_pct": 100.0,
+      "mean_corrupt": 2.42,
+      "source": "scale"
+    },
+    {
+      "dataset": "stratosphere",
+      "capture": "botnet-capture-20110811-neris",
+      "n_flows": 100,
+      "corrupt_cost": 0.6,
+      "evasion_pct": 100.0,
+      "mean_corrupt": 2.27,
+      "source": "scale"
+    },
+    {
+      "dataset": "stratosphere",
+      "capture": "botnet-capture-20110811-neris",
+      "n_flows": 200,
+      "corrupt_cost": 0.6,
+      "evasion_pct": 100.0,
+      "mean_corrupt": 2.17,
+      "source": "scale"
+    },
+    {
+      "dataset": "stratosphere",
+      "capture": "botnet-capture-20110811-neris",
+      "n_flows": 24,
+      "corrupt_cost": 0.1,
+      "evasion_pct": 100.0,
+      "mean_corrupt": 2.88,
+      "source": "sweep"
+    },
+    {
+      "dataset": "stratosphere",
+      "capture": "botnet-capture-20110811-neris",
+      "n_flows": 24,
+      "corrupt_cost": 0.2,
+      "evasion_pct": 100.0,
+      "mean_corrupt": 2.88,
+      "source": "sweep"
+    },
+    {
+      "dataset": "stratosphere",
+      "capture": "botnet-capture-20110811-neris",
+      "n_flows": 24,
+      "corrupt_cost": 0.3,
+      "evasion_pct": 100.0,
+      "mean_corrupt": 2.88,
+      "source": "sweep"
+    },
+    {
+      "dataset": "stratosphere",
+      "capture": "botnet-capture-20110811-neris",
+      "n_flows": 24,
+      "corrupt_cost": 0.4,
+      "evasion_pct": 100.0,
+      "mean_corrupt": 2.88,
+      "source": "sweep"
+    },
+    {
+      "dataset": "stratosphere",
+      "capture": "botnet-capture-20110811-neris",
+      "n_flows": 24,
+      "corrupt_cost": 0.6,
+      "evasion_pct": 100.0,
+      "mean_corrupt": 2.88,
+      "source": "sweep"
+    }
+  ]
+}
