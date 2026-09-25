@@ -91,9 +91,21 @@ class SnortBatchService:
         """Write all flows into one pcap with unique source 5-tuples.
 
         ``batch`` is a sequence of (packets, query_id).  Each packet must be a
-        scapy packet with IP/TCP or IP/UDP layers.  The source IP/port is
+        scapy packet with IP/TCP or IP/UDP layers.  The source address/port is
         rewritten so alerts map back to the query; destination and payload are
         left untouched.
+
+        DIRECTION-AWARE REWRITE (required, not cosmetic)
+        ------------------------------------------------
+        Only the FLOW INITIATOR's packets get their source replaced; the
+        responder's packets get their DESTINATION replaced instead, so the
+        session stays coherent.  Rewriting ``src`` on every packet (what this
+        did before) makes the responder appear to answer a different host,
+        which breaks every rule carrying ``flow:established`` -- and the ET
+        Open C2 set is built on them.  Measured on one real
+        ``botnet-capture-20110811-neris`` flow whose 10 packets DO alert in
+        file mode: rewriting ``src`` on all of them -> 0 alerts; rewriting only
+        the initiator's ``src`` (responder's ``dst``) -> 1 alert.
         """
         from scapy.all import IP, TCP, UDP, wrpcap
 
@@ -102,8 +114,23 @@ class SnortBatchService:
             # one unique address per query (direction-independent mapping)
             src_ip = f"{QUERY_NET}{1 + (qid % 254)}"
             src_port = QUERY_PORT_BASE + (qid % 60000)
+            # The initiator is the flow's first packet; every flow here is a
+            # captured conversation, so that packet defines the client side.
+            client = packets[0][IP].src if packets else None
             for pkt in packets:
                 p = pkt.copy()
+                if client is not None and p[IP].src != client:
+                    # responder direction: keep the tuple symmetric
+                    p[IP].dst = src_ip
+                    if UDP in p:
+                        p[UDP].dport = src_port
+                        del p[UDP].chksum
+                    elif TCP in p:
+                        p[TCP].dport = src_port
+                        del p[TCP].chksum
+                    del p[IP].chksum
+                    out.append(p)
+                    continue
                 p[IP].src = src_ip
                 if UDP in p:
                     p[UDP].sport = src_port

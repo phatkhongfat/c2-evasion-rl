@@ -208,6 +208,17 @@ class ResidentSnortService:
         another one produced Ether/Ether/IP, which Snort parses as a malformed
         frame and ignores entirely -- measured: double Ether -> 0 alerts,
         original Ether preserved -> 41 alerts.
+
+        DIRECTION-AWARE REWRITE (required, not cosmetic)
+        ------------------------------------------------
+        Only the FLOW INITIATOR's packets get their source replaced; the
+        responder's packets get their DESTINATION replaced instead.  Rewriting
+        ``src`` on every packet makes the responder appear to answer a
+        different host, which breaks every rule carrying ``flow:established``
+        -- and the ET Open C2 set is built on them.  Measured on one real
+        ``botnet-capture-20110811-neris`` flow whose 10 packets DO alert in
+        file mode: rewriting ``src`` on all of them -> 0 alerts; rewriting only
+        the initiator's ``src`` (responder's ``dst``) -> 1 alert.
         """
         from scapy.all import Ether, IP, TCP, UDP
 
@@ -215,10 +226,24 @@ class ResidentSnortService:
         for packets, qid in batch:
             uid = uid_base + qid
             src_ip, src_port = _uid_to_addr_port(uid)
+            client = packets[0][IP].src if packets else None
             for pkt in (packets if self.max_pkts_per_flow <= 0
                         else packets[:self.max_pkts_per_flow]):
                 p = pkt.copy()
                 if IP not in p:
+                    continue
+                if client is not None and p[IP].src != client:
+                    p[IP].dst = src_ip
+                    if UDP in p:
+                        p[UDP].dport = src_port
+                        del p[UDP].chksum
+                    elif TCP in p:
+                        p[TCP].dport = src_port
+                        del p[TCP].chksum
+                    del p[IP].chksum
+                    if Ether not in p:
+                        p = Ether(dst="ff:ff:ff:ff:ff:ff") / p
+                    blobs.append(bytes(p))
                     continue
                 p[IP].src = src_ip
                 if UDP in p:

@@ -194,6 +194,17 @@ class RealPacketEnv(gym.Env):
 
         wanted = {(r.src, int(r.sport), r.dst, int(r.dport), r.proto)
                   for r in df.head(self.n_flows * 20).itertuples()}
+        # A flow is BIDIRECTIONAL.  Collecting only the exact forward tuple (as
+        # this did before) drops the responder's packets, and the ET Open C2
+        # set is built on ``flow:established``: without the SYN-ACK/handshake
+        # half, Snort never sees an established session and content rules stay
+        # silent.  Measured on ``botnet-capture-20110811-neris``: a flow whose
+        # 10 packets (both directions) alert -> 0 alerts when only its 5
+        # forward packets are replayed.  That is the true source of the
+        # impossible "baseline detected 0" (and of the 100%-evasion-for-random
+        # readings that follow from it).
+        rev_wanted = {(d, int(dp), s, int(sp), proto)
+                      for (s, sp, d, dp, proto) in wanted}
 
         capdir = _capture_dir_for(self.capture)
         if capdir is None:
@@ -215,6 +226,11 @@ class RealPacketEnv(gym.Env):
                        int(pkt[layer].dport), proto)
                 if key in wanted:
                     found.setdefault(key, []).append(pkt)
+                elif key in rev_wanted:
+                    # store the responder's packet under the flow's forward key
+                    fwd = (pkt[IP].dst, int(pkt[layer].dport), pkt[IP].src,
+                           int(pkt[layer].sport), proto)
+                    found.setdefault(fwd, []).append(pkt)
             # no early break: keep scanning so short flows are not lost
 
         usable = [(k, v) for k, v in found.items() if len(v) >= 4]

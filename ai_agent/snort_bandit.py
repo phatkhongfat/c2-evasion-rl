@@ -349,14 +349,25 @@ def run_configs(configs, get_svc, resident, args, out_dir=None, verbose=True):
     back.  Envs are cached because the corrupt-cost sweep must compare costs on
     IDENTICAL flows, and re-loading a pcap per cost would both change the flow
     set and pay the pcap scan again.
+
+    A config whose capture cannot supply the requested number of flows is
+    SKIPPED, not run: a pool shortfall means the requested measurement is not
+    available, and quietly sampling 24 plans from a 1-flow pool produces a
+    number that looks like a result and is not one.
     """
     svc = get_svc()
-    env_cache, rows = {}, []
+    env_cache, rows, skipped = {}, [], []
     for capture, n_flows, cost in configs:
         key = (capture, n_flows)
         if key not in env_cache:
             env_cache[key] = load_env(capture, n_flows, args.batch, args.dataset)
         _env, flows, n = env_cache[key]
+        if n_flows != "auto" and n < int(n_flows):
+            msg = (f"{capture}: pool has {n} usable flows, {n_flows} requested")
+            print(f"[!] SKIP {msg}")
+            skipped.append({"capture": capture, "requested": int(n_flows),
+                            "available": n, "reason": "pool_shortfall"})
+            continue
         if verbose:
             print(f"\n=== {capture} | n_flows={n} | corrupt_cost={cost} ===")
         r = run_bandit(flows, svc, capture=capture, rounds=args.rounds,
@@ -378,7 +389,7 @@ def run_configs(configs, get_svc, resident, args, out_dir=None, verbose=True):
             r["snort_stats"] = svc.stats() if resident else None
             write_json_atomic(out_dir / f"cross_capture_{capture}.json", r)
             print(f"[+] report: {out_dir}/cross_capture_{capture}.json")
-    return svc, rows
+    return svc, rows, skipped
 
 
 def main():
@@ -449,12 +460,16 @@ def main():
         mode, out_dir = "single", None
 
     try:
-        svc, rows = run_configs(configs, get_svc, resident, args, out_dir)
+        svc, rows, skipped = run_configs(configs, get_svc, resident, args, out_dir)
+        if not rows:
+            print("[-] no config produced a measurement", file=sys.stderr)
+            return 1
         if mode == "cross":
             return 0
         payload = {
             "dataset": args.dataset, "capture": args.capture,
             "rounds": args.rounds, "batch": args.batch,
+            "skipped": skipped,
             "snort_stats": svc.stats() if resident else None,
         }
         if mode == "sweep":

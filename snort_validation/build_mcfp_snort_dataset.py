@@ -117,7 +117,7 @@ def label_one(pcap: Path, dataset_dir: str, workdir: Path, cache: Path,
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--root", default="data/stratosphere/mcfp")
-    ap.add_argument("--captures", nargs="+", required=True,
+    ap.add_argument("--captures", nargs="+",
                     help="capture stems, or 'all' for every local pcap")
     ap.add_argument("--out", default="data/mcfp_snort_labeled.parquet")
     ap.add_argument("--cache", default="data/stratosphere/mcfp_labels")
@@ -125,13 +125,36 @@ def main() -> int:
     ap.add_argument("--min-alerted", type=int, default=1,
                     help="skip captures with fewer Snort-alerted flows than "
                          "this (they cannot supply a training/eval pool)")
+    ap.add_argument("--from-parts", default=None,
+                    help="merge already-labelled <capture>.parquet parts from "
+                         "this dir instead of re-running Snort. Labelling is "
+                         "one Snort pass plus a single-threaded scapy scan per "
+                         "capture, so the parallel path is to run this script "
+                         "once per capture (4 at a time) and merge the parts.")
     args = ap.parse_args()
+
+    if args.from_parts:
+        parts, skipped = [], []
+        for p in sorted(Path(args.from_parts).glob("*.parquet")):
+            df = pd.read_parquet(p)
+            if int(df["snort_alert"].sum()) < args.min_alerted:
+                skipped.append(p.stem)
+                continue
+            parts.append(df)
+        if not parts:
+            print(f"[-] no part met --min-alerted {args.min_alerted}",
+                  file=sys.stderr)
+            return 1
+        return _write_merged(parts, skipped, args.out)
 
     root = Path(args.root)
     pcaps = sorted(root.glob("*/*.pcap"))
-    if args.captures != ["all"]:
+    if args.captures and args.captures != ["all"]:
         wanted = set(args.captures)
         pcaps = [p for p in pcaps if p.stem in wanted]
+    if not args.captures and not args.from_parts:
+        print("[-] --captures or --from-parts required", file=sys.stderr)
+        return 1
     if not pcaps:
         print(f"[-] no pcaps matched under {root}", file=sys.stderr)
         return 1
@@ -156,8 +179,13 @@ def main() -> int:
         print("[-] nothing labelled", file=sys.stderr)
         return 1
 
+    return _write_merged(parts, skipped, args.out)
+
+
+def _write_merged(parts, skipped, out_path) -> int:
+    """Concatenate labelled parts, write the table, print the summary."""
     out_df = pd.concat(parts, ignore_index=True)
-    out = Path(args.out)
+    out = Path(out_path)
     out.parent.mkdir(parents=True, exist_ok=True)
     out_df.to_parquet(out, index=False)
 

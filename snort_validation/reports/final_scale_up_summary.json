@@ -1,0 +1,38 @@
+{
+  "results": [
+    {
+      "scale": "24 flows (baseline)",
+      "n_flows": 24,
+      "deterministic_evaded": 24,
+      "evasion_pct": 100.0,
+      "mean_corrupt": 0,
+      "rounds": 8
+    },
+    {
+      "scale": "100 flows",
+      "n_flows": 100,
+      "deterministic_evaded": 94,
+      "evasion_pct": 94.0,
+      "mean_corrupt": 8.69,
+      "rounds": 8
+    },
+    {
+      "scale": "300 flows",
+      "n_flows": 300,
+      "deterministic_evaded": 287,
+      "evasion_pct": 95.66666666666667,
+      "mean_corrupt": 7.71,
+      "rounds": 8
+    },
+    {
+      "scale": "500 flows",
+      "n_flows": 323,
+      "deterministic_evaded": 69,
+      "evasion_pct": 21.36222910216718,
+      "mean_corrupt": 0.0,
+      "rounds": 8
+    }
+  ],
+  "count": 4,
+  "timestamp": "2026-09-25"
+}
