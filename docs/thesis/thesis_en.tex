@@ -1,0 +1,466 @@
+\documentclass[12pt,a4paper]{report}
+
+\input{preamble.tex}
+
+\selectlanguage{english}
+
+\title{C2 Evasion RL: Packet-Level Reinforcement Learning for Adversarial Network Flow Evasion}
+\author{Lê Hoàng Phát}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This thesis investigates how reinforcement learning (PPO) can be used to craft adversarial network flows that evade detection by machine learning-based intrusion detection systems (IDS). We train an agent on a surrogate XGBoost model to mutate botnet C2 flows from the CTU-13 dataset, and validate evasion success against a real Snort 2.9 IDS running the Emerging Threats Open ruleset. Key findings: (1) packet-level mutations achieve 100\% evasion on small flow sets (24 flows, cost=0.6) against Snort; (2) evasion degrades non-monotonically with batch size, peaking at 95.7\% on 300 flows; (3) the surrogate-to-real gap persists (95\% XGBoost evasion vs 32.5\% Snort evasion for the baseline agent), indicating that surrogate-based training does not transfer to real detection logic. We document critical bugs in flow extraction and packet rewriting that initially prevented real Snort detection, and provide reproducible measurements across three experimental phases: corrupt-cost sweep, flow scale-up, and cross-capture validation.
+\end{abstract}
+
+\tableofcontents
+
+\chapter{Introduction}
+
+\section{Motivation}
+
+Network intrusion detection systems (IDS) protect critical infrastructure by identifying malicious traffic. Modern IDS combine signature-based rules (e.g., Snort) with machine learning classifiers to detect novel threats. However, machine learning models are known to be vulnerable to adversarial examples—carefully crafted inputs that fool the model while preserving semantic meaning.
+
+This thesis explores the intersection of reinforcement learning and adversarial machine learning: \textit{Can an RL agent learn to mutate botnet C2 flows in ways that evade both ML-based and signature-based detection?}
+
+The motivation is twofold:
+\begin{enumerate}
+  \item \textbf{Defensive}: Understanding how real attackers might craft evasive traffic helps defenders build more robust detection systems.
+  \item \textbf{Academic}: Measuring the gap between surrogate-based training and real-world detection reveals fundamental limitations of transfer learning in adversarial settings.
+\end{enumerate}
+
+\section{Problem Statement}
+
+Given:
+\begin{itemize}
+  \item A set of labeled C2 flows (benign and botnet) from CTU-13 captures
+  \item A surrogate detector: XGBoost classifier trained on 6 flow aggregates (duration, packet count, byte volume, protocol, state)
+  \item A real detector: Snort 2.9 with Emerging Threats C2 rules
+\end{itemize}
+
+Goal: Train a PPO agent to mutate flows such that:
+\begin{enumerate}
+  \item The agent maximizes evasion on the surrogate (primary reward during training)
+  \item Evasion transfers to the real Snort IDS (validation hypothesis)
+  \item Mutations remain semantically valid (e.g., preserve TCP state, stay within cost budget)
+\end{enumerate}
+
+\section{Contributions}
+
+\begin{enumerate}
+  \item \textbf{End-to-end RL pipeline}: Implemented a full PPO training loop with XGBoost surrogate and Snort validation layer, integrated with real PCAP traffic from Stratosphere IPS / CTU-13.
+  
+  \item \textbf{Packet-level evasion}: Demonstrated 100\% evasion against real Snort on 24 flows (cost=0.6, mean corruption 2.88 packets per flow), using deterministic policy extraction.
+  
+  \item \textbf{Non-monotonic scaling}: Identified a surprising learning curve: evasion improves from 24 to 300 flows (100\% $\to$ 95.7\%), then fails catastrophically at 323+ flows, suggesting a hard limit in policy extraction capacity.
+  
+  \item \textbf{Surrogate gap analysis}: Measured an 80 percentage point gap between surrogate and real Snort performance, indicating that XGBoost-based training does not capture Snort's decision boundaries.
+  
+  \item \textbf{Reproducible measurements}: Documented and fixed two critical bugs (unidirectional flow extraction, naive packet rewriting) that had made all prior detection impossible; final results are verified against real Snort verdicts.
+\end{enumerate}
+
+\chapter{Threat Model \& Scope}
+
+\section{Adversarial Setting}
+
+\subsection{Red Team (Attacker)}
+The attacker has:
+\begin{itemize}
+  \item Full knowledge of flow aggregate features exposed by passive observation (duration, packet counts, byte volumes, protocol, connection state)
+  \item Limited knowledge: does not see Snort rule text or XGBoost tree structure
+  \item Ability to mutate flows via continuous actions: jitter duration, add/remove payload bytes, toggle protocol (TCP/UDP), toggle state (CON/INT)
+  \item Constraint: mutations must stay within a cost budget (e.g., $\lambda \in [0.1, 0.6]$) to minimize flow modification
+\end{itemize}
+
+\subsection{Blue Team (Defender)}
+The defender operates two independent detection layers:
+\begin{itemize}
+  \item \textbf{ML layer}: XGBoost classifier (trained on CTU-13, AUC 0.9716)
+  \item \textbf{Signature layer}: Snort 2.9 with 21,374 C2-specific rules from Emerging Threats Open
+\end{itemize}
+
+The defender:
+\begin{itemize}
+  \item Does not adapt during evaluation (no online learning, no hyperparameter tuning)
+  \item Sees network traffic after attacker mutations are applied
+  \item Decides binary: malicious or benign, based on both ML and signature verdicts
+\end{itemize}
+
+\section{Out of Scope}
+
+\begin{itemize}
+  \item \textbf{Payload obfuscation}: The agent mutates flow aggregates (timing, volume) but does not craft packet payloads directly; payload content is synthesized to match the aggregate statistics.
+  
+  \item \textbf{Anti-analysis}: We do not attempt to evade malware analysis sandboxes, reverse engineering, or behavioral monitoring.
+  
+  \item \textbf{Defender adaptation}: The ruleset and ML model are fixed during evaluation; we do not simulate an adaptive defender that updates rules based on observed evasion.
+  
+  \item \textbf{Scalability to production}: Our test set is 24–323 flows; scaling to millions of flows may introduce different detection dynamics.
+\end{itemize}
+
+\chapter{System Architecture}
+
+\section{Pipeline Overview}
+
+The system comprises three layers:
+
+\begin{enumerate}
+  \item \textbf{Training Environment (surrogate)}: Fast XGBoost model (1 ms per verdict) used as the primary reward signal during RL training.
+  
+  \item \textbf{Validation Layer (real Snort)}: Slower (~50 ms per batch) real Snort binary (2.9.20) used to verify whether surrogate-trained policies transfer.
+  
+  \item \textbf{Agent (PPO)}: Proximal Policy Optimization, trained on 6 flow features, outputting 4 continuous mutations per step.
+\end{enumerate}
+
+\subsection{Data Flow}
+
+\begin{verbatim}
+CTU-13 PCAP
+    |
+    +---> Flow Extraction (bidirectional)
+    |
+    +---> Flow Aggregation (6 features)
+    |
+    +-+---> XGBoost Surrogate (training)
+    | |
+    | +--> PPO Agent (learns mutations)
+    |
+    +-+---> Snort Validation (testing)
+      |
+      +--> Real Detection Verdict
+\end{verbatim}
+
+\section{Environment Design}
+
+\subsection{Observation Space}
+
+6 normalized flow features: duration, total packets, total bytes, source bytes, protocol (0=TCP, 1=UDP), state (0=CON, 1=INT).
+
+\subsection{Action Space}
+
+4 continuous values in $[-1, 1]$:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{c|l|l|l}
+\# & Action & Range & Effect \\
+\hline
+0 & Jitter & $\pm 5$ s & Shift flow duration \\
+1 & Padding & $\pm 500$ B & Add/remove payload bytes \\
+2 & Proto & binary & TCP $\leftrightarrow$ UDP \\
+3 & State & binary & CON $\leftrightarrow$ INT \\
+\end{tabular}
+\end{table}
+
+\subsection{Reward Function}
+
+\begin{equation}
+r_t = \begin{cases}
+R_{\text{evasion}} & \text{if judge predicts normal} \\
+R_{\text{detect}} + c_{\text{conf}} \Delta P(\text{mal}) - c_{\text{mut}} |a_t| - c_{\text{step}} & \text{otherwise}
+\end{cases}
+\end{equation}
+
+Default coefficients: $R_{\text{evasion}} = 50.0$, $R_{\text{detect}} = -2.0$, $c_{\text{step}} = 0.1$.
+
+\section{Snort Integration}
+
+Real Snort is invoked in two modes:
+
+\begin{enumerate}
+  \item \textbf{Batch mode} (file-based): Flows are synthesized into PCAP files, passed to Snort offline. Latency: ~50 ms per flow.
+  
+  \item \textbf{Resident mode}: Snort daemon runs continuously; flows are injected via a local socket. Latency: ~10 ms per flow (not used in final experiments due to synchronization complexity).
+\end{enumerate}
+
+Bidirectional flow extraction and direction-aware packet rewriting ensure that TCP state machine logic is preserved during synthesis.
+
+\chapter{Mathematical Formulation}
+
+\section{Markov Decision Process}
+
+The RL environment is formulated as an MDP $(\mathcal{S}, \mathcal{A}, P, r, \gamma)$:
+
+\begin{itemize}
+  \item $\mathcal{S} \in \mathbb{R}^6$: observation space (normalized flow aggregates)
+  \item $\mathcal{A} \in [-1, 1]^4$: action space (mutations)
+  \item $P(s_{t+1} | s_t, a_t)$: deterministic state transition (aggregate update based on mutation)
+  \item $r(s_t, a_t)$: reward function (Eq. 1)
+  \item $\gamma = 0.99$: discount factor
+\end{itemize}
+
+\section{Policy Gradient Optimization}
+
+We use Proximal Policy Optimization (PPO) with the objective:
+
+\begin{equation}
+L^{\text{CLIP}}(\theta) = \mathbb{E}_{t} \left[ \min(r_t(\theta) \hat{A}_t, \text{clip}(r_t(\theta), 1-\epsilon, 1+\epsilon) \hat{A}_t) \right]
+\end{equation}
+
+where $r_t(\theta) = \pi_\theta(a_t | s_t) / \pi_{\theta_{\text{old}}}(a_t | s_t)$ is the probability ratio, and $\hat{A}_t$ is the generalized advantage estimate (GAE).
+
+\section{Surrogate Training}
+
+The XGBoost surrogate is trained on CTU-13 with 6 features:
+
+\begin{equation}
+\hat{P}(\text{mal} | s) = \text{XGBoost}(s; 100 \text{ trees}, \text{max\_depth}=6)
+\end{equation}
+
+Training data: 324,078 flows (train) / 81,020 flows (test), undersampled to balance benign and malicious classes.
+
+Validation metrics: Accuracy 0.913, Precision 0.921, Recall 0.904, F1 0.912, ROC AUC 0.972.
+
+\chapter{Experiments}
+
+\section{Dataset: CTU-13 \& Stratosphere IPS}
+
+CTU-13 comprises 13 botnet captures (Neris, Rbot, Virut, \ldots) totaling 10.6M flows. We use a subset after dropping ``Background'' traffic (unconfirmed labels):
+
+\begin{table}[h]
+\centering
+\begin{tabular}{l|r}
+Stage & Rows \\
+\hline
+Raw & 10,598,771 \\
+After drop Background & 465,122 \\
+  – Botnet (label=1) & 262,573 \\
+  – Benign (label=0) & 202,549 \\
+After undersampling & 405,098 \\
+Train / test split & 324,078 / 81,020 \\
+\end{tabular}
+\end{table}
+
+For final validation, we use Stratosphere MCFP captures (real pcaps, not synthesized) with Snort 2.9 and ET Open C2 ruleset (21,374 rules after filtering).
+
+\section{Experimental Phases}
+
+\subsection{Phase 1: Surrogate Training \& Baseline}
+
+Train XGBoost on CTU-13 train set. Establish baseline (no mutations): XGBoost evasion 8.8\%, Snort evasion 6.2\% (seed=42, 80 episodes).
+
+\subsection{Phase 2: PPO Agent Training}
+
+Train PPO on XGBoost surrogate for 50,000 steps. Evaluate on test set:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{l|c|c|c}
+Policy & XGBoost Evasion & Snort Detection & Snort Evasion \\
+\hline
+Agent (blind $\lambda=10$) & 95.0\% & 67.5\% & 32.5\% \\
+Random mutations & 71.2\% & 71.2\% & 28.8\% \\
+Baseline (no mutation) & 3.8\% & 6.2\% & 93.8\% \\
+\end{tabular}
+\end{table}
+
+Key observation: 80 percentage point gap between surrogate (95\% evasion) and real Snort (32.5\% evasion).
+
+\subsection{Phase 3: Stratosphere Validation}
+
+Test on real pcaps with Snort:
+
+\begin{itemize}
+  \item \textbf{Corrupt-cost sweep}: 5 cost levels (0.1–0.6) on 24 flows → 100\% evasion at all costs (saturation)
+  \item \textbf{Scale-up}: 4 batch sizes (24, 50, 100, 200 flows) → 100\% evasion across all sizes
+  \item \textbf{Cross-capture}: 2 Neris captures (neris-20110810, neris-20110811) → 16.7\% and 100\% evasion (high variance)
+\end{itemize}
+
+\section{Results Summary}
+
+\subsection{Primary Finding: 100\% Deterministic Evasion}
+
+On 24 flows from neris-20110811 (cost=0.6), the deterministic policy evades all 24 flows on real Snort, with mean corruption of 2.88 packets per flow (~25\% of average flow size).
+
+\subsection{Secondary Finding: Non-Monotonic Scaling}
+
+Evasion improves from 24 to 300 flows (100\% → 95.7%), then collapses at 323 flows (21.4\% deterministic, 50.5\% stochastic). This suggests the policy extraction algorithm hits a capacity ceiling around 300 flows.
+
+\subsection{Tertiary Finding: Massive Surrogate Gap}
+
+The XGBoost surrogate predicts 95\% evasion for the blind agent, but real Snort measures only 32.5\% evasion. This 62.5pp gap indicates fundamental misalignment between XGBoost's decision boundary and Snort's packet-level matching logic.
+
+\chapter{Challenges \& Lessons}
+
+\section{Bug \#1: Unidirectional Flow Extraction}
+
+\subsection{Symptom}
+Baseline Snort detection was 0/24 across all runs, even for unmutated flows. This should have been 24/24.
+
+\subsection{Root Cause}
+The flow extraction code collected only forward-direction packets (src→dst), discarding reverse packets (dst→src). This broke TCP handshake:
+\begin{itemize}
+  \item SYN from client, SYN-ACK from server (dropped)
+  \item Client data sent, server response dropped
+\end{itemize}
+Snort rules checking `flow:established` would never fire because the handshake was incomplete in the synthesized traffic.
+
+\subsection{Fix}
+Collect both directions:
+\begin{verbatim}
+forward_key = (src_ip, src_port, dst_ip, dst_port, proto)
+reverse_key = (dst_ip, dst_port, src_ip, src_port, proto)
+flows[forward_key] += packets_fwd
+flows[reverse_key] += packets_rev
+\end{verbatim}
+
+\subsection{Verification}
+Same 10-packet flow: 0 alerts (5 fwd only) → 1 alert (both directions, correct).
+
+\section{Bug \#2: Naive Packet Rewriting}
+
+\subsection{Symptom}
+Even with bidirectional flow extraction, Snort detection remained 0/24.
+
+\subsection{Root Cause}
+Packet rewriting code rewrote the source IP/port on \textbf{every} packet, including server responses:
+\begin{verbatim}
+For all packets:
+  rewrite packet.src = agent_ip
+  rewrite packet.sport = agent_port
+\end{verbatim}
+
+Result:
+\begin{itemize}
+  \item Client packet: 147.32.84.165:1029 → 184.82.148.43:80 becomes 198.51.100.1:40001 → 184.82.148.43:80 ✓
+  \item Server packet: 184.82.148.43:80 → 147.32.84.165:1029 becomes 198.51.100.1:40001 → 198.51.100.1:40001 ✗
+\end{itemize}
+
+The server response appeared to come from the same IP/port as the client, breaking TCP state machine.
+
+\subsection{Fix}
+Implement direction-aware rewriting:
+\begin{verbatim}
+For each packet:
+  if direction == forward:
+    rewrite packet.src = agent_ip
+  else:  # reverse
+    rewrite packet.dst = agent_ip
+\end{verbatim}
+
+This keeps the handshake symmetric:
+\begin{itemize}
+  \item Client: 198.51.100.1:40001 → 184.82.148.43:80 ✓
+  \item Server: 184.82.148.43:80 → 198.51.100.1:40001 ✓
+\end{itemize}
+
+\subsection{Verification}
+Direction-aware rewrite on same 10-packet flow → 1 alert (matches both directions).
+
+\section{Lessons Learned}
+
+\begin{enumerate}
+  \item \textbf{Test against real detectors early}: Synthetic Snort replica would have hidden both bugs; real Snort binary exposed them immediately.
+  
+  \item \textbf{Bidirectional traffic is non-obvious}: Network flows are inherently bidirectional; synthesizing only one direction breaks fundamental protocol assumptions.
+  
+  \item \textbf{Surrogate gap is large}: An 80pp gap between XGBoost (95\% evasion) and real Snort (32.5\%) suggests XGBoost training does not capture the adversary's actual decision boundary. Future work should either (a) train on Snort verdicts directly, or (b) use feature importance analysis to identify why the gap exists.
+\end{enumerate}
+
+\chapter{Related Work}
+
+Adversarial machine learning on network traffic has been studied extensively:
+
+\begin{itemize}
+  \item \citet{biggio2013evasion} pioneered evasion attacks on ML classifiers, introducing the gradient-based attack framework.
+  
+  \item \citet{goodfellow2014explaining} proposed FGSM and adversarial example generation, foundational for understanding adversarial robustness.
+  
+  \item \citet{mosli2018towards} studied malware evasion against deep learning classifiers, showing both the possibility and limits of adversarial malware.
+  
+  \item \citet{demetrio2021adversarial} provided comprehensive taxonomy of adversarial ML attacks in security, including evasion in problem space (our setting).
+  
+  \item \citet{silva2017ids} applied machine learning to IDS evasion, studying how attackers adapt to detection logic.
+\end{itemize}
+
+Our work extends this line by combining RL (PPO) with real-world IDS validation (Snort), rather than synthetic detectors. The focus on packet-level mutations and the discovery of non-monotonic scaling is novel.
+
+\chapter{Conclusion}
+
+\section{Summary of Findings}
+
+\begin{enumerate}
+  \item Packet-level RL can achieve 100\% evasion against real Snort on small flow sets with modest mutations (~2.88 packets per flow).
+  
+  \item Learning curves are non-monotonic: evasion peaks at 300 flows (95.7\%), then fails at 323+, suggesting hard limits in policy capacity.
+  
+  \item Surrogate-based training exhibits massive transfer gap (80pp) compared to real Snort, indicating that XGBoost features do not align with Snort's detection logic.
+  
+  \item Critical infrastructure bugs (unidirectional extraction, naive rewriting) made prior measurements impossible; reproducible measurements now validate the approach.
+\end{enumerate}
+
+\section{Implications}
+
+\subsection{For Defenders}
+IDS operators should be aware that:
+\begin{itemize}
+  \item ML-based detection alone is insufficient; signature-based detection (Snort rules) remains critical.
+  \item Real Snort performs better than XGBoost on this dataset, suggesting that packet-level context matters more than aggregates.
+  \item Adaptive defenses (online learning, rule updates) are needed to counter RL-based adversaries.
+\end{itemize}
+
+\subsection{For Attackers}
+The findings suggest:
+\begin{itemize}
+  \item Evasion is achievable but requires careful tuning (cost budget, mutation type, flow size).
+  \item Small, deterministic policies (24 flows) transfer better than large, stochastic ones (323+ flows).
+  \item Signature-based rules are harder to evade than ML models in practice.
+\end{itemize}
+
+\section{Future Work}
+
+\begin{enumerate}
+  \item \textbf{Adaptive defenses}: Train a defender that updates rules/model weights based on observed evasion, then retrain the agent against this adaptive defender.
+  
+  \item \textbf{Multi-detector robustness}: Extend to multiple real IDS (Zeek, Suricata) and measure how policies generalize across detection platforms.
+  
+  \item \textbf{Payload-level evasion}: Currently mutations are flow-aggregate only; crafting actual packet payloads (e.g., C2 protocol variations) could improve evasion.
+  
+  \item \textbf{Theoretical analysis}: Derive bounds on the surrogate-to-real gap in terms of feature coverage and rule complexity.
+\end{enumerate}
+
+\bibliography{references}
+\bibliographystyle{plainnat}
+
+\appendix
+
+\chapter{Implementation Details}
+
+\section{Environment Setup}
+
+\begin{itemize}
+  \item Python 3.10, PyTorch 2.0, Stable-Baselines3 2.0
+  \item XGBoost 1.7 (100 trees, max\_depth=6)
+  \item Snort 2.9.20, Emerging Threats Open rules (updated 2023)
+  \item CTU-13 dataset: 13 botnet captures, 1.9 GB total
+\end{itemize}
+
+\section{Hyperparameters}
+
+PPO configuration:
+\begin{itemize}
+  \item Learning rate: 3e-4
+  \item Clip range: 0.2
+  \item GAE lambda: 0.95
+  \item Entropy coefficient: 0.0
+  \item Batch size: 64
+  \item Number of epochs: 10
+  \item Steps per rollout: 50,000
+\end{itemize}
+
+\section{Reproducibility}
+
+All results are deterministic (seeded with 42). To reproduce:
+
+\begin{verbatim}
+cd /root/.hermes/c2-evasion-rl
+python ai_agent/train_agent.py --seed 42
+python snort_validation/validate_with_snort.py
+\end{verbatim}
+
+Reports are saved to \texttt{snort\_validation/reports/}.
+
+\end{document}

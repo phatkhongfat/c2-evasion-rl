@@ -1,0 +1,69 @@
+% preamble.tex — shared LaTeX preamble for C2-Evasion RL thesis
+% Used by both thesis_vi.tex and thesis_en.tex
+
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc}   % Vietnamese glyph repertoire (vntex); required for thesis_vi
+\usepackage{lmodern}       % Latin Modern ships T5-encoded fonts
+\usepackage[vietnamese,english]{babel}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage[margin=1in]{geometry}
+\usepackage{natbib}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\usepackage{microtype}
+
+% Unicode symbols used in prose (the sibling draft uses U+2713 / U+2717)
+\DeclareUnicodeCharacter{2713}{\ensuremath{\checkmark}}
+\DeclareUnicodeCharacter{2717}{\ensuremath{\times}}
+
+% Custom macros
+\newcommand{\eg}{\emph{e.g.}}
+\newcommand{\ie}{\emph{i.e.}}
+\newcommand{\etal}{\emph{et al.}}
+\newcommand{\PPO}{\texttt{PPO}}
+\newcommand{\IDS}{\texttt{IDS}}
+\newcommand{\XGB}{\texttt{XGBoost}}
+\newcommand{\RL}{\textit{RL}}
+\newcommand{\MDP}{\textit{MDP}}
+\newcommand{\CTU}{\textit{CTU-13}}
+\newcommand{\Snort}{\textit{Snort}}
+
+% Code listing style
+\lstset{
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  columns=fullflexible,
+  frame=single,
+  numbers=left,
+  numberstyle=\tiny,
+  keywordstyle=\color{blue},
+  commentstyle=\color{gray},
+  stringstyle=\color{red},
+  backgroundcolor=\color{lightgray!10},
+  language=Python
+}
+
+% Hyperref setup
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue,
+  pdftitle={C2 Evasion RL: Packet-Level Reinforcement Learning for Adversarial Network Flow Evasion},
+  pdfauthor={Lê Hoàng Phát}
+}
+
+% Header/footer
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\thepage}
+\lhead{C2 Evasion RL}
+\renewcommand{\headrulewidth}{0.4pt}
+\setlength{\headheight}{15pt}   % silences fancyhdr "headheight too small" warning
