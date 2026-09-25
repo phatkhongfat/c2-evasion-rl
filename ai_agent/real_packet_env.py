@@ -69,6 +69,11 @@ N_ACTIONS = 6
 # so "fully evaded" always outranks "fewer alerts but still detected".
 REWARD_EVASION_BONUS = 10.0
 
+# Fixed space sizes (independent of the loaded capture) so a saved model can be
+# reloaded against any flow set without shape/action-space mismatches.
+ACTION_MAX_PACKETS = 32
+OBS_MAX_PACKETS = 32
+
 
 def _capture_dir_for(capture: str) -> Optional[Path]:
     """Map a capture name to its extraction subdirectory."""
@@ -111,12 +116,20 @@ class RealPacketEnv(gym.Env):
         # choice ("corrupt these specific packets"), and measured PPO stalled at
         # ~1.17 alerts without ever reaching 0.  MultiDiscrete lets the agent
         # name the packet and the action directly.
-        self.max_packets = max(len(p) for _k, p in self.flows)
+        # Both spaces are FIXED so a saved model reloads on any flow set.
+        # Deriving them from the loaded data made the env non-portable (a model
+        # trained with max_packets=18 raised "unexpected observation shape" when
+        # evaluated on a set with 21), and it also changed the action space,
+        # which silently invalidates the network's output layer.
+        self.max_packets = int(min(
+            max(len(p) for _k, p in self.flows), ACTION_MAX_PACKETS))
+        self.obs_max_packets = OBS_MAX_PACKETS
         self.action_space = spaces.MultiDiscrete(
             [self.max_packets, N_ACTIONS, 3])  # (packet_idx, action, strength)
         # observation: per-flow summary + mutation progress + coverage mask
         self.observation_space = spaces.Box(
-            low=-5.0, high=5.0, shape=(10 + self.max_packets,), dtype=np.float32)
+            low=-5.0, high=5.0, shape=(10 + self.obs_max_packets,),
+            dtype=np.float32)
 
         self._idx = 0
         self._mutations = 0
@@ -313,8 +326,8 @@ class RealPacketEnv(gym.Env):
         coverage = len(self._corrupted) / n
         # per-packet mask: which packets still need corrupting.  Evasion needs
         # EVERY matching packet corrupted, so this is the actionable state.
-        mask = np.zeros(self.max_packets, dtype=np.float32)
-        for i in range(min(len(packets), self.max_packets)):
+        mask = np.zeros(self.obs_max_packets, dtype=np.float32)
+        for i in range(min(len(packets), self.obs_max_packets)):
             mask[i] = 1.0 if i in self._corrupted else 0.0
         obs = np.array([
             len(packets) / 20.0,
