@@ -481,6 +481,7 @@ ROUNDS=8 bash snort_validation/run_stratosphere_sweep.sh
 | [`docs/REAL_SNORT_IN_THE_LOOP.md`](docs/REAL_SNORT_IN_THE_LOOP.md) | Snort thật trong vòng thưởng, sổ lỗi đầy đủ, thông lượng |
 | [`docs/CHANGELOG_SNORT_INTEGRATION.md`](docs/CHANGELOG_SNORT_INTEGRATION.md) | Mọi thay đổi từ khi đưa Snort vào tới lúc chuyển sang Stratosphere |
 | [`docs/DATASET_AND_RULESET_SWITCH.md`](docs/DATASET_AND_RULESET_SWITCH.md) | Vì sao pcap thật + ET Open thay thế lưu lượng tổng hợp + luật tự viết |
+| [`docs/dataset-sources.md`](docs/dataset-sources.md) | Nguồn tải mọi capture pcap, kèm URL và dung lượng đã kiểm chứng |
 | [`docs/SNORT_DECISION_BOUNDARIES.md`](docs/SNORT_DECISION_BOUNDARIES.md) | Ngữ nghĩa luật đo được: `flow:established`, ngưỡng neo, `any any` |
 | [`docs/evasion_ceiling_analysis.md`](docs/evasion_ceiling_analysis.md) | Vì sao liên kết hành động→thưởng giới hạn né tránh |
 | [`docs/packet_level_rl.md`](docs/packet_level_rl.md) | Thiết kế môi trường mức gói rời rạc |
@@ -504,7 +505,8 @@ snort_validation/          dịch vụ phát hiện, bộ dữ liệu, bộ lu�
   et_open_c2/                bộ luật ET Open C2 đã lọc + cấu hình Snort
   reports/                   kết quả JSON, gồm final_results_table.json
 blue_team/                 huấn luyện judge surrogate (giai đoạn mức luồng)
-red_team/                  hạ tầng C2 giả
+red_team/                  server + client beacon C2 giả (chỉ demo; hai
+                           interceptor NFQUEUE đã bị xoá — nạp model chết)
 data/                      capture, bảng parquet có nhãn, encoder
 docs/                      ghi chú thiết kế, phân tích, sơ đồ
 tests/                     kiểm thử đơn vị cho bộ biến đổi gói và môi trường

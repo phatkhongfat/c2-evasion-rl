@@ -474,6 +474,7 @@ ROUNDS=8 bash snort_validation/run_stratosphere_sweep.sh
 | [`docs/REAL_SNORT_IN_THE_LOOP.md`](docs/REAL_SNORT_IN_THE_LOOP.md) | Real Snort in the reward loop, full bug ledger, throughput |
 | [`docs/CHANGELOG_SNORT_INTEGRATION.md`](docs/CHANGELOG_SNORT_INTEGRATION.md) | Every change from Snort introduction to the Stratosphere switch |
 | [`docs/DATASET_AND_RULESET_SWITCH.md`](docs/DATASET_AND_RULESET_SWITCH.md) | Why real pcaps + ET Open replaced synthesised traffic + hand-written rules |
+| [`docs/dataset-sources.md`](docs/dataset-sources.md) | Where every capture pcap is fetched from, with verified URLs and sizes |
 | [`docs/SNORT_DECISION_BOUNDARIES.md`](docs/SNORT_DECISION_BOUNDARIES.md) | Measured rule semantics: `flow:established`, anchored thresholds, `any any` |
 | [`docs/evasion_ceiling_analysis.md`](docs/evasion_ceiling_analysis.md) | Why the action→reward coupling caps evasion |
 | [`docs/packet_level_rl.md`](docs/packet_level_rl.md) | Discrete packet-level environment design |
@@ -497,7 +498,8 @@ snort_validation/          detector services, datasets, ruleset, reports
   et_open_c2/                filtered ET Open C2 ruleset + Snort config
   reports/                   JSON results, including final_results_table.json
 blue_team/                 surrogate judge training (flow-level stage)
-red_team/                  mock C2 infrastructure
+red_team/                  mock C2 beacon server + client (demo only; the live
+                           NFQUEUE interceptors were removed — dead model paths)
 data/                      captures, labelled parquet tables, encoders
 docs/                      design notes, analysis, diagrams
 tests/                     packet modifier and env unit tests
