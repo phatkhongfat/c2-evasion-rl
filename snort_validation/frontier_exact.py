@@ -12,6 +12,7 @@ are reported as lower bounds, never as solved.
 """
 import sys
 import json
+import os
 import math
 import time
 import itertools
@@ -70,6 +71,7 @@ def main():
     print(f"sanity k=0 (uncorrupted): {det}/{n} detected", flush=True)
 
     min_k = {}          # flow -> smallest k that evades
+    OPTIMAL_MASK = {}   # flow -> the exact packet indices that achieved it
     for k in range(1, MAX_K + 1):
         todo = [i for i in range(n) if i not in min_k]
         # The unevadable flow cannot be saved by any k, so do not waste search on it.
@@ -77,7 +79,7 @@ def main():
         if not todo:
             break
 
-        items, owner = [], []
+        items, owner, masks = [], [], []
         for fi in todo:
             m = len(pay[fi])
             if k > m:
@@ -85,6 +87,7 @@ def main():
             for combo in itertools.combinations(pay[fi], k):
                 items.append(apply_corrupt_mask(flows[fi][1], mask_of(combo)))
                 owner.append(fi)
+                masks.append(list(combo))
         if not items:
             print(f"k={k}: no candidates left (solved or k>m)", flush=True)
             break
@@ -96,12 +99,12 @@ def main():
         print(f"k={k}: scoring {len(items)} candidates over {len(todo)} flows ...", flush=True)
         t1 = time.time()
         found = {}
-        # score() does arithmetic on the id, so ids must be ints: keep a separate
-        # owner map instead of encoding the flow into the id itself.
+        best_mask = {}
         next_id = 10_000_000 + k * 1_000_000
         for c in range(0, len(items), CHUNK):
             chunk_items = items[c:c + CHUNK]
             chunk_owner = owner[c:c + CHUNK]
+            chunk_masks = masks[c:c + CHUNK]
             base = next_id
             ids = list(range(base, base + len(chunk_items)))
             next_id += len(chunk_items)
@@ -111,8 +114,10 @@ def main():
                     fi = chunk_owner[cid - base]
                     if fi not in found:
                         found[fi] = k
+                        best_mask[fi] = chunk_masks[cid - base]
         for fi in found:
             min_k[fi] = k
+            OPTIMAL_MASK[fi] = best_mask[fi]
         print(f"  -> {len(found)} flow(s) solved at k={k}  [{time.time()-t1:.0f}s]", flush=True)
 
     solved = sorted(min_k)
@@ -140,6 +145,17 @@ def main():
     else:
         print(f"\nPARTIAL: solved {len(solved)}/{n} flows, {len(unsolved)} need k>{MAX_K}.")
         print(f"  lower bound so far: mean >= {exact/n:.2f} (incomplete)")
+
+    out = {"capture": CAPTURE, "n_flows": n,
+           "control_mean_corrupt": round(ca_nc, 4),
+           "control_evaded": len(ca_ev), "unevadable": unevadable,
+           "optimal_mask": {str(fi): OPTIMAL_MASK[fi] for fi in sorted(OPTIMAL_MASK)},
+           "min_k": {str(fi): min_k[fi] for fi in sorted(min_k)}}
+    os.makedirs("labels", exist_ok=True)
+    lpath = f"labels/oracle_{CAPTURE}.json"
+    with open(lpath, "w") as fh:
+        json.dump(out, fh, indent=1)
+    print(f"wrote {len(OPTIMAL_MASK)} supervision labels -> {lpath}")
 
     print(f"\nelapsed {time.time()-t0:.0f}s")
     svc.stop()
