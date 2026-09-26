@@ -1,0 +1,22 @@
+
+=== botnet-capture-20110811-neris ===
+  flows with labels      : 24 (train 18 / test 6)
+  optimal corruptions    : mean 1.04
+  best single-feature    : train 100%, test 83%  (feature 13, sign +1)
+  per-feature (train top5): f13+1=100%, f12+1=100%, f7+1=100%, f10+1=83%, f9+1=83%
+  MLP exact mask match   : test 83%  missed flows [21]
+  control for comparison : 2.88 corruptions, 24/24 evaded
+  END-TO-END cloned policy: 24/24 evaded @ mean_corrupt=1.42
+  END-TO-END control      : 24/24 evaded @ mean_corrupt=2.88
+  VERDICT: beats  (beats=True)
+
+=== botnet-capture-20110819-bot ===
+  flows with labels      : 23 (train 17 / test 6)
+  optimal corruptions    : mean 2.35
+  best single-feature    : train 82%, test 100%  (feature 12, sign +1)
+  per-feature (train top5): f12+1=82%, f7+1=82%, f5+1=82%, f3+1=82%, f2+1=82%
+  MLP exact mask match   : test 83%  missed flows [20]
+  control for comparison : 10.50 corruptions, 23/24 evaded
+  END-TO-END cloned policy: 14/24 evaded @ mean_corrupt=2.35
+  END-TO-END control      : 23/24 evaded @ mean_corrupt=10.50
+  VERDICT: loses  (beats=False)
