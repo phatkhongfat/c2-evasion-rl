@@ -1,3 +1,24 @@
+# Conda environment for the packet-level C2-evasion pipeline.
+#
+#   conda env create -f environment.yml
+#   conda activate rl_c2_evasion
+#   python setup_check.py
+#   python -m pytest tests/ -q
+#
+# Versions below are the ones the project was actually measured on, taken from
+# the .venv the documented results were produced with. The bounds exist to catch
+# breaking major releases, not to reproduce bit-for-bit.
+#
+# Deliberately absent, and why:
+#   * netfilterqueue / NFQUEUE is used only by red_team/ (live packet capture on
+#     Linux, needs CAP_NET_ADMIN). A plain `conda env create` on a machine
+#     without libnetfilter_queue fails on it, so it is documented as an extra.
+#   * No plotting, notebook, or experiment-tracking packages. Nothing in the
+#     codebase imports them. A previous version of this file listed ~20 of
+#     them, which made the environment take far longer to install than the
+#     project actually needs.
+#   * No black/flake8/mypy: the repo has no committed lint configuration, so
+#     pinning versions of tools nothing runs would be a false guarantee.
 name: rl_c2_evasion
 channels:
   - pytorch
@@ -5,169 +26,69 @@ channels:
   - defaults
 
 dependencies:
-  # ============================================================================
-  # CORE PYTHON & SYSTEM
-  # ============================================================================
   - python=3.11
   - pip
 
-  # ============================================================================
-  # DATA SCIENCE & ML (Stable versions for reproducibility)
-  # ============================================================================
-  - numpy>=1.24,<2.0              # Numerical computing
-  - pandas>=2.0,<3.0              # Data manipulation
-  - scipy>=1.10,<2.0              # Scientific computing
-  - scikit-learn>=1.3,<2.0        # ML utilities
-  - matplotlib>=3.7,<4.0          # Basic plotting
-  - pyarrow>=12.0,<14.0           # Parquet I/O
-  - joblib>=1.3,<2.0              # Parallelization
+  # --- numerics (versions actually measured, not the ones that were guessed) ---
+  - numpy>=2.0,<3.0            # measured on 2.4.6
+  - pandas>=2.2,<4.0           # measured on 3.0.6
+  - scipy>=1.11,<2.0           # measured on 1.17.1
+  - scikit-learn>=1.4,<2.0     # measured on 1.9.1
+  - pyarrow>=15.0              # parquet engine for pool_loader + dataset builders
+  - joblib>=1.3,<2.0           # measured on 1.6.0
+  - xgboost>=2.0,<4.0          # measured on 3.2.0, surrogate IDS
 
-  # ============================================================================
-  # ADVANCED ML (Better than basic sklearn)
-  # ============================================================================
-  - xgboost>=2.0,<3.0             # Gradient boosting (surrogate IDS)
-  - lightgbm>=4.0,<5.0            # Alternative gradient boosting
-  - shap>=0.42,<1.0               # Feature importance & explainability
+  # --- torch: CPU build, matching the torch==2.14.0+cpu the results came from --
+  # For GPU, replace the line below with:
+  #   - pytorch::pytorch=2.14.*=cuda126
+  - pytorch::pytorch=2.14.*=cpu
 
-  # ============================================================================
-  # DEEP LEARNING (PyTorch)
-  # Choose ONE option below based on your hardware:
-  #
-  # OPTION 1: CPU ONLY (default)
-  #   Keep as-is. Works on any machine, slower for training.
-  #
-  # OPTION 2: GPU (CUDA 11.8)
-  #   Replace pytorch line with:
-  #   - pytorch::pytorch[version=">=2.1,<3.0"]=*=cuda118*
-  #   - pytorch::pytorch-cuda=11.8
-  #   Requires NVIDIA GPU + CUDA drivers installed
-  #
-  # OPTION 3: GPU (Latest CUDA)
-  #   Replace pytorch line with:
-  #   - pytorch::pytorch[version=">=2.1,<3.0"]=*=cuda*
-  #   - pytorch::pytorch-cuda   (auto-detects CUDA version)
-  # ============================================================================
-  - pytorch::pytorch>=2.1,<3.0    # CPU version (fast setup)
-  - pytorch::torchvision>=0.16,<1.0
-  - pytorch::torchaudio>=2.1,<3.0
-  # - pytorch::pytorch-cuda=11.8  # UNCOMMENT for GPU support
-
-  # ============================================================================
-  # UTILITIES & NETWORKING
-  # ============================================================================
-  - requests>=2.31,<3.0           # HTTP client
-  - beautifulsoup4>=4.12,<5.0     # HTML parsing
-  - tqdm>=4.66,<5.0               # Progress bars
-  - pyyaml>=6.0,<7.0              # YAML parsing
-  - networkx>=3.1,<4.0            # Flow graph analysis
-
-  # ============================================================================
-  # JUPYTER & DEVELOPMENT
-  # ============================================================================
-  - jupyterlab>=4.0,<5.0          # Jupyter IDE
-  - notebook>=7.0,<8.0            # Notebook support
-  - ipython>=8.0,<9.0             # Enhanced Python shell
-  - pytest>=7.4,<8.0              # Testing framework
-
-  # ============================================================================
-  # VISUALIZATION & ANALYSIS
-  # ============================================================================
-  - plotly>=5.17,<6.0             # Interactive plots
-  - seaborn>=0.13,<1.0            # Statistical visualization
-  - graphviz                      # Flow diagram rendering
-
-  # ============================================================================
-  # PIP PACKAGES (RL, Security, Monitoring)
-  # ============================================================================
   - pip:
-      # --- Reinforcement Learning ---
-      - gymnasium==1.3.0          # RL environment framework
-      - stable-baselines3==2.9.0  # PPO, DQN, A2C algorithms
-      - sb3-contrib==2.2.1        # SAC, TD3, QRDQN advanced algorithms
-      - tensorboard==2.21.0       # Training visualization
+      # --- packet handling -----------------------------------------------------
+      - scapy==2.7.0            # packet mutation, pcap parsing, feature extraction
 
-      # --- Network & Security ---
-      - scapy==2.7.0              # Packet crafting & analysis
-      - flask==3.1.3              # C2 server mock
-      - flask-cors==4.0.0         # Cross-origin requests
+      # --- RL (packet-level policy, PPO, and the SB3 sweep harness) ------------
+      - stable-baselines3==2.9.0
+      - gymnasium==1.3.0
 
-      # --- Computer Vision ---
-      - opencv-python==4.8.1.78   # Image processing (stable version)
+      # --- red team: local mock C2 server (red_team/mock_server.py) -------------
+      - flask==3.1.3
 
-      # --- Explainability ---
-      - lime==0.2.0               # Model explanations
-      - eli5==0.13.0              # Feature visualization
-
-      # --- Experiment Tracking & Monitoring ---
-      - wandb==0.15.12            # Weights & Biases integration
-      - mlflow==2.8.1             # Model registry & tracking
-
-      # --- Data Processing ---
-      - featuretools==1.28.0      # Automated feature engineering
-      - category-encoders==2.6.3  # Categorical encoding
-
-      # --- Code Quality ---
-      - pytest-cov==4.1.0         # Code coverage
-      - black==23.12.0            # Code formatter
-      - flake8==6.1.0             # Linter
-      - mypy==1.7.1               # Type checking
-
-      # --- Utilities ---
-      - rich==15.0.0              # Beautiful terminal output
-      - python-dotenv==1.0.0      # .env file support
-      - click==8.1.7              # CLI tools
+      # --- tests ----------------------------------------------------------------
+      - pytest==9.1.1
 
 # ============================================================================
-# INSTALLATION INSTRUCTIONS
+# OPTIONAL EXTRA: live packet interception
+#
+#   conda activate rl_c2_evasion
+#   pip install NetfilterQueue
+#
+# Only needed by red_team/interceptor.py and red_team/live_interceptor.py.
+# Those need root and a kernel module (libnetfilter_queue). They are not part
+# of the validation path, so they stay out of the base environment.
 # ============================================================================
 #
-# 1. Create environment:
-#    conda env create -f environment.yml
+# EXTRAS (install manually only if you need them)
+#   - matplotlib    : ad-hoc plots only; no module in the repo imports it
+#   - tensorboard   : pulled in automatically by stable-baselines3
 #
-# 2. Activate environment:
-#    conda activate rl_c2_evasion
+# NOTE: Snort is a SYSTEM dependency and cannot be installed from conda.
+#       The validation path needs Snort 2.9.20 on PATH and the ET Open C2
+#       ruleset at snort_validation/et_open_c2/et_open_c2.rules.
 #
-# 3. Verify installation:
-#    python setup_check.py
+#       Run at most ONE resident Snort instance at a time. They all share
+#       iface lo, and concurrent instances silently corrupt each other's
+#       results -- that failure mode is wrong numbers, not a crash, and it
+#       cost a full round of re-measurement to diagnose.
 #
-# 4. For GPU support:
-#    - Edit this file: uncomment pytorch-cuda line, comment out CPU pytorch line
-#    - Recreate environment: conda env create -f environment.yml --force
-#    - Ensure NVIDIA drivers are installed: nvidia-smi
+# DATA: the capture pcaps are not in git (repo is public, the captures are
+#       hundreds of MB, and the CTU-13 licence forbids redistribution).
+#       Fetch them after cloning:
+#         bash snort_validation/fetch_stratosphere.sh            # CTU-13
+#         bash snort_validation/fetch_stratosphere_captures.sh 43 # MCFP
 #
-# 5. Launch training:
-#    make train           # or: python ai_agent/train_agent.py
-#
-# 6. Evaluate agent:
-#    make eval            # or: python ai_agent/evaluate.py
-#
-# 7. Monitor experiments (if using Weights & Biases):
-#    wandb login
-#    # Experiments auto-logged during training
-#
-# ============================================================================
-#
-# TROUBLESHOOTING:
-#
-# Issue: "conda: command not found"
-#   → Install Miniconda: https://docs.conda.io/projects/miniconda
-#
-# Issue: "Solving environment failed" / "Conflict detected"
-#   → Try: conda clean --all
-#   → Then: conda env create -f environment.yml
-#
-# Issue: "ModuleNotFoundError: No module named 'gymnasium'"
-#   → Verify conda env is activated: conda activate rl_c2_evasion
-#   → Or install manually: pip install -r requirements.txt
-#
-# Issue: GPU not detected (CUDA not working)
-#   → Check: nvidia-smi
-#   → Install NVIDIA CUDA Toolkit matching your GPU
-#   → Rebuild environment with GPU pytorch line uncommented
-#
-# Issue: Slow installation
-#   → Try alternative conda channel: conda config --add channels conda-forge
-#   → Use faster solver: conda install -c conda-forge mamba
-#   → Then: mamba env create -f environment.yml
-#
-# ============================================================================
+# NOTE ON entry points: the Makefile targets are stale -- they invoke the
+#   flow-level PPO trainer (ai_agent/train_agent.py) and call bare `python3`.
+#   The packet-level work runs through snort_validation/label_feasibility.py
+#   and snort_validation/frontier_exact.py, and must be run with the env
+#   interpreter explicitly: `python snort_validation/label_feasibility.py`.
