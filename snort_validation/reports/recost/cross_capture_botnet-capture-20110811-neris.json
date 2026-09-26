@@ -3,7 +3,7 @@
   "flows": 24,
   "rounds": 8,
   "batch": 96,
-  "corrupt_cost": 0.6,
+  "corrupt_cost": 1.0,
   "baseline_detected": 24,
   "history": [
     {
@@ -11,7 +11,7 @@
       "evaded": 45,
       "batch": 96,
       "evasion_pct": 46.9,
-      "mean_reward": 3.3,
+      "mean_reward": 2.729,
       "mean_corrupt_all": 1.43,
       "mean_corrupt_when_evaded": 2.31
     },
@@ -20,16 +20,16 @@
       "evaded": 53,
       "batch": 96,
       "evasion_pct": 55.2,
-      "mean_reward": 4.244,
-      "mean_corrupt_all": 1.36,
-      "mean_corrupt_when_evaded": 1.89
+      "mean_reward": 3.708,
+      "mean_corrupt_all": 1.35,
+      "mean_corrupt_when_evaded": 1.87
     },
     {
       "round": 2,
       "evaded": 62,
       "batch": 96,
       "evasion_pct": 64.6,
-      "mean_reward": 4.763,
+      "mean_reward": 3.875,
       "mean_corrupt_all": 2.22,
       "mean_corrupt_when_evaded": 2.73
     },
@@ -38,7 +38,7 @@
       "evaded": 65,
       "batch": 96,
       "evasion_pct": 67.7,
-      "mean_reward": 5.304,
+      "mean_reward": 4.542,
       "mean_corrupt_all": 1.91,
       "mean_corrupt_when_evaded": 2.14
     },
@@ -47,7 +47,7 @@
       "evaded": 68,
       "batch": 96,
       "evasion_pct": 70.8,
-      "mean_reward": 5.542,
+      "mean_reward": 4.708,
       "mean_corrupt_all": 2.08,
       "mean_corrupt_when_evaded": 2.21
     },
@@ -56,7 +56,7 @@
       "evaded": 73,
       "batch": 96,
       "evasion_pct": 76.0,
-      "mean_reward": 5.983,
+      "mean_reward": 5.062,
       "mean_corrupt_all": 2.3,
       "mean_corrupt_when_evaded": 2.36
     },
@@ -65,7 +65,7 @@
       "evaded": 78,
       "batch": 96,
       "evasion_pct": 81.2,
-      "mean_reward": 6.456,
+      "mean_reward": 5.469,
       "mean_corrupt_all": 2.47,
       "mean_corrupt_when_evaded": 2.79
     },
@@ -74,7 +74,7 @@
       "evaded": 79,
       "batch": 96,
       "evasion_pct": 82.3,
-      "mean_reward": 6.577,
+      "mean_reward": 5.594,
       "mean_corrupt_all": 2.46,
       "mean_corrupt_when_evaded": 2.71
     }
@@ -97,9 +97,9 @@
     "snort_calls": 12,
     "flows": 864,
     "seconds": 30.1,
-    "send_seconds": 7.501,
-    "last_send_s": 0.2213,
-    "last_total_s": 2.5032,
-    "ms_per_flow": 34.78
+    "send_seconds": 7.595,
+    "last_send_s": 0.2566,
+    "last_total_s": 2.5082,
+    "ms_per_flow": 34.81
   }
 }

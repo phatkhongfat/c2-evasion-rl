@@ -17,21 +17,21 @@
     },
     {
       "round": 1,
-      "evaded": 17,
+      "evaded": 15,
       "batch": 96,
-      "evasion_pct": 17.7,
-      "mean_reward": -4.225,
+      "evasion_pct": 15.6,
+      "mean_reward": -4.485,
       "mean_corrupt_all": 0.38,
-      "mean_corrupt_when_evaded": 1.35
+      "mean_corrupt_when_evaded": 1.53
     },
     {
       "round": 2,
-      "evaded": 10,
+      "evaded": 4,
       "batch": 96,
-      "evasion_pct": 10.4,
-      "mean_reward": -5.65,
+      "evasion_pct": 4.2,
+      "mean_reward": -6.733,
       "mean_corrupt_all": 0.3,
-      "mean_corrupt_when_evaded": 1.7
+      "mean_corrupt_when_evaded": 4.25
     },
     {
       "round": 3,
@@ -53,21 +53,21 @@
     },
     {
       "round": 5,
-      "evaded": 6,
+      "evaded": 5,
       "batch": 96,
-      "evasion_pct": 6.2,
-      "mean_reward": -5.546,
-      "mean_corrupt_all": 0.51,
-      "mean_corrupt_when_evaded": 3.83
+      "evasion_pct": 5.2,
+      "mean_reward": -5.69,
+      "mean_corrupt_all": 0.49,
+      "mean_corrupt_when_evaded": 4.0
     },
     {
       "round": 6,
-      "evaded": 29,
+      "evaded": 5,
       "batch": 96,
-      "evasion_pct": 30.2,
-      "mean_reward": -2.423,
+      "evasion_pct": 5.2,
+      "mean_reward": -6.725,
       "mean_corrupt_all": 0.43,
-      "mean_corrupt_when_evaded": 1.1
+      "mean_corrupt_when_evaded": 4.2
     },
     {
       "round": 7,
@@ -79,14 +79,14 @@
       "mean_corrupt_when_evaded": 2.8
     }
   ],
-  "deterministic_evaded": 21,
-  "deterministic_pct": 87.5,
+  "deterministic_evaded": 4,
+  "deterministic_pct": 16.67,
   "deterministic_mean_corrupt": 0.62,
   "random_evaded": 2,
   "random_pct": 8.33,
   "random_mean_corrupt": 0.21,
-  "corrupt_all_evaded": 8,
-  "corrupt_all_pct": 33.33,
+  "corrupt_all_evaded": 4,
+  "corrupt_all_pct": 16.67,
   "corrupt_all_mean_corrupt": 0.62,
   "dataset": "stratosphere",
   "snort_stats": {
@@ -96,10 +96,10 @@
     "error": null,
     "snort_calls": 24,
     "flows": 1728,
-    "seconds": 638.3,
-    "send_seconds": 613.304,
-    "last_send_s": 18.2556,
-    "last_total_s": 18.649,
-    "ms_per_flow": 369.39
+    "seconds": 618.6,
+    "send_seconds": 591.404,
+    "last_send_s": 16.8122,
+    "last_total_s": 17.1829,
+    "ms_per_flow": 357.96
   }
 }

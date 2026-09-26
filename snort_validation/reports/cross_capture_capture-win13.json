@@ -96,10 +96,10 @@
     "error": null,
     "snort_calls": 36,
     "flows": 2592,
-    "seconds": 668.4,
-    "send_seconds": 615.804,
-    "last_send_s": 0.0674,
-    "last_total_s": 2.5091,
-    "ms_per_flow": 257.87
+    "seconds": 648.6,
+    "send_seconds": 593.784,
+    "last_send_s": 0.0641,
+    "last_total_s": 2.5016,
+    "ms_per_flow": 250.24
   }
 }

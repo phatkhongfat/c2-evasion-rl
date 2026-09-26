@@ -223,8 +223,14 @@ class ResidentSnortService:
         from scapy.all import Ether, IP, TCP, UDP
 
         blobs: List[bytes] = []
-        for packets, qid in batch:
-            uid = uid_base + qid
+        # The wire id is the POSITION in the batch, never the caller's qid.
+        # Callers choose qids freely (it is just their dict key), and folding it
+        # into uid let a large qid wrap the /24 address encoding
+        # (``hi = (uid // UID_PER_NET) % 250``) while the decode path did not --
+        # so the alert was attributed to no flow, the counter stayed 0, and the
+        # flow was reported as EVADED. See _max_safe_uid for the bound.
+        for idx, (packets, _qid) in enumerate(batch):
+            uid = uid_base + idx
             src_ip, src_port = _uid_to_addr_port(uid)
             client = packets[0][IP].src if packets else None
             for pkt in (packets if self.max_pkts_per_flow <= 0
@@ -287,6 +293,17 @@ class ResidentSnortService:
         except OSError:
             return 0
 
+    def _max_safe_uid(self) -> int:
+        """Highest uid_base that keeps a whole batch inside one /24 period.
+
+        ``_uid_to_addr_port`` keeps only ``hi = (uid // UID_PER_NET) % 250``, so
+        past ``250 * UID_PER_NET`` the encoded address wraps and the recovered
+        id no longer matches the one that was sent. Counting then silently
+        reports the flow as evaded. We refuse to encode past that point rather
+        than return a wrong verdict.
+        """
+        return 250 * UID_PER_NET - MAX_QUERIES_PER_BATCH
+
     def alert_counts_chunked(
             self, items: Sequence[Tuple[List, int]]) -> Dict[int, int]:
         """Score a batch from the alert bytes written after the send.
@@ -302,6 +319,14 @@ class ResidentSnortService:
         for i in range(0, len(items), MAX_QUERIES_PER_BATCH):
             chunk = items[i:i + MAX_QUERIES_PER_BATCH]
             uid_base = self._uid_base
+            if uid_base + len(chunk) > self._max_safe_uid():
+                # Encoding past this point wraps the /24 address and every
+                # verdict from here on would read as "evaded". Refuse loudly.
+                raise RuntimeError(
+                    f"query-id space exhausted (uid_base={uid_base}, "
+                    f"limit={self._max_safe_uid()}): encoding would wrap and "
+                    f"report every flow as evaded. Start a fresh "
+                    f"ResidentSnortService instead of continuing.")
             self._uid_base += MAX_QUERIES_PER_BATCH   # never reuse ids
             t0 = time.time()
             pos = self._file_size()          # everything before is old
@@ -309,6 +334,9 @@ class ResidentSnortService:
             send_s = time.time() - t0
 
             counts: Dict[int, int] = {qid: 0 for _p, qid in chunk}
+            # Wire id == position in the chunk (see _build_frames); map it back
+            # to the caller's key.
+            pos_to_qid = [qid for _p, qid in chunk]
             buf = b""
             # Snort writes its fast-alert file through a BUFFERED stream, so a
             # batch's alerts do not appear until the stream is flushed.  The
@@ -356,8 +384,8 @@ class ResidentSnortService:
                 if uid is None:
                     continue
                 qid = uid - uid_base
-                if qid in counts:
-                    counts[qid] += 1
+                if 0 <= qid < len(pos_to_qid):
+                    counts[pos_to_qid[qid]] += 1
 
             self.n_calls += 1
             self.n_flows += len(chunk)

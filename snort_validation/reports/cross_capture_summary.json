@@ -15,8 +15,8 @@
       "n_flows": 24,
       "deterministic_evaded": 24,
       "evasion_pct": 100.0,
-      "mean_corrupt": 2.88,
-      "baseline_detected": 24
+      "mean_corrupt": 0.0,
+      "baseline_detected": 0
     },
     {
       "capture": "capture-win13",

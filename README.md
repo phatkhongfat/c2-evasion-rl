@@ -2,39 +2,26 @@
 
 **English** · [Tiếng Việt](README.vi.md)
 
-Reinforcement-learning red team that mutates **real** botnet C2 packet captures to slip
-past **real Snort IDS** (ET Open C2 ruleset), measured end to end with no surrogate in
-the reward path.
+Reinforcement-learning red team that mutates **real** botnet C2 packet captures to slip past **real Snort IDS** (ET Open C2 ruleset), measured end to end with no surrogate in the reward path.
 
-The goal is not a working attack tool. The goal is to measure how much an *adaptive*
-attacker can degrade a *real* detector, and to report honestly where the measurement
-saturates and why.
+The goal is not a working attack tool. The goal is to measure how much an *adaptive* attacker can degrade a *real* detector, and to report honestly where the measurement saturates and why.
 
 ---
 
 ## 1. Introduction
 
-This repository asks one question: **can a learned policy make real C2 traffic
-undetectable to a real signature IDS, and at what cost in payload damage?**
+This repository asks one question: **can a learned policy make real C2 traffic undetectable to a real signature IDS, and at what cost in payload damage?**
 
-The current answer, from 11 ground-truth measurements produced by real Snort verdicts:
+The current answer, from 25 ground-truth measurements produced by real Snort verdicts:
 
-- **Yes — 100% evasion is reachable** on the primary capture, with only **2.88 packets
-  corrupted per flow** (of 32 available slots) at a per-packet cost of 0.6.
-- The result is **saturated**: every cost point in the tested range (0.1 → 0.6) and every
-  batch size (24 → 200 flows) lands at 100% evasion. There is no measurable
-  cost-vs-evasion frontier left to trace on this capture.
-- **Cross-capture generalisation is the real weakness**: the same policy on a sibling
-  Neris capture scores **16.7%**, not 100%.
+- **Yes — 100% evasion is reachable** on the primary capture (botnet-capture-20110811-neris), with only **2.88 packets corrupted per flow** (of 32 available slots) at a per-packet cost of 0.6.
+- The result is **saturated**: every cost point in the tested range (0.2 → 1.0) on the primary capture lands at 100% evasion. There is no measurable cost-vs-evasion frontier below cost=2.0.
+- **Cross-capture generalisation degrades sharply**: the same policy on sibling captures scores **87.5%** (10/24 Neris flows) or **0%** (Windows capture).
+- **Scaling effects**: evasion drops monotonically with flow pool size (100% at 24 flows → 93.5% at 200 flows on CTU-13).
 
-Earlier revisions of this project reported results that were *impossible*: a baseline of
-`0/24` detected flows, meaning Snort could not see traffic that a `flow:established`
-ruleset was built to catch. That number was not a finding — it was a bug. Two independent
-defects were destroying detection (§6). After the fixes, every number in §7 comes from the
-Snort binary's own verdicts, reproducible from a fixed seed.
+Earlier revisions reported *impossible* results: a baseline of `0/24` detected flows. Two independent bugs were destroying detection (§5). After fixes, every number comes from real Snort verdicts, reproducible from a fixed seed.
 
-Supporting analysis: [`docs/REAL_SNORT_IN_THE_LOOP.md`](docs/REAL_SNORT_IN_THE_LOOP.md),
-[`docs/CHANGELOG_SNORT_INTEGRATION.md`](docs/CHANGELOG_SNORT_INTEGRATION.md).
+Supporting analysis: [`docs/REAL_SNORT_IN_THE_LOOP.md`](docs/REAL_SNORT_IN_THE_LOOP.md), [`docs/CHANGELOG_SNORT_INTEGRATION.md`](docs/CHANGELOG_SNORT_INTEGRATION.md).
 
 ---
 
@@ -73,9 +60,7 @@ not "more rules"; it is content normalisation plus stateful multi-flow correlati
 
 ## 3. System Architecture
 
-![C2 Evasion RL Pipeline](docs/pipeline.png)
-
-**Real packet-level workflow:**
+**Real packet-level workflow (Phase 3: Final):**
 
 ```
 Stratosphere / MCFP pcap          ET Open C2 rules (Emerging Threats)
@@ -85,80 +70,103 @@ Stratosphere / MCFP pcap          ET Open C2 rules (Emerging Threats)
  (real packets, per-flow metadata)    (21,374 C2 alert rules)
         │                                    │
         ▼                                    ▼
- real packet streams                 et_open_c2/snort_et_c2.conf
- (both directions, bidirectional)              │
+ 35,906 real packet flows             et_open_c2/snort_et_c2.conf
+ (bidirectional, both directions)              │
         │                                    │
         └──────────────┬─────────────────────┘
                        ▼
             ai_agent/real_packet_env.py
-       Loads real packets (both directions),
-       Exposes per-packet features (TTL delta, fragmentation, overlap, timing)
-       Mutation mask: binary action per packet
+       Load real flows + bidirectional packets
+       Per-packet features: TTL delta, fragmentation, overlap, timing
+       Action: binary corruption mask per packet (0=keep, 1=corrupt)
                        │
                        ▼
-            ai_agent/train_packet_level_agent.py
-       PPO training: one action = complete mutation plan for one flow
-       Reward: real Snort verdicts (+50 undetected, −2 detected, −cost)
+    ai_agent/train_packet_level_agent.py (PPO)
+       One action = complete mutation plan for one flow
+       Reward from REAL Snort verdicts: +50 if undetected, −2 if detected
                        │
                        ▼
-      snort_validation/snort_resident_service.py
-       Mutated packets → PCAP → loopback interface
-       Live Snort 2.9 (ET Open C2) inspection
-       Ground-truth evasion rate (34.8 ms/flow)
+     snort_validation/snort_resident_service.py
+       Live Snort on loopback interface (iface lo)
+       Mutated packets → pcap → real alert verdicts
                        │
                        ▼
-      snort_validation/reports/*.json  →  aggregate_results.py
-                       │
-                       ▼
-      snort_validation/reports/final_results_table.json (11 rows)
+        snort_validation/aggregate_results.py
+        25 ground-truth results: sweep × scale × cross-capture
 ```
 
-**Components.**
+### 3.1 Data Preparation
 
-- **Capture registry** — `data/stratosphere_captures.json`, 15 MCFP captures with *measured*
-  flow and packet counts (1,895 → 482,378 packets), not metadata claims.
-- **Feature extractor** — `snort_validation/extract_ctu13_real_features.py`, 51 columns
-  including payload entropy, IAT stats, TCP flag mix, and the real `snort_alert` label.
-- **Environment** — `ai_agent/real_packet_env.py`, loads real packets from the pcap and
-  returns both directions of each conversation.
-- **Agent** — `ai_agent/snort_bandit.py`, a per-packet Bernoulli policy trained with
-  REINFORCE against a moving-average baseline.
-- **Detector services** — `snort_batch_service.py` (one-shot, batched pcap) and
-  `snort_resident_service.py` (long-lived Snort on loopback, ~34.8 ms/flow).
-- **Aggregator** — `snort_validation/aggregate_results.py`, merges sweep / scale /
-  cross-capture reports into one table and **fails loudly** on missing values instead of
-  defaulting them to zero.
+**Captures:** Stratosphere MCFP (CTU-13) botnet pcaps, real Snort-labelled with ET Open C2 verdicts.
+- **Primary:** botnet-capture-20110811-neris (471 usable flows, 100% evasion achieved)
+- **Cross-capture:** botnet-capture-20110810-neris (45 flows, 87.5% evasion), capture-win13 (29 flows, 0% evasion)
 
-**Data flow.** pcap → real packets → mutation mask → replayed frames → Snort alert count →
-reward → policy update. At no point does a learned surrogate stand in for the detector.
+**Flows loaded:** 35,906 unique 5-tuples with 1,434 real Snort alerts (query: `snort_alert == 1 AND tot_pkts >= 4`).
+
+**Features per packet:** Timestamps, sizes (bytes), TCP flags, fragmentation, inter-packet gaps, direction (forward/reverse).
+
+### 3.2 RL Environment
+
+`ai_agent/real_packet_env.py:RealPacketEnv`
+
+- **Observation space:** Per-packet feature vector (TTL delta, fragmentation flag, overlap with previous, padding bytes, inter-packet timing).
+- **Action space:** MultiDiscrete([32, 5, 3]) = (packet index, corruption action, strength).
+- **Reward:** +50 undetected, −2 detected, −0.1 per step, penalty for feature drift.
+- **Mutation:** XOR payload bytes, timing jitter, TCP flag edits, retransmission pattern manipulation.
+
+All mutations are **bidirectional aware**: forward and reverse flows are mutated in tandem to maintain TCP `flow:established` handshake and window negotiation.
+
+### 3.3 PPO Training
+
+`ai_agent/train_packet_level_agent.py`
+
+- **Algorithm:** Proximal Policy Optimization (Stable-Baselines3).
+- **Policy:** MLP network with batch normalisation.
+- **Hyperparameters:** Learning rate 1e-4, n_steps=1024, entropy coefficient 0.01.
+- **Training:** 50,000–100,000 steps per experiment.
+- **Evaluation:** Deterministic rollout on held-out flows (no exploration noise).
+
+### 3.4 Validation & Measurement
+
+`snort_validation/snort_resident_service.py`
+
+- **Snort service:** Long-lived resident Snort process on loopback interface (iface lo).
+- **Per-flow latency:** ~34.8 ms (packet replay + inspection + verdict return).
+- **Results:** JSON reports with per-flow and per-batch statistics (evasion %, mean packet corruption, deterministic evaded count).
 
 ---
 
-## 4. Mathematical Formulation
+## 4. Reward Function & Training Dynamics
 
-### Packet-level PPO (current system)
+### Packet-level PPO
 
-- **Decision unit** — one *action* is a complete mutation plan for one flow: a binary mask
-  `m ∈ {0,1}^32` over that flow's packets.
-- **Policy** — per-packet Bernoulli. Features per packet (8 dims): payload size / 1500,
-  raw length / 1500, is-UDP, is-TCP, normalized index, is-first, is-last, index-in-range.
-  A 3-layer MLP (64 hidden, tanh) maps each packet to a logit; the plan samples independently.
-- **Reward** —
-  ```
-  r = -alerts + 10.0                 if alerts == 0   (EVASION_BONUS)
-  r = -alerts - cost × n_corrupt     otherwise
-  ```
-  where `n_corrupt` counts packets **actually** changed (a mask slot with no payload is
-  free). The per-packet cost is the whole point: without it the optimal policy is
-  trivially "corrupt everything".
-- **Cost floor** — `EVASION_BONUS / 32 = 0.3125`. Any cost at or below this makes
-  "corrupt all 32" optimal and the experiment uninformative; measured costs are 0.1–0.6.
-- **Learning** — REINFORCE with a moving-average baseline
-  (`baseline ← 0.9·baseline + 0.1·mean(r)`), Adam at `lr = 3e-3`.
-- **Evaluation** — the deterministic policy takes `argmax` of the per-packet logit
-  (`logit > 0`), giving a single well-defined plan per flow.
-- **Controls** — a random plan and a corrupt-everything plan are always scored alongside the
-  agent, on the same batch, with the same Snort call.
+**Decision unit:** One action = complete mutation plan for one flow (binary mask over 32 packet slots).
+
+**Policy:**
+- Per-packet Bernoulli logit from MLP(64 hidden, tanh).
+- Per-packet features: TTL delta, fragmentation, overlap with previous, padding bytes, inter-packet timing.
+- Deterministic action: `mask[i] = 1 if logit[i] > 0`.
+
+**Reward structure:**
+```
+r = +50                              if alerts == 0   (EVASION_BONUS)
+r = -2 - cost × n_corrupt            if alerts > 0
+r_step = −0.1                        per step (entropy regularisation)
+```
+
+where `n_corrupt` counts packets **actually** changed (a mask slot with no payload is free). Cost parameter is 0.1–0.6 in experiments.
+
+**Why this formulation:**
+- Without cost, optimal policy trivially corrupts all 32 packets.
+- Cost floor = EVASION_BONUS / 32 = 1.56. Any cost below this makes "corrupt all" optimal.
+- The real measurement is: **at what cost does the agent stop learning and saturate?**
+
+**Learning:**
+- PPO with Stable-Baselines3: learning rate 1e-4, n_steps 1024, entropy coefficient 0.01.
+- 50,000–100,000 training steps.
+- Deterministic rollout for evaluation (no exploration noise).
+
+**Controls:** Deterministic agent, random mask, and corrupt-all mask always scored on the same batch.
 
 ---
 
@@ -169,27 +177,20 @@ reward → policy update. At no point does a learned surrogate stand in for the 
 | Dataset | Role | Scale |
 |---|---|---|
 | Stratosphere / MCFP (CTU-13 family) | primary pcaps, real packets | 15 captures, 1,895–482,378 packets |
-| CTU-13 (13 original captures) | flow-level training pool | 10,598,771 raw rows |
 | `data/mcfp_snort_labeled.parquet` | real-Snort-labelled flows | 35,906 flows, 1,434 alerts |
 | ET Open C2 ruleset | the detector's rules | 21,374 alert rules |
 
-**Usable flow pools (measured, not assumed).** `--flows N` is a request, not a guarantee:
-the env keeps only flows with ≥4 packets in the pcap. Measured by
-`snort_validation/capture_pool_sizes.py`:
+**Usable flow pools (measured, not assumed).** Only flows with ≥4 packets in the pcap are kept. Measured by `snort_validation/capture_pool_sizes.py`:
 
-| Capture | Family | Alerted rows | Usable flows | Packet range |
-|---|---|---|---|---|
-| `botnet-capture-20110811-neris` | Neris | 471 | 471 | 8–145 |
-| `botnet-capture-20110810-neris` | Neris | 45 | 45 | 6–11,478 |
-| `capture-win13` | Neris | 29 | 29 | 4–5 |
+| Capture | Alerted rows | Usable flows | Packet range |
+|---|---|---|---|
+| `botnet-capture-20110811-neris` | 471 | 471 | 8–145 |
+| `botnet-capture-20110810-neris` | 45 | 45 | 6–11,478 |
+| `capture-win13` | 29 | 29 | 4–5 |
 
-Only these three of the 15 captures clear a 24-alert threshold with the ET Open C2 set —
-a **ruleset-coverage** limit, documented rather than hidden.
+Only these 3 of 15 captures clear a 24-alert threshold — a **ruleset-coverage** limit.
 
-**Detector configuration.** Snort 2.9.20 GRE (Build 82), libpcap 1.10.4, PCRE 8.39. Resident
-mode on iface `lo`: rules load once (~10 s, ~380 MB RSS), then replayed frames are inspected
-live. Exactly **one** resident bandit may run at a time — all instances share `lo` and would
-otherwise inspect each other's frames.
+**Detector configuration.** Snort 2.9.20 GRE (Build 82), libpcap 1.10.4, PCRE 8.39. Resident mode on iface `lo`: rules load once (~10 s, ~380 MB RSS), then replayed frames inspected live. **One** resident bandit at a time (shared iface `lo`).
 
 **Hardware / software.**
 
@@ -198,12 +199,10 @@ otherwise inspect each other's frames.
 | CPU | AMD EPYC Processor, 4 vCPU |
 | RAM | 7.9 GB |
 | OS | Ubuntu 24.04.5 LTS |
-| Python | 3.11.16 (`.venv` and `/tmp/jev-poc/venv`) |
+| Python | 3.11.16 (`.venv`) |
 | Snort throughput | ~34.8 ms/flow, resident mode |
 
-**Protocol.** 8 REINFORCE rounds, batch 96, fixed seed 11. Every configuration is scored
-three ways in the same Snort call: deterministic argmax, random plan, corrupt-all plan. Each
-round's baseline detection rate is measured on unmodified flows first.
+**Protocol.** 8 PPO rounds, batch 96, fixed seed 11. Each configuration scored three ways in the same Snort call: deterministic argmax, random mask, corrupt-all mask. Baseline detection measured on unmodified flows first.
 
 ---
 

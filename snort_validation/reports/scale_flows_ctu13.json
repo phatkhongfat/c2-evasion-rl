@@ -1,0 +1,371 @@
+{
+  "dataset": "ctu13",
+  "capture": "botnet-capture-20110819-bot",
+  "rounds": 8,
+  "batch": 96,
+  "skipped": [],
+  "snort_stats": {
+    "mode": "resident",
+    "iface": "lo",
+    "available": true,
+    "error": null,
+    "snort_calls": 48,
+    "flows": 4568,
+    "seconds": 133.1,
+    "send_seconds": 58.146,
+    "last_send_s": 2.5862,
+    "last_total_s": 2.9672,
+    "ms_per_flow": 29.13
+  },
+  "corrupt_cost": 0.6,
+  "scale_results": [
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "dataset": "ctu13",
+      "n_flows": 24,
+      "corrupt_cost": 0.6,
+      "deterministic_evaded": 24,
+      "evasion_pct": 100.0,
+      "mean_corrupt": 10.5,
+      "baseline_detected": 24,
+      "random_evaded": 4,
+      "corrupt_all_evaded": 24,
+      "corrupt_all_mean_corrupt": 10.5,
+      "history": [
+        {
+          "round": 0,
+          "evaded": 16,
+          "batch": 96,
+          "evasion_pct": 16.7,
+          "mean_reward": -2.76,
+          "mean_corrupt_all": 5.62,
+          "mean_corrupt_when_evaded": 4.44
+        },
+        {
+          "round": 1,
+          "evaded": 25,
+          "batch": 96,
+          "evasion_pct": 26.0,
+          "mean_reward": -1.773,
+          "mean_corrupt_all": 5.7,
+          "mean_corrupt_when_evaded": 5.16
+        },
+        {
+          "round": 2,
+          "evaded": 27,
+          "batch": 96,
+          "evasion_pct": 28.1,
+          "mean_reward": -1.425,
+          "mean_corrupt_all": 5.55,
+          "mean_corrupt_when_evaded": 5.41
+        },
+        {
+          "round": 3,
+          "evaded": 38,
+          "batch": 96,
+          "evasion_pct": 39.6,
+          "mean_reward": -1.129,
+          "mean_corrupt_all": 7.12,
+          "mean_corrupt_when_evaded": 6.61
+        },
+        {
+          "round": 4,
+          "evaded": 33,
+          "batch": 96,
+          "evasion_pct": 34.4,
+          "mean_reward": -1.629,
+          "mean_corrupt_all": 7.18,
+          "mean_corrupt_when_evaded": 6.12
+        },
+        {
+          "round": 5,
+          "evaded": 37,
+          "batch": 96,
+          "evasion_pct": 38.5,
+          "mean_reward": -1.41,
+          "mean_corrupt_all": 7.49,
+          "mean_corrupt_when_evaded": 5.89
+        },
+        {
+          "round": 6,
+          "evaded": 52,
+          "batch": 96,
+          "evasion_pct": 54.2,
+          "mean_reward": 0.369,
+          "mean_corrupt_all": 7.56,
+          "mean_corrupt_when_evaded": 6.83
+        },
+        {
+          "round": 7,
+          "evaded": 58,
+          "batch": 96,
+          "evasion_pct": 60.4,
+          "mean_reward": 0.8,
+          "mean_corrupt_all": 8.04,
+          "mean_corrupt_when_evaded": 7.38
+        }
+      ]
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "dataset": "ctu13",
+      "n_flows": 50,
+      "corrupt_cost": 0.6,
+      "deterministic_evaded": 49,
+      "evasion_pct": 98.0,
+      "mean_corrupt": 9.92,
+      "baseline_detected": 50,
+      "random_evaded": 7,
+      "corrupt_all_evaded": 49,
+      "corrupt_all_mean_corrupt": 9.92,
+      "history": [
+        {
+          "round": 0,
+          "evaded": 15,
+          "batch": 96,
+          "evasion_pct": 15.6,
+          "mean_reward": -2.279,
+          "mean_corrupt_all": 4.67,
+          "mean_corrupt_when_evaded": 4.53
+        },
+        {
+          "round": 1,
+          "evaded": 25,
+          "batch": 96,
+          "evasion_pct": 26.0,
+          "mean_reward": -2.042,
+          "mean_corrupt_all": 6.25,
+          "mean_corrupt_when_evaded": 6.32
+        },
+        {
+          "round": 2,
+          "evaded": 35,
+          "batch": 96,
+          "evasion_pct": 36.5,
+          "mean_reward": -0.923,
+          "mean_corrupt_all": 6.31,
+          "mean_corrupt_when_evaded": 5.57
+        },
+        {
+          "round": 3,
+          "evaded": 45,
+          "batch": 96,
+          "evasion_pct": 46.9,
+          "mean_reward": -0.321,
+          "mean_corrupt_all": 7.27,
+          "mean_corrupt_when_evaded": 6.87
+        },
+        {
+          "round": 4,
+          "evaded": 51,
+          "batch": 96,
+          "evasion_pct": 53.1,
+          "mean_reward": 0.127,
+          "mean_corrupt_all": 7.69,
+          "mean_corrupt_when_evaded": 6.78
+        },
+        {
+          "round": 5,
+          "evaded": 50,
+          "batch": 96,
+          "evasion_pct": 52.1,
+          "mean_reward": -0.133,
+          "mean_corrupt_all": 7.9,
+          "mean_corrupt_when_evaded": 6.7
+        },
+        {
+          "round": 6,
+          "evaded": 63,
+          "batch": 96,
+          "evasion_pct": 65.6,
+          "mean_reward": 1.2,
+          "mean_corrupt_all": 8.26,
+          "mean_corrupt_when_evaded": 7.4
+        },
+        {
+          "round": 7,
+          "evaded": 61,
+          "batch": 96,
+          "evasion_pct": 63.5,
+          "mean_reward": 0.779,
+          "mean_corrupt_all": 8.56,
+          "mean_corrupt_when_evaded": 8.23
+        }
+      ]
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "dataset": "ctu13",
+      "n_flows": 100,
+      "corrupt_cost": 0.6,
+      "deterministic_evaded": 98,
+      "evasion_pct": 98.0,
+      "mean_corrupt": 10.12,
+      "baseline_detected": 67,
+      "random_evaded": 42,
+      "corrupt_all_evaded": 98,
+      "corrupt_all_mean_corrupt": 10.12,
+      "history": [
+        {
+          "round": 0,
+          "evaded": 17,
+          "batch": 96,
+          "evasion_pct": 17.7,
+          "mean_reward": -1.913,
+          "mean_corrupt_all": 4.49,
+          "mean_corrupt_when_evaded": 5.47
+        },
+        {
+          "round": 1,
+          "evaded": 26,
+          "batch": 96,
+          "evasion_pct": 27.1,
+          "mean_reward": -1.727,
+          "mean_corrupt_all": 5.92,
+          "mean_corrupt_when_evaded": 5.62
+        },
+        {
+          "round": 2,
+          "evaded": 49,
+          "batch": 96,
+          "evasion_pct": 51.0,
+          "mean_reward": 0.765,
+          "mean_corrupt_all": 6.21,
+          "mean_corrupt_when_evaded": 5.88
+        },
+        {
+          "round": 3,
+          "evaded": 54,
+          "batch": 96,
+          "evasion_pct": 56.2,
+          "mean_reward": 0.569,
+          "mean_corrupt_all": 7.54,
+          "mean_corrupt_when_evaded": 5.85
+        },
+        {
+          "round": 4,
+          "evaded": 44,
+          "batch": 96,
+          "evasion_pct": 45.8,
+          "mean_reward": -1.031,
+          "mean_corrupt_all": 8.23,
+          "mean_corrupt_when_evaded": 6.5
+        },
+        {
+          "round": 5,
+          "evaded": 52,
+          "batch": 96,
+          "evasion_pct": 54.2,
+          "mean_reward": 0.181,
+          "mean_corrupt_all": 7.77,
+          "mean_corrupt_when_evaded": 6.04
+        },
+        {
+          "round": 6,
+          "evaded": 49,
+          "batch": 96,
+          "evasion_pct": 51.0,
+          "mean_reward": -0.338,
+          "mean_corrupt_all": 8.17,
+          "mean_corrupt_when_evaded": 6.96
+        },
+        {
+          "round": 7,
+          "evaded": 59,
+          "batch": 96,
+          "evasion_pct": 61.5,
+          "mean_reward": 0.694,
+          "mean_corrupt_all": 8.32,
+          "mean_corrupt_when_evaded": 7.58
+        }
+      ]
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "dataset": "ctu13",
+      "n_flows": 200,
+      "corrupt_cost": 0.6,
+      "deterministic_evaded": 187,
+      "evasion_pct": 93.5,
+      "mean_corrupt": 11.49,
+      "baseline_detected": 170,
+      "random_evaded": 44,
+      "corrupt_all_evaded": 187,
+      "corrupt_all_mean_corrupt": 11.49,
+      "history": [
+        {
+          "round": 0,
+          "evaded": 12,
+          "batch": 96,
+          "evasion_pct": 12.5,
+          "mean_reward": -3.354,
+          "mean_corrupt_all": 5.83,
+          "mean_corrupt_when_evaded": 6.58
+        },
+        {
+          "round": 1,
+          "evaded": 15,
+          "batch": 96,
+          "evasion_pct": 15.6,
+          "mean_reward": -3.335,
+          "mean_corrupt_all": 6.43,
+          "mean_corrupt_when_evaded": 5.07
+        },
+        {
+          "round": 2,
+          "evaded": 61,
+          "batch": 96,
+          "evasion_pct": 63.5,
+          "mean_reward": 1.425,
+          "mean_corrupt_all": 7.36,
+          "mean_corrupt_when_evaded": 7.11
+        },
+        {
+          "round": 3,
+          "evaded": 29,
+          "batch": 96,
+          "evasion_pct": 30.2,
+          "mean_reward": -2.688,
+          "mean_corrupt_all": 7.97,
+          "mean_corrupt_when_evaded": 6.55
+        },
+        {
+          "round": 4,
+          "evaded": 26,
+          "batch": 96,
+          "evasion_pct": 27.1,
+          "mean_reward": -2.421,
+          "mean_corrupt_all": 7.07,
+          "mean_corrupt_when_evaded": 6.35
+        },
+        {
+          "round": 5,
+          "evaded": 30,
+          "batch": 96,
+          "evasion_pct": 31.2,
+          "mean_reward": -3.027,
+          "mean_corrupt_all": 8.86,
+          "mean_corrupt_when_evaded": 7.13
+        },
+        {
+          "round": 6,
+          "evaded": 36,
+          "batch": 96,
+          "evasion_pct": 37.5,
+          "mean_reward": -2.64,
+          "mean_corrupt_all": 9.36,
+          "mean_corrupt_when_evaded": 7.83
+        },
+        {
+          "round": 7,
+          "evaded": 41,
+          "batch": 96,
+          "evasion_pct": 42.7,
+          "mean_reward": -2.598,
+          "mean_corrupt_all": 10.25,
+          "mean_corrupt_when_evaded": 7.59
+        }
+      ]
+    }
+  ]
+}
