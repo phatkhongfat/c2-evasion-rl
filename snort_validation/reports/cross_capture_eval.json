@@ -1,0 +1,9 @@
+{
+  "train_capture": "botnet-capture-20110810-neris",
+  "eval_capture": "botnet-capture-20110811-neris",
+  "eval_size": 50,
+  "baseline_evasion": 0.06,
+  "agent_evasion": 0.8,
+  "delta_pp": 74.0,
+  "model": "ppo_enhanced.zip"
+}

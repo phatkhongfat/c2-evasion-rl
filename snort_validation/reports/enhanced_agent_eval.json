@@ -1,0 +1,17 @@
+{
+  "validation_size": 100,
+  "baseline": {
+    "evasion_rate": 0.17,
+    "avg_corrupted": 6.89
+  },
+  "agent": {
+    "evasion_rate": 0.88,
+    "avg_corrupted": 6.89
+  },
+  "delta": {
+    "evasion_pp": 71.0,
+    "corrupted": 0.0
+  },
+  "model": "ppo_enhanced.zip",
+  "env": "EnhancedPacketLevelEnv"
+}
