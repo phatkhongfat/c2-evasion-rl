@@ -159,6 +159,23 @@ def apply_corrupt_mask(packets: list, mask: np.ndarray) -> list:
     return out
 
 
+def prefix_entropy(payload: bytes, nbytes: int = 32) -> float:
+    """Shannon entropy of the first ``nbytes``, as a fraction of log2(256).
+
+    Normalised (not raw bits) so the column lives in [0, 1] like every other
+    feature and needs no rescaling at the network input. ``0.0`` for an empty
+    payload so the call site needs no special case.
+    """
+    chunk = payload[:nbytes]
+    if not chunk:
+        return 0.0
+    counts = np.bincount(np.frombuffer(chunk, dtype=np.uint8), minlength=256)
+    p = counts[counts > 0] / len(chunk)
+    H = float(-(p * np.log2(p)).sum())
+    # Normalised by max entropy log2(256)=8
+    return H / 8.0
+
+
 def packet_features(packets: list) -> np.ndarray:
     """(max_packets, MAX_PKT_FEAT) per-packet features for the policy."""
     from scapy.all import IP, Raw, TCP, UDP
