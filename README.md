@@ -284,7 +284,7 @@ Only these 3 of 15 captures clear a 24-alert threshold — a **ruleset-coverage*
 | CPU | AMD EPYC Processor, 4 vCPU |
 | RAM | 7.9 GB |
 | OS | Ubuntu 24.04.5 LTS |
-| Python | 3.11.16 (`.venv`) |
+| Python | 3.11.16 (conda env `rl_c2_evasion`) |
 | Snort throughput | ~34.8 ms/flow, resident mode |
 
 **Protocol.** 8 PPO rounds, batch 96, fixed seed 11. Each configuration scored three ways in the same Snort call: deterministic argmax, random mask, corrupt-all mask. Baseline detection measured on unmodified flows first.
@@ -581,56 +581,74 @@ learning, not just feature fumbling).
 
 ## Quick Start
 
-**Prerequisites.** Snort 2.9.20 (`snort -V`), a Python 3.11 venv with
-`torch`, `scapy`, `numpy`, `pandas`, `pyarrow`, `gymnasium`, and root (resident mode injects
-frames on `lo`).
+**Prerequisites.** Snort 2.9.20 (`snort -V`), Miniconda/Anaconda, and root (resident mode injects frames on `lo`).
 
 ```bash
 # 1. Clone and enter
 cd /root/.hermes/c2-evasion-rl
 
-# 2. Environment — repo-local venv carries the RL + packet stack
-.venv/bin/python -V                      # Python 3.11.16
+# 2. Create and activate the conda environment (Python 3.11 + torch + scapy + gymnasium + …)
+conda env create -f environment.yml
+conda activate rl_c2_evasion
+python -V                          # Python 3.11.x
 
 # 3. Verify Snort and the C2 ruleset
 snort -V | head -2                       # Version 2.9.20 GRE (Build 82)
 wc -l snort_validation/et_open_c2/et_open_c2.rules    # 21,419 lines
 
 # 4. Check how many usable flows each capture actually supplies
-.venv/bin/python snort_validation/capture_pool_sizes.py --dataset stratosphere
+python snort_validation/capture_pool_sizes.py --dataset stratosphere
 
 # 5. Run the full sweep (cross-capture + cost sweep + scale-up + final table)
 ROUNDS=8 bash snort_validation/run_stratosphere_sweep.sh
 
 # 6. Read the 11-row result table
-.venv/bin/python -c "import json;d=json.load(open('snort_validation/reports/final_results_table.json'));print(d['count'],'rows')"
+python -c "import json;d=json.load(open('snort_validation/reports/final_results_table.json'));print(d['count'],'rows')"
 
 # 7. Single experiment, resident mode
-.venv/bin/python ai_agent/snort_bandit.py --flows 24 --rounds 8 --batch 96 \
+python ai_agent/snort_bandit.py --flows 24 --rounds 8 --batch 96 \
     --corrupt-cost 0.6 --resident --dataset stratosphere \
     --capture botnet-capture-20110811-neris
 
 # 8. Tests
-.venv/bin/python -m pytest snort_validation/test_snort_batch_service.py -v
-.venv/bin/python snort_validation/test_stratosphere_sweep.py
+python -m pytest snort_validation/test_snort_batch_service.py -v
+python snort_validation/test_stratosphere_sweep.py
 
 # 9. Current system — train the PPO packet-level agent (EnhancedPacketLevelEnv)
-.venv/bin/python ai_agent/train_enhanced_packet_agent.py --timesteps 10000 --tag enhanced
+python ai_agent/train_enhanced_packet_agent.py --timesteps 10000 --tag enhanced
 #    → models/ppo_enhanced.zip, logs/training_enhanced.json
 
 # 10. Evaluate the PPO agent (in-distribution)
-.venv/bin/python ai_agent/eval_enhanced_agent.py
+python ai_agent/eval_enhanced_agent.py
 
 # 11. Cross-capture PPO eval (train 20110810-neris → eval 20110811-neris, 50 flows)
-.venv/bin/python ai_agent/eval_cross_capture.py
+python ai_agent/eval_cross_capture.py
 #    → snort_validation/reports/cross_capture_eval.json  (baseline 4.0%, agent 82.0%)
 #    Determinism regression test (3 byte-identical runs):
-.venv/bin/python -m pytest tests/test_eval_cross_capture_determinism.py -v
+python -m pytest tests/test_eval_cross_capture_determinism.py -v
 
 # 12. Diagnose the action → reward path
-.venv/bin/python scripts/measure_action_impact.py   # per-dim reward spread, both envs
-.venv/bin/python scripts/trace_action_to_reward.py  # one action → packet → both verdicts
+python scripts/measure_action_impact.py   # per-dim reward spread, both envs
+python scripts/trace_action_to_reward.py  # one action → packet → both verdicts
 ```
+
+**Notes for conda users.**
+
+- Every command below assumes `conda activate rl_c2_evasion` is in effect, so the interpreter is
+  just `python`. If you prefer not to activate the env, replace `python` with
+  `conda run -n rl_c2_evasion python` — same interpreter, no shell-state dependency.
+- Snort is a **system** dependency and is not installable from conda. Install it separately so
+  `snort` is on `PATH`; the validation scripts shell out to it.
+- GPU is opt-in: `environment.yml` pins the CPU torch build that the documented results were
+  produced on. For CUDA, edit that line to `pytorch::pytorch=2.14.*=cuda126` before creating
+  the env, then `conda env update -f environment.yml`.
+- Non-interactive jobs (cron, CI, `nohup`) must use `conda run -n rl_c2_evasion python …`;
+  `conda activate` does not survive a non-login shell.
+- To update an existing env after editing `environment.yml`: `conda env update -f environment.yml --prune`.
+  To nuke and rebuild: `conda env remove -n rl_c2_evasion && conda env create -f environment.yml`.
+- A repo-local `.venv` still works and is the interpreter the committed measurements were made
+  with — the two are interchangeable for every script here. Conda is simply the path of least
+  friction for a fresh machine.
 
 **Two operational rules.**
 

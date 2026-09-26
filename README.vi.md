@@ -202,7 +202,7 @@ trình dùng chung `lo` và nếu không sẽ kiểm tra frame của nhau.
 | CPU | AMD EPYC Processor, 4 vCPU |
 | RAM | 7.9 GB |
 | OS | Ubuntu 24.04.5 LTS |
-| Python | 3.11.16 (`.venv` và `/tmp/jev-poc/venv`) |
+| Python | 3.11.16 (conda env `rl_c2_evasion`) |
 | Thông lượng Snort | ~34.8 ms/luồng, chế độ thường trú |
 
 **Giao thức thực nghiệm.** 8 vòng REINFORCE, lô 96, seed cố định 11. Mỗi cấu hình được chấm
@@ -432,39 +432,57 @@ tránh yêu cầu học, không chỉ làm rối lưu lượng).
 
 ## Bắt đầu nhanh
 
-**Điều kiện tiên quyết.** Snort 2.9.20 (`snort -V`), một venv Python 3.11 với `torch`,
-`scapy`, `numpy`, `pandas`, `pyarrow`, `gymnasium`, và quyền root (chế độ thường trú bơm frame
-trên `lo`).
+**Điều kiện tiên quyết.** Snort 2.9.20 (`snort -V`), Miniconda/Anaconda, và quyền root (chế độ thường trú bơm frame trên `lo`).
 
 ```bash
 # 1. Vào thư mục kho
 cd /root/.hermes/c2-evasion-rl
 
-# 2. Môi trường — venv trong kho chứa sẵn stack RL + gói tin
-.venv/bin/python -V                      # Python 3.11.16
+# 2. Tạo và kích hoạt môi trường conda (Python 3.11 + torch + scapy + gymnasium + …)
+conda env create -f environment.yml
+conda activate rl_c2_evasion
+python -V                          # Python 3.11.x
 
 # 3. Kiểm tra Snort và bộ luật C2
 snort -V | head -2                       # Version 2.9.20 GRE (Build 82)
 wc -l snort_validation/et_open_c2/et_open_c2.rules    # 21,419 dòng
 
 # 4. Kiểm tra mỗi capture thực sự cung cấp bao nhiêu luồng khả dụng
-.venv/bin/python snort_validation/capture_pool_sizes.py --dataset stratosphere
+python snort_validation/capture_pool_sizes.py --dataset stratosphere
 
 # 5. Chạy toàn bộ sweep (liên capture + quét chi phí + mở rộng + bảng cuối)
 ROUNDS=8 bash snort_validation/run_stratosphere_sweep.sh
 
 # 6. Đọc bảng kết quả 11 dòng
-.venv/bin/python -c "import json;d=json.load(open('snort_validation/reports/final_results_table.json'));print(d['count'],'rows')"
+python -c "import json;d=json.load(open('snort_validation/reports/final_results_table.json'));print(d['count'],'rows')"
 
 # 7. Một thí nghiệm đơn, chế độ thường trú
-.venv/bin/python ai_agent/snort_bandit.py --flows 24 --rounds 8 --batch 96 \
+python ai_agent/snort_bandit.py --flows 24 --rounds 8 --batch 96 \
     --corrupt-cost 0.6 --resident --dataset stratosphere \
     --capture botnet-capture-20110811-neris
 
 # 8. Kiểm thử
-.venv/bin/python -m pytest snort_validation/test_snort_batch_service.py -v
-.venv/bin/python snort_validation/test_stratosphere_sweep.py
+python -m pytest snort_validation/test_snort_batch_service.py -v
+python snort_validation/test_stratosphere_sweep.py
 ```
+
+**Lưu ý cho người dùng conda.**
+
+- Mọi lệnh dưới đây giả định `conda activate rl_c2_evasion` đã có hiệu lực, nên trình thông dịch
+  chỉ cần gọi `python`. Nếu không muốn kích hoạt env, thay `python` bằng
+  `conda run -n rl_c2_evasion python` — cùng trình thông dịch, không phụ thuộc trạng thái shell.
+- Snort là **phụ thuộc hệ thống**, không cài được từ conda. Cài riêng để `snort` nằm trong `PATH`;
+  các script kiểm định sẽ gọi ra nó.
+- GPU là tùy chọn: `environment.yml` ghim bản torch CPU — đúng bản mà các số liệu đã ghi ra
+  được đo. Với CUDA, sửa dòng đó thành `pytorch::pytorch=2.14.*=cuda126` trước khi tạo env,
+  rồi chạy `conda env update -f environment.yml`.
+- Job không tương tác (cron, CI, `nohup`) phải dùng `conda run -n rl_c2_evasion python …`;
+  `conda activate` không tồn tại trong shell đăng nhập phi tương tác.
+- Cập nhật env có sẵn sau khi sửa `environment.yml`: `conda env update -f environment.yml --prune`.
+  Xoá và dựng lại: `conda env remove -n rl_c2_evasion && conda env create -f environment.yml`.
+- Venv `.venv` trong kho vẫn chạy được và chính là trình thông dịch dùng để tạo ra các số liệu
+  đã commit — hai cách hoán đổi được với nhau cho mọi script ở đây. Conda chỉ đơn giản hơn khi
+  bạn cài trên máy mới.
 
 **Hai nguyên tắc vận hành.**
 
