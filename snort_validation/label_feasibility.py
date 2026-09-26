@@ -97,6 +97,15 @@ def main():
         print(f"  optimal corruptions    : mean {Y.sum(axis=1).mean():.2f}")
         print(f"  best single-feature    : train {top_hit:.0%}, "
               f"test {te_rule:.0%}  (feature {top_d}, sign {top_sgn:+d})")
+        top5, seen_d = [], set()
+        for hit, d, sgn in best:            # best is sorted desc by train hit
+            if d in seen_d:
+                continue
+            seen_d.add(d)
+            top5.append(f"f{d}{sgn:+d}={hit:.0%}")
+            if len(top5) == 5:
+                break
+        print(f"  per-feature (train top5): {', '.join(top5)}")
         print(f"  MLP exact mask match   : test {exact:.0%}  missed flows {miss}")
         print(f"  control for comparison : {lab['control_mean_corrupt']:.2f} "
               f"corruptions, {lab['control_evaded']}/{lab['n_flows']} evaded")

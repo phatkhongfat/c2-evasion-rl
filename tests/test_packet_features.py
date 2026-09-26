@@ -96,7 +96,11 @@ def _all_real_features():
 
 
 def test_no_dead_feature_columns():
-    """The regression guard for feature 7 ('1.0 if i < n else 0.0')."""
+    """The regression guard for feature 7 ('1.0 if i < n else 0.0').
+
+    Slow by nature: it loads all 48 flows of both captures (~3 min). Keep it --
+    it is the only test that would have caught a constant column.
+    """
     rows = _all_real_features()
     assert rows, "no flows loaded - the liveness check would pass vacuously"
     dead = []
