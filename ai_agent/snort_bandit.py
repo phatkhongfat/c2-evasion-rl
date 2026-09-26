@@ -85,7 +85,7 @@ EVASION_BONUS = 10.0
 # control the reward-optimal action and leaving the policy nothing to learn.
 # See ``break_even_cost`` and tests/test_beats_control.py.
 CORRUPT_COST = 1.0
-MAX_PKT_FEAT = 8
+MAX_PKT_FEAT = 15
 
 
 def break_even_cost(n_corruptable: float) -> float:
@@ -177,24 +177,71 @@ def prefix_entropy(payload: bytes, nbytes: int = 32) -> float:
 
 
 def packet_features(packets: list) -> np.ndarray:
-    """(max_packets, MAX_PKT_FEAT) per-packet features for the policy."""
+    """(ACTION_MAX_PACKETS, MAX_PKT_FEAT) per-packet features for the policy.
+
+    Columns, in order:
+      0  dsize            payload+header bytes on the wire / 1500
+      1  raw             Raw payload bytes / 1500
+      2  is_udp          1.0 if the packet is UDP
+      3  is_tcp          1.0 if the packet is TCP
+      4  relative_index  position among the flow's packets
+      5  is_first        1.0 for the flow's first packet
+      6  is_last         1.0 for the flow's last packet
+      7  is_payload      1.0 if the packet carries a corruptable payload
+      8  payload_rank    percentile rank of this payload's size among payloads
+      9  raw_z           (raw - mean raw) / (std raw + 1), clipped to [-3, 3]/3
+     10  is_longest      1.0 for the single largest payload, 0.5 for ties
+     11  payload_fraction_before  payloads seen before this one / n_payload
+     12  n_payload_norm  how many of this flow's packets are corruptable / 32
+     13  prefix_mean     mean of the first 16 payload bytes / 255
+     14  prefix_entropy  entropy of the first 32 payload bytes / log2(256)
+
+    Columns 8-14 are *flow-relative*: they describe a packet by how it differs
+    from the other packets of its own flow, which is the signal the old
+    per-packet columns could not express. They are all 0.0 for a flow with no
+    payload, where nothing is corruptable and no action is possible.
+    """
     from scapy.all import IP, Raw, TCP, UDP
 
     n = len(packets)
+    n_pkt = len(packets[:ACTION_MAX_PACKETS])
     feats = np.zeros((ACTION_MAX_PACKETS, MAX_PKT_FEAT), dtype=np.float32)
+    if n_pkt == 0:
+        return feats
+
+    payload_idx = {i for i, p in enumerate(packets[:ACTION_MAX_PACKETS])
+                   if Raw in p and len(bytes(p[Raw].load)) > 0}
+    n_pay = len(payload_idx)
+    raws = [len(bytes(packets[i][Raw].load)) for i in sorted(payload_idx)]
+    mean_raw = float(np.mean(raws)) if raws else 0.0
+    std_raw = float(np.std(raws)) if raws else 0.0
+    max_raw = max(raws) if raws else 0
+    n_max = sum(1 for r in raws if r == max_raw) if raws else 0
+    seen = 0
     for i, p in enumerate(packets[:ACTION_MAX_PACKETS]):
         dsize = len(bytes(p[IP].payload)) if IP in p else 0
         raw = len(bytes(p[Raw].load)) if Raw in p else 0
-        feats[i] = np.array([
-            dsize / 1500.0,
-            raw / 1500.0,
-            1.0 if UDP in p else 0.0,
-            1.0 if TCP in p else 0.0,
-            i / max(n - 1, 1),
-            1.0 if i == 0 else 0.0,
-            1.0 if i == n - 1 else 0.0,
-            1.0 if i < n else 0.0,
-        ], dtype=np.float32)
+        row = [0.0] * MAX_PKT_FEAT
+        row[0] = dsize / 1500.0
+        row[1] = raw / 1500.0
+        row[2] = 1.0 if UDP in p else 0.0
+        row[3] = 1.0 if TCP in p else 0.0
+        row[4] = i / max(n - 1, 1)
+        row[5] = 1.0 if i == 0 else 0.0
+        row[6] = 1.0 if i == n - 1 else 0.0
+        row[7] = 1.0 if i in payload_idx else 0.0
+        if i in payload_idx:
+            row[8] = (sum(1 for r in raws if r < raw) + 0.5 * sum(1 for r in raws if r == raw)) / n_pay
+            row[9] = float(np.clip((raw - mean_raw) / (std_raw + 1.0), -3.0, 3.0)) / 3.0
+            row[10] = 1.0 if (raw == max_raw and n_max == 1) else (0.5 if raw == max_raw else 0.0)
+            row[11] = seen / max(n_pay, 1)
+            row[12] = n_pay / ACTION_MAX_PACKETS
+            pl = bytes(p[Raw].load)
+            head = pl[:16]
+            row[13] = (sum(head) / (len(head) * 255.0)) if head else 0.0
+            row[14] = prefix_entropy(pl)
+            seen += 1
+        feats[i] = np.array(row, dtype=np.float32)
     return feats
 
 
