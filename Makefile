@@ -1,45 +1,54 @@
 # Makefile for C2 Evasion RL
+#
+# Run from the repo root with the repo-local .venv. That .venv is the only
+# interpreter here with gymnasium + stable-baselines3 + scapy; the system
+# `python3` has none of them, and running from a subdirectory breaks the
+# repo-module imports.
+#
+# ponytail: only the packet-level entry points are wired up. The old flow-level
+# targets (train_agent.py / evaluate.py / c2_ppo_tensorboard) are gone because
+# that approach is retired -- see README "Project History" -- and `make check`
+# is gone because setup_check.py predates the packet-level work. The live
+# scripts take no CLI flags; they write fixed report paths. Add a target when
+# there is a command worth running twice.
 
-.PHONY: help install check train eval tensorboard clean
+PY := .venv/bin/python
+
+.PHONY: help install feasibility frontier variance test clean
 
 help:
-	@echo "C2 Evasion RL – Available targets:"
-	@echo "  make install       Install dependencies (conda/pip)"
-	@echo "  make check         Validate environment setup"
-	@echo "  make train         Train PPO agent (50k timesteps)"
-	@echo "  make eval          Evaluate trained agent (80 samples)"
-	@echo "  make tensorboard   Launch tensorboard (port 6006)"
-	@echo "  make clean         Remove logs, models, __pycache__"
+	@echo "C2 Evasion RL -- available targets:"
+	@echo "  make install       Create the conda env from environment.yml"
+	@echo "  make feasibility   Per-capture feasibility gate (label_feasibility.py)"
+	@echo "  make frontier      Exact corruption solver (frontier_exact.py)"
+	@echo "  make variance      Harness run-to-run spread (harness_variance.py)"
+	@echo "  make test          Run the pytest suite"
+	@echo "  make clean         Remove __pycache__, .pyc, pytest cache"
 
 install:
 	@echo "[*] Installing conda environment..."
 	conda env create -f environment.yml -y
 
-install-pip:
-	@echo "[*] Installing pip dependencies..."
-	pip install -r requirements.txt
+feasibility:
+	@echo "[*] Feasibility gate..."
+	$(PY) snort_validation/label_feasibility.py
 
-check:
-	@echo "[*] Validating environment..."
-	python3 setup_check.py
+frontier:
+	@echo "[*] Exact frontier solver..."
+	$(PY) snort_validation/frontier_exact.py
 
-train: check
-	@echo "[*] Starting PPO training..."
-	cd ai_agent && python3 train_agent.py
+variance:
+	@echo "[*] Harness variance..."
+	$(PY) snort_validation/harness_variance.py
 
-eval: check
-	@echo "[*] Evaluating trained agent..."
-	cd ai_agent && python3 evaluate.py
-
-tensorboard:
-	@echo "[*] Launching TensorBoard (http://localhost:6006)..."
-	tensorboard --logdir=ai_agent/c2_ppo_tensorboard/ --port=6006
+test:
+	@echo "[*] Running tests..."
+	$(PY) -m pytest tests/ -q
 
 clean:
 	@echo "[*] Cleaning up..."
-	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
-	find . -type f -name "*.pyc" -delete
-	rm -rf ai_agent/logs/* 2>/dev/null || true
+	find . -type d -name __pycache__ -not -path "./.venv/*" -exec rm -rf {} + 2>/dev/null || true
+	find . -type f -name "*.pyc" -not -path "./.venv/*" -delete
 	rm -rf .pytest_cache/ 2>/dev/null || true
 	@echo "[+] Done"
 
