@@ -1,8 +1,8 @@
 {
   "method": "greedy",
-  "queries": 113,
+  "queries": 149,
   "evaded": 58,
   "n_flows": 64,
   "evasion_pct": 90.6,
-  "final_epsilon": 0.167
+  "final_epsilon": 0.166
 }

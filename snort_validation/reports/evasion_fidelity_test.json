@@ -1,0 +1,62 @@
+{
+  "split8": {
+    "stream_starts_with_command": 16,
+    "original_substring_present": 16,
+    "n": 16
+  },
+  "split16": {
+    "stream_starts_with_command": 16,
+    "original_substring_present": 16,
+    "n": 16
+  },
+  "split24": {
+    "stream_starts_with_command": 16,
+    "original_substring_present": 16,
+    "n": 16
+  },
+  "prepend4": {
+    "stream_starts_with_command": 0,
+    "original_substring_present": 0,
+    "n": 16
+  },
+  "prepend8": {
+    "stream_starts_with_command": 0,
+    "original_substring_present": 0,
+    "n": 16
+  },
+  "prepend12": {
+    "stream_starts_with_command": 0,
+    "original_substring_present": 0,
+    "n": 16
+  },
+  "pad16": {
+    "stream_starts_with_command": 0,
+    "original_substring_present": 0,
+    "n": 16
+  },
+  "reorder": {
+    "stream_starts_with_command": 16,
+    "original_substring_present": 16,
+    "n": 16
+  },
+  "ttl": {
+    "stream_starts_with_command": 16,
+    "original_substring_present": 16,
+    "n": 16
+  },
+  "corrupt8": {
+    "stream_starts_with_command": 0,
+    "original_substring_present": 0,
+    "n": 16
+  },
+  "overlap8": {
+    "stream_starts_with_command": 0,
+    "original_substring_present": 0,
+    "n": 16
+  },
+  "noop": {
+    "stream_starts_with_command": 16,
+    "original_substring_present": 16,
+    "n": 16
+  }
+}

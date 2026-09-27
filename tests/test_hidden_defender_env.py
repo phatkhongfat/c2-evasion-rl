@@ -109,8 +109,14 @@ def test_corrupt_breaks_semantics_and_scores_minus_ten():
     assert n_checked > 0, "corrupt8 never dodged an alert; test would be vacuous"
 
 
-def test_prepend_preserves_semantics_and_evades():
-    """prepend4 was measured at 43/80 valid across the pooled corpus."""
+def test_prepend_breaks_the_channel():
+    """prepend must NOT earn reward: it evades by destroying the command.
+
+    Under the old substring bar prepend scored 43/80 "valid" and looked like the
+    strongest mechanism.  It is not an evasion at all -- the junk bytes sit in
+    front of every segment, so the reassembled stream no longer begins with the
+    C2 command and the endpoint never executes it.  Byte equality is the bar.
+    """
     env = HiddenDefenderEnv(split="train")
     idx = ACTION_NAMES.index("prepend4")
     env.reset()
@@ -118,11 +124,12 @@ def test_prepend_preserves_semantics_and_evades():
     for _ in range(len(env._flows)):
         _o, reward, term, _t, info = env.step(idx)
         if info["evaded"] and info["semantics_ok"]:
-            assert reward == 10.0
             valid += 1
         if term:
             break
-    assert valid >= 20, f"prepend4 only valid on {valid}/64 train flows"
+    assert valid == 0, (
+        f"prepend4 preserved the channel on {valid}/64 flows; the strict "
+        "semantics bar should reject it everywhere")
 
 
 def test_split_preserves_semantics_and_evades():

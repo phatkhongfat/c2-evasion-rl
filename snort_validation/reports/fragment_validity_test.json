@@ -1,0 +1,92 @@
+{
+  "split8": {
+    "reassembles": 0,
+    "byte_identical_to_original": 0,
+    "errors": {
+      "6 final fragments": 7,
+      "10 final fragments": 7,
+      "16 final fragments": 1,
+      "12 final fragments": 1
+    }
+  },
+  "split16": {
+    "reassembles": 0,
+    "byte_identical_to_original": 0,
+    "errors": {
+      "6 final fragments": 7,
+      "10 final fragments": 7,
+      "16 final fragments": 1,
+      "12 final fragments": 1
+    }
+  },
+  "split24": {
+    "reassembles": 0,
+    "byte_identical_to_original": 0,
+    "errors": {
+      "6 final fragments": 7,
+      "10 final fragments": 7,
+      "16 final fragments": 1,
+      "12 final fragments": 1
+    }
+  },
+  "prepend4": {
+    "reassembles": 16,
+    "byte_identical_to_original": 0,
+    "errors": {
+      "reassembles-but-differs": 16
+    }
+  },
+  "prepend8": {
+    "reassembles": 16,
+    "byte_identical_to_original": 0,
+    "errors": {
+      "reassembles-but-differs": 16
+    }
+  },
+  "prepend12": {
+    "reassembles": 16,
+    "byte_identical_to_original": 0,
+    "errors": {
+      "reassembles-but-differs": 16
+    }
+  },
+  "pad16": {
+    "reassembles": 16,
+    "byte_identical_to_original": 0,
+    "errors": {
+      "reassembles-but-differs": 16
+    }
+  },
+  "reorder": {
+    "reassembles": 16,
+    "byte_identical_to_original": 16,
+    "errors": {}
+  },
+  "ttl": {
+    "reassembles": 16,
+    "byte_identical_to_original": 16,
+    "errors": {}
+  },
+  "corrupt8": {
+    "reassembles": 16,
+    "byte_identical_to_original": 0,
+    "errors": {
+      "reassembles-but-differs": 16
+    }
+  },
+  "overlap8": {
+    "reassembles": 0,
+    "byte_identical_to_original": 0,
+    "errors": {
+      "6 final fragments": 7,
+      "10 final fragments": 7,
+      "16 final fragments": 1,
+      "12 final fragments": 1
+    }
+  },
+  "noop": {
+    "reassembles": 16,
+    "byte_identical_to_original": 16,
+    "errors": {}
+  }
+}

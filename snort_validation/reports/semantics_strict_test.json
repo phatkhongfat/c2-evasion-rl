@@ -1,0 +1,92 @@
+{
+  "split8": {
+    "datagram_integrity": 8,
+    "stream_starts_with_command": 16,
+    "n": 16,
+    "errors": {
+      "no mutated datagram reassembles to": 8
+    }
+  },
+  "split16": {
+    "datagram_integrity": 8,
+    "stream_starts_with_command": 16,
+    "n": 16,
+    "errors": {
+      "no mutated datagram reassembles to": 8
+    }
+  },
+  "split24": {
+    "datagram_integrity": 8,
+    "stream_starts_with_command": 16,
+    "n": 16,
+    "errors": {
+      "no mutated datagram reassembles to": 8
+    }
+  },
+  "prepend4": {
+    "datagram_integrity": 0,
+    "stream_starts_with_command": 0,
+    "n": 16,
+    "errors": {
+      "no mutated datagram reassembles to": 16
+    }
+  },
+  "prepend8": {
+    "datagram_integrity": 0,
+    "stream_starts_with_command": 0,
+    "n": 16,
+    "errors": {
+      "no mutated datagram reassembles to": 16
+    }
+  },
+  "prepend12": {
+    "datagram_integrity": 0,
+    "stream_starts_with_command": 0,
+    "n": 16,
+    "errors": {
+      "no mutated datagram reassembles to": 16
+    }
+  },
+  "pad16": {
+    "datagram_integrity": 0,
+    "stream_starts_with_command": 0,
+    "n": 16,
+    "errors": {
+      "no mutated datagram reassembles to": 16
+    }
+  },
+  "reorder": {
+    "datagram_integrity": 16,
+    "stream_starts_with_command": 16,
+    "n": 16,
+    "errors": {}
+  },
+  "ttl": {
+    "datagram_integrity": 16,
+    "stream_starts_with_command": 16,
+    "n": 16,
+    "errors": {}
+  },
+  "corrupt8": {
+    "datagram_integrity": 0,
+    "stream_starts_with_command": 0,
+    "n": 16,
+    "errors": {
+      "no mutated datagram reassembles to": 16
+    }
+  },
+  "overlap8": {
+    "datagram_integrity": 0,
+    "stream_starts_with_command": 0,
+    "n": 16,
+    "errors": {
+      "no mutated datagram reassembles to": 16
+    }
+  },
+  "noop": {
+    "datagram_integrity": 16,
+    "stream_starts_with_command": 16,
+    "n": 16,
+    "errors": {}
+  }
+}

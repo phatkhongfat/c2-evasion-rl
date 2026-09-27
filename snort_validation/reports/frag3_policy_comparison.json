@@ -1,0 +1,100 @@
+{
+  "first": {
+    "snort_stats": {
+      "snort_calls": 7,
+      "flows": 320,
+      "seconds": 75.9,
+      "ms_per_flow": 237.13
+    },
+    "mechanisms": {
+      "split": {
+        "flows_solvable_by_some_offset": 16,
+        "offsets_working_on_every_solvable_flow": [
+          8
+        ],
+        "first_offset_histogram": {
+          "8": 16
+        },
+        "good_offsets_per_flow": {
+          "min": 1,
+          "max": 8,
+          "mean": 5.9
+        }
+      },
+      "prepend": {
+        "flows_solvable_by_some_offset": 16,
+        "offsets_working_on_every_solvable_flow": [
+          1,
+          2,
+          4,
+          8,
+          12,
+          16,
+          24,
+          32,
+          48,
+          64,
+          96,
+          128
+        ],
+        "first_offset_histogram": {
+          "1": 16
+        },
+        "good_offsets_per_flow": {
+          "min": 12,
+          "max": 12,
+          "mean": 12.0
+        }
+      }
+    }
+  },
+  "last": {
+    "snort_stats": {
+      "snort_calls": 7,
+      "flows": 320,
+      "seconds": 74.3,
+      "ms_per_flow": 232.05
+    },
+    "mechanisms": {
+      "split": {
+        "flows_solvable_by_some_offset": 16,
+        "offsets_working_on_every_solvable_flow": [
+          8
+        ],
+        "first_offset_histogram": {
+          "8": 16
+        },
+        "good_offsets_per_flow": {
+          "min": 1,
+          "max": 8,
+          "mean": 5.9
+        }
+      },
+      "prepend": {
+        "flows_solvable_by_some_offset": 16,
+        "offsets_working_on_every_solvable_flow": [
+          1,
+          2,
+          4,
+          8,
+          12,
+          16,
+          24,
+          32,
+          48,
+          64,
+          96,
+          128
+        ],
+        "first_offset_histogram": {
+          "1": 16
+        },
+        "good_offsets_per_flow": {
+          "min": 12,
+          "max": 12,
+          "mean": 12.0
+        }
+      }
+    }
+  }
+}

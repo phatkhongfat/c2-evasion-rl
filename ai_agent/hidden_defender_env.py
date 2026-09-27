@@ -58,12 +58,19 @@ def payloads_of(pkts):
 
 
 def semantics_intact(original_payloads, pkts) -> bool:
-    """Every original payload still appears contiguously in the stream.
+    """True only when the C2 command still reaches the endpoint intact.
 
-    Same bar as the measured mechanism matrix, so numbers stay comparable.
+    The earlier version checked `op in joined` per original segment.  That bar is
+    too weak and it silently endorsed broken channels: prepend inserts junk in
+    FRONT of every segment, so each original segment is still present as a
+    substring while the reassembled stream no longer begins with the command.
+    Measured on real Snort that turned prepend into 16/16 "evasion" that simply
+    stopped being C2 traffic.
+
+    For a stream protocol the only honest bar is byte equality of the
+    reassembled stream, which is what fragmentation preserves by construction.
     """
-    joined = b"".join(payloads_of(pkts))
-    return all(op in joined for op in original_payloads)
+    return b"".join(payloads_of(pkts)) == b"".join(original_payloads)
 
 
 def apply_mech(pkts, mech: str):
