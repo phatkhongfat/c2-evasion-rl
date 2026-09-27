@@ -47,6 +47,14 @@
   true,
   true
  ],
+ "0|http_header_pad": [
+  true,
+  true
+ ],
+ "0|length_wrapper": [
+  true,
+  false
+ ],
  "1|split8": [
   true,
   true
@@ -95,6 +103,14 @@
   true,
   true
  ],
+ "1|http_header_pad": [
+  true,
+  true
+ ],
+ "1|length_wrapper": [
+  true,
+  false
+ ],
  "2|split8": [
   true,
   true
@@ -120,11 +136,11 @@
   false
  ],
  "2|pad16": [
-  true,
-  false
+  false,
+  true
  ],
  "2|reorder": [
-  true,
+  false,
   true
  ],
  "2|ttl": [
@@ -142,6 +158,14 @@
  "2|noop": [
   false,
   true
+ ],
+ "2|http_header_pad": [
+  true,
+  true
+ ],
+ "2|length_wrapper": [
+  true,
+  false
  ],
  "3|split8": [
   true,
@@ -191,6 +215,14 @@
   false,
   true
  ],
+ "3|http_header_pad": [
+  false,
+  true
+ ],
+ "3|length_wrapper": [
+  false,
+  false
+ ],
  "4|split8": [
   true,
   true
@@ -217,7 +249,7 @@
  ],
  "4|pad16": [
   false,
-  false
+  true
  ],
  "4|reorder": [
   false,
@@ -238,6 +270,14 @@
  "4|noop": [
   false,
   true
+ ],
+ "4|http_header_pad": [
+  true,
+  true
+ ],
+ "4|length_wrapper": [
+  true,
+  false
  ],
  "5|split8": [
   true,
@@ -265,7 +305,7 @@
  ],
  "5|pad16": [
   false,
-  false
+  true
  ],
  "5|reorder": [
   false,
@@ -286,6 +326,14 @@
  "5|noop": [
   false,
   true
+ ],
+ "5|http_header_pad": [
+  true,
+  true
+ ],
+ "5|length_wrapper": [
+  true,
+  false
  ],
  "6|split8": [
   true,
@@ -335,6 +383,14 @@
   false,
   true
  ],
+ "6|http_header_pad": [
+  false,
+  true
+ ],
+ "6|length_wrapper": [
+  false,
+  false
+ ],
  "7|split8": [
   true,
   true
@@ -383,6 +439,14 @@
   false,
   true
  ],
+ "7|http_header_pad": [
+  false,
+  true
+ ],
+ "7|length_wrapper": [
+  false,
+  false
+ ],
  "8|split8": [
   true,
   true
@@ -409,7 +473,7 @@
  ],
  "8|pad16": [
   false,
-  false
+  true
  ],
  "8|reorder": [
   false,
@@ -431,6 +495,14 @@
   false,
   true
  ],
+ "8|http_header_pad": [
+  true,
+  true
+ ],
+ "8|length_wrapper": [
+  true,
+  false
+ ],
  "9|split8": [
   true,
   true
@@ -440,7 +512,7 @@
   true
  ],
  "9|split24": [
-  true,
+  false,
   true
  ],
  "9|prepend4": [
@@ -456,15 +528,15 @@
   false
  ],
  "9|pad16": [
-  false,
+  true,
   false
  ],
  "9|reorder": [
-  false,
+  true,
   true
  ],
  "9|ttl": [
-  false,
+  true,
   true
  ],
  "9|corrupt8": [
@@ -476,8 +548,16 @@
   false
  ],
  "9|noop": [
-  false,
+  true,
   true
+ ],
+ "9|http_header_pad": [
+  true,
+  true
+ ],
+ "9|length_wrapper": [
+  true,
+  false
  ],
  "10|split8": [
   true,
@@ -504,19 +584,19 @@
   false
  ],
  "10|pad16": [
-  false,
-  false
+  true,
+  true
  ],
  "10|reorder": [
-  false,
+  true,
   true
  ],
  "10|ttl": [
-  false,
+  true,
   true
  ],
  "10|corrupt8": [
-  false,
+  true,
   false
  ],
  "10|overlap8": [
@@ -524,19 +604,27 @@
   false
  ],
  "10|noop": [
-  false,
+  true,
   true
+ ],
+ "10|http_header_pad": [
+  true,
+  true
+ ],
+ "10|length_wrapper": [
+  true,
+  false
  ],
  "11|split8": [
   true,
   true
  ],
  "11|split16": [
-  true,
+  false,
   true
  ],
  "11|split24": [
-  true,
+  false,
   true
  ],
  "11|prepend4": [
@@ -574,6 +662,14 @@
  "11|noop": [
   false,
   true
+ ],
+ "11|http_header_pad": [
+  false,
+  true
+ ],
+ "11|length_wrapper": [
+  false,
+  false
  ],
  "12|split8": [
   true,
@@ -623,6 +719,14 @@
   false,
   true
  ],
+ "12|http_header_pad": [
+  false,
+  true
+ ],
+ "12|length_wrapper": [
+  false,
+  false
+ ],
  "13|split8": [
   true,
   true
@@ -649,7 +753,7 @@
  ],
  "13|pad16": [
   false,
-  false
+  true
  ],
  "13|reorder": [
   false,
@@ -670,6 +774,14 @@
  "13|noop": [
   false,
   true
+ ],
+ "13|http_header_pad": [
+  true,
+  true
+ ],
+ "13|length_wrapper": [
+  true,
+  false
  ],
  "14|split8": [
   true,
@@ -697,7 +809,7 @@
  ],
  "14|pad16": [
   false,
-  false
+  true
  ],
  "14|reorder": [
   false,
@@ -718,6 +830,14 @@
  "14|noop": [
   false,
   true
+ ],
+ "14|http_header_pad": [
+  true,
+  true
+ ],
+ "14|length_wrapper": [
+  true,
+  false
  ],
  "15|split8": [
   true,
@@ -745,7 +865,7 @@
  ],
  "15|pad16": [
   false,
-  false
+  true
  ],
  "15|reorder": [
   false,
@@ -766,5 +886,13 @@
  "15|noop": [
   false,
   true
+ ],
+ "15|http_header_pad": [
+  true,
+  true
+ ],
+ "15|length_wrapper": [
+  true,
+  false
  ]
 }

@@ -1,12 +1,12 @@
 {
   "random_sweep": {
-    "queries": 55,
+    "queries": 51,
     "evaded": 16,
     "n_flows": 16,
     "evasion_pct": 100.0
   },
   "greedy": {
-    "queries": 33,
+    "queries": 28,
     "evaded": 16,
     "n_flows": 16,
     "evasion_pct": 100.0
@@ -22,7 +22,7 @@
     "evaded": 16,
     "actions_chosen": {
       "split8": 8,
-      "split16": 8
+      "split24": 8
     },
     "n_flows": 16,
     "evasion_pct": 100.0

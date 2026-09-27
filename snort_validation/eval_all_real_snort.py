@@ -39,8 +39,18 @@ MODEL = REPO / "models/ppo_hidden_defender.zip"
 SEED = 42
 
 
-def score_matrix(flows, batch_size=32):
-    """{(flow_idx, mech): (evaded, semantics_ok)} from the real snort binary."""
+def score_matrix(flows, batch_size=1):
+    """{(flow_idx, mech): (evaded, semantics_ok)} from the real snort binary.
+
+    SCORING ISOLATED PER PAIR -- required, not an optimisation.
+    A 32-pair pcap made Snort emit 4 alerts, and 12 of those 32 verdicts
+    disagreed with scoring the same pair in its own pcap (measured on
+    eval chunk 0: split8/noop/ttl/reorder/pad16/http_header_pad/length_wrapper
+    on flows 0 and 1 all read "not detected" batched and "detected" alone).
+    The mixed pcap suppressed alerts across the whole capture, so any batched
+    number silently understates detection.  batch_size=1 costs 224 snort calls
+    (~80s) and is the only setting whose verdicts are trustworthy.
+    """
     combos = [(i, m) for i in range(len(flows)) for m in ACTION_NAMES]
     svc = SnortBatchService(batch_size=batch_size)
     matrix = {}
