@@ -98,7 +98,7 @@ def apply_mech(pkts, mech: str):
             if Raw in p:
                 payload = bytes(p[Raw].load)
                 if 8 < len(payload):
-                    frags = overlap_fragments(payload, 8, overlap=4)
+                    frags = overlap_fragments(payload, 8)
                     rebuilt.extend(fragment_plan_to_packets(out, frags, i))
                     i += 1
                     continue

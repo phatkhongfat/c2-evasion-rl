@@ -1,0 +1,10 @@
+{
+  "method": "supervised_tree",
+  "queries": 64,
+  "oracle_queries": 97,
+  "evaded": 64,
+  "n_flows": 64,
+  "evasion_pct": 100.0,
+  "depth": 3,
+  "note": "sees oracle labels; not achievable in practice"
+}
