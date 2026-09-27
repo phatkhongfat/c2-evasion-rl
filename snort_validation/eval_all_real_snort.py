@@ -120,10 +120,12 @@ def train_tree():
 def main() -> int:
     flows_all = load_corpus("test")
     # Filter to HTTP only (avoid degenerate split8-solves-all on Neris binary)
-    flows = {fid: flow for fid, flow in flows_all.items() 
-             if flow.get("framing") == "http"}
+    flows = [flow for flow in flows_all if flow.get("framing") == "http"]
     n = len(flows)
     print(f"[*] HTTP-only test set: {n}/{len(flows_all)} flows")
+    if n == 0:
+        print("[!] ERROR: no HTTP flows found in test set")
+        return 1
     print(f"[*] scoring {n * len(ACTION_NAMES)} (flow, mechanism) pairs "
           f"with the real snort binary ...")
     M = score_matrix(flows)
