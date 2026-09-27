@@ -27,7 +27,10 @@ from hidden_defender_env import apply_mech, load_corpus, payloads_of, semantics_
 from snort_batch_service import SnortBatchService  # noqa: E402
 
 REPORTS = REPO / "snort_validation/reports"
-OFFSETS = list(range(1, 17))
+# split_at must be a multiple of 8 (IP fragment offsets are 8-byte units),
+# while prepend takes an arbitrary byte count -- different search spaces.
+OFFSET_SETS = {"split": [8, 16, 24, 32, 40, 48, 56, 64],
+               "prepend": [1, 2, 3, 4, 6, 8, 12, 16, 20, 24, 32, 48, 64, 96, 128]}
 
 
 def mutate(pkts, mech, off):
@@ -38,8 +41,8 @@ def mutate(pkts, mech, off):
 def main() -> int:
     flows = load_corpus("test")
     n = len(flows)
-    combos = [(i, m, o) for i in range(n) for m in ("split", "prepend")
-              for o in OFFSETS]
+    combos = [(i, m, o) for i in range(n) for m in OFFSET_SETS
+              for o in OFFSET_SETS[m]]
     svc = SnortBatchService(batch_size=48)
     res = {}
     for s in range(0, len(combos), 48):
@@ -55,10 +58,11 @@ def main() -> int:
         print(f"    scored {s + len(chunk)}/{len(combos)}")
 
     report = {}
-    for mech in ("split", "prepend"):
+    for mech in OFFSET_SETS:
         per_flow = {}
         for i in range(n):
-            good = [o for o in OFFSETS if res[(i, mech, o)][0] and res[(i, mech, o)][1]]
+            good = [o for o in OFFSET_SETS[mech]
+                    if res[(i, mech, o)][0] and res[(i, mech, o)][1]]
             per_flow[i] = good
         cover = Counter()
         for good in per_flow.values():
