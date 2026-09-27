@@ -110,3 +110,26 @@ def fragment_plan_to_packets(packets: Sequence, frags: Sequence[Fragment],
             fip = fip / UDP(sport=pkt[UDP].sport, dport=pkt[UDP].dport)
         out.append(fip / Raw(load=f.data))
     return out
+
+
+def fix_checksums(pkt, new_payload: bytes):
+    """Return a copy of pkt carrying new_payload with refreshed checksums.
+
+    Snort silently discards packets whose IP/UDP/TCP checksum is wrong, so a
+    payload rewrite that skipped this would make every mechanism "evade" for
+    the wrong reason.  The input packet is never mutated.
+    """
+    from scapy.all import IP, Raw, TCP, UDP
+
+    out = pkt.copy()
+    if Raw in out:
+        out[Raw].load = new_payload
+    else:
+        out = out / Raw(load=new_payload)
+    if UDP in out:
+        del out[UDP].chksum
+    if TCP in out:
+        del out[TCP].chksum
+    if IP in out:
+        del out[IP].chksum
+    return IP(bytes(out))

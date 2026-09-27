@@ -4,12 +4,17 @@ import sys
 from pathlib import Path
 
 import pytest
+from scapy.all import IP, Raw, UDP, TCP
 
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "snort_validation"))
 
 from c2_semantics import Fragment, assemble, reconstructs_command  # noqa: E402
-from fragment_ops import overlap_fragments, split_fragments  # noqa: E402
+from fragment_ops import (  # noqa: E402
+    fix_checksums,
+    overlap_fragments,
+    split_fragments,
+)
 
 
 def _dht_payload():
@@ -63,3 +68,36 @@ def test_fragment_plan_to_packets_preserves_all_bytes():
     # offsets are 8-byte units and only the final fragment clears MF
     assert [p[IP].frag for p in out] == [0, 1, 0]
     assert [int(p[IP].flags) for p in out] == [1, 0, 1]
+
+
+def _pkt(transport_cls):
+    p = IP(src="10.0.0.1", dst="10.0.0.2") / transport_cls(sport=1234, dport=80)
+    return p / Raw(load=b"original")
+
+
+def test_fix_checksums_udp():
+    new = b"a much longer body that changes the checksum"
+    p = fix_checksums(_pkt(UDP), new)
+    assert p[Raw].load == new
+    assert p[UDP].chksum is not None
+
+
+def test_fix_checksums_tcp():
+    p = fix_checksums(_pkt(TCP), b"another entirely different length of body")
+    assert p[TCP].chksum is not None
+
+
+def test_fix_checksums_original_untouched():
+    p = _pkt(UDP)
+    before = bytes(p[Raw].load)
+    fix_checksums(p, b"different")
+    assert bytes(p[Raw].load) == before
+
+
+def test_fix_checksums_value_reflects_new_payload():
+    """A stale checksum makes Snort drop the packet, which would make every
+    mechanism 'evade' for the wrong reason -- so the value must really change
+    with the payload."""
+    short = fix_checksums(_pkt(UDP), b"x" * 10)[UDP].chksum
+    long = fix_checksums(_pkt(UDP), b"x" * 400)[UDP].chksum
+    assert short != long
