@@ -173,6 +173,23 @@ def main() -> int:
 
     out = REPORTS / "hidden_defender_real_snort_test.json"
     out.write_text(json.dumps(rows, indent=2))
+    (REPORTS / "hidden_defender_matrix_test.json").write_text(
+        json.dumps({f"{i}|{m}": list(v) for (i, m), v in M.items()}, indent=1))
+
+    # -- discrimination analysis: is this benchmark able to separate methods?
+    solved_by = {m: sum(1 for i in range(n) if M[(i, m)][0] and M[(i, m)][1])
+                 for m in ACTION_NAMES}
+    per_flow = {i: sum(1 for m in ACTION_NAMES if M[(i, m)][0] and M[(i, m)][1])
+                for i in range(n)}
+    print(f"\n[*] DISCRIMINATION: flows solved per mechanism (of {n})")
+    for m, c in sorted(solved_by.items(), key=lambda kv: -kv[1]):
+        print(f"      {m:<12} {c:>3}/{n}")
+    print(f"[*] mechanisms that work per flow: "
+          f"min={min(per_flow.values())} max={max(per_flow.values())} "
+          f"mean={sum(per_flow.values()) / n:.1f}")
+    best = max(solved_by.values())
+    print(f"[*] best single mechanism solves {best}/{n} "
+          f"({100.0 * best / n:.1f}%) -> benchmark ceiling")
 
     print(f"[*] held-out test set ({n} flows), REAL Snort verdict per query\n")
     print(f"{'method':>18} {'queries':>8} {'evaded':>9} {'pct':>7}")

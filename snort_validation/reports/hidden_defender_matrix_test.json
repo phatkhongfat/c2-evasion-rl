@@ -1,0 +1,770 @@
+{
+ "0|split8": [
+  true,
+  true
+ ],
+ "0|split16": [
+  false,
+  true
+ ],
+ "0|split24": [
+  false,
+  true
+ ],
+ "0|prepend4": [
+  true,
+  true
+ ],
+ "0|prepend8": [
+  true,
+  true
+ ],
+ "0|prepend12": [
+  true,
+  true
+ ],
+ "0|pad16": [
+  true,
+  true
+ ],
+ "0|reorder": [
+  true,
+  true
+ ],
+ "0|ttl": [
+  true,
+  true
+ ],
+ "0|corrupt8": [
+  true,
+  false
+ ],
+ "0|overlap8": [
+  true,
+  false
+ ],
+ "0|noop": [
+  true,
+  true
+ ],
+ "1|split8": [
+  true,
+  true
+ ],
+ "1|split16": [
+  false,
+  true
+ ],
+ "1|split24": [
+  false,
+  true
+ ],
+ "1|prepend4": [
+  true,
+  true
+ ],
+ "1|prepend8": [
+  true,
+  true
+ ],
+ "1|prepend12": [
+  true,
+  true
+ ],
+ "1|pad16": [
+  true,
+  true
+ ],
+ "1|reorder": [
+  true,
+  true
+ ],
+ "1|ttl": [
+  true,
+  true
+ ],
+ "1|corrupt8": [
+  true,
+  false
+ ],
+ "1|overlap8": [
+  true,
+  false
+ ],
+ "1|noop": [
+  true,
+  true
+ ],
+ "2|split8": [
+  true,
+  true
+ ],
+ "2|split16": [
+  true,
+  true
+ ],
+ "2|split24": [
+  true,
+  true
+ ],
+ "2|prepend4": [
+  true,
+  true
+ ],
+ "2|prepend8": [
+  true,
+  true
+ ],
+ "2|prepend12": [
+  true,
+  true
+ ],
+ "2|pad16": [
+  true,
+  true
+ ],
+ "2|reorder": [
+  true,
+  true
+ ],
+ "2|ttl": [
+  false,
+  true
+ ],
+ "2|corrupt8": [
+  false,
+  false
+ ],
+ "2|overlap8": [
+  true,
+  false
+ ],
+ "2|noop": [
+  false,
+  true
+ ],
+ "3|split8": [
+  true,
+  true
+ ],
+ "3|split16": [
+  true,
+  true
+ ],
+ "3|split24": [
+  true,
+  true
+ ],
+ "3|prepend4": [
+  true,
+  true
+ ],
+ "3|prepend8": [
+  true,
+  true
+ ],
+ "3|prepend12": [
+  true,
+  true
+ ],
+ "3|pad16": [
+  false,
+  true
+ ],
+ "3|reorder": [
+  false,
+  true
+ ],
+ "3|ttl": [
+  false,
+  true
+ ],
+ "3|corrupt8": [
+  true,
+  false
+ ],
+ "3|overlap8": [
+  true,
+  false
+ ],
+ "3|noop": [
+  false,
+  true
+ ],
+ "4|split8": [
+  true,
+  true
+ ],
+ "4|split16": [
+  true,
+  true
+ ],
+ "4|split24": [
+  true,
+  true
+ ],
+ "4|prepend4": [
+  true,
+  true
+ ],
+ "4|prepend8": [
+  true,
+  true
+ ],
+ "4|prepend12": [
+  true,
+  true
+ ],
+ "4|pad16": [
+  false,
+  true
+ ],
+ "4|reorder": [
+  false,
+  true
+ ],
+ "4|ttl": [
+  false,
+  true
+ ],
+ "4|corrupt8": [
+  true,
+  false
+ ],
+ "4|overlap8": [
+  true,
+  false
+ ],
+ "4|noop": [
+  false,
+  true
+ ],
+ "5|split8": [
+  true,
+  true
+ ],
+ "5|split16": [
+  true,
+  true
+ ],
+ "5|split24": [
+  true,
+  true
+ ],
+ "5|prepend4": [
+  true,
+  true
+ ],
+ "5|prepend8": [
+  true,
+  true
+ ],
+ "5|prepend12": [
+  true,
+  true
+ ],
+ "5|pad16": [
+  false,
+  true
+ ],
+ "5|reorder": [
+  false,
+  true
+ ],
+ "5|ttl": [
+  false,
+  true
+ ],
+ "5|corrupt8": [
+  false,
+  false
+ ],
+ "5|overlap8": [
+  true,
+  false
+ ],
+ "5|noop": [
+  false,
+  true
+ ],
+ "6|split8": [
+  true,
+  true
+ ],
+ "6|split16": [
+  true,
+  true
+ ],
+ "6|split24": [
+  true,
+  true
+ ],
+ "6|prepend4": [
+  true,
+  true
+ ],
+ "6|prepend8": [
+  true,
+  true
+ ],
+ "6|prepend12": [
+  true,
+  true
+ ],
+ "6|pad16": [
+  false,
+  true
+ ],
+ "6|reorder": [
+  false,
+  true
+ ],
+ "6|ttl": [
+  false,
+  true
+ ],
+ "6|corrupt8": [
+  true,
+  false
+ ],
+ "6|overlap8": [
+  true,
+  false
+ ],
+ "6|noop": [
+  false,
+  true
+ ],
+ "7|split8": [
+  true,
+  true
+ ],
+ "7|split16": [
+  true,
+  true
+ ],
+ "7|split24": [
+  true,
+  true
+ ],
+ "7|prepend4": [
+  true,
+  true
+ ],
+ "7|prepend8": [
+  true,
+  true
+ ],
+ "7|prepend12": [
+  true,
+  true
+ ],
+ "7|pad16": [
+  false,
+  true
+ ],
+ "7|reorder": [
+  false,
+  true
+ ],
+ "7|ttl": [
+  false,
+  true
+ ],
+ "7|corrupt8": [
+  true,
+  false
+ ],
+ "7|overlap8": [
+  true,
+  false
+ ],
+ "7|noop": [
+  false,
+  true
+ ],
+ "8|split8": [
+  true,
+  true
+ ],
+ "8|split16": [
+  true,
+  true
+ ],
+ "8|split24": [
+  true,
+  true
+ ],
+ "8|prepend4": [
+  true,
+  true
+ ],
+ "8|prepend8": [
+  true,
+  true
+ ],
+ "8|prepend12": [
+  true,
+  true
+ ],
+ "8|pad16": [
+  false,
+  true
+ ],
+ "8|reorder": [
+  false,
+  true
+ ],
+ "8|ttl": [
+  false,
+  true
+ ],
+ "8|corrupt8": [
+  false,
+  false
+ ],
+ "8|overlap8": [
+  true,
+  false
+ ],
+ "8|noop": [
+  false,
+  true
+ ],
+ "9|split8": [
+  true,
+  true
+ ],
+ "9|split16": [
+  true,
+  true
+ ],
+ "9|split24": [
+  true,
+  true
+ ],
+ "9|prepend4": [
+  true,
+  true
+ ],
+ "9|prepend8": [
+  true,
+  true
+ ],
+ "9|prepend12": [
+  true,
+  true
+ ],
+ "9|pad16": [
+  false,
+  true
+ ],
+ "9|reorder": [
+  false,
+  true
+ ],
+ "9|ttl": [
+  false,
+  true
+ ],
+ "9|corrupt8": [
+  true,
+  false
+ ],
+ "9|overlap8": [
+  true,
+  false
+ ],
+ "9|noop": [
+  false,
+  true
+ ],
+ "10|split8": [
+  true,
+  true
+ ],
+ "10|split16": [
+  true,
+  true
+ ],
+ "10|split24": [
+  true,
+  true
+ ],
+ "10|prepend4": [
+  true,
+  true
+ ],
+ "10|prepend8": [
+  true,
+  true
+ ],
+ "10|prepend12": [
+  true,
+  true
+ ],
+ "10|pad16": [
+  false,
+  true
+ ],
+ "10|reorder": [
+  false,
+  true
+ ],
+ "10|ttl": [
+  false,
+  true
+ ],
+ "10|corrupt8": [
+  false,
+  false
+ ],
+ "10|overlap8": [
+  true,
+  false
+ ],
+ "10|noop": [
+  false,
+  true
+ ],
+ "11|split8": [
+  true,
+  true
+ ],
+ "11|split16": [
+  true,
+  true
+ ],
+ "11|split24": [
+  true,
+  true
+ ],
+ "11|prepend4": [
+  true,
+  true
+ ],
+ "11|prepend8": [
+  true,
+  true
+ ],
+ "11|prepend12": [
+  true,
+  true
+ ],
+ "11|pad16": [
+  false,
+  true
+ ],
+ "11|reorder": [
+  false,
+  true
+ ],
+ "11|ttl": [
+  false,
+  true
+ ],
+ "11|corrupt8": [
+  true,
+  false
+ ],
+ "11|overlap8": [
+  true,
+  false
+ ],
+ "11|noop": [
+  false,
+  true
+ ],
+ "12|split8": [
+  true,
+  true
+ ],
+ "12|split16": [
+  true,
+  true
+ ],
+ "12|split24": [
+  true,
+  true
+ ],
+ "12|prepend4": [
+  true,
+  true
+ ],
+ "12|prepend8": [
+  true,
+  true
+ ],
+ "12|prepend12": [
+  true,
+  true
+ ],
+ "12|pad16": [
+  false,
+  true
+ ],
+ "12|reorder": [
+  false,
+  true
+ ],
+ "12|ttl": [
+  false,
+  true
+ ],
+ "12|corrupt8": [
+  true,
+  false
+ ],
+ "12|overlap8": [
+  true,
+  false
+ ],
+ "12|noop": [
+  false,
+  true
+ ],
+ "13|split8": [
+  true,
+  true
+ ],
+ "13|split16": [
+  true,
+  true
+ ],
+ "13|split24": [
+  true,
+  true
+ ],
+ "13|prepend4": [
+  true,
+  true
+ ],
+ "13|prepend8": [
+  true,
+  true
+ ],
+ "13|prepend12": [
+  true,
+  true
+ ],
+ "13|pad16": [
+  false,
+  true
+ ],
+ "13|reorder": [
+  false,
+  true
+ ],
+ "13|ttl": [
+  false,
+  true
+ ],
+ "13|corrupt8": [
+  false,
+  false
+ ],
+ "13|overlap8": [
+  true,
+  false
+ ],
+ "13|noop": [
+  false,
+  true
+ ],
+ "14|split8": [
+  true,
+  true
+ ],
+ "14|split16": [
+  true,
+  true
+ ],
+ "14|split24": [
+  true,
+  true
+ ],
+ "14|prepend4": [
+  true,
+  true
+ ],
+ "14|prepend8": [
+  true,
+  true
+ ],
+ "14|prepend12": [
+  true,
+  true
+ ],
+ "14|pad16": [
+  false,
+  true
+ ],
+ "14|reorder": [
+  false,
+  true
+ ],
+ "14|ttl": [
+  false,
+  true
+ ],
+ "14|corrupt8": [
+  false,
+  false
+ ],
+ "14|overlap8": [
+  true,
+  false
+ ],
+ "14|noop": [
+  false,
+  true
+ ],
+ "15|split8": [
+  true,
+  true
+ ],
+ "15|split16": [
+  true,
+  true
+ ],
+ "15|split24": [
+  true,
+  true
+ ],
+ "15|prepend4": [
+  true,
+  true
+ ],
+ "15|prepend8": [
+  true,
+  true
+ ],
+ "15|prepend12": [
+  true,
+  true
+ ],
+ "15|pad16": [
+  false,
+  true
+ ],
+ "15|reorder": [
+  false,
+  true
+ ],
+ "15|ttl": [
+  false,
+  true
+ ],
+ "15|corrupt8": [
+  false,
+  false
+ ],
+ "15|overlap8": [
+  true,
+  false
+ ],
+ "15|noop": [
+  false,
+  true
+ ]
+}

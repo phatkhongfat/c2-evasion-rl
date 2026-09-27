@@ -1,0 +1,30 @@
+{
+  "random_sweep": {
+    "queries": 32,
+    "evaded": 16,
+    "n_flows": 16,
+    "evasion_pct": 100.0
+  },
+  "greedy": {
+    "queries": 19,
+    "evaded": 16,
+    "n_flows": 16,
+    "evasion_pct": 100.0
+  },
+  "supervised_tree": {
+    "queries": 16,
+    "evaded": 16,
+    "n_flows": 16,
+    "evasion_pct": 100.0
+  },
+  "ppo": {
+    "queries": 16,
+    "evaded": 16,
+    "actions_chosen": {
+      "prepend12": 15,
+      "prepend8": 1
+    },
+    "n_flows": 16,
+    "evasion_pct": 100.0
+  }
+}
