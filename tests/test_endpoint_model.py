@@ -3,7 +3,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "snort_validation"))
 
-from endpoint_model import parse_command, FRAMINGS
+from endpoint_model import parse_command, detect_framing, FRAMINGS
 
 
 def test_http_request_line_parsed():
@@ -52,3 +52,15 @@ def test_garbage_is_rejected():
 
 def test_framings_are_distinct():
     assert set(FRAMINGS) == {"http", "irc", "length2"}
+
+
+def test_detect_framing_http():
+    assert detect_framing(b"GET /a HTTP/1.1\r\nHost: x\r\n\r\n") == "http"
+
+
+def test_detect_framing_irc():
+    assert detect_framing(b":bot PRIVMSG #c2 :d1:ad2\r\n") == "irc"
+
+
+def test_detect_framing_length2():
+    assert detect_framing(b"LEN2:\x00\x00d1:ad2") == "length2"

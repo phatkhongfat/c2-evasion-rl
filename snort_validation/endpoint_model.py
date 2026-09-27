@@ -76,3 +76,19 @@ def parse_command(raw: bytes, framing: str) -> bytes | None:
     if fn is None:
         raise KeyError(f"unknown framing: {framing!r}")
     return fn(raw)
+
+
+def detect_framing(raw: bytes) -> str:
+    """Guess which framing a captured flow uses.
+
+    Conservative and prefix-based on purpose: mislabelling a flow would make a
+    mechanism look like it evades for the wrong reason.  ``length2`` is checked
+    first because a wrapped stream would otherwise be misread as HTTP.
+    """
+    if raw.startswith(b"LEN") and b":" in raw[:12]:
+        return "length2"
+    if raw.startswith((b"GET ", b"POST ", b"PUT ", b"HEAD ", b"DELETE ", b"HTTP/")):
+        return "http"
+    if _IRC.search(raw):
+        return "irc"
+    return "http"  # corpus default; flows we have not labelled
