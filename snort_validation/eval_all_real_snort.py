@@ -29,8 +29,8 @@ sys.path.insert(0, str(REPO / "ai_agent"))
 sys.path.insert(0, str(REPO / "snort_validation"))
 
 from hidden_defender_env import (  # noqa: E402
-    ACTION_NAMES, HiddenDefenderEnv, apply_mech, load_corpus, payloads_of,
-    semantics_intact,
+    ACTION_NAMES, HiddenDefenderEnv, apply_mech, load_corpus, mech_applicable,
+    payloads_of, semantics_intact,
 )
 from snort_batch_service import SnortBatchService  # noqa: E402
 
@@ -63,14 +63,24 @@ def score_matrix(flows, batch_size=32):
 
 
 class QueryCounter:
-    """Count distinct (flow, mechanism) probes -- one defender query each."""
+    """Count distinct (flow, mechanism) probes -- one defender query each.
 
-    def __init__(self, matrix):
+    A mechanism the flow's protocol cannot carry is skipped without spending a
+    query: the attacker knows its own framing, so probing "pad the headers of a
+    binary record chain" is not a probe a protocol-aware attacker would make.
+    Counting it would both inflate the query count and hand the new mechanisms
+    free wins on flows where they are meaningless.
+    """
+
+    def __init__(self, matrix, flows):
         self.matrix = matrix
+        self.flows = flows
         self.seen = set()
         self.queries = 0
 
     def valid(self, i, mech):
+        if not mech_applicable(payloads_of(self.flows[i]["packets"]), mech):
+            return False
         if (i, mech) not in self.seen:
             self.seen.add((i, mech))
             self.queries += 1
@@ -109,7 +119,7 @@ def main() -> int:
     rng = np.random.default_rng(SEED)
 
     # -- random_sweep: no memory, random order, retry until valid
-    q = QueryCounter(M)
+    q = QueryCounter(M, flows)
     solved = 0
     for i in range(n):
         order = list(range(len(ACTION_NAMES)))
@@ -121,7 +131,7 @@ def main() -> int:
     rows["random_sweep"] = {"queries": q.queries, "evaded": solved}
 
     # -- greedy: reuse the mechanism that worked on the nearest flow
-    q = QueryCounter(M)
+    q = QueryCounter(M, flows)
     solved = 0
     history = []
     eps = 0.3
@@ -143,7 +153,7 @@ def main() -> int:
     rows["greedy"] = {"queries": q.queries, "evaded": solved}
 
     # -- supervised_tree: oracle-labelled ceiling
-    q = QueryCounter(M)
+    q = QueryCounter(M, flows)
     tree = train_tree()
     solved = 0
     for i in range(n):
@@ -153,7 +163,7 @@ def main() -> int:
     rows["supervised_tree"] = {"queries": q.queries, "evaded": solved}
 
     # -- ppo
-    q = QueryCounter(M)
+    q = QueryCounter(M, flows)
     model = PPO.load(MODEL, device="cpu")
     solved = 0
     chosen = Counter()
@@ -177,13 +187,19 @@ def main() -> int:
         json.dumps({f"{i}|{m}": list(v) for (i, m), v in M.items()}, indent=1))
 
     # -- discrimination analysis: is this benchmark able to separate methods?
-    solved_by = {m: sum(1 for i in range(n) if M[(i, m)][0] and M[(i, m)][1])
+    app = {i: {m for m in ACTION_NAMES
+               if mech_applicable(payloads_of(flows[i]["packets"]), m)}
+           for i in range(n)}
+    solved_by = {m: sum(1 for i in range(n)
+                        if m in app[i] and M[(i, m)][0] and M[(i, m)][1])
                  for m in ACTION_NAMES}
-    per_flow = {i: sum(1 for m in ACTION_NAMES if M[(i, m)][0] and M[(i, m)][1])
+    per_flow = {i: sum(1 for m in app[i] if M[(i, m)][0] and M[(i, m)][1])
                 for i in range(n)}
     print(f"\n[*] DISCRIMINATION: flows solved per mechanism (of {n})")
     for m, c in sorted(solved_by.items(), key=lambda kv: -kv[1]):
-        print(f"      {m:<12} {c:>3}/{n}")
+        usable = sum(1 for i in range(n) if m in app[i])
+        note = f"  (applicable to {usable}/{n} flows)" if usable != n else ""
+        print(f"      {m:<16} {c:>3}/{n}{note}")
     print(f"[*] mechanisms that work per flow: "
           f"min={min(per_flow.values())} max={max(per_flow.values())} "
           f"mean={sum(per_flow.values()) / n:.1f}")
