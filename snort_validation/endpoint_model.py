@@ -63,10 +63,25 @@ def _parse_length2(raw: bytes) -> bytes | None:
     return body or None
 
 
+# Neris-style binary record chain: "<tag><len>:<data>" repeated.  The full
+# grammar was not reverse-engineered, so the parser only certifies that the
+# stream *starts* as a record chain and otherwise treats bytes as the command.
+# That keeps the bar honest: a prefix is rejected, and trailing junk is NOT
+# claimed to be safe.
+_NERIS_HEAD = re.compile(rb"^[a-z_]+\d+:")
+
+
+def _parse_neris(raw: bytes) -> bytes | None:
+    if not _NERIS_HEAD.match(raw):
+        return None
+    return raw or None
+
+
 FRAMINGS = {
     "http": _parse_http,
     "irc": _parse_irc,
     "length2": _parse_length2,
+    "neris": _parse_neris,
 }
 
 
@@ -91,4 +106,6 @@ def detect_framing(raw: bytes) -> str:
         return "http"
     if _IRC.search(raw):
         return "irc"
+    if _NERIS_HEAD.match(raw):
+        return "neris"
     return "http"  # corpus default; flows we have not labelled

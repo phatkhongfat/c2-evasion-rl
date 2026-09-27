@@ -1,0 +1,22 @@
+{
+  "total": 80,
+  "by_framing": {
+    "http": 40,
+    "neris": 40
+  },
+  "by_split": {
+    "train": {
+      "http": 32,
+      "neris": 32
+    },
+    "test": {
+      "neris": 8,
+      "http": 8
+    }
+  },
+  "flows_unparseable_by_detected_framing": {
+    "train": 1,
+    "test": 0
+  },
+  "length_prefixed_available": false
+}
