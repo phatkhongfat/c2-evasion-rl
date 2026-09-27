@@ -1,30 +1,29 @@
 {
   "random_sweep": {
-    "queries": 51,
-    "evaded": 16,
-    "n_flows": 16,
+    "queries": 25,
+    "evaded": 8,
+    "n_flows": 8,
     "evasion_pct": 100.0
   },
   "greedy": {
-    "queries": 28,
-    "evaded": 16,
-    "n_flows": 16,
+    "queries": 13,
+    "evaded": 8,
+    "n_flows": 8,
     "evasion_pct": 100.0
   },
   "supervised_tree": {
-    "queries": 16,
-    "evaded": 16,
-    "n_flows": 16,
+    "queries": 8,
+    "evaded": 8,
+    "n_flows": 8,
     "evasion_pct": 100.0
   },
   "ppo": {
-    "queries": 16,
-    "evaded": 16,
+    "queries": 8,
+    "evaded": 8,
     "actions_chosen": {
-      "split8": 8,
       "split24": 8
     },
-    "n_flows": 16,
+    "n_flows": 8,
     "evasion_pct": 100.0
   }
 }
