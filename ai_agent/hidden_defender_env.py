@@ -35,14 +35,27 @@ from snort_batch_service import SnortBatchService  # noqa: E402
 
 CORPUS_PKL = REPO / "snort_validation/reports/hidden_defender_corpus.pkl"
 
-# 12 mechanisms.  split8/16/24 and prepend4/8/12 measured; pad/reorder/ttl
+# Mechanism A filler: unknown headers a real server ignores, but a `depth:`
+# signature anchored in the HTTP head will still see shifted bytes.
+_JUNK_HEADERS = b"".join(
+    b"X-Pad-%04d: %s\r\n" % (i, b"A" * 24) for i in range(4)
+)
+
+# Mechanism B: declared byte offset of the real data inside the wrapper.
+_WRAP_OFFSET = 64
+
+# 14 mechanisms.  split8/16/24 and prepend4/8/12 measured; pad/reorder/ttl
 # measured as 0/80 evaders (kept as informative negatives); corrupt8 breaks
 # semantics (kept so the -10 penalty is observable); noop is the null action.
+# http_header_pad / length_wrapper are protocol-aware (A and B): they are
+# applicable only to a flow whose framing can carry them, and
+# `mech_applicable` keeps the rest out of the denominator.
 ACTION_NAMES = [
     "split8", "split16", "split24",
     "prepend4", "prepend8", "prepend12",
     "pad16", "reorder", "ttl",
     "corrupt8", "overlap8", "noop",
+    "http_header_pad", "length_wrapper",
 ]
 N_ACTIONS = len(ACTION_NAMES)
 
@@ -57,20 +70,70 @@ def payloads_of(pkts):
     return [bytes(p[Raw].load) for p in pkts if Raw in p]
 
 
+def framing_of(payloads) -> str:
+    """Protocol framing of the flow's command stream, from its first bytes."""
+    from endpoint_model import detect_framing
+
+    return detect_framing(b"".join(payloads))
+
+
 def semantics_intact(original_payloads, pkts) -> bool:
     """True only when the C2 command still reaches the endpoint intact.
 
-    The earlier version checked `op in joined` per original segment.  That bar is
-    too weak and it silently endorsed broken channels: prepend inserts junk in
-    FRONT of every segment, so each original segment is still present as a
-    substring while the reassembled stream no longer begins with the command.
-    Measured on real Snort that turned prepend into 16/16 "evasion" that simply
-    stopped being C2 traffic.
+    Byte equality of the joined stream is the right bar for a protocol whose
+    grammar we cannot model -- it is exactly what fragmentation preserves and
+    what prepend/pad/corrupt break.  But it is the WRONG bar for HTTP, where a
+    real server skips unknown headers: header padding changes the bytes while
+    the command is still delivered, and byte equality would throw that away.
 
-    For a stream protocol the only honest bar is byte equality of the
-    reassembled stream, which is what fragmentation preserves by construction.
+    So the bar is: for every packet whose ORIGINAL payload yields a command
+    under the flow's framing, the mutated packet must yield the same command.
+    Packets that yield no command (responses, binary segments) impose no
+    constraint, and a flow whose original never parsed keeps the strict
+    byte-equality bar rather than being waved through.
     """
-    return b"".join(payloads_of(pkts)) == b"".join(original_payloads)
+    orig = list(original_payloads)
+    new = payloads_of(pkts)
+    from endpoint_model import parse_command
+
+    framing = framing_of(orig)
+
+    if len(orig) != len(new):
+        # Fragmentation changes the packet count.  The handler sees a
+        # reassembled stream, not a packet list, so compare that instead --
+        # otherwise the one mechanism that legitimately works is scored as
+        # breaking the channel.
+        cmd_o = parse_command(b"".join(orig), framing)
+        cmd_n = parse_command(b"".join(new), framing)
+        if cmd_o is not None:
+            return cmd_o == cmd_n
+        return b"".join(orig) == b"".join(new)
+
+    parseable = [i for i, p in enumerate(orig) if parse_command(p, framing) is not None]
+    if not parseable:
+        return orig == new
+
+    for i in parseable:
+        if parse_command(orig[i], framing) != parse_command(new[i], framing):
+            return False
+    return True
+
+
+def mech_applicable(original_payloads, mech: str) -> bool:
+    """False when the flow's protocol has nowhere for this mechanism to go.
+
+    HTTP header padding cannot help a binary record chain; a length wrapper can
+    only be read by a handler that already understands it.  Counting an
+    inapplicable mechanism as an evasion would inflate every headline number.
+    """
+    from endpoint_model import detect_framing
+
+    framing = detect_framing(b"".join(original_payloads))
+    if mech == "http_header_pad":
+        return framing == "http"
+    if mech == "length_wrapper":
+        return framing == "length2"
+    return True
 
 
 def apply_mech(pkts, mech: str):
@@ -113,7 +176,36 @@ def apply_mech(pkts, mech: str):
             i += 1
         return rebuilt
 
-    if mech.startswith("pad"):
+    if mech == "http_header_pad":
+        # Mechanism A.  Junk goes into HTTP HEADERS, never in front of the
+        # request line and never into a binary record chain -- a real server
+        # skips an unknown header, but prepending breaks the request line.
+        from endpoint_model import is_http_request
+
+        for i in pay_idx:
+            p = out[i]
+            raw = bytes(p[Raw].load)
+            if not is_http_request(raw):
+                continue
+            head, sep, body = raw.partition(b"\r\n")
+            if not sep:
+                continue
+            p[Raw].load = head + b"\r\n" + _JUNK_HEADERS + body
+
+    elif mech == "length_wrapper":
+        # Mechanism B.  A wrapper header declares where the real data starts,
+        # so any amount of filler precedes it.  Applied to the first
+        # payload-bearing packet, which is where the stream begins.
+        from fragment_ops import fix_checksums
+
+        for i in pay_idx:
+            p = out[i]
+            raw = bytes(p[Raw].load)
+            header = b"LEN%d:" % _WRAP_OFFSET
+            out[i] = fix_checksums(p, header + bytes(_WRAP_OFFSET) + raw)
+            break
+
+    elif mech.startswith("pad"):
         n = int(mech[3:])
         for i in pay_idx:
             p = out[i]

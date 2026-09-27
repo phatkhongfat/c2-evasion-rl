@@ -46,12 +46,14 @@ def test_obs_carries_no_rule_information():
         assert all(isinstance(v, float) for v in obs)
 
 
-def test_action_space_is_discrete_twelve():
+def test_action_space_is_discrete_fourteen():
     env = HiddenDefenderEnv(split="train")
-    assert env.action_space.n == N_ACTIONS == 12
+    assert env.action_space.n == N_ACTIONS == 14
     assert env.observation_space.shape == (8,)
     assert ACTION_NAMES[:3] == ["split8", "split16", "split24"]
     assert "prepend4" in ACTION_NAMES and "noop" in ACTION_NAMES
+    # Protocol-aware mechanisms A and B.
+    assert {"http_header_pad", "length_wrapper"} <= set(ACTION_NAMES)
 
 
 def test_step_returns_wellformed_gym_tuple():

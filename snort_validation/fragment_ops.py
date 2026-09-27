@@ -122,8 +122,18 @@ def fix_checksums(pkt, new_payload: bytes):
     from scapy.all import IP, Raw, TCP, UDP
 
     out = pkt.copy()
-    if Raw in out:
-        out[Raw].load = new_payload
+    # Rebuild from the packet's OWN link-layer class: a corpus packet is
+    # Ether/IP/TCP, and re-parsing as IP() would silently drop the Ethernet
+    # header, producing a frame Snort never sees as intended.
+    link = pkt.__class__
+    # Replace the WHOLE payload stack below the transport header.  Editing
+    # only Raw.load leaves a pre-existing Padding layer in place, and the
+    # rebuilt bytes then re-parse into Padding + a truncated Raw tail.
+    for cls in (TCP, UDP):
+        if cls in out:
+            del out[cls].payload
+            out = out / Raw(load=new_payload)
+            break
     else:
         out = out / Raw(load=new_payload)
     if UDP in out:
@@ -132,4 +142,5 @@ def fix_checksums(pkt, new_payload: bytes):
         del out[TCP].chksum
     if IP in out:
         del out[IP].chksum
-    return IP(bytes(out))
+        del out[IP].len  # stale total length truncates a grown payload on re-parse
+    return link(bytes(out))

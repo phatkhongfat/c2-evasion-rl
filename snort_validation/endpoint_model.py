@@ -93,6 +93,22 @@ def parse_command(raw: bytes, framing: str) -> bytes | None:
     return fn(raw)
 
 
+def is_http_request(raw: bytes) -> bool:
+    """True when the payload opens with a well-formed HTTP request line.
+
+    Used to decide whether header padding has anywhere legal to go: a binary
+    record chain or a response body must be left alone.
+    """
+    head = raw.split(b"\r\n", 1)[0]
+    parts = head.split(b" ")
+    return (
+        len(parts) == 3
+        and parts[0].isalpha()
+        and parts[1].startswith(b"/")
+        and parts[2].startswith(b"HTTP/")
+    )
+
+
 def detect_framing(raw: bytes) -> str:
     """Guess which framing a captured flow uses.
 

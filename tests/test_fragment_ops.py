@@ -94,6 +94,45 @@ def test_fix_checksums_original_untouched():
     assert bytes(p[Raw].load) == before
 
 
+def test_fix_checksums_preserves_a_grown_payload():
+    """A stale IP total length silently truncates the packet on re-parse, so
+    the wrapped stream would lose its tail without any error."""
+    p = _pkt(UDP)
+    grown = b"L" + b"Z" * 500
+    out = fix_checksums(p, grown)
+    assert bytes(out[Raw].load) == grown
+
+
+def test_fix_checksums_on_padded_tcp_packet():
+    """A real corpus packet is IP/TCP/Padding/Raw.  Editing only Raw.load left
+    the Padding layer behind and the rebuilt bytes re-parsed into a 20-byte
+    Raw tail -- the wrapped command silently lost its head."""
+    from scapy.packet import Padding
+
+    p = IP(src="10.0.0.1", dst="10.0.0.2") / TCP(sport=1234, dport=80)
+    p = p / Padding(load=b"\x00" * 4) / Raw(load=b"x" * 600)
+    assert Padding in p
+
+    grown = b"LEN64:" + b"\x00" * 64 + bytes(p[Raw].load)
+    out = fix_checksums(p, grown)
+    assert bytes(out[Raw].load) == grown
+
+
+def test_fix_checksums_keeps_the_ethernet_header():
+    """Corpus packets are Ether/IP/TCP.  Re-parsing as IP() dropped the
+    Ethernet header, so the frame Snort reads no longer matches the flow."""
+    from scapy.all import Ether
+
+    p = Ether(src="00:11:22:33:44:55", dst="66:77:88:99:aa:bb")
+    p = p / IP(src="10.0.0.1", dst="10.0.0.2") / TCP(sport=1234, dport=80)
+    p = p / Raw(load=b"y" * 300)
+
+    out = fix_checksums(p, b"Z" * 400)
+    assert Ether in out
+    assert out[Ether].src == "00:11:22:33:44:55"
+    assert bytes(out[Raw].load) == b"Z" * 400
+
+
 def test_fix_checksums_value_reflects_new_payload():
     """A stale checksum makes Snort drop the packet, which would make every
     mechanism 'evade' for the wrong reason -- so the value must really change
