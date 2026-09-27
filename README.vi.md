@@ -283,8 +283,9 @@ Sổ lỗi đầy đủ kèm phép đo: [`docs/REAL_SNORT_IN_THE_LOOP.md`](docs/
 
 ## 7. Kết quả và đánh giá
 
-Cả 11 dòng dưới đây là phán quyết Snort thật, được tổng hợp trong
-`snort_validation/reports/final_results_table.json`.
+Các bảng dưới đây là phán quyết Snort thật, được tổng hợp trong
+`snort_validation/reports/final_results_table.json` (25 dòng; 11 dòng bandit được trình
+bày ở §7.1–7.3, phần còn lại là cross-capture).
 
 ### 7.1 Quét chi phí làm hỏng — 24 luồng, `botnet-capture-20110811-neris`
 
@@ -453,7 +454,7 @@ python snort_validation/capture_pool_sizes.py --dataset stratosphere
 # 5. Chạy toàn bộ sweep (liên capture + quét chi phí + mở rộng + bảng cuối)
 ROUNDS=8 bash snort_validation/run_stratosphere_sweep.sh
 
-# 6. Đọc bảng kết quả 11 dòng
+# 6. Đọc bảng kết quả đầy đủ (25 dòng; §7.1–7.3 trình bày 11 dòng bandit trong đó)
 python -c "import json;d=json.load(open('snort_validation/reports/final_results_table.json'));print(d['count'],'rows')"
 
 # 7. Một thí nghiệm đơn, chế độ thường trú

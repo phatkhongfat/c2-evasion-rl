@@ -39,6 +39,7 @@ def main():
                         capture=args.capture, max_mutations=12, seed=7)
     n = len(env.flows)
     model = PPO.load(args.model, device="cpu")
+    env.assert_model_compatible(model)
     print(f"[*] model={args.model}")
     print(f"[*] {n} real flows from {args.capture}")
 

@@ -365,7 +365,8 @@ Full bug ledger with measurements: [`docs/REAL_SNORT_IN_THE_LOOP.md`](docs/REAL_
 This section reports **two different systems** and must be read with that distinction in
 mind. §7.1–7.3 are the **bandit stage** (`ai_agent/snort_bandit.py`, binary corruption mask
 over packet slots), aggregated in `snort_validation/reports/final_results_table.json` — all
-11 rows there are real Snort verdicts. §7.4 is the **current PPO packet-level agent**
+11 bandit rows shown in §7.1–7.3 (of 25 total) are real Snort verdicts. §7.4 is the
+**current PPO packet-level agent**
 (`models/ppo_enhanced.zip`), a different system with a different action space and its own
 numbers. The two are not comparable row-for-row: the bandit chooses *which packets to
 corrupt*, the PPO agent chooses *continuous per-packet mutation parameters*.
@@ -602,7 +603,7 @@ python snort_validation/capture_pool_sizes.py --dataset stratosphere
 # 5. Run the full sweep (cross-capture + cost sweep + scale-up + final table)
 ROUNDS=8 bash snort_validation/run_stratosphere_sweep.sh
 
-# 6. Read the 11-row result table
+# 6. Read the full result table (25 rows; §7.1–7.3 present the 11 bandit rows of it)
 python -c "import json;d=json.load(open('snort_validation/reports/final_results_table.json'));print(d['count'],'rows')"
 
 # 7. Single experiment, resident mode

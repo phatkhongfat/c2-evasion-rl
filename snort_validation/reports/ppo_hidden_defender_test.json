@@ -1,0 +1,12 @@
+{
+  "method": "ppo_real_snort",
+  "split": "test",
+  "n_flows": 16,
+  "evaded": 16,
+  "evasion_pct": 100.0,
+  "actions_chosen": {
+    "prepend12": 15,
+    "prepend8": 1
+  },
+  "replica_agreement": "9/16"
+}

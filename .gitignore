@@ -97,5 +97,16 @@ skills-lock.json
 *.bundle
 *.tar.gz
 
+# AI agent artifacts (local tooling state, not project content)
+.cursor/
+.aider*
+.cline/
+.roo/
+.codeium/
+.continue/
+.claude.json
+opencode.json
+AGENTS.local.md
+
 # Model checkpoints (large, regenerable)
 models/checkpoints_*/

@@ -119,6 +119,18 @@ class SnortBatchService:
             client = packets[0][IP].src if packets else None
             for pkt in packets:
                 p = pkt.copy()
+                # A fragment carries no transport header.  Rewrite only the IP
+                # address (and checksum), or the fragment cannot be reassembled
+                # into the same flow as its siblings and the rule engine never
+                # sees a complete payload.
+                if UDP not in p and TCP not in p:
+                    if client is not None and p[IP].src != client:
+                        p[IP].dst = src_ip
+                    else:
+                        p[IP].src = src_ip
+                    del p[IP].chksum
+                    out.append(p)
+                    continue
                 if client is not None and p[IP].src != client:
                     # responder direction: keep the tuple symmetric
                     p[IP].dst = src_ip

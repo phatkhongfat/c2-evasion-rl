@@ -1,0 +1,4016 @@
+{
+  "flows": 80,
+  "mechs": [
+    "split8",
+    "split16",
+    "pad16",
+    "pad64",
+    "prepend4",
+    "prepend8",
+    "corrupt8",
+    "reorder",
+    "ttl"
+  ],
+  "rows": [
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "mech": {
+        "split8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "split16": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend8": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "corrupt8": {
+          "evade": false,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    },
+    {
+      "capture": "botnet-capture-20110819-bot",
+      "mech": {
+        "split8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "split16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad16": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "pad64": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "prepend4": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "prepend8": {
+          "evade": true,
+          "semantics": true,
+          "valid": true
+        },
+        "corrupt8": {
+          "evade": true,
+          "semantics": false,
+          "valid": false
+        },
+        "reorder": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        },
+        "ttl": {
+          "evade": false,
+          "semantics": true,
+          "valid": false
+        }
+      }
+    }
+  ]
+}

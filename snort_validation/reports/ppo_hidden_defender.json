@@ -1,0 +1,9 @@
+{
+  "method": "ppo",
+  "queries": 384,
+  "evaded": 60,
+  "n_flows": 64,
+  "evasion_pct": 93.8,
+  "epochs": 6,
+  "semantics_breaks": 31
+}

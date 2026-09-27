@@ -1,0 +1,584 @@
+================================================================================
+OBSERVATION RATIONALE — HISTORY & EVIDENCE
+Repo: /root/.hermes/c2-evasion-rl   Branch: packet-level-rl
+HEAD at time of writing: 94f79b74a843844478ea95a7fbaccfc1721ee288 (2026-09-26)
+Generated: 2026-09-26
+================================================================================
+
+SCOPE NOTE: This repo has TWO distinct observation spaces. The task's "7-feature
+observation" is the PACKET-LEVEL env (packet_level_env.py, shape=(7,)). Do not
+confuse it with the FLOW-LEVEL env (c2_evasion_env.py) whose observation is
+OBSERVATION_FEATURES = ['dur','tot_pkts','tot_bytes','src_bytes','proto','state']
+(6 features, config.py:13). The "15-feature" experiment is yet a third thing:
+the per-packet feature matrix in snort_bandit.py (MAX_PKT_FEAT=15).
+
+--------------------------------------------------------------------------------
+TASK 1.1 — COMMIT WHERE THE 7-FEATURE OBSERVATION WAS DEFINED
+--------------------------------------------------------------------------------
+
+  Commit SHA : 756f8f8df393d93986d40411324294b6dc858303  (short: 756f8f8)
+  Date       : 2026-09-24
+  Subject    : "feat: add PacketLevelEnv for packet-level RL"
+  File       : ai_agent/packet_level_env.py  (195 lines, added in this commit)
+  Evidence   : git log --all --oneline --source -- ai_agent/packet_level_env.py
+               -> ONLY ONE commit in all history touches this file: 756f8f8.
+               `git log --all -S"shape=(7,)"` returns exactly two commits:
+                 756f8f8 (2026-09-24) — introduction
+                 6311c03 (2026-09-25) — "feat: family-specific rules + enhanced
+                                         packet-level env (from earlier subagent)"
+               `git merge-base --is-ancestor 756f8f8 6311c03` -> TRUE, i.e.
+               756f8f8 is the ORIGIN and 6311c03 only re-touched the file.
+               (6311c03 matched -S"shape=(7,)" via context shift, not a change
+               to the shape itself.)
+
+  The 7 features, as written in the commit (packet_level_env.py:53-58):
+     Observation: [pkt_idx, direction, dsize, time, flow_bytes_sent,
+                   flow_pkts_sent, is_detected]
+       1 pkt_idx           current packet index / max_packets  (normalized)
+       2 direction         0 = src, 1 = dst
+       3 dsize             normalized by 1500 (MTU)
+       4 time              normalized by flow duration  (HARDCODED 0.0 — see note)
+       5 flow_bytes_sent   cumulative bytes / expected total
+       6 flow_pkts_sent    cumulative packets / expected total
+       7 is_detected       0 = not yet detected, 1 = detected by Snort
+
+  Commit message body (the only in-repo rationale, and it is thin):
+     "- Gym environment with packet-by-packet actions
+      - Queries real Snort replica for reward
+      - Observation includes packet state + flow context
+      - Tests: reset, step, full episode"
+     -> No per-feature justification, no alternatives considered, no ablation.
+
+  NOTE on feature 4 (`time`): the code comment claims it is normalized by flow
+  duration, but the current implementation hardcodes it to 0.0. Treat `time` as
+  effectively dead in the shipped 7-dim observation.
+
+--------------------------------------------------------------------------------
+TASK 1.2 — DOES A DESIGN DOC / FEATURE RATIONALE EXIST?
+--------------------------------------------------------------------------------
+
+  ANSWER: NO dedicated design doc or rationale document exists. There is no
+  file named *design*, *rationale*, or *observation* anywhere in the repo
+  (find -iname "*design*" / "*rationale*" / "*observation*" -> zero hits,
+  excluding .venv).
+
+  What DOES exist (descriptive, not justificatory):
+    - docs/packet_level_rl.md  §"Observation Space" (line 38) merely RESTATES
+      the 7 features verbatim:
+        "**7D continuous**: [pkt_idx, direction, dsize, time, flow_bytes_sent,
+                            flow_pkts_sent, is_detected]"
+      It gives a one-line gloss per feature but NO rationale for why these 7
+      were chosen, no comparison to alternatives, no ablation.
+    - docs/06-archive/investigation-notes/PACKET_LEVEL_RL_COMPLETION.md:24
+      also restates the same 7D list (archived completion note).
+    - The commit message of 756f8f8 (above) is the closest thing to a
+      rationale and only says "packet state + flow context".
+
+  Grep result for rationale keywords in docs/ and root READMEs
+  ("rationale", "why these", "why 7", "design decision", "feature choice",
+   "chosen because", "7D", "7-feature", "7 feature", "7-dim", "7 dim"):
+    -> NO hits in docs/, README.md, README.vi.md, or CHANGELOG.md.
+    -> The only "7D" hit is the descriptive line docs/packet_level_rl.md:38.
+
+  CONCLUSION: the 7-feature observation is UNDOCUMENTED in terms of rationale.
+  It was introduced as an initial scaffold (an "enhanced packet-level env"
+  followed) with no design record. Any rationale must be reconstructed from the
+  code comments, not cited from a doc.
+
+--------------------------------------------------------------------------------
+TASK 1.3 — 15-FEATURE EXPERIMENT: FILE + FUNCTION
+--------------------------------------------------------------------------------
+
+  The 15-feature experiment is the per-packet FEATURE MATRIX used by the
+  batched bandit, NOT an RL observation space.
+
+  PRIMARY LOCATION:
+    File     : ai_agent/snort_bandit.py
+    Constant : MAX_PKT_FEAT = 15          (snort_bandit.py:88)
+    Function : packet_features(packets: list) -> np.ndarray   (snort_bandit.py:179)
+               returns shape (ACTION_MAX_PACKETS, MAX_PKT_FEAT) = (32, 15)
+    Helper   : prefix_entropy(payload: bytes, nbytes: int = 32) -> float
+               (snort_bandit.py:162) — Shannon entropy of the first 32 payload
+               bytes, normalized by log2(256).
+    Consumers: PacketPolicy.__init__ (snort_bandit.py:255) does
+               nn.Linear(MAX_PKT_FEAT, hidden) — the policy net input width.
+
+  The 15 columns (documented in the packet_features docstring, lines 180-206):
+      0 dsize                   payload+header bytes on wire / 1500
+      1 raw                     Raw payload bytes / 1500
+      2 is_udp                  1.0 if UDP
+      3 is_tcp                  1.0 if TCP
+      4 relative_index          position among flow's packets
+      5 is_first                1.0 for flow's first packet
+      6 is_last                 1.0 for flow's last packet
+      7 is_payload              1.0 if corruptable payload present
+      8 payload_rank            percentile rank of payload size among payloads
+      9 raw_z                   (raw - mean)/(std+1), clipped [-3,3]/3
+     10 is_longest              1.0 single largest payload, 0.5 for ties
+     11 payload_fraction_before payloads seen before / n_payload
+     12 n_payload_norm          corruptable packets / 32
+     13 prefix_mean             mean of first 16 payload bytes / 255
+     14 prefix_entropy          entropy of first 32 payload bytes / log2(256)
+
+  Columns 8-14 are the *flow-relative* additions (rank / z-score / is-longest /
+  payload-fraction / n-payload-norm / prefix-mean / prefix-entropy) — exactly
+  the "rank, z-score, is-longest, payload-fraction" the task asked to locate.
+
+  COMMITS:
+    74799ce (2026-09-26) "feat(features): replace 8 per-packet features with 15
+            flow-relative ones"   -> ai_agent/snort_bandit.py (+71/-...),
+                                      tests/test_packet_features.py
+    f574319 (2026-09-26) "feat(features): add prefix_entropy helper with unit tests"
+    964c9d7 (2026-09-26) "test(features): correct the entropy ceiling; add
+            per-feature diagnostic"
+    a119629 (2026-09-26) "chore: record 15-feature feasibility run"
+            -> snort_validation/reports/feasibility/feat15.txt
+
+  EXPERIMENT RUNNER (produces the feat15.txt report):
+    File     : snort_validation/label_feasibility.py
+    Purpose  : "Feasibility gate: can the policy's features reproduce the
+               optimal masks?" — best single-feature rule + MLP vs the exact
+               oracle mask, graded end-to-end through the control gate.
+    Imports  : from snort_bandit import packet_features, MAX_PKT_FEAT
+    Output   : snort_validation/reports/feasibility/feat15.txt
+    (Note: the report path uses "feat15" but the script takes no --feat flag;
+     it reads the current packet_features() output. The literal "feat15" string
+     lives only in the report path/commit, not in the script.)
+
+  MEASURED RESULT (snort_validation/reports/feasibility/feat15.txt):
+    botnet-capture-20110811-neris: END-TO-END 24/24 evaded @ mean_corrupt=1.42
+        (control 24/24 @ 2.88)  -> VERDICT: beats  (beats=True)
+    botnet-capture-20110819-bot:   END-TO-END 14/24 evaded @ mean_corrupt=2.35
+        (control 23/24 @ 10.50) -> VERDICT: loses  (beats=False)
+    i.e. 15 features improved both captures but did NOT flip the gate — the
+    next lever is set-level decision, not more per-packet columns.
+
+  RELATED (do not confuse — different feature work, flow-level not per-packet):
+    - snort_validation/validate_features_vs_snort.py — "Task 2", validates 20
+      CANDIDATE flow-level features against real Snort verdicts (1271549).
+    - snort_validation/extract_ctu13_real_features.py, train_real_snort_surrogate.py,
+      label_real_flows_with_snort.py — flow-level feature extraction/ranking
+      (payload_fraction, payload_entropy, etc.).
+    - tests/test_packet_features.py — guard for the 15-feature matrix, incl.
+      test_no_dead_feature_columns (dataset-wide liveness, ~3 min).
+
+--------------------------------------------------------------------------------
+BOTTOM LINE FOR PHASE 1
+--------------------------------------------------------------------------------
+  1. 7-feature obs defined in 756f8f8 (2026-09-24), the ONLY commit that ever
+     added packet_level_env.py. No per-feature rationale in the message.
+  2. NO design doc / rationale doc exists. docs/packet_level_rl.md only restates
+     the feature list; the commit message is the sole (thin) justification.
+  3. 15-feature experiment = packet_features() in ai_agent/snort_bandit.py
+     (MAX_PKT_FEAT=15), added by 74799ce (2026-09-26); graded by
+     snort_validation/label_feasibility.py, results in
+     snort_validation/reports/feasibility/feat15.txt.
+================================================================================
+
+################################################################################
+PHASE 2 — ACTION-SPACE BUG VERIFICATION AND IMPACT MEASUREMENT
+################################################################################
+
+TASK 2.1 — to_flow_features SOURCE (ai_agent/packet_modifier.py:63-85)
+--------------------------------------------------------------------------------
+  def to_flow_features(self, modified_packets: List[Dict]) -> Dict:
+      ...
+      tot_pkts  = len(modified_packets)
+      tot_bytes = sum(p["dsize"] for p in modified_packets)
+      src_bytes = sum(p["dsize"] for p in modified_packets if p["direction"] == "src")
+      dur       = modified_packets[-1]["time"] - modified_packets[0]["time"] ...
+      return {"tot_pkts": tot_pkts, "tot_bytes": tot_bytes,
+              "src_bytes": src_bytes, "dur": dur,
+              "proto": "tcp", "state": "CON"}
+
+  CONFIRMED: the returned dict has EXACTLY the keys
+  ['dur', 'proto', 'src_bytes', 'state', 'tot_bytes', 'tot_pkts'].
+  No 'ttl', no 'fragmented', no 'overlap_offset'.
+
+  Meanwhile apply_actions() (packet_modifier.py:52-59) DOES write those three
+  keys into each modified packet dict:
+      "ttl": self.base_ttl + ttl_delta,
+      "fragmented": frag_flag,
+      "overlap_offset": overlap_offset
+  -> they are computed, stored per packet, and then dropped at the conversion
+     boundary. The agent's action dims 0, 1 and 3 never leave the modifier.
+
+TASK 2.2 — TRACE (scripts/trace_action_to_reward.py)
+--------------------------------------------------------------------------------
+  Script created at scripts/trace_action_to_reward.py. It runs one synthetic
+  10-packet TCP/CON flow through apply_actions -> to_flow_features ->
+  both replicas, for 8 action vectors, and prints the feature dict plus the
+  verdict of each replica.
+
+  RUN OUTPUT (abridged to the decisive columns):
+
+  action                 feature dict identical   flow-replica   enhanced-replica
+                         to baseline?             changed?       changed?
+  --------------------   ----------------------   ------------   ----------------
+  TTL +10 only           True                     False          False
+  TTL -10 only           True                     False          False
+  TTL alternating +/-10  True                     False          False
+  frag only              True                     False          True
+  overlap +100 only      True                     False          True
+  padding +100 only      False                    False          False
+  ALL four               False                    False          True
+
+  Full feature dict, baseline vs TTL+10 vs frag-only vs overlap-only — all four
+  produce the IDENTICAL dict:
+      {'tot_pkts': 10, 'tot_bytes': 1000, 'src_bytes': 1000, 'dur': 0.9,
+       'proto': 'tcp', 'state': 'CON'}
+  The per-packet metadata differs (ttl 74 vs 64; fragmented 10/10 vs 0/10;
+  max|overlap| 100 vs 0), but the dict handed to replica_snort_verdict() does
+  not. Only padding changes the dict (tot_bytes/src_bytes 1000 -> 2000), and
+  even that did NOT flip the flow-level verdict on this flow.
+
+  BUG CONFIRMED. In packet_level_env.py:127 the reward path is
+      flow_features = self.modifier.to_flow_features(self.modified_packets)
+      detected = replica_snort_verdict(flow_features)
+  so TTL, fragmentation and overlap have NO path to the reward signal.
+
+  NOTE ON INDIRECT EFFECTS: the flow-level replica calls packet_plan(features),
+  which RE-SYNTHESIZES the packet list from the 4 aggregates. So the replica
+  never sees the modified packets at all — it sees a fresh plan built from
+  {tot_pkts, tot_bytes, src_bytes, dur}. Padding therefore acts only through
+  aggregate byte counts; TTL/frag/overlap have no aggregate to act through.
+
+TASK 2.3 — DOES THE ENHANCED ENV FIX IT?  PARTIALLY.
+--------------------------------------------------------------------------------
+  ai_agent/enhanced_packet_level_env.py:98-107:
+      if terminated:
+          from enhanced_snort_replica import enhanced_replica_snort_verdict
+          flow_features = self.modifier.to_flow_features(self.modified_packets)
+          flow_features["proto"] = ...
+          flow_features["state"] = ...
+          detected = enhanced_replica_snort_verdict(flow_features,
+                                                    self.modified_packets)
+  -> YES, it passes the packet list as a second argument. The bug's mechanism
+     (metadata dropped before the verdict) is bypassed for frag and overlap.
+
+  snort_validation/enhanced_snort_replica.py:14-17 signature:
+      enhanced_replica_snort_verdict(features: Dict,
+                                     modified_packets: List[Dict] = None) -> bool
+  Body: delegates to replica_snort_verdict(features) first, then applies 5
+  packet-level rules P1-P5 over the packet list:
+      P1  any(ttl < 10)                            -> detected
+      P2  len(ttls) >= 3 and std(ttls) > 15        -> detected
+      P3  len(pkts) >= 5 and frag_ratio > 0.3      -> detected
+      P4  any(|overlap_offset| > 50)               -> detected
+      P5  >= 2 of {min(ttl) < 20, frag_count >= 2, max|overlap| > 30}
+
+  MEASURED — the enhanced env is NOT a full fix. The packet list reaches the
+  verdict, but the ACTION-SPACE CLAMP makes the TTL rules unreachable:
+    * packet_modifier.apply_actions clamps ttl_delta to [-10, +10] (:47)
+    * base_ttl = 64 (PacketModifier.__init__ default; envs use the default)
+    * => reachable TTL range is exactly [54, 74]
+    * P1 needs ttl < 10            : min reachable 54   -> UNREACHABLE
+    * P2 needs std(ttl) > 15       : max reachable 10.00 -> UNREACHABLE
+    * P5 needs min(ttl) < 20       : min reachable 54   -> UNREACHABLE
+  Empirically, the strongest TTL action available (alternating +10/-10 on every
+  packet, giving std = 10.00) still returns "EVADED" from the enhanced replica.
+  By contrast the same rules fire correctly when handed out-of-range metadata
+  by hand: ttl=5 -> "P1: Low TTL (<10)"; [20,90]*5 -> "P2: TTL variance
+  (std=35.0)". So the rules are correct and the clamp is what kills them.
+
+  NET: enhanced env re-enables frag (dim 1) and overlap (dim 3); TTL (dim 0)
+  is dead in BOTH envs. The action space is effectively 1-dim in
+  packet_level_env.py and 3-dim (of 4) in enhanced_packet_level_env.py.
+
+TASK 2.2b — IMPACT MEASUREMENT (scripts/measure_action_impact.py)
+--------------------------------------------------------------------------------
+  Script created at scripts/measure_action_impact.py. It sweeps ONE normalized
+  action dim at a time over [-1.0, -0.5, 0.0, 0.5, 1.0] with the other three
+  held at 0, averages the episode return over 12 seeded flows from the real
+  CTU-13 pool (262,504 flows), and reports the spread (max-min mean reward).
+  Spread 0.00 == the dim is DEAD.
+
+  PacketLevelEnv (flow-level replica) — pool size 262,504:
+      dim                   -1.0      -0.5       0.0       0.5       1.0    spread
+      ttl_delta             7.08      7.08      7.08      7.08      7.08      0.00
+      frag_flag             7.08      7.08      7.08      7.08      7.08      0.00
+      padding_bytes         7.06      7.08      7.08      7.08      7.08      0.02
+      overlap_offset        7.08      7.08      7.08      7.08      7.08      0.00
+  -> TTL, frag and overlap have EXACTLY zero reward spread. Padding has 0.02
+     (a ~0.3% swing), i.e. the 4-dim action space is effectively 1-dim and
+     even that dim is nearly inert. This is the quantitative proof of the bug.
+
+  EnhancedPacketLevelEnv (enhanced replica) — same pool:
+      dim                   -1.0      -0.5       0.0       0.5       1.0    spread
+      ttl_delta             8.49      8.49      8.49      8.49      8.49      0.00
+      frag_flag             8.49      8.49      8.49      7.58      7.58      0.92
+      padding_bytes         8.49      8.49      8.49      8.49      8.49      0.00
+      overlap_offset       -1.59      8.49      8.49      8.49     -1.59     10.08
+  -> overlap and frag now MOVE the reward (spread 10.08 and 0.92), TTL still
+     does not (spread 0.00). The enhanced env raises the mean return too
+     (8.49 vs 7.08) because it no longer kills the episode on first detection.
+
+  REWARD-SHAPING DIFFERENCE (secondary finding, same trace):
+  packet_level_env.py checks detection EVERY step and terminates on first
+  detection; enhanced_packet_level_env.py only checks detection at termination
+  (env.step:94-113, `if terminated:` ... `else: reward = -0.1`). With a
+  do-nothing policy on a 10-packet TCP flow:
+      PacketLevelEnv        : 7 steps, rewards [-0.1 x6, -1.0],  detected=True
+      EnhancedPacketLevelEnv: 10 steps, rewards [-0.1 x9, +10.0], detected=False
+  So the enhanced env can only ever reward the TERMINAL state — an agent gets
+  no per-packet feedback, and frag/overlap are evaluated only once at the end
+  against the full packet list. That makes frag/overlap learnable in principle
+  but with a single, sparse terminal signal.
+
+TASK 2.4 — DOES THE BUG BLOCK LEARNING?
+--------------------------------------------------------------------------------
+  NO. A 4-dim action space with 1 live dim still yields a non-zero gradient, so
+  PPO converges and the agent beats random (+10.67pp on >=10-packet flows, per
+  the committed reports). The bug does not prevent convergence; it CAPS THE
+  CEILING: with only padding reaching the reward, and padding's spread at 0.02
+  on the real pool, the reachable policy improvement is bounded by an
+  essentially inert signal. Consistent with the skill's note that the binding
+  constraint is the environment's action->reward coupling, not the training
+  budget — more training on this env cannot help.
+
+BOTTOM LINE FOR PHASE 2
+--------------------------------------------------------------------------------
+  1. CONFIRMED: to_flow_features() returns only
+     {tot_pkts, tot_bytes, src_bytes, dur, proto, state}. TTL/frag/overlap are
+     set per packet by apply_actions() and silently dropped.
+  2. CONFIRMED BY TRACE: identical feature dict for baseline / TTL+10 / TTL-10 /
+     TTL-alternating / frag-only / overlap-only; the flow-level replica verdict
+     is unchanged. Only padding alters the dict, and it did not flip this flow.
+  3. CONFIRMED BY SWEEP (real pool, 12 flows/dim): reward spread is 0.00 for
+     ttl_delta, frag_flag and overlap_offset in PacketLevelEnv; padding 0.02.
+  4. ENHANCED ENV PARTIALLY FIXES IT: it passes self.modified_packets to
+     enhanced_replica_snort_verdict(), which restores frag (spread 0.92) and
+     overlap (spread 10.08). TTL stays dead (spread 0.00) because the +/-10
+     ttl_delta clamp keeps TTL in [54, 74], far outside every P1/P2/P5
+     threshold. Two further limits: detection is terminal-only (sparse reward),
+     and the flow-level replica still re-synthesizes packets via packet_plan()
+     rather than consuming the modified ones.
+  5. The bug does not block learning; it caps it. The fix with the highest
+     leverage is not more training — it is widening the action space's reach
+     (or feeding packet metadata to the reward) so dims 0/1/3 can move reward.
+
+  Scripts added:
+    scripts/trace_action_to_reward.py   — per-action trace through both replicas
+    scripts/measure_action_impact.py    — per-dim reward-sensitivity sweep
+================================================================================
+
+################################################################################
+PHASE 3 — AUTOREGRESSIVE VS SET-ENCODING: ARCHITECTURE DECISION
+################################################################################
+
+TASK 3.1 — FRONTIER SOLVER OUTPUT FORMAT (snort_validation/frontier_exact.py)
+--------------------------------------------------------------------------------
+  The solver's unit of decision is a per-flow MASK, not a trajectory.
+
+  Algorithm (exact, per-flow, no joint search):
+    - score() judges each flow independently, so the global minimum is the SUM
+      of per-flow minima (frontier_exact.py:1-11). No sequential plan is built.
+    - progressive deepening over k = 1..MAX_K: test every k-SUBSET of the flow's
+      reachable payload packets (itertools.combinations, :87) and stop at the
+      first k that evades. A subset, by construction, is an unordered SET.
+    - on a hit it records the winning subset: best_mask[fi] = list(combo) (:117),
+      and OPTIMAL_MASK[fi] = that list (:120).
+
+  EMITTED ARTIFACT — labels/oracle_<capture>.json (frontier_exact.py:149-158):
+    keys = [capture, n_flows, control_mean_corrupt, control_evaded,
+            unevadable, optimal_mask, min_k]
+      "optimal_mask": { "<flow>": [pkt_idx, ...] }   <- SET of packet indices
+      "min_k":        { "<flow>": k }                 <- its cardinality
+    Verified by loading the file: optimal_mask values are Python lists of ints
+    (e.g. flow 5 -> [0,3,6,9]); min_k values are ints. There is NO ordering
+    field, NO step index, NO action-per-timestep trace. The solver never emits
+    a sequence an autoregressive agent could imitate.
+
+  => The target is a binary mask over the packet slots. This is exactly the
+     output shape a set-encoder produces and exactly what a per-packet
+     left-to-right policy cannot express.
+
+TASK 3.2 — FEASIBILITY GATE BASELINE (snort_validation/label_feasibility.py)
+--------------------------------------------------------------------------------
+  RAN LIVE (2026-09-26): .venv/bin/python snort_validation/label_feasibility.py
+  Output byte-identical to the committed snort_validation/reports/feasibility/
+  feat15.txt (diff -> IDENTICAL). Fresh copy saved as
+  snort_validation/reports/feasibility/feat15_live_2026-09-26.txt.
+
+  === botnet-capture-20110811-neris ===   (the EASY capture)
+    flows with labels    : 24 (train 18 / test 6)
+    optimal corruptions  : mean 1.04
+    best single-feature  : train 100%, test 83%  (feature 13, sign +1)
+    per-feature top5     : f13+1=100%, f12+1=100%, f7+1=100%, f10+1=83%, f9+1=83%
+    MLP exact mask match : test 83%  (missed flow 21)
+    control              : 2.88 corruptions, 24/24 evaded
+    END-TO-END clone     : 24/24 evaded @ 1.42   VERDICT: beats (beats=True)
+
+  === botnet-capture-20110819-bot ===      (the HARD capture — the gate)
+    flows with labels    : 23 (train 17 / test 6)
+    optimal corruptions  : mean 2.35
+    best single-feature  : train 82%, test 100%  (feature 12, sign +1)
+    per-feature top5     : f12+1=82%, f7+1=82%, f5+1=82%, f3+1=82%, f2+1=82%
+    MLP exact mask match : test 83%  (missed flow 20)
+    control              : 10.50 corruptions, 23/24 evaded
+    END-TO-END clone     : 14/24 evaded @ 2.35   VERDICT: loses (beats=False)
+
+  BASELINE CROSS-CHECK (computed from labels/oracle_botnet-capture-20110819-bot.json):
+    index-0 INCLUSION baseline (fraction of optimal masks containing packet 0)
+                                                         : 20/23 = 87%
+    always-{0} EXACT-mask baseline                        :  5/23 = 22%
+    top-5 single features all read 82%  -> 82% < 87%.
+    i.e. the five "best" features are FIVE DEGENERATE RULES that all collapse to
+    "pick packet 0", and they score BELOW the trivial always-packet-0 baseline.
+    The single-feature signal is a mirage: it looks like a tie of strong features
+    and is actually one trivial rule repeated. Any "best single-feature accuracy"
+    must be read against the 87% index-0 baseline, never in isolation.
+
+  WHY THE MLP'S 83% EXACT-MATCH STILL LOSES END-TO-END:
+    The current policy (ai_agent/snort_bandit.py PacketPolicy) is
+    nn.Sequential(nn.Linear(MAX_PKT_FEAT, h), Tanh, Linear(h,h), Tanh, Linear(h,1))
+    applied to feats (B, P, F) -> (B, P) logits — the SAME net scored
+    INDEPENDENTLY per packet slot. There is no cross-packet coupling term, so it
+    cannot represent "corrupt exactly {0,3,6,9} and nothing else" as a joint
+    choice; each slot is decided alone. It clears 83% on the 6 held-out flows,
+    but the 17% it misses are the decisive scattered flows, and the end-to-end
+    gate collapses to 14/24 vs the control's 23/24. Mask-match accuracy is NOT
+    the binding metric — the end-to-end control gate is.
+
+TASK 3.3 — STRUCTURE OF THE OPTIMAL MASKS (labels/oracle_botnet-capture-20110819-bot.json)
+--------------------------------------------------------------------------------
+  23 labeled flows (flow 15 unevadable, excluded).
+    min_k distribution : {1: 5, 2: 10, 3: 3, 4: 5}
+                         -> 18/23 flows need k >= 2  (scattered sets)
+    non-contiguous masks: 17/23  (only 6 are a contiguous run)
+    distinct masks     : {0,3} x8, {0} x5, {0,3,6,9} x5,
+                         {0,3,6} x1, {0,1,2} x1, {1,7,9} x1, {1,3} x1, {14,19} x1
+    max index used     : 19 (packets are spread across the whole flow)
+  Concrete scattered targets the solver demands:
+    flow  5..9 -> [0,3,6,9]   (stride-3 quadruple)
+    flow 17    -> [0,1,2]
+    flow 18    -> [1,7,9]     (gaps at 2-6, 8)
+    flow 23    -> [14,19]     (late, far apart)
+  A left-to-right autoregressive agent commits a decision at slot 0 before it
+  has any basis to know that slot 3 (or 9, or 19) must ALSO be corrupted, and it
+  cannot revisit. This is a coordination requirement across non-adjacent slots,
+  which is a SET problem.
+
+  CONTRAST — 20110811 is degenerate and must not drive the decision:
+    its optimal mask is [3] for 23/24 flows and [3,13] for one. A single fixed
+    index dominates, so ANY per-packet scorer (and even a constant) reproduces it.
+    This is why the per-packet MLP "beats" there (24/24 @ 1.42) yet "loses" on
+    20110819. The architecture question is decided on 20110819 alone.
+
+TASK 3.4 — DECISION MATRIX
+--------------------------------------------------------------------------------
+  | Approach                      | Obs unit       | Decision unit      | Can coordinate k=2-4 scattered sets? | Matches solver? | Complexity |
+  |-------------------------------|----------------|--------------------|--------------------------------------|-----------------|------------|
+  | Autoregressive (current)      | one packet     | one action/step    | NO — independent per slot, no memory | NO              | Low        |
+  | Set-encoder (self-attention)  | full packet set| corruption mask    | YES — joint, permutation-invariant   | YES             | Medium     |
+  | Hybrid (AR + recurrent memory)| one packet     | action + carry     | partially — indirect, still serial   | NO              | Medium     |
+
+  Evidence per row:
+    - Autoregressive: PacketPolicy scores each slot with the same MLP
+      independently; measured END-TO-END 14/24 @ 2.35 -> LOSES the gate.
+    - Set-encoder: emits a per-slot logit conditioned on the WHOLE packet set,
+      so slot 0's decision can depend on slots 3/6/9. This is the only family
+      whose decision unit equals the solver's optimal_mask.
+    - Hybrid: can carry state, but still decides serially and never sees the
+      future slots at decision time -> cannot commit to {0,3,6,9} as a unit.
+
+RECOMMENDATION: SET-ENCODING.
+--------------------------------------------------------------------------------
+  Rationale:
+    1. The frontier solver emits per-flow MASKS (binary/set over packet slots),
+       not trajectories. The decision unit of the target == the decision unit of
+       a set-encoder. There is nothing sequential to imitate.
+    2. On 20110819 the optimum is a scattered set: 18/23 flows need k>=2 and
+       17/23 masks are non-contiguous ({0,3,6,9}, {1,7,9}, {14,19}). A per-packet
+       autoregressive policy has no mechanism to select slot 0 AND slot 3 jointly.
+    3. The current policy is literally a shared per-packet MLP (no cross-slot
+       term) — it CANNOT represent a joint set. The measured result confirms it:
+       83% exact-mask match but 14/24 end-to-end vs control 23/24 -> loses.
+    4. The single-feature signal is degenerate (top-5 all 82% < 87% index-0
+       baseline), so more per-packet feature columns will not rescue the
+       architecture; the coupling is the missing ingredient.
+    5. The planned semantic observation (which rule SIDs fire) is set-level by
+       nature — a rule fires if ANY packet in the flow matches — so it composes
+       naturally with a set-encoder and not with a serial policy.
+
+  Concrete design (minimal, to be validated by the BC gate below):
+    - Input: per-packet feature matrix (32, MAX_PKT_FEAT=15) from packet_features().
+    - 2-4 layers of self-attention (d_model 64, permutation-invariant, no
+      positional encoding by default; optionally a learned slot embedding), a
+      mask over padding slots.
+    - Output head: per-slot logit -> Bernoulli mask (identical output shape to
+      the solver's optimal_mask, so BCE toward the oracle is direct).
+    - Constraint note: mask cardinality should be free (no fixed k) so the model
+      can learn k=1 for easy flows and k=4 for the stride-3 flows.
+
+GATE FOR THE BC BASELINE (must pass BEFORE any full RL)
+--------------------------------------------------------------------------------
+  Purpose: behaviour cloning is only worth attempting if the FEATURES can express
+  the optimal mask. If a supervised net cannot hit the oracle masks, RL cannot
+  either, and the bottleneck is feature quality — not the policy architecture.
+
+  Procedure:
+    1. Load exact optimal masks from labels/oracle_botnet-capture-20110819-bot.json
+       (and ...-20110811-neris.json for regression).
+    2. Train TWO supervised baselines with BCE toward the oracle mask, identical
+       features, identical split:
+         (a) per-packet MLP  = the current PacketPolicy head (independent slots)
+         (b) set-encoder     = self-attention over the full packet set (joint)
+       Both on the 15-feature packet matrix. This isolates ARCHITECTURE from
+       FEATURES: if (b) > (a), set-encoding is the lever; if (b) == (a), it is not.
+    3. Eval — the acceptance test is END-TO-END, not mask-match: sample the
+       predicted mask, play it through the real resident Snort service, and grade
+       with snort_validation/control_gate.py::policy_beats_control
+       (beats == policy_evaded >= control_evaded AND policy_mean_corrupt <
+       control_mean_corrupt).
+    4. Seed >= 5 runs (harness_variance.py shows a single batch on a used Snort
+       instance is not comparable — always use a fresh instance per run).
+
+  NUMERIC GATE (both captures must hold; 20110819 is the decisive one):
+    20110819-bot : control = 23/24 evaded @ mean 10.50 corruptions.
+                   PASS  <=>  evaded >= 23/24  AND  mean_corrupt < 10.50
+                               (beats=True), sustained across >= 5 seeds.
+                   (Current per-packet MLP: 14/24 @ 2.35 -> FAIL, as expected.)
+    20110811-neris: control = 24/24 @ 2.88. Must not regress:
+                   PASS  <=>  evaded == 24/24  AND  mean_corrupt < 2.88.
+                   (Current per-packet MLP: 24/24 @ 1.42 -> already PASS.)
+
+  DECISION RULE:
+    - If (b) passes 20110819 and holds 20110811 -> architecture hypothesis
+      confirmed. Proceed to full RL (mask policy, e.g. PPO over the Bernoulli
+      mask) and then to semantic obs (rule SIDs) + multi-capture training.
+    - If (b) passes but only barely (e.g. 23/24 @ 10.4) -> treat as fragile;
+      add semantic obs BEFORE scaling RL, since the residual gap is feature-side.
+    - If (b) ties or loses on 20110819 -> the architectural hypothesis is WRONG;
+      set-encoding is not the bottleneck. Return to FEATURE ENGINEERING (semantic
+      rule-SID observation) rather than training a larger model.
+    - Do NOT start full RL until a BC baseline clears the gate: RL over a
+      mask space it cannot express just reproduces the per-packet ceiling.
+
+BOTTOM LINE FOR PHASE 3
+--------------------------------------------------------------------------------
+  1. The frontier solver emits a per-flow MASK (optimal_mask: {flow: [indices]},
+     min_k: {flow: k}) — an unordered set, not a trajectory. There is no
+     sequential target to imitate.
+  2. Feasibility baseline (live run, reproduced byte-identically): 20110811
+     per-packet MLP BEATS (24/24 @ 1.42 vs control 2.88); 20110819 per-packet
+     MLP LOSES (14/24 @ 2.35 vs control 23/24 @ 10.50). The single-feature
+     signal on 20110819 is degenerate: top-5 features all 82%, BELOW the 87%
+     index-0 inclusion baseline.
+  3. On 20110819 the optimum is a scattered set: 18/23 flows need k>=2, 17/23
+     masks are non-contiguous, targets like [0,3,6,9], [1,7,9], [14,19].
+  4. RECOMMENDATION: SET-ENCODING (self-attention over the packet set ->
+     per-slot logit -> Bernoulli mask). The current PacketPolicy is a shared
+     per-packet MLP with no cross-slot term and cannot express a joint set;
+     that is an architectural limit, not a missing feature column.
+  5. GATE before full RL: train BC baselines (per-packet MLP vs set-encoder) on
+     the oracle masks, grade the PREDICTED masks end-to-end through real Snort
+     with policy_beats_control, >= 5 seeds. PASS on 20110819 = evaded >= 23/24
+     AND mean_corrupt < 10.50; hold 20110811 at 24/24 AND < 2.88. Only then
+     scale to RL + semantic obs.
+
+  Evidence files:
+    labels/oracle_botnet-capture-20110819-bot.json   — optimal_mask + min_k (targets)
+    labels/oracle_botnet-capture-20110811-neris.json — degenerate-mask contrast
+    snort_validation/reports/feasibility/feat15_live_2026-09-26.txt — fresh run
+================================================================================

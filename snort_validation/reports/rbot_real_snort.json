@@ -1,0 +1,27 @@
+{
+  "capture": "botnet-capture-20110812-rbot",
+  "flows": 3,
+  "baseline_detected": 1,
+  "results": {
+    "split8": {
+      "detected": 0,
+      "evaded": 3,
+      "semantics": true
+    },
+    "split16": {
+      "detected": 0,
+      "evaded": 3,
+      "semantics": true
+    },
+    "prepend1": {
+      "detected": 0,
+      "evaded": 3,
+      "semantics": true
+    },
+    "prepend4": {
+      "detected": 0,
+      "evaded": 3,
+      "semantics": true
+    }
+  }
+}

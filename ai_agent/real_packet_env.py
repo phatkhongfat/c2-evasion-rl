@@ -97,6 +97,21 @@ ACTION_MAX_PACKETS = 32
 OBS_MAX_PACKETS = 32
 
 
+def corruptable(pkt) -> bool:
+    """True when this packet carries payload the mutator can overwrite.
+
+    Must stay in lockstep with `_apply_mutation`'s A_CORRUPT branch, or the
+    observation would advertise packets the agent cannot actually corrupt.
+    """
+    from scapy.all import Raw
+    return Raw in pkt and len(bytes(pkt[Raw].load)) > 0
+
+
+def payload_indices(packets) -> list:
+    """Indices of packets the agent can corrupt."""
+    return [i for i, p in enumerate(packets) if corruptable(p)]
+
+
 def _capture_dir_for(capture: str) -> Optional[Path]:
     """Map a capture name to its extraction subdirectory."""
     pcap = _capture_pcap(capture)
@@ -143,8 +158,14 @@ class RealPacketEnv(gym.Env):
         # trained with max_packets=18 raised "unexpected observation shape" when
         # evaluated on a set with 21), and it also changed the action space,
         # which silently invalidates the network's output layer.
-        self.max_packets = int(min(
-            max(len(p) for _k, p in self.flows), ACTION_MAX_PACKETS))
+        # ALWAYS the constant, never derived from the loaded flows.  A data-
+        # derived width changes the action space between runs, and a checkpoint
+        # trained under one width silently loses the ability to address packets
+        # beyond it (measured: model [11 6 3] against env [32 6 3] -> the policy
+        # could only ever corrupt indices 0..10, and it picked a payload-free
+        # one).  Measured on this repo: a data-derived width gave 20 for
+        # `botnet-capture-20110811-neris`, not 32.
+        self.max_packets = ACTION_MAX_PACKETS
         self.obs_max_packets = OBS_MAX_PACKETS
         self.action_space = spaces.MultiDiscrete(
             [self.max_packets, N_ACTIONS, 3])  # (packet_idx, action, strength)
@@ -162,6 +183,7 @@ class RealPacketEnv(gym.Env):
         self._last_verdicts: Dict[int, bool] = {}
         self._episode_qid: Optional[int] = None
         self._verdict_cache: Dict[Tuple, int] = {}
+        self._baseline_cache: Dict[int, int] = {}
         self._cache_hits = 0
         self._cache_misses = 0
         self._next_qid = 0
@@ -243,6 +265,28 @@ class RealPacketEnv(gym.Env):
             raise ValueError("no usable multi-packet flows loaded")
         self.n_loaded = len(self.flows)
 
+    def assert_model_compatible(self, model) -> None:
+        """Raise if a loaded checkpoint cannot address this env's packets.
+
+        A silent mismatch is the worst failure mode here: the policy runs, the
+        reward is computed, and the result is 0% with no indication that the
+        agent could not reach the packets it needed.  Measured on the shipped
+        checkpoint: env (32, 6, 3) vs model (11, 6, 3).
+        """
+        want = tuple(int(x) for x in self.action_space.nvec)
+        got = tuple(int(x) for x in model.action_space.nvec)
+        if want != got:
+            raise ValueError(
+                f"action-space mismatch: env {want} vs model {got}. Retrain the "
+                f"model against this env, or set ACTION_MAX_PACKETS to "
+                f"{got[0]} before loading it.")
+        obs_want = tuple(self.observation_space.shape)
+        obs_got = tuple(model.observation_space.shape)
+        if obs_want != obs_got:
+            raise ValueError(
+                f"observation-shape mismatch: env {obs_want} vs model {obs_got}. "
+                f"The observation changed (payload mask); retrain.")
+
     # -- mutation ---------------------------------------------------------
     def _apply_mutation(self, packets: List, action) -> List:
         from scapy.all import IP, Raw, TCP, UDP
@@ -265,8 +309,6 @@ class RealPacketEnv(gym.Env):
             target = int(frac * (n - 1))
 
         out = [p.copy() for p in packets]
-        if aid == A_CORRUPT:
-            self._corrupted.add(target)
 
         if aid == A_PAD:
             pad = 1 + int(strength * 120)
@@ -330,6 +372,12 @@ class RealPacketEnv(gym.Env):
             if Raw in p:
                 payload = bytearray(bytes(p[Raw].load))
                 if payload:
+                    # Bookkeeping must mirror the mutation exactly.  Recording
+                    # a packet that carries no payload made the observation's
+                    # `coverage` feature rise while nothing changed, so the
+                    # policy saw progress it had not made (measured: it kept
+                    # corrupting handshake index 1 and reported coverage).
+                    self._corrupted.add(target)
                     k = max(1, int(len(payload) * (0.25 + 0.5 * strength)))
                     k = min(k, len(payload))
                     # ASSIGN a deterministic byte, do NOT add a delta.
@@ -468,6 +516,22 @@ class RealPacketEnv(gym.Env):
         self._pending = []
         self._pending_keys = []
         return verdicts
+
+    def baseline_alert_counts(self) -> Dict[int, int]:
+        """Alert count for every flow, unmodified, cached per flow.
+
+        The baseline is a fixed property of the capture, and re-measuring it
+        costs one Snort call per flow (~10 s each), so callers that need it
+        repeatedly (coverage checks, acceptance gates) must not pay twice.
+        """
+        missing = [i for i in range(len(self.flows))
+                   if i not in self._baseline_cache]
+        if missing:
+            items = [(self.flows[i][1], i) for i in missing]
+            got = self._svc.alert_counts_chunked(items)
+            for i in missing:
+                self._baseline_cache[i] = int(got.get(i, 1))
+        return dict(self._baseline_cache)
 
     def service_stats(self) -> Dict:
         s = dict(self._svc.stats())

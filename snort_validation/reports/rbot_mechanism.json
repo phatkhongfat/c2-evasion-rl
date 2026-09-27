@@ -1,0 +1,67 @@
+{
+  "capture": "botnet-capture-20110812-rbot",
+  "rules": [
+    2019471,
+    2019486
+  ],
+  "flows_tested": 3,
+  "results": {
+    "split8": {
+      "evaded": 0,
+      "semantics": 3,
+      "valid": 0
+    },
+    "split16": {
+      "evaded": 0,
+      "semantics": 3,
+      "valid": 0
+    },
+    "split24": {
+      "evaded": 0,
+      "semantics": 3,
+      "valid": 0
+    },
+    "split32": {
+      "evaded": 0,
+      "semantics": 3,
+      "valid": 0
+    },
+    "overlap8": {
+      "evaded": 0,
+      "semantics": 0,
+      "valid": 0
+    },
+    "overlap16": {
+      "evaded": 0,
+      "semantics": 0,
+      "valid": 0
+    },
+    "prepend1": {
+      "evaded": 3,
+      "semantics": 3,
+      "valid": 3
+    },
+    "prepend4": {
+      "evaded": 3,
+      "semantics": 3,
+      "valid": 3
+    },
+    "prepend8": {
+      "evaded": 3,
+      "semantics": 3,
+      "valid": 3
+    },
+    "pad16": {
+      "evaded": 0,
+      "semantics": 3,
+      "valid": 0
+    },
+    "pad64": {
+      "evaded": 0,
+      "semantics": 3,
+      "valid": 0
+    }
+  },
+  "best_split": 0,
+  "best_prepend": 3
+}
