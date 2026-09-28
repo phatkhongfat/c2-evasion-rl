@@ -1,0 +1,90 @@
+{
+  "n_flows": 8,
+  "n_agree": 8,
+  "agreement_pct": 100.0,
+  "surrogate_false_safe": 0,
+  "replica_alerted": 1,
+  "real_alerted": 1,
+  "rows": [
+    {
+      "idx": 0,
+      "framing": "http",
+      "flow_id": 0,
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true
+    },
+    {
+      "idx": 1,
+      "framing": "http",
+      "flow_id": 1,
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true
+    },
+    {
+      "idx": 2,
+      "framing": "http",
+      "flow_id": 2,
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true
+    },
+    {
+      "idx": 3,
+      "framing": "neris",
+      "flow_id": 3,
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true
+    },
+    {
+      "idx": 4,
+      "framing": "http",
+      "flow_id": 4,
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true
+    },
+    {
+      "idx": 5,
+      "framing": "neris",
+      "flow_id": 5,
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true
+    },
+    {
+      "idx": 6,
+      "framing": "http",
+      "flow_id": 6,
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true
+    },
+    {
+      "idx": 7,
+      "framing": "http",
+      "flow_id": 7,
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true
+    }
+  ]
+}
