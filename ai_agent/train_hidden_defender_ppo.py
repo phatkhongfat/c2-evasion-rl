@@ -20,7 +20,7 @@ from pathlib import Path
 
 import gymnasium as gym
 import numpy as np
-from stable_baselines3 import PPO
+from sb3_contrib import MaskablePPO
 from stable_baselines3.common.callbacks import BaseCallback
 
 REPO = Path("/root/.hermes/c2-evasion-rl")
@@ -64,6 +64,15 @@ class BatchEnv(gym.Env):
             self._i = 0
         return obs, reward, done, False, info
 
+    def action_masks(self) -> np.ndarray:
+        """Delegate to the inner env so the mask tracks the CURRENT flow.
+
+        BatchEnv advances the inner env's flow index inside step(), so the mask
+        must be recomputed per step rather than cached at reset -- the protocol
+        of the next flow is not known until we get there.
+        """
+        return self.inner.action_masks()
+
 
 class QueryCounter(BaseCallback):
     """Count distinct flows solved, not raw steps (PPO revisits flows)."""
@@ -89,9 +98,9 @@ class QueryCounter(BaseCallback):
 def main() -> int:
     REPORTS.mkdir(parents=True, exist_ok=True)
     env = BatchEnv(split="train", seed=SEED)
-    model = PPO("MlpPolicy", env, n_steps=N_FLOWS, batch_size=N_FLOWS,
-                n_epochs=10, learning_rate=3e-4, ent_coef=0.01,
-                gamma=0.0, seed=SEED, verbose=0)
+    model = MaskablePPO("MlpPolicy", env, n_steps=N_FLOWS, batch_size=N_FLOWS,
+                        n_epochs=10, learning_rate=3e-4, ent_coef=0.01,
+                        gamma=0.0, seed=SEED, verbose=0)
     counter = QueryCounter()
 
     epochs_run = 0

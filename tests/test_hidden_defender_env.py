@@ -19,8 +19,9 @@ sys.path.insert(0, str(REPO / "ai_agent"))
 sys.path.insert(0, str(REPO / "snort_validation"))
 
 from hidden_defender_env import (  # noqa: E402
-    ACTION_NAMES, HiddenDefenderEnv, N_ACTIONS, load_corpus, payloads_of,
-    semantics_intact,
+    ACTION_COSTS, ACTION_NAMES, HiddenDefenderEnv, N_ACTIONS, load_corpus,
+    payloads_of, semantics_intact,
+    REWARD_ALERTED, REWARD_BREAK_SEMANTICS, REWARD_EVADE,
 )
 
 
@@ -62,7 +63,13 @@ def test_step_returns_wellformed_gym_tuple():
     assert obs.shape == (8,) and obs.dtype == np.float32
     obs2, reward, terminated, truncated, info = env.step(0)
     assert obs2.shape == (8,)
-    assert reward in (10.0, -10.0, -1.0)
+    # Direction 1: reward is the base reward MINUS the action cost, so compare
+    # against the cost-adjusted set rather than the raw constants.
+    cost = ACTION_COSTS[0]
+    expected = {base - cost for base in
+                (REWARD_EVADE, REWARD_BREAK_SEMANTICS, REWARD_ALERTED)}
+    assert any(abs(reward - e) < 1e-6 for e in expected)
+    assert abs(info["action_cost"] - cost) < 1e-6
     assert isinstance(terminated, bool) and isinstance(truncated, bool)
     for key in ("alert", "evaded", "semantics_ok", "action", "flow_id"):
         assert key in info, f"info missing {key}"
@@ -104,7 +111,8 @@ def test_corrupt_breaks_semantics_and_scores_minus_ten():
     for _ in range(len(env._flows)):
         _o, reward, term, _t, info = env.step(idx)
         if info["evaded"] and not info["semantics_ok"]:
-            assert reward == -10.0
+            # Direction 1: base penalty minus this action's cost.
+            assert abs(reward - (REWARD_BREAK_SEMANTICS - ACTION_COSTS[idx])) < 1e-6
             n_checked += 1
         if term:
             break
@@ -142,7 +150,9 @@ def test_split_preserves_semantics_and_evades():
     for _ in range(len(env._flows)):
         _o, reward, term, _t, info = env.step(idx)
         if info["evaded"] and info["semantics_ok"]:
-            assert reward == 10.0
+            # Direction 1: base reward minus this action's cost, and the cost
+            # must be reported in info so the penalty is auditable.
+            assert abs(reward - (REWARD_EVADE - ACTION_COSTS[idx])) < 1e-6
             valid += 1
         if term:
             break

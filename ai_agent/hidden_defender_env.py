@@ -65,6 +65,27 @@ REWARD_EVADE = 10.0
 REWARD_BREAK_SEMANTICS = -10.0
 REWARD_ALERTED = -1.0
 
+# Action cost penalty (Direction 1): differentiate mechanisms by resource cost.
+# In real networks, fragmentation consumes bandwidth/CPU and raises suspicion;
+# HTTP header padding is stealthy (legitimate traffic has custom headers).
+# RL should learn: "Split only when necessary; prefer padding on HTTP flows."
+ACTION_COSTS = {
+    0: 0.5,      # split8 (highest cost — many fragments, bandwidth)
+    1: 0.4,      # split16
+    2: 0.3,      # split24 (lowest split cost)
+    3: 0.2,      # prepend4
+    4: 0.2,      # prepend8
+    5: 0.2,      # prepend12
+    6: 0.1,      # pad16 (append junk, low cost)
+    7: 0.35,     # reorder (out-of-order penalty, risky)
+    8: 0.1,      # ttl (low cost, but unreliable)
+    9: 0.4,      # corrupt8 (high risk, breaks semantics anyway)
+    10: 0.35,    # overlap8 (ambiguity cost, risky)
+    11: 0.0,     # noop (no cost)
+    12: 0.05,    # http_header_pad (cheap, natural — legitimate HTTP has custom headers)
+    13: 0.25,    # length_wrapper (medium cost — needs protocol awareness)
+}
+
 
 def payloads_of(pkts):
     return [bytes(p[Raw].load) for p in pkts if Raw in p]
@@ -301,10 +322,59 @@ class HiddenDefenderEnv(gym.Env):
         return (not alert), sem, alert
 
     # -- gym API ----------------------------------------------------------
+    def _compute_action_mask(self) -> list:
+        """Direction 2: Compute which actions are applicable for current flow's protocol.
+        
+        Returns a list of 14 binary values (0/1) where:
+        - 1 = action is applicable (semantics-preserving for this protocol)
+        - 0 = action is not applicable (would break semantics or be protocol-invalid)
+        
+        Rules:
+        - noop (11) is always allowed
+        - http_header_pad (12) only on HTTP
+        - length_wrapper (13) only on HTTP (needs body to wrap)
+        - All split/prepend/ttl/reorder/overlap actions apply to any protocol (IP layer)
+        """
+        if self._idx >= len(self._flows):
+            return [1] * 14  # Default: all allowed if out of bounds
+        
+        flow = self._flows[self._idx]
+        framing = flow.get("framing", "unknown")
+        
+        # Start: all actions allowed
+        mask = [1] * 14
+        
+        # HTTP-only actions
+        if framing != "http":
+            mask[12] = 0  # http_header_pad requires HTTP
+            mask[13] = 0  # length_wrapper requires HTTP body
+        
+        # neris-specific: prepend breaks the record chain parser
+        # (conservative: only allow protocol-agnostic IP-layer mechanisms)
+        if framing == "neris":
+            mask[3] = 0   # prepend4
+            mask[4] = 0   # prepend8
+            mask[5] = 0   # prepend12
+        
+        return mask
+
+    def action_masks(self) -> np.ndarray:
+        """Direction 2, wired for MaskablePPO.
+
+        sb3-contrib's MaskablePPO requires the env to expose ``action_masks()``
+        and calls it immediately before sampling an action, so the mask always
+        reflects the flow the agent is actually facing.  Returning the mask in
+        ``info`` from ``reset()`` is not enough: a plain ``PPO`` policy never
+        reads it, and even a masking policy would see a stale mask after the
+        first step of a multi-flow episode.
+        """
+        return np.asarray(self._compute_action_mask(), dtype=np.int8)
+
     def reset(self, *, seed=None, options=None):
         super().reset(seed=seed)
         self._idx = 0
-        return self._obs(), {}
+        mask = self._compute_action_mask()
+        return self._obs(), {"action_mask": mask}
 
     def _obs(self) -> np.ndarray:
         if self._idx >= len(self._flows):
@@ -316,12 +386,18 @@ class HiddenDefenderEnv(gym.Env):
         mech = ACTION_NAMES[int(action)]
         evaded, sem, alert = self.score(flow, mech)
 
+        # Base reward from evasion success/failure
         if evaded and sem:
             reward = REWARD_EVADE
         elif evaded and not sem:
             reward = REWARD_BREAK_SEMANTICS
         else:
             reward = REWARD_ALERTED
+
+        # Subtract action cost (Direction 1): penalize expensive mechanisms.
+        # This forces RL to learn trade-offs: "cheap actions are better when they work."
+        action_cost = ACTION_COSTS[int(action)]
+        reward = reward - action_cost
 
         self._idx += 1
         terminated = self._idx >= len(self._flows)
@@ -332,6 +408,7 @@ class HiddenDefenderEnv(gym.Env):
             "semantics_ok": sem,
             "action": mech,
             "flow_id": flow["flow_id"],
+            "action_cost": action_cost,
         }
         obs = self._flows[self._idx]["obs"] if not terminated else self._obs()
         return np.asarray(obs, dtype=np.float32), reward, terminated, truncated, info
