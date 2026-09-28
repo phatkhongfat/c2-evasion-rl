@@ -1,0 +1,3775 @@
+{
+  "elapsed_s": 2359,
+  "overall": {
+    "n": 224,
+    "n_agree": 161,
+    "n_disagree": 63,
+    "agreement_pct": 71.9,
+    "surrogate_false_safe": 0,
+    "disagreements": [
+      {
+        "flow_idx": 0,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 0,
+        "framing": "http",
+        "mech": "prepend4",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 0,
+        "framing": "http",
+        "mech": "prepend8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 0,
+        "framing": "http",
+        "mech": "prepend12",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 0,
+        "framing": "http",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 0,
+        "framing": "http",
+        "mech": "length_wrapper",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 1,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 1,
+        "framing": "http",
+        "mech": "prepend4",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 1,
+        "framing": "http",
+        "mech": "prepend8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 1,
+        "framing": "http",
+        "mech": "prepend12",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 1,
+        "framing": "http",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 1,
+        "framing": "http",
+        "mech": "length_wrapper",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 2,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 2,
+        "framing": "http",
+        "mech": "prepend4",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 2,
+        "framing": "http",
+        "mech": "prepend8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 2,
+        "framing": "http",
+        "mech": "prepend12",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 2,
+        "framing": "http",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 4,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 4,
+        "framing": "http",
+        "mech": "prepend4",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 4,
+        "framing": "http",
+        "mech": "prepend8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 4,
+        "framing": "http",
+        "mech": "prepend12",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 4,
+        "framing": "http",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 4,
+        "framing": "http",
+        "mech": "length_wrapper",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 6,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 6,
+        "framing": "http",
+        "mech": "prepend4",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 6,
+        "framing": "http",
+        "mech": "prepend8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 6,
+        "framing": "http",
+        "mech": "prepend12",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 6,
+        "framing": "http",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 6,
+        "framing": "http",
+        "mech": "length_wrapper",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 7,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 7,
+        "framing": "http",
+        "mech": "split16",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 7,
+        "framing": "http",
+        "mech": "split24",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 7,
+        "framing": "http",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 8,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 8,
+        "framing": "http",
+        "mech": "prepend4",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 8,
+        "framing": "http",
+        "mech": "prepend8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 8,
+        "framing": "http",
+        "mech": "prepend12",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 8,
+        "framing": "http",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 8,
+        "framing": "http",
+        "mech": "length_wrapper",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 9,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 9,
+        "framing": "http",
+        "mech": "prepend4",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 9,
+        "framing": "http",
+        "mech": "prepend8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 9,
+        "framing": "http",
+        "mech": "prepend12",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 9,
+        "framing": "http",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 9,
+        "framing": "http",
+        "mech": "length_wrapper",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 12,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 12,
+        "framing": "http",
+        "mech": "prepend4",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 12,
+        "framing": "http",
+        "mech": "prepend8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 12,
+        "framing": "http",
+        "mech": "prepend12",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 12,
+        "framing": "http",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 12,
+        "framing": "http",
+        "mech": "length_wrapper",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 14,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 14,
+        "framing": "http",
+        "mech": "prepend4",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 14,
+        "framing": "http",
+        "mech": "prepend8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 14,
+        "framing": "http",
+        "mech": "prepend12",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 14,
+        "framing": "http",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 14,
+        "framing": "http",
+        "mech": "length_wrapper",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 15,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 15,
+        "framing": "http",
+        "mech": "prepend4",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 15,
+        "framing": "http",
+        "mech": "prepend8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 15,
+        "framing": "http",
+        "mech": "prepend12",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 15,
+        "framing": "http",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 15,
+        "framing": "http",
+        "mech": "length_wrapper",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      }
+    ]
+  },
+  "eligible_only": {
+    "n": 116,
+    "n_agree": 103,
+    "n_disagree": 13,
+    "agreement_pct": 88.8,
+    "surrogate_false_safe": 0,
+    "disagreements": [
+      {
+        "flow_idx": 0,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 1,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 2,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 4,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 6,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 7,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 7,
+        "framing": "http",
+        "mech": "split16",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 7,
+        "framing": "http",
+        "mech": "split24",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 8,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 9,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 12,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 14,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 15,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      }
+    ]
+  },
+  "per_mechanism": {
+    "split8": {
+      "n": 16,
+      "n_agree": 5,
+      "n_disagree": 11,
+      "agreement_pct": 31.2,
+      "surrogate_false_safe": 0,
+      "disagreements": [
+        {
+          "flow_idx": 0,
+          "framing": "http",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 1,
+          "framing": "http",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 2,
+          "framing": "http",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 4,
+          "framing": "http",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 6,
+          "framing": "http",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 7,
+          "framing": "http",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 8,
+          "framing": "http",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 9,
+          "framing": "http",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 12,
+          "framing": "http",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 14,
+          "framing": "http",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 15,
+          "framing": "http",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        }
+      ]
+    },
+    "split16": {
+      "n": 16,
+      "n_agree": 15,
+      "n_disagree": 1,
+      "agreement_pct": 93.8,
+      "surrogate_false_safe": 0,
+      "disagreements": [
+        {
+          "flow_idx": 7,
+          "framing": "http",
+          "mech": "split16",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        }
+      ]
+    },
+    "split24": {
+      "n": 16,
+      "n_agree": 15,
+      "n_disagree": 1,
+      "agreement_pct": 93.8,
+      "surrogate_false_safe": 0,
+      "disagreements": [
+        {
+          "flow_idx": 7,
+          "framing": "http",
+          "mech": "split24",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        }
+      ]
+    },
+    "prepend4": {
+      "n": 16,
+      "n_agree": 6,
+      "n_disagree": 10,
+      "agreement_pct": 37.5,
+      "surrogate_false_safe": 0,
+      "disagreements": [
+        {
+          "flow_idx": 0,
+          "framing": "http",
+          "mech": "prepend4",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 1,
+          "framing": "http",
+          "mech": "prepend4",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 2,
+          "framing": "http",
+          "mech": "prepend4",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 4,
+          "framing": "http",
+          "mech": "prepend4",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 6,
+          "framing": "http",
+          "mech": "prepend4",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 8,
+          "framing": "http",
+          "mech": "prepend4",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 9,
+          "framing": "http",
+          "mech": "prepend4",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 12,
+          "framing": "http",
+          "mech": "prepend4",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 14,
+          "framing": "http",
+          "mech": "prepend4",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 15,
+          "framing": "http",
+          "mech": "prepend4",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        }
+      ]
+    },
+    "prepend8": {
+      "n": 16,
+      "n_agree": 6,
+      "n_disagree": 10,
+      "agreement_pct": 37.5,
+      "surrogate_false_safe": 0,
+      "disagreements": [
+        {
+          "flow_idx": 0,
+          "framing": "http",
+          "mech": "prepend8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 1,
+          "framing": "http",
+          "mech": "prepend8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 2,
+          "framing": "http",
+          "mech": "prepend8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 4,
+          "framing": "http",
+          "mech": "prepend8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 6,
+          "framing": "http",
+          "mech": "prepend8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 8,
+          "framing": "http",
+          "mech": "prepend8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 9,
+          "framing": "http",
+          "mech": "prepend8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 12,
+          "framing": "http",
+          "mech": "prepend8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 14,
+          "framing": "http",
+          "mech": "prepend8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 15,
+          "framing": "http",
+          "mech": "prepend8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        }
+      ]
+    },
+    "prepend12": {
+      "n": 16,
+      "n_agree": 6,
+      "n_disagree": 10,
+      "agreement_pct": 37.5,
+      "surrogate_false_safe": 0,
+      "disagreements": [
+        {
+          "flow_idx": 0,
+          "framing": "http",
+          "mech": "prepend12",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 1,
+          "framing": "http",
+          "mech": "prepend12",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 2,
+          "framing": "http",
+          "mech": "prepend12",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 4,
+          "framing": "http",
+          "mech": "prepend12",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 6,
+          "framing": "http",
+          "mech": "prepend12",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 8,
+          "framing": "http",
+          "mech": "prepend12",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 9,
+          "framing": "http",
+          "mech": "prepend12",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 12,
+          "framing": "http",
+          "mech": "prepend12",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 14,
+          "framing": "http",
+          "mech": "prepend12",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 15,
+          "framing": "http",
+          "mech": "prepend12",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        }
+      ]
+    },
+    "pad16": {
+      "n": 16,
+      "n_agree": 16,
+      "n_disagree": 0,
+      "agreement_pct": 100.0,
+      "surrogate_false_safe": 0,
+      "disagreements": []
+    },
+    "reorder": {
+      "n": 16,
+      "n_agree": 16,
+      "n_disagree": 0,
+      "agreement_pct": 100.0,
+      "surrogate_false_safe": 0,
+      "disagreements": []
+    },
+    "ttl": {
+      "n": 16,
+      "n_agree": 16,
+      "n_disagree": 0,
+      "agreement_pct": 100.0,
+      "surrogate_false_safe": 0,
+      "disagreements": []
+    },
+    "corrupt8": {
+      "n": 16,
+      "n_agree": 16,
+      "n_disagree": 0,
+      "agreement_pct": 100.0,
+      "surrogate_false_safe": 0,
+      "disagreements": []
+    },
+    "overlap8": {
+      "n": 16,
+      "n_agree": 5,
+      "n_disagree": 11,
+      "agreement_pct": 31.2,
+      "surrogate_false_safe": 0,
+      "disagreements": [
+        {
+          "flow_idx": 0,
+          "framing": "http",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 1,
+          "framing": "http",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 2,
+          "framing": "http",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 4,
+          "framing": "http",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 6,
+          "framing": "http",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 7,
+          "framing": "http",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 8,
+          "framing": "http",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 9,
+          "framing": "http",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 12,
+          "framing": "http",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 14,
+          "framing": "http",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 15,
+          "framing": "http",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        }
+      ]
+    },
+    "noop": {
+      "n": 16,
+      "n_agree": 16,
+      "n_disagree": 0,
+      "agreement_pct": 100.0,
+      "surrogate_false_safe": 0,
+      "disagreements": []
+    },
+    "http_header_pad": {
+      "n": 16,
+      "n_agree": 16,
+      "n_disagree": 0,
+      "agreement_pct": 100.0,
+      "surrogate_false_safe": 0,
+      "disagreements": []
+    },
+    "length_wrapper": {
+      "n": 16,
+      "n_agree": 7,
+      "n_disagree": 9,
+      "agreement_pct": 43.8,
+      "surrogate_false_safe": 0,
+      "disagreements": [
+        {
+          "flow_idx": 0,
+          "framing": "http",
+          "mech": "length_wrapper",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 1,
+          "framing": "http",
+          "mech": "length_wrapper",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 4,
+          "framing": "http",
+          "mech": "length_wrapper",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 6,
+          "framing": "http",
+          "mech": "length_wrapper",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 8,
+          "framing": "http",
+          "mech": "length_wrapper",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 9,
+          "framing": "http",
+          "mech": "length_wrapper",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 12,
+          "framing": "http",
+          "mech": "length_wrapper",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 14,
+          "framing": "http",
+          "mech": "length_wrapper",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 15,
+          "framing": "http",
+          "mech": "length_wrapper",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        }
+      ]
+    }
+  },
+  "rows": [
+    {
+      "flow_idx": 0,
+      "framing": "http",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 0,
+      "framing": "http",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 0,
+      "framing": "http",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 0,
+      "framing": "http",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 0,
+      "framing": "http",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 0,
+      "framing": "http",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 0,
+      "framing": "http",
+      "mech": "pad16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 0,
+      "framing": "http",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 0,
+      "framing": "http",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 0,
+      "framing": "http",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 0,
+      "framing": "http",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 0,
+      "framing": "http",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 0,
+      "framing": "http",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 0,
+      "framing": "http",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 1,
+      "framing": "http",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 1,
+      "framing": "http",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 1,
+      "framing": "http",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 1,
+      "framing": "http",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 1,
+      "framing": "http",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 1,
+      "framing": "http",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 1,
+      "framing": "http",
+      "mech": "pad16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 1,
+      "framing": "http",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 1,
+      "framing": "http",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 1,
+      "framing": "http",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 1,
+      "framing": "http",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 1,
+      "framing": "http",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 1,
+      "framing": "http",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 1,
+      "framing": "http",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 2,
+      "framing": "http",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 2,
+      "framing": "http",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 2,
+      "framing": "http",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 2,
+      "framing": "http",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 2,
+      "framing": "http",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 2,
+      "framing": "http",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 2,
+      "framing": "http",
+      "mech": "pad16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 2,
+      "framing": "http",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 2,
+      "framing": "http",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 2,
+      "framing": "http",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 2,
+      "framing": "http",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 2,
+      "framing": "http",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 2,
+      "framing": "http",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 2,
+      "framing": "http",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 4,
+      "framing": "http",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 4,
+      "framing": "http",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 4,
+      "framing": "http",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 4,
+      "framing": "http",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 4,
+      "framing": "http",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 4,
+      "framing": "http",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 4,
+      "framing": "http",
+      "mech": "pad16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 4,
+      "framing": "http",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 4,
+      "framing": "http",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 4,
+      "framing": "http",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 4,
+      "framing": "http",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 4,
+      "framing": "http",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 4,
+      "framing": "http",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 4,
+      "framing": "http",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 5,
+      "framing": "neris",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 5,
+      "framing": "neris",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 5,
+      "framing": "neris",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 5,
+      "framing": "neris",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 5,
+      "framing": "neris",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 5,
+      "framing": "neris",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 5,
+      "framing": "neris",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 5,
+      "framing": "neris",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 5,
+      "framing": "neris",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 5,
+      "framing": "neris",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 5,
+      "framing": "neris",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 5,
+      "framing": "neris",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 5,
+      "framing": "neris",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 5,
+      "framing": "neris",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 6,
+      "framing": "http",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 6,
+      "framing": "http",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 6,
+      "framing": "http",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 6,
+      "framing": "http",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 6,
+      "framing": "http",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 6,
+      "framing": "http",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 6,
+      "framing": "http",
+      "mech": "pad16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 6,
+      "framing": "http",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 6,
+      "framing": "http",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 6,
+      "framing": "http",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 6,
+      "framing": "http",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 6,
+      "framing": "http",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 6,
+      "framing": "http",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 6,
+      "framing": "http",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 7,
+      "framing": "http",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 7,
+      "framing": "http",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 7,
+      "framing": "http",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 7,
+      "framing": "http",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 7,
+      "framing": "http",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 7,
+      "framing": "http",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 7,
+      "framing": "http",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 7,
+      "framing": "http",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 7,
+      "framing": "http",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 7,
+      "framing": "http",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 7,
+      "framing": "http",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 7,
+      "framing": "http",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 7,
+      "framing": "http",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 7,
+      "framing": "http",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 8,
+      "framing": "http",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 8,
+      "framing": "http",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 8,
+      "framing": "http",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 8,
+      "framing": "http",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 8,
+      "framing": "http",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 8,
+      "framing": "http",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 8,
+      "framing": "http",
+      "mech": "pad16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 8,
+      "framing": "http",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 8,
+      "framing": "http",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 8,
+      "framing": "http",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 8,
+      "framing": "http",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 8,
+      "framing": "http",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 8,
+      "framing": "http",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 8,
+      "framing": "http",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 9,
+      "framing": "http",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 9,
+      "framing": "http",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 9,
+      "framing": "http",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 9,
+      "framing": "http",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 9,
+      "framing": "http",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 9,
+      "framing": "http",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 9,
+      "framing": "http",
+      "mech": "pad16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 9,
+      "framing": "http",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 9,
+      "framing": "http",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 9,
+      "framing": "http",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 9,
+      "framing": "http",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 9,
+      "framing": "http",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 9,
+      "framing": "http",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 9,
+      "framing": "http",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 10,
+      "framing": "neris",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 10,
+      "framing": "neris",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 10,
+      "framing": "neris",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 10,
+      "framing": "neris",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 10,
+      "framing": "neris",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 10,
+      "framing": "neris",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 10,
+      "framing": "neris",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 10,
+      "framing": "neris",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 10,
+      "framing": "neris",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 10,
+      "framing": "neris",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 10,
+      "framing": "neris",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 10,
+      "framing": "neris",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 10,
+      "framing": "neris",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 10,
+      "framing": "neris",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 11,
+      "framing": "neris",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 11,
+      "framing": "neris",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 11,
+      "framing": "neris",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 11,
+      "framing": "neris",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 11,
+      "framing": "neris",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 11,
+      "framing": "neris",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 11,
+      "framing": "neris",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 11,
+      "framing": "neris",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 11,
+      "framing": "neris",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 11,
+      "framing": "neris",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 11,
+      "framing": "neris",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 11,
+      "framing": "neris",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 11,
+      "framing": "neris",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 11,
+      "framing": "neris",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 12,
+      "framing": "http",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 12,
+      "framing": "http",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 12,
+      "framing": "http",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 12,
+      "framing": "http",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 12,
+      "framing": "http",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 12,
+      "framing": "http",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 12,
+      "framing": "http",
+      "mech": "pad16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 12,
+      "framing": "http",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 12,
+      "framing": "http",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 12,
+      "framing": "http",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 12,
+      "framing": "http",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 12,
+      "framing": "http",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 12,
+      "framing": "http",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 12,
+      "framing": "http",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 13,
+      "framing": "neris",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 13,
+      "framing": "neris",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 13,
+      "framing": "neris",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 13,
+      "framing": "neris",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 13,
+      "framing": "neris",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 13,
+      "framing": "neris",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 13,
+      "framing": "neris",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 13,
+      "framing": "neris",
+      "mech": "reorder",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 13,
+      "framing": "neris",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 13,
+      "framing": "neris",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 13,
+      "framing": "neris",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 13,
+      "framing": "neris",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 13,
+      "framing": "neris",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 13,
+      "framing": "neris",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 14,
+      "framing": "http",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 14,
+      "framing": "http",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 14,
+      "framing": "http",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 14,
+      "framing": "http",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 14,
+      "framing": "http",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 14,
+      "framing": "http",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 14,
+      "framing": "http",
+      "mech": "pad16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 14,
+      "framing": "http",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 14,
+      "framing": "http",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 14,
+      "framing": "http",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 14,
+      "framing": "http",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 14,
+      "framing": "http",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 14,
+      "framing": "http",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 14,
+      "framing": "http",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 15,
+      "framing": "http",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 15,
+      "framing": "http",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 15,
+      "framing": "http",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 15,
+      "framing": "http",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 15,
+      "framing": "http",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 15,
+      "framing": "http",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 15,
+      "framing": "http",
+      "mech": "pad16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 15,
+      "framing": "http",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 15,
+      "framing": "http",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 15,
+      "framing": "http",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 15,
+      "framing": "http",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 15,
+      "framing": "http",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 15,
+      "framing": "http",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 15,
+      "framing": "http",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    }
+  ]
+}
