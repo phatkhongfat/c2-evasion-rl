@@ -96,8 +96,32 @@ class QueryCounter(BaseCallback):
 
 
 def main() -> int:
+    import argparse
+
+    global N_FLOWS, MAX_EPOCHS, SEED, TARGET
+
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--real-snort", action="store_true",
+                    help="score every training step with the real Snort binary "
+                         "instead of the RealRulesReplica surrogate (~1.3 s/flow)")
+    ap.add_argument("--n-flows", type=int, default=N_FLOWS)
+    ap.add_argument("--max-epochs", type=int, default=MAX_EPOCHS)
+    ap.add_argument("--seed", type=int, default=SEED)
+    ap.add_argument("--out", default=None)
+    args = ap.parse_args()
+
+    N_FLOWS, MAX_EPOCHS, SEED = args.n_flows, args.max_epochs, args.seed
+
     REPORTS.mkdir(parents=True, exist_ok=True)
-    env = BatchEnv(split="train", seed=SEED)
+    # Two scorers. The surrogate (RealRulesReplica) parses the real 21,374-rule
+    # ET Open C2 file and reproduces the 3 sids that fire per capture, but it
+    # silently drops the 4,394 rules (20.6%) it cannot implement -- anything using
+    # pcre / byte_test / byte_extract / byte_jump. Real Snort is the actual
+    # defender, and the two have already been caught disagreeing on this project,
+    # so scoring must be selectable, not hardcoded to the surrogate.
+    env = BatchEnv(split="train", seed=SEED, real_snort=args.real_snort)
+    scorer = "real_snort" if args.real_snort else "replica"
+    print(f"[*] training with scorer={scorer}")
     model = MaskablePPO("MlpPolicy", env, n_steps=N_FLOWS, batch_size=N_FLOWS,
                         n_epochs=10, learning_rate=3e-4, ent_coef=0.01,
                         gamma=0.0, seed=SEED, verbose=0)
@@ -128,10 +152,12 @@ def main() -> int:
         "epochs": epochs_run,
         "semantics_breaks": counter.sem_break,
     }
-    out = REPORTS / "ppo_hidden_defender.json"
+    out = Path(args.out) if args.out else REPORTS / "ppo_hidden_defender.json"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    result["scorer"] = scorer
     out.write_text(json.dumps(result, indent=2))
     print(f"[*] ppo: {result['queries']} queries, {result['evasion_pct']}%, "
-          f"{result['epochs']} epochs")
+          f"{result['epochs']} epochs, scorer={scorer}")
     print(f"[+] {out}")
     return 0
 
