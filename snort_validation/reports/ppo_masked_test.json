@@ -1,0 +1,161 @@
+{
+  "method": "maskable_ppo",
+  "scorer": "real_snort",
+  "split": "test",
+  "n_flows": 16,
+  "alerted": 0,
+  "evaded": 16,
+  "valid_evasion": 16,
+  "valid_evasion_pct": 100.0,
+  "masked_actions_used": 0,
+  "actions_chosen": {
+    "split8": 8,
+    "http_header_pad": 8
+  },
+  "per_flow": [
+    {
+      "flow_id": "botnet-capture-20110819-bot|109.185.46.214:31055->147.32.84.191:29676|udp",
+      "framing": "neris",
+      "action": "split8",
+      "alert": false,
+      "evaded": true,
+      "semantics_ok": true,
+      "reward": 9.5
+    },
+    {
+      "flow_id": "botnet-capture-20110819-bot|116.39.144.45:21425->147.32.84.191:29676|udp",
+      "framing": "neris",
+      "action": "split8",
+      "alert": false,
+      "evaded": true,
+      "semantics_ok": true,
+      "reward": 9.5
+    },
+    {
+      "flow_id": "botnet-capture-20110811-neris|147.32.84.165:1059->184.82.155.107:80|tcp",
+      "framing": "http",
+      "action": "http_header_pad",
+      "alert": false,
+      "evaded": true,
+      "semantics_ok": true,
+      "reward": 9.95
+    },
+    {
+      "flow_id": "botnet-capture-20110819-bot|112.120.38.117:16882->147.32.84.192:31037|udp",
+      "framing": "neris",
+      "action": "split8",
+      "alert": false,
+      "evaded": true,
+      "semantics_ok": true,
+      "reward": 9.5
+    },
+    {
+      "flow_id": "botnet-capture-20110811-neris|147.32.84.165:1118->94.63.150.20:80|tcp",
+      "framing": "http",
+      "action": "http_header_pad",
+      "alert": false,
+      "evaded": true,
+      "semantics_ok": true,
+      "reward": 9.95
+    },
+    {
+      "flow_id": "botnet-capture-20110811-neris|147.32.84.165:1274->184.82.147.251:80|tcp",
+      "framing": "http",
+      "action": "http_header_pad",
+      "alert": false,
+      "evaded": true,
+      "semantics_ok": true,
+      "reward": 9.95
+    },
+    {
+      "flow_id": "botnet-capture-20110819-bot|114.143.118.30:18993->147.32.84.165:32234|udp",
+      "framing": "neris",
+      "action": "split8",
+      "alert": false,
+      "evaded": true,
+      "semantics_ok": true,
+      "reward": 9.5
+    },
+    {
+      "flow_id": "botnet-capture-20110819-bot|114.43.210.162:1038->147.32.84.165:32234|udp",
+      "framing": "neris",
+      "action": "split8",
+      "alert": false,
+      "evaded": true,
+      "semantics_ok": true,
+      "reward": 9.5
+    },
+    {
+      "flow_id": "botnet-capture-20110811-neris|147.32.84.165:1138->184.82.155.107:80|tcp",
+      "framing": "http",
+      "action": "http_header_pad",
+      "alert": false,
+      "evaded": true,
+      "semantics_ok": true,
+      "reward": 9.95
+    },
+    {
+      "flow_id": "botnet-capture-20110819-bot|109.210.3.249:11482->147.32.84.191:29676|udp",
+      "framing": "neris",
+      "action": "split8",
+      "alert": false,
+      "evaded": true,
+      "semantics_ok": true,
+      "reward": 9.5
+    },
+    {
+      "flow_id": "botnet-capture-20110811-neris|147.32.84.165:1297->184.82.147.251:80|tcp",
+      "framing": "http",
+      "action": "http_header_pad",
+      "alert": false,
+      "evaded": true,
+      "semantics_ok": true,
+      "reward": 9.95
+    },
+    {
+      "flow_id": "botnet-capture-20110819-bot|101.51.139.195:28082->147.32.84.191:29676|udp",
+      "framing": "neris",
+      "action": "split8",
+      "alert": false,
+      "evaded": true,
+      "semantics_ok": true,
+      "reward": 9.5
+    },
+    {
+      "flow_id": "botnet-capture-20110819-bot|109.182.152.44:55689->147.32.84.191:29676|udp",
+      "framing": "neris",
+      "action": "split8",
+      "alert": false,
+      "evaded": true,
+      "semantics_ok": true,
+      "reward": 9.5
+    },
+    {
+      "flow_id": "botnet-capture-20110811-neris|147.32.84.165:1071->184.82.148.43:80|tcp",
+      "framing": "http",
+      "action": "http_header_pad",
+      "alert": false,
+      "evaded": true,
+      "semantics_ok": true,
+      "reward": 9.95
+    },
+    {
+      "flow_id": "botnet-capture-20110811-neris|147.32.84.165:1244->184.82.148.43:80|tcp",
+      "framing": "http",
+      "action": "http_header_pad",
+      "alert": false,
+      "evaded": true,
+      "semantics_ok": true,
+      "reward": 9.95
+    },
+    {
+      "flow_id": "botnet-capture-20110811-neris|147.32.84.165:1050->184.82.147.251:80|tcp",
+      "framing": "http",
+      "action": "http_header_pad",
+      "alert": false,
+      "evaded": true,
+      "semantics_ok": true,
+      "reward": 9.95
+    }
+  ]
+}
