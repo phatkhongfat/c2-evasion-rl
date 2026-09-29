@@ -40,7 +40,7 @@ Mechanisms already covering this:
 - **Wrapper with offset:** `length_wrapper` (encapsulate with a header that declares where real data starts).
 
 Results on HTTP-only test set (8 flows, **evaluated with real Snort, batch_size=1**):
-- Awaiting completion of `eval_all_real_snort.py` (currently 9/112 pairs scored).
+- Awaiting completion of `eval_all_real_snort.py` (running, 13/112 pairs scored so far).
 
 ## Summary
 

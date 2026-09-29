@@ -4,11 +4,11 @@
   true
  ],
  "0|split16": [
-  false,
+  true,
   true
  ],
  "0|split24": [
-  false,
+  true,
   true
  ],
  "0|prepend4": [
@@ -24,19 +24,19 @@
   false
  ],
  "0|pad16": [
-  true,
-  false
+  false,
+  true
  ],
  "0|reorder": [
-  true,
+  false,
   true
  ],
  "0|ttl": [
-  true,
+  false,
   true
  ],
  "0|corrupt8": [
-  true,
+  false,
   false
  ],
  "0|overlap8": [
@@ -44,7 +44,7 @@
   false
  ],
  "0|noop": [
-  true,
+  false,
   true
  ],
  "0|http_header_pad": [
@@ -60,11 +60,11 @@
   true
  ],
  "1|split16": [
-  false,
+  true,
   true
  ],
  "1|split24": [
-  false,
+  true,
   true
  ],
  "1|prepend4": [
@@ -80,15 +80,15 @@
   false
  ],
  "1|pad16": [
-  true,
-  false
+  false,
+  true
  ],
  "1|reorder": [
-  true,
+  false,
   true
  ],
  "1|ttl": [
-  true,
+  false,
   true
  ],
  "1|corrupt8": [
@@ -100,7 +100,7 @@
   false
  ],
  "1|noop": [
-  true,
+  false,
   true
  ],
  "1|http_header_pad": [
@@ -193,7 +193,7 @@
  ],
  "3|pad16": [
   false,
-  false
+  true
  ],
  "3|reorder": [
   false,
@@ -204,7 +204,7 @@
   true
  ],
  "3|corrupt8": [
-  true,
+  false,
   false
  ],
  "3|overlap8": [
@@ -216,11 +216,11 @@
   true
  ],
  "3|http_header_pad": [
-  false,
+  true,
   true
  ],
  "3|length_wrapper": [
-  false,
+  true,
   false
  ],
  "4|split8": [
@@ -260,7 +260,7 @@
   true
  ],
  "4|corrupt8": [
-  true,
+  false,
   false
  ],
  "4|overlap8": [
@@ -361,7 +361,7 @@
  ],
  "6|pad16": [
   false,
-  false
+  true
  ],
  "6|reorder": [
   false,
@@ -372,7 +372,7 @@
   true
  ],
  "6|corrupt8": [
-  true,
+  false,
   false
  ],
  "6|overlap8": [
@@ -384,11 +384,11 @@
   true
  ],
  "6|http_header_pad": [
-  false,
+  true,
   true
  ],
  "6|length_wrapper": [
-  false,
+  true,
   false
  ],
  "7|split8": [
@@ -417,7 +417,7 @@
  ],
  "7|pad16": [
   false,
-  false
+  true
  ],
  "7|reorder": [
   false,
@@ -428,7 +428,7 @@
   true
  ],
  "7|corrupt8": [
-  true,
+  false,
   false
  ],
  "7|overlap8": [
@@ -440,458 +440,10 @@
   true
  ],
  "7|http_header_pad": [
-  false,
+  true,
   true
  ],
  "7|length_wrapper": [
-  false,
-  false
- ],
- "8|split8": [
-  true,
-  true
- ],
- "8|split16": [
-  true,
-  true
- ],
- "8|split24": [
-  true,
-  true
- ],
- "8|prepend4": [
-  true,
-  false
- ],
- "8|prepend8": [
-  true,
-  false
- ],
- "8|prepend12": [
-  true,
-  false
- ],
- "8|pad16": [
-  false,
-  true
- ],
- "8|reorder": [
-  false,
-  true
- ],
- "8|ttl": [
-  false,
-  true
- ],
- "8|corrupt8": [
-  false,
-  false
- ],
- "8|overlap8": [
-  true,
-  false
- ],
- "8|noop": [
-  false,
-  true
- ],
- "8|http_header_pad": [
-  true,
-  true
- ],
- "8|length_wrapper": [
-  true,
-  false
- ],
- "9|split8": [
-  true,
-  true
- ],
- "9|split16": [
-  true,
-  true
- ],
- "9|split24": [
-  false,
-  true
- ],
- "9|prepend4": [
-  true,
-  false
- ],
- "9|prepend8": [
-  true,
-  false
- ],
- "9|prepend12": [
-  true,
-  false
- ],
- "9|pad16": [
-  true,
-  false
- ],
- "9|reorder": [
-  true,
-  true
- ],
- "9|ttl": [
-  true,
-  true
- ],
- "9|corrupt8": [
-  true,
-  false
- ],
- "9|overlap8": [
-  true,
-  false
- ],
- "9|noop": [
-  true,
-  true
- ],
- "9|http_header_pad": [
-  true,
-  true
- ],
- "9|length_wrapper": [
-  true,
-  false
- ],
- "10|split8": [
-  true,
-  true
- ],
- "10|split16": [
-  true,
-  true
- ],
- "10|split24": [
-  true,
-  true
- ],
- "10|prepend4": [
-  true,
-  false
- ],
- "10|prepend8": [
-  true,
-  false
- ],
- "10|prepend12": [
-  true,
-  false
- ],
- "10|pad16": [
-  true,
-  true
- ],
- "10|reorder": [
-  true,
-  true
- ],
- "10|ttl": [
-  true,
-  true
- ],
- "10|corrupt8": [
-  true,
-  false
- ],
- "10|overlap8": [
-  true,
-  false
- ],
- "10|noop": [
-  true,
-  true
- ],
- "10|http_header_pad": [
-  true,
-  true
- ],
- "10|length_wrapper": [
-  true,
-  false
- ],
- "11|split8": [
-  true,
-  true
- ],
- "11|split16": [
-  false,
-  true
- ],
- "11|split24": [
-  false,
-  true
- ],
- "11|prepend4": [
-  true,
-  false
- ],
- "11|prepend8": [
-  true,
-  false
- ],
- "11|prepend12": [
-  true,
-  false
- ],
- "11|pad16": [
-  false,
-  false
- ],
- "11|reorder": [
-  false,
-  true
- ],
- "11|ttl": [
-  false,
-  true
- ],
- "11|corrupt8": [
-  true,
-  false
- ],
- "11|overlap8": [
-  true,
-  false
- ],
- "11|noop": [
-  false,
-  true
- ],
- "11|http_header_pad": [
-  false,
-  true
- ],
- "11|length_wrapper": [
-  false,
-  false
- ],
- "12|split8": [
-  true,
-  true
- ],
- "12|split16": [
-  true,
-  true
- ],
- "12|split24": [
-  true,
-  true
- ],
- "12|prepend4": [
-  true,
-  false
- ],
- "12|prepend8": [
-  true,
-  false
- ],
- "12|prepend12": [
-  true,
-  false
- ],
- "12|pad16": [
-  false,
-  false
- ],
- "12|reorder": [
-  false,
-  true
- ],
- "12|ttl": [
-  false,
-  true
- ],
- "12|corrupt8": [
-  true,
-  false
- ],
- "12|overlap8": [
-  true,
-  false
- ],
- "12|noop": [
-  false,
-  true
- ],
- "12|http_header_pad": [
-  false,
-  true
- ],
- "12|length_wrapper": [
-  false,
-  false
- ],
- "13|split8": [
-  true,
-  true
- ],
- "13|split16": [
-  true,
-  true
- ],
- "13|split24": [
-  true,
-  true
- ],
- "13|prepend4": [
-  true,
-  false
- ],
- "13|prepend8": [
-  true,
-  false
- ],
- "13|prepend12": [
-  true,
-  false
- ],
- "13|pad16": [
-  false,
-  true
- ],
- "13|reorder": [
-  false,
-  true
- ],
- "13|ttl": [
-  false,
-  true
- ],
- "13|corrupt8": [
-  false,
-  false
- ],
- "13|overlap8": [
-  true,
-  false
- ],
- "13|noop": [
-  false,
-  true
- ],
- "13|http_header_pad": [
-  true,
-  true
- ],
- "13|length_wrapper": [
-  true,
-  false
- ],
- "14|split8": [
-  true,
-  true
- ],
- "14|split16": [
-  true,
-  true
- ],
- "14|split24": [
-  true,
-  true
- ],
- "14|prepend4": [
-  true,
-  false
- ],
- "14|prepend8": [
-  true,
-  false
- ],
- "14|prepend12": [
-  true,
-  false
- ],
- "14|pad16": [
-  false,
-  true
- ],
- "14|reorder": [
-  false,
-  true
- ],
- "14|ttl": [
-  false,
-  true
- ],
- "14|corrupt8": [
-  false,
-  false
- ],
- "14|overlap8": [
-  true,
-  false
- ],
- "14|noop": [
-  false,
-  true
- ],
- "14|http_header_pad": [
-  true,
-  true
- ],
- "14|length_wrapper": [
-  true,
-  false
- ],
- "15|split8": [
-  true,
-  true
- ],
- "15|split16": [
-  true,
-  true
- ],
- "15|split24": [
-  true,
-  true
- ],
- "15|prepend4": [
-  true,
-  false
- ],
- "15|prepend8": [
-  true,
-  false
- ],
- "15|prepend12": [
-  true,
-  false
- ],
- "15|pad16": [
-  false,
-  true
- ],
- "15|reorder": [
-  false,
-  true
- ],
- "15|ttl": [
-  false,
-  true
- ],
- "15|corrupt8": [
-  false,
-  false
- ],
- "15|overlap8": [
-  true,
-  false
- ],
- "15|noop": [
-  false,
-  true
- ],
- "15|http_header_pad": [
-  true,
-  true
- ],
- "15|length_wrapper": [
   true,
   false
  ]

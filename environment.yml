@@ -46,6 +46,7 @@ dependencies:
 
       # --- RL (packet-level policy, PPO, and the SB3 sweep harness) ------------
       - stable-baselines3==2.9.0
+      - sb3-contrib==2.9.0            # MaskablePPO (train_hidden_defender_ppo.py)
       - gymnasium==1.3.0
 
       # --- red team: local mock C2 beacon server + client (demo scripts) -------

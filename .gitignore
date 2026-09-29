@@ -110,3 +110,8 @@ AGENTS.local.md
 
 # Model checkpoints (large, regenerable)
 models/checkpoints_*/
+
+# Local venv shims and session state (not project content)
+venv_gym/
+venv_gymnasium/
+.session_state
