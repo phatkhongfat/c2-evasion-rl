@@ -1,0 +1,1721 @@
+{
+  "nodes": [
+    {
+      "id": "file:snort_validation/frag3_policy_comparison.py",
+      "type": "file",
+      "name": "frag3_policy_comparison.py",
+      "filePath": "snort_validation/frag3_policy_comparison.py",
+      "summary": "So sánh hai chính sách ghép mảnh của Snort — `first` (chỉ soi mảnh đầu) và `last` (ghép đủ rồi mới soi) — bằng cách quét cùng dải offset split/prepend trên flow C2 thật, chấm bằng Snort thật để phát hiện benchmark đang đo thiên lệch cấu hình thay vì kỹ năng kẻ tấn công.",
+      "tags": [
+        "validation",
+        "snort",
+        "fragmentation",
+        "benchmark",
+        "evasion"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/frag3_policy_comparison.py:make_conf",
+      "type": "function",
+      "name": "make_conf",
+      "filePath": "snort_validation/frag3_policy_comparison.py",
+      "lineRange": [
+        34,
+        40
+      ],
+      "summary": "Tạo bản sao file cấu hình Snort với dòng `frag3_engine: policy` ghi đè thành first hoặc last để phục vụ so sánh.",
+      "tags": [
+        "config",
+        "snort",
+        "fragmentation",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/frag3_policy_comparison.py:sweep",
+      "type": "function",
+      "name": "sweep",
+      "filePath": "snort_validation/frag3_policy_comparison.py",
+      "lineRange": [
+        43,
+        58
+      ],
+      "summary": "Sinh toàn bộ tổ hợp (flow, cơ chế, offset) rồi chấm hàng loạt qua SnortBatchService, trả về kết quả né và tính toàn vẹn ngữ nghĩa.",
+      "tags": [
+        "sweep",
+        "snort",
+        "batch",
+        "evaluation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/frag3_policy_comparison.py:summarise",
+      "type": "function",
+      "name": "summarise",
+      "filePath": "snort_validation/frag3_policy_comparison.py",
+      "lineRange": [
+        61,
+        88
+      ],
+      "summary": "Tổng hợp theo cơ chế: số flow giải được bằng một offset nào đó, tập offset hiệu quả trên mọi flow, histogram offset đầu và độ rộng offset tốt mỗi flow.",
+      "tags": [
+        "aggregation",
+        "statistics",
+        "reporting"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/frag3_policy_comparison.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "snort_validation/frag3_policy_comparison.py",
+      "lineRange": [
+        91,
+        105
+      ],
+      "summary": "Chạy sweep cho cả policy first và last rồi ghi báo cáo frag3_policy_comparison.json.",
+      "tags": [
+        "entry-point",
+        "orchestration",
+        "reporting"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:snort_validation/fragment_ops.py",
+      "type": "file",
+      "name": "fragment_ops.py",
+      "filePath": "snort_validation/fragment_ops.py",
+      "summary": "Bộ phép biến đổi dựa trên mập mờ ở tầng phân mảnh IP: chèn mảnh chồng lấn để Snort (policy first) và endpoint (policy last) nhìn thấy byte khác nhau, kèm tiện ích dựng gói scapy thật và tính lại checksum.",
+      "tags": [
+        "utility",
+        "fragmentation",
+        "evasion",
+        "scapy",
+        "packet-manipulation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/fragment_ops.py:_check_split",
+      "type": "function",
+      "name": "_check_split",
+      "filePath": "snort_validation/fragment_ops.py",
+      "lineRange": [
+        27,
+        33
+      ],
+      "summary": "Kiểm tra split_at dương và là bội của 8 byte (đơn vị offset mảnh IP), ném ValueError nếu không hợp lệ.",
+      "tags": [
+        "validation",
+        "fragmentation",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/fragment_ops.py:split_fragments",
+      "type": "function",
+      "name": "split_fragments",
+      "filePath": "snort_validation/fragment_ops.py",
+      "lineRange": [
+        36,
+        43
+      ],
+      "summary": "Cắt một payload thành hai mảnh IP không chồng lấn; ghép lại giống hệt bản gốc dưới mọi policy.",
+      "tags": [
+        "fragmentation",
+        "control",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/fragment_ops.py:overlap_fragments",
+      "type": "function",
+      "name": "overlap_fragments",
+      "filePath": "snort_validation/fragment_ops.py",
+      "lineRange": [
+        46,
+        68
+      ],
+      "summary": "Tạo ba mảnh: decoy lành ở offset 0, đuôi thật ở split_at, rồi mảnh chứa byte thật đầu tiên chồng lấn đến sau — policy first giữ decoy còn policy last giữ byte thật.",
+      "tags": [
+        "fragmentation",
+        "evasion",
+        "overlap",
+        "ambiguity"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/fragment_ops.py:reorder_fragments",
+      "type": "function",
+      "name": "reorder_fragments",
+      "filePath": "snort_validation/fragment_ops.py",
+      "lineRange": [
+        71,
+        76
+      ],
+      "summary": "Trình bày lại cùng tập mảnh theo thứ tự đến khác (hoán vị).",
+      "tags": [
+        "fragmentation",
+        "utility",
+        "ordering"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/fragment_ops.py:fragment_plan_to_packets",
+      "type": "function",
+      "name": "fragment_plan_to_packets",
+      "filePath": "snort_validation/fragment_ops.py",
+      "lineRange": [
+        79,
+        112
+      ],
+      "summary": "Chuyển kế hoạch Fragment thành gói scapy phân mảnh thật, tái dùng header IP/UDP của gói đích và đặt bit MF đúng trên mảnh có offset lớn nhất.",
+      "tags": [
+        "fragmentation",
+        "scapy",
+        "packet-construction"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/fragment_ops.py:fix_checksums",
+      "type": "function",
+      "name": "fix_checksums",
+      "filePath": "snort_validation/fragment_ops.py",
+      "lineRange": [
+        115,
+        146
+      ],
+      "summary": "Trả bản sao gói mang payload mới với checksum IP/UDP/TCP làm mới, dựng lại từ đúng lớp link-layer gốc để Snort không âm thầm loại gói.",
+      "tags": [
+        "checksum",
+        "scapy",
+        "correctness",
+        "utility"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:snort_validation/fragment_validity_test.py",
+      "type": "file",
+      "name": "fragment_validity_test.py",
+      "filePath": "snort_validation/fragment_validity_test.py",
+      "summary": "Kiểm tra gói đã biến đổi có hợp lệ theo RFC 791 hay chỉ là gói hỏng bị Snort loại bỏ — phân biệt 'né tránh thật' với 'kênh C2 đã chết', vì điều đó quyết định nghiên cứu đo kỹ năng hay đo sự hỏng gói.",
+      "tags": [
+        "test",
+        "validation",
+        "fragmentation",
+        "rfc791",
+        "evasion"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/fragment_validity_test.py:fragments",
+      "type": "function",
+      "name": "fragments",
+      "filePath": "snort_validation/fragment_validity_test.py",
+      "lineRange": [
+        35,
+        47
+      ],
+      "summary": "Trích (offset byte, cờ MF, payload) cho mọi gói IPv4 phân mảnh trong flow.",
+      "tags": [
+        "fragmentation",
+        "parsing",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/fragment_validity_test.py:reassemble",
+      "type": "function",
+      "name": "reassemble",
+      "filePath": "snort_validation/fragment_validity_test.py",
+      "lineRange": [
+        50,
+        74
+      ],
+      "summary": "Ghép mảnh theo RFC 791 (sắp theo offset), trả về (payload, lỗi) mô tả chồng lấn, khoảng trống, offset sai hoặc sai số mảnh cuối.",
+      "tags": [
+        "fragmentation",
+        "rfc791",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/fragment_validity_test.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "snort_validation/fragment_validity_test.py",
+      "lineRange": [
+        77,
+        108
+      ],
+      "summary": "Chạy kiểm tra ghép mảnh cho mọi cơ chế trong ACTION_NAMES và ghi fragment_validity_test.json.",
+      "tags": [
+        "entry-point",
+        "validation",
+        "reporting"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:snort_validation/frontier_exact.py",
+      "type": "file",
+      "name": "frontier_exact.py",
+      "filePath": "snort_validation/frontier_exact.py",
+      "summary": "Giải chính xác bài toán biên: với mỗi flow, tìm tập gói nhỏ nhất cần làm hỏng để né Snort bằng cách thử mọi tổ hợp k-mục theo độ sâu tăng dần, rồi xuất nhãn giám sát tối ưu cho behaviour cloning.",
+      "tags": [
+        "frontier",
+        "exact-search",
+        "labeling",
+        "snort",
+        "evasion"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/frontier_exact.py:mask_of",
+      "type": "function",
+      "name": "mask_of",
+      "filePath": "snort_validation/frontier_exact.py",
+      "lineRange": [
+        36,
+        40
+      ],
+      "summary": "Tạo mask numpy độ dài ACTION_MAX_PACKETS với 1.0 tại các chỉ số gói được chọn.",
+      "tags": [
+        "masking",
+        "utility",
+        "numpy"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/frontier_exact.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "snort_validation/frontier_exact.py",
+      "lineRange": [
+        43,
+        162
+      ],
+      "summary": "Chạy control làm-hỏng-tất-cả và sanity k=0, tìm k nhỏ nhất né được cho từng flow qua progressive deepening, rồi ghi nhãn tối ưu vào labels/oracle_<capture>.json.",
+      "tags": [
+        "entry-point",
+        "exact-search",
+        "labeling",
+        "orchestration"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:snort_validation/harness_variance.py",
+      "type": "file",
+      "name": "harness_variance.py",
+      "filePath": "snort_validation/harness_variance.py",
+      "summary": "Đo độ bất định run-to-run của harness chấm điểm: chạy lại y hệt kế hoạch làm-hỏng-tất-cả 5 lần trong các service độc lập để phát hiện verdict dao động, vì một verdict đổi giữa các lần chạy sẽ vô hiệu mọi so sánh.",
+      "tags": [
+        "validation",
+        "determinism",
+        "harness",
+        "snort",
+        "measurement"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/harness_variance.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "snort_validation/harness_variance.py",
+      "lineRange": [
+        26,
+        55
+      ],
+      "summary": "Với mỗi capture, chạy lại kế hoạch corrupt-all REPEATS lần trên instance ResidentSnortService mới, in độ lệch và liệt kê flow có verdict dao động.",
+      "tags": [
+        "measurement",
+        "determinism",
+        "reporting"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:snort_validation/joint_outcomes.py",
+      "type": "file",
+      "name": "joint_outcomes.py",
+      "filePath": "snort_validation/joint_outcomes.py",
+      "summary": "Script tổng hợp không định nghĩa hàm: đối chiếu kết quả né XGBoost với kết quả né Snort thật cho từng policy qua các lần chạy blind/l10/enh10, đếm bốn tổ hợp cùng né, chỉ XGB, chỉ Snort, không né.",
+      "tags": [
+        "reporting",
+        "statistics",
+        "xgboost",
+        "snort",
+        "evidence"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:snort_validation/label_feasibility.py",
+      "type": "file",
+      "name": "label_feasibility.py",
+      "filePath": "snort_validation/label_feasibility.py",
+      "summary": "Cổng khả thi: kiểm tra mạng nơ-ron trên đặc trưng per-packet hiện có có tái tạo được mask tối ưu của frontier không, từ đó quyết định behaviour cloning có vô nghĩa và phải đổi đặc trưng trước hay không.",
+      "tags": [
+        "feasibility",
+        "machine-learning",
+        "imitation",
+        "features",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/label_feasibility.py:load",
+      "type": "function",
+      "name": "load",
+      "filePath": "snort_validation/label_feasibility.py",
+      "lineRange": [
+        33,
+        49
+      ],
+      "summary": "Nạp nhãn oracle và đặc trưng per-packet của flow, dựng ma trận X (flow×slot×feature) và Y (mask tối ưu).",
+      "tags": [
+        "data-loading",
+        "features",
+        "utility"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/label_feasibility.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "snort_validation/label_feasibility.py",
+      "lineRange": [
+        52,
+        113
+      ],
+      "summary": "So sánh quy tắc đơn-đặc-trưng tốt nhất với MLP huấn luyện BCE khớp mask tối ưu trên tập held-out, in tỷ lệ khớp chính xác và gọi đánh giá end-to-end.",
+      "tags": [
+        "machine-learning",
+        "imitation",
+        "evaluation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/label_feasibility.py:end_to_end",
+      "type": "function",
+      "name": "end_to_end",
+      "filePath": "snort_validation/label_feasibility.py",
+      "lineRange": [
+        116,
+        161
+      ],
+      "summary": "Chạy mask do policy clone dự đoán qua Snort thật và chấm so với control bằng policy_beats_control.",
+      "tags": [
+        "end-to-end",
+        "snort",
+        "evaluation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:snort_validation/label_real_flows_with_snort.py",
+      "type": "file",
+      "name": "label_real_flows_with_snort.py",
+      "filePath": "snort_validation/label_real_flows_with_snort.py",
+      "summary": "Gán nhãn verdict Snort thật (ET Open C2) cho flow CTU-13 thật rồi xếp hạng đặc trưng đo được theo mức phân tách alert/sạch, bằng cách chạy Snort một lần trên capture thật (payload thật) rồi join theo 5-tuple.",
+      "tags": [
+        "labeling",
+        "snort",
+        "feature-analysis",
+        "ctu13",
+        "validation"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:snort_validation/label_real_flows_with_snort.py:run_snort_over_capture",
+      "type": "function",
+      "name": "run_snort_over_capture",
+      "filePath": "snort_validation/label_real_flows_with_snort.py",
+      "lineRange": [
+        72,
+        82
+      ],
+      "summary": "Chạy một lượt Snort trên pcap thật và trả đường dẫn file alert (None nếu không có).",
+      "tags": [
+        "snort",
+        "execution",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/label_real_flows_with_snort.py:parse_alerts",
+      "type": "function",
+      "name": "parse_alerts",
+      "filePath": "snort_validation/label_real_flows_with_snort.py",
+      "lineRange": [
+        85,
+        109
+      ],
+      "summary": "Phân tích file alert: tập tuple có hướng (cả hai chiều), đếm theo sid, bản đồ message và số dòng alert.",
+      "tags": [
+        "parsing",
+        "snort",
+        "regex"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/label_real_flows_with_snort.py:auc_score",
+      "type": "function",
+      "name": "auc_score",
+      "filePath": "snort_validation/label_real_flows_with_snort.py",
+      "lineRange": [
+        112,
+        130
+      ],
+      "summary": "Tính AUC dựa trên hạng có xử lý đồng hạng, đo mức phân tách giữa flow bị alert và flow sạch.",
+      "tags": [
+        "statistics",
+        "auc",
+        "evaluation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/label_real_flows_with_snort.py:cohens_d",
+      "type": "function",
+      "name": "cohens_d",
+      "filePath": "snort_validation/label_real_flows_with_snort.py",
+      "lineRange": [
+        133,
+        140
+      ],
+      "summary": "Tính Cohen's d (kích thước hiệu ứng, phương sai gộp) giữa hai nhóm.",
+      "tags": [
+        "statistics",
+        "effect-size",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/label_real_flows_with_snort.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "snort_validation/label_real_flows_with_snort.py",
+      "lineRange": [
+        143,
+        240
+      ],
+      "summary": "Nạp parquet đặc trưng, chạy Snort, join verdict theo 5-tuple, xếp hạng ~40 đặc trưng theo AUC/Cohen's d và ghi báo cáo JSON.",
+      "tags": [
+        "entry-point",
+        "feature-analysis",
+        "reporting",
+        "snort"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:snort_validation/offset_sweep_test.py",
+      "type": "file",
+      "name": "offset_sweep_test.py",
+      "filePath": "snort_validation/offset_sweep_test.py",
+      "summary": "Thí nghiệm quyết định: offset thắng có phụ thuộc từng flow hay không — quét offset cho split và prepend trên 16 flow held-out bằng Snort thật để xem có cần tham số hoá không gian hành động theo offset hay không.",
+      "tags": [
+        "experiment",
+        "offset-sweep",
+        "snort",
+        "rl-framing",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/offset_sweep_test.py:mutate",
+      "type": "function",
+      "name": "mutate",
+      "filePath": "snort_validation/offset_sweep_test.py",
+      "lineRange": [
+        36,
+        38
+      ],
+      "summary": "Ủy thác cho cùng đường code path mà env và baseline dùng (apply_mech với tên cơ chế kèm offset).",
+      "tags": [
+        "utility",
+        "mutation",
+        "delegation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/offset_sweep_test.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "snort_validation/offset_sweep_test.py",
+      "lineRange": [
+        41,
+        91
+      ],
+      "summary": "Chấm hàng loạt tổ hợp (flow, cơ chế, offset), thống kê offset hiệu quả mỗi flow và ghi offset_sweep_test.json.",
+      "tags": [
+        "entry-point",
+        "sweep",
+        "reporting"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:snort_validation/parse_http_eval.py",
+      "type": "file",
+      "name": "parse_http_eval.py",
+      "filePath": "snort_validation/parse_http_eval.py",
+      "summary": "Script nhỏ đọc báo cáo JSON đánh giá HTTP-only và in bảng tổng hợp tỷ lệ né theo từng cơ chế so với Snort thật.",
+      "tags": [
+        "reporting",
+        "parsing",
+        "http",
+        "snort",
+        "summary"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/parse_http_eval.py:parse_eval_results",
+      "type": "function",
+      "name": "parse_eval_results",
+      "filePath": "snort_validation/parse_http_eval.py",
+      "lineRange": [
+        11,
+        27
+      ],
+      "summary": "Nạp báo cáo JSON và nhóm kết quả theo cơ chế, đếm số lần né trên tổng số.",
+      "tags": [
+        "parsing",
+        "aggregation",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/parse_http_eval.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "snort_validation/parse_http_eval.py",
+      "lineRange": [
+        29,
+        59
+      ],
+      "summary": "Đọc eval_http_only_real_snort.json và in bảng tỷ lệ né theo cơ chế kèm dòng tổng.",
+      "tags": [
+        "entry-point",
+        "reporting",
+        "summary"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:snort_validation/prepare_enhanced_surrogate_data.py",
+      "type": "file",
+      "name": "prepare_enhanced_surrogate_data.py",
+      "filePath": "snort_validation/prepare_enhanced_surrogate_data.py",
+      "summary": "Chuẩn bị tập huấn luyện surrogate tăng cường: đóng băng hai ma trận .npz (baseline 6 đặc trưng, enhanced 6+10) cùng manifest ghi số dòng, số dương, SHA-256, thứ tự đặc trưng và split phân tầng dùng chung.",
+      "tags": [
+        "data-preparation",
+        "surrogate",
+        "feature-selection",
+        "reproducibility",
+        "manifest"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/prepare_enhanced_surrogate_data.py:sha256",
+      "type": "function",
+      "name": "sha256",
+      "filePath": "snort_validation/prepare_enhanced_surrogate_data.py",
+      "lineRange": [
+        60,
+        63
+      ],
+      "summary": "Tính băm SHA-256 của một file để ghi vào manifest provenance.",
+      "tags": [
+        "hashing",
+        "provenance",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/prepare_enhanced_surrogate_data.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "snort_validation/prepare_enhanced_surrogate_data.py",
+      "lineRange": [
+        66,
+        137
+      ],
+      "summary": "Nạp đặc trưng được chọn, dựng dataset, chia train/test phân tầng có seed, lưu hai file .npz và manifest JSON kèm ghi chú rò rỉ dữ liệu.",
+      "tags": [
+        "entry-point",
+        "data-preparation",
+        "reproducibility"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:snort_validation/probe_overlap_evasion.py",
+      "type": "file",
+      "name": "probe_overlap_evasion.py",
+      "filePath": "snort_validation/probe_overlap_evasion.py",
+      "summary": "Probe GO/NO-GO quyết định né tránh dựa trên chồng lấn mảnh có thật trên setup này hay không: so ba nhánh original/split/overlap trên một flow, tất cả chấm bằng Snort thật, đồng thời yêu cầu endpoint vẫn khôi phục đúng lệnh C2.",
+      "tags": [
+        "probe",
+        "experiment",
+        "fragmentation",
+        "snort",
+        "evasion"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/probe_overlap_evasion.py:score",
+      "type": "function",
+      "name": "score",
+      "filePath": "snort_validation/probe_overlap_evasion.py",
+      "lineRange": [
+        44,
+        60
+      ],
+      "summary": "Ghi một pcap và chạy Snort để đọc verdict: cờ alert, số dòng alert và danh sách sid/message khớp regex.",
+      "tags": [
+        "snort",
+        "scoring",
+        "utility"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/probe_overlap_evasion.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "snort_validation/probe_overlap_evasion.py",
+      "lineRange": [
+        63,
+        162
+      ],
+      "summary": "Nạp flow thật, tìm mọi gói mang pattern C2, dựng nhánh split và overlap, chấm bằng Snort rồi in VERDICT 'REAL EVASION' hay không.",
+      "tags": [
+        "entry-point",
+        "probe",
+        "evasion",
+        "orchestration"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:snort_validation/real_rules_replica.py",
+      "type": "file",
+      "name": "real_rules_replica.py",
+      "filePath": "snort_validation/real_rules_replica.py",
+      "summary": "Bản sao Python của chính các rule ET Open C2 thật sự nổ trên một capture: phân tích content/nocase/offset/depth/distance/within và flow:established rồi đánh giá trên payload gói thật, để tối ưu đúng bề mặt khớp của Snort ở tốc độ Python thay vì ~10s mỗi lần gọi Snort.",
+      "tags": [
+        "replica",
+        "rule-engine",
+        "snort",
+        "et-open",
+        "surrogate"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:snort_validation/real_rules_replica.py:parse_content",
+      "type": "function",
+      "name": "parse_content",
+      "filePath": "snort_validation/real_rules_replica.py",
+      "lineRange": [
+        64,
+        89
+      ],
+      "summary": "Chuyển chuỗi content của Snort thành bytes, giải mã đoạn |hex| và escape như \\n, \\r, \\\\, \\\".",
+      "tags": [
+        "parsing",
+        "snort-rules",
+        "bytes"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/real_rules_replica.py:_mods_before_next_content",
+      "type": "function",
+      "name": "_mods_before_next_content",
+      "filePath": "snort_validation/real_rules_replica.py",
+      "lineRange": [
+        161,
+        166
+      ],
+      "summary": "Tìm các modifier (nocase/offset/depth/distance/within) nằm giữa một content và content kế tiếp trong cùng rule.",
+      "tags": [
+        "parsing",
+        "snort-rules",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/real_rules_replica.py:parse_ruleset",
+      "type": "function",
+      "name": "parse_ruleset",
+      "filePath": "snort_validation/real_rules_replica.py",
+      "lineRange": [
+        169,
+        216
+      ],
+      "summary": "Phân tích file rules thành danh sách Rule kèm ContentMatch và cờ flow, có lọc theo tập sid.",
+      "tags": [
+        "parsing",
+        "snort-rules",
+        "rule-engine"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:snort_validation/real_rules_replica.py:firing_sids",
+      "type": "function",
+      "name": "firing_sids",
+      "filePath": "snort_validation/real_rules_replica.py",
+      "lineRange": [
+        222,
+        258
+      ],
+      "summary": "Chạy Snort thật một lượt trên capture và cache các SID nổ ra (~10s, lưu đĩa), vì lọc về rule đang nổ là hợp lý — làm hỏng payload chỉ có thể phá chứ không tạo thêm khớp.",
+      "tags": [
+        "snort",
+        "caching",
+        "rule-engine"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/real_rules_replica.py:_has_handshake",
+      "type": "function",
+      "name": "_has_handshake",
+      "filePath": "snort_validation/real_rules_replica.py",
+      "lineRange": [
+        264,
+        267
+      ],
+      "summary": "Kiểm tra flow có đủ cờ SYN và ACK để thoả điều kiện flow:established.",
+      "tags": [
+        "tcp",
+        "validation",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/real_rules_replica.py:_initiator",
+      "type": "function",
+      "name": "_initiator",
+      "filePath": "snort_validation/real_rules_replica.py",
+      "lineRange": [
+        270,
+        275
+      ],
+      "summary": "Xác định IP khởi tạo flow (địa chỉ nguồn của gói đầu tiên có IP kèm TCP/UDP).",
+      "tags": [
+        "tcp",
+        "flow",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/real_rules_replica.py:_payloads",
+      "type": "function",
+      "name": "_payloads",
+      "filePath": "snort_validation/real_rules_replica.py",
+      "lineRange": [
+        278,
+        288
+      ],
+      "summary": "Trích danh sách payload của các gói, tuỳ chọn chỉ lấy hướng đi theo initiator.",
+      "tags": [
+        "payload",
+        "flow",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/real_rules_replica.py:coverage_report",
+      "type": "function",
+      "name": "coverage_report",
+      "filePath": "snort_validation/real_rules_replica.py",
+      "lineRange": [
+        341,
+        364
+      ],
+      "summary": "So sánh verdict của replica với số alert đo được của Snort thật trên nhiều flow, trả tỷ lệ đồng thuận và số rule chứa cú pháp không hỗ trợ.",
+      "tags": [
+        "validation",
+        "coverage",
+        "reporting",
+        "snort"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/real_rules_replica.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "snort_validation/real_rules_replica.py",
+      "lineRange": [
+        367,
+        384
+      ],
+      "summary": "Entry point CLI: in danh sách rule đã nạp (--dump-rules) hoặc báo cáo độ phủ so với Snort thật.",
+      "tags": [
+        "entry-point",
+        "reporting",
+        "orchestration"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:snort_validation/real_rules_replica.py:ContentMatch",
+      "type": "class",
+      "name": "ContentMatch",
+      "filePath": "snort_validation/real_rules_replica.py",
+      "lineRange": [
+        93,
+        126
+      ],
+      "summary": "Một content cùng các modifier, biết tìm pattern trong payload theo offset/depth tuyệt đối hoặc distance/within tương đối so với content trước.",
+      "tags": [
+        "data-model",
+        "snort-rules",
+        "matching"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:snort_validation/real_rules_replica.py:Rule",
+      "type": "class",
+      "name": "Rule",
+      "filePath": "snort_validation/real_rules_replica.py",
+      "lineRange": [
+        130,
+        158
+      ],
+      "summary": "Một alert rule ET Open C2 gồm nhiều ContentMatch; nổ khi mọi content khớp theo thứ tự trong CÙNG một payload và thoả flow gate (established/to_server/from_server).",
+      "tags": [
+        "data-model",
+        "snort-rules",
+        "matching"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:snort_validation/real_rules_replica.py:RealRulesReplica",
+      "type": "class",
+      "name": "RealRulesReplica",
+      "filePath": "snort_validation/real_rules_replica.py",
+      "lineRange": [
+        291,
+        338
+      ],
+      "summary": "Đánh giá rule ET Open C2 thật trên payload gói thật: đếm alert, verdict nhị phân và liệt kê rule nổ, kèm constructor for_sids/for_capture.",
+      "tags": [
+        "service",
+        "rule-engine",
+        "snort",
+        "evaluation"
+      ],
+      "complexity": "complex"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:snort_validation/frag3_policy_comparison.py",
+      "target": "function:snort_validation/frag3_policy_comparison.py:make_conf",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/frag3_policy_comparison.py",
+      "target": "function:snort_validation/frag3_policy_comparison.py:make_conf",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/frag3_policy_comparison.py",
+      "target": "function:snort_validation/frag3_policy_comparison.py:sweep",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/frag3_policy_comparison.py",
+      "target": "function:snort_validation/frag3_policy_comparison.py:sweep",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/frag3_policy_comparison.py",
+      "target": "function:snort_validation/frag3_policy_comparison.py:summarise",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/frag3_policy_comparison.py",
+      "target": "function:snort_validation/frag3_policy_comparison.py:summarise",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/frag3_policy_comparison.py",
+      "target": "function:snort_validation/frag3_policy_comparison.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/frag3_policy_comparison.py",
+      "target": "function:snort_validation/frag3_policy_comparison.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/frag3_policy_comparison.py",
+      "target": "file:snort_validation/snort_batch_service.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:snort_validation/frag3_policy_comparison.py",
+      "target": "file:ai_agent/hidden_defender_env.py",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:snort_validation/fragment_ops.py",
+      "target": "function:snort_validation/fragment_ops.py:_check_split",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/fragment_ops.py",
+      "target": "function:snort_validation/fragment_ops.py:_check_split",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/fragment_ops.py",
+      "target": "function:snort_validation/fragment_ops.py:split_fragments",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/fragment_ops.py",
+      "target": "function:snort_validation/fragment_ops.py:split_fragments",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/fragment_ops.py",
+      "target": "function:snort_validation/fragment_ops.py:overlap_fragments",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/fragment_ops.py",
+      "target": "function:snort_validation/fragment_ops.py:overlap_fragments",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/fragment_ops.py",
+      "target": "function:snort_validation/fragment_ops.py:reorder_fragments",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/fragment_ops.py",
+      "target": "function:snort_validation/fragment_ops.py:reorder_fragments",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/fragment_ops.py",
+      "target": "function:snort_validation/fragment_ops.py:fragment_plan_to_packets",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/fragment_ops.py",
+      "target": "function:snort_validation/fragment_ops.py:fragment_plan_to_packets",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/fragment_ops.py",
+      "target": "function:snort_validation/fragment_ops.py:fix_checksums",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/fragment_ops.py",
+      "target": "function:snort_validation/fragment_ops.py:fix_checksums",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/fragment_ops.py",
+      "target": "file:snort_validation/c2_semantics.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:snort_validation/fragment_validity_test.py",
+      "target": "function:snort_validation/fragment_validity_test.py:fragments",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/fragment_validity_test.py",
+      "target": "function:snort_validation/fragment_validity_test.py:fragments",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/fragment_validity_test.py",
+      "target": "function:snort_validation/fragment_validity_test.py:reassemble",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/fragment_validity_test.py",
+      "target": "function:snort_validation/fragment_validity_test.py:reassemble",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/fragment_validity_test.py",
+      "target": "function:snort_validation/fragment_validity_test.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/fragment_validity_test.py",
+      "target": "function:snort_validation/fragment_validity_test.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/fragment_validity_test.py",
+      "target": "file:ai_agent/hidden_defender_env.py",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:snort_validation/frontier_exact.py",
+      "target": "function:snort_validation/frontier_exact.py:mask_of",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/frontier_exact.py",
+      "target": "function:snort_validation/frontier_exact.py:mask_of",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/frontier_exact.py",
+      "target": "function:snort_validation/frontier_exact.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/frontier_exact.py",
+      "target": "function:snort_validation/frontier_exact.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/frontier_exact.py",
+      "target": "file:ai_agent/snort_bandit.py",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:snort_validation/frontier_exact.py",
+      "target": "file:snort_validation/snort_resident_service.py",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:snort_validation/frontier_exact.py",
+      "target": "file:ai_agent/real_packet_env.py",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:snort_validation/harness_variance.py",
+      "target": "function:snort_validation/harness_variance.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/harness_variance.py",
+      "target": "function:snort_validation/harness_variance.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/harness_variance.py",
+      "target": "file:ai_agent/real_packet_env.py",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:snort_validation/harness_variance.py",
+      "target": "file:ai_agent/snort_bandit.py",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:snort_validation/harness_variance.py",
+      "target": "file:snort_validation/snort_resident_service.py",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:snort_validation/label_feasibility.py",
+      "target": "function:snort_validation/label_feasibility.py:load",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/label_feasibility.py",
+      "target": "function:snort_validation/label_feasibility.py:load",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/label_feasibility.py",
+      "target": "function:snort_validation/label_feasibility.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/label_feasibility.py",
+      "target": "function:snort_validation/label_feasibility.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/label_feasibility.py",
+      "target": "function:snort_validation/label_feasibility.py:end_to_end",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/label_feasibility.py",
+      "target": "function:snort_validation/label_feasibility.py:end_to_end",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/label_feasibility.py",
+      "target": "file:ai_agent/real_packet_env.py",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:snort_validation/label_feasibility.py",
+      "target": "file:ai_agent/snort_bandit.py",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:snort_validation/label_feasibility.py",
+      "target": "file:snort_validation/control_gate.py",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:snort_validation/label_feasibility.py",
+      "target": "file:snort_validation/snort_resident_service.py",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:snort_validation/label_real_flows_with_snort.py",
+      "target": "function:snort_validation/label_real_flows_with_snort.py:run_snort_over_capture",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/label_real_flows_with_snort.py",
+      "target": "function:snort_validation/label_real_flows_with_snort.py:run_snort_over_capture",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/label_real_flows_with_snort.py",
+      "target": "function:snort_validation/label_real_flows_with_snort.py:parse_alerts",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/label_real_flows_with_snort.py",
+      "target": "function:snort_validation/label_real_flows_with_snort.py:parse_alerts",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/label_real_flows_with_snort.py",
+      "target": "function:snort_validation/label_real_flows_with_snort.py:auc_score",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/label_real_flows_with_snort.py",
+      "target": "function:snort_validation/label_real_flows_with_snort.py:auc_score",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/label_real_flows_with_snort.py",
+      "target": "function:snort_validation/label_real_flows_with_snort.py:cohens_d",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/label_real_flows_with_snort.py",
+      "target": "function:snort_validation/label_real_flows_with_snort.py:cohens_d",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/label_real_flows_with_snort.py",
+      "target": "function:snort_validation/label_real_flows_with_snort.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/label_real_flows_with_snort.py",
+      "target": "function:snort_validation/label_real_flows_with_snort.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/offset_sweep_test.py",
+      "target": "function:snort_validation/offset_sweep_test.py:mutate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/offset_sweep_test.py",
+      "target": "function:snort_validation/offset_sweep_test.py:mutate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/offset_sweep_test.py",
+      "target": "function:snort_validation/offset_sweep_test.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/offset_sweep_test.py",
+      "target": "function:snort_validation/offset_sweep_test.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/offset_sweep_test.py",
+      "target": "file:ai_agent/hidden_defender_env.py",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:snort_validation/offset_sweep_test.py",
+      "target": "file:snort_validation/snort_batch_service.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:snort_validation/parse_http_eval.py",
+      "target": "function:snort_validation/parse_http_eval.py:parse_eval_results",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/parse_http_eval.py",
+      "target": "function:snort_validation/parse_http_eval.py:parse_eval_results",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/parse_http_eval.py",
+      "target": "function:snort_validation/parse_http_eval.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/parse_http_eval.py",
+      "target": "function:snort_validation/parse_http_eval.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/prepare_enhanced_surrogate_data.py",
+      "target": "function:snort_validation/prepare_enhanced_surrogate_data.py:sha256",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/prepare_enhanced_surrogate_data.py",
+      "target": "function:snort_validation/prepare_enhanced_surrogate_data.py:sha256",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/prepare_enhanced_surrogate_data.py",
+      "target": "function:snort_validation/prepare_enhanced_surrogate_data.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/prepare_enhanced_surrogate_data.py",
+      "target": "function:snort_validation/prepare_enhanced_surrogate_data.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/prepare_enhanced_surrogate_data.py",
+      "target": "file:snort_validation/surrogate_dataset.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:snort_validation/probe_overlap_evasion.py",
+      "target": "function:snort_validation/probe_overlap_evasion.py:score",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/probe_overlap_evasion.py",
+      "target": "function:snort_validation/probe_overlap_evasion.py:score",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/probe_overlap_evasion.py",
+      "target": "function:snort_validation/probe_overlap_evasion.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/probe_overlap_evasion.py",
+      "target": "function:snort_validation/probe_overlap_evasion.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/probe_overlap_evasion.py",
+      "target": "file:snort_validation/c2_semantics.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:snort_validation/probe_overlap_evasion.py",
+      "target": "file:snort_validation/fragment_ops.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:snort_validation/probe_overlap_evasion.py",
+      "target": "file:ai_agent/real_packet_env.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:snort_validation/probe_overlap_evasion.py",
+      "target": "file:snort_validation/snort_batch_service.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:snort_validation/real_rules_replica.py",
+      "target": "function:snort_validation/real_rules_replica.py:parse_content",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/real_rules_replica.py",
+      "target": "function:snort_validation/real_rules_replica.py:parse_content",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/real_rules_replica.py",
+      "target": "function:snort_validation/real_rules_replica.py:_mods_before_next_content",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/real_rules_replica.py",
+      "target": "function:snort_validation/real_rules_replica.py:_mods_before_next_content",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/real_rules_replica.py",
+      "target": "function:snort_validation/real_rules_replica.py:parse_ruleset",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/real_rules_replica.py",
+      "target": "function:snort_validation/real_rules_replica.py:parse_ruleset",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/real_rules_replica.py",
+      "target": "function:snort_validation/real_rules_replica.py:firing_sids",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/real_rules_replica.py",
+      "target": "function:snort_validation/real_rules_replica.py:firing_sids",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/real_rules_replica.py",
+      "target": "function:snort_validation/real_rules_replica.py:_has_handshake",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/real_rules_replica.py",
+      "target": "function:snort_validation/real_rules_replica.py:_has_handshake",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/real_rules_replica.py",
+      "target": "function:snort_validation/real_rules_replica.py:_initiator",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/real_rules_replica.py",
+      "target": "function:snort_validation/real_rules_replica.py:_initiator",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/real_rules_replica.py",
+      "target": "function:snort_validation/real_rules_replica.py:_payloads",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/real_rules_replica.py",
+      "target": "function:snort_validation/real_rules_replica.py:_payloads",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/real_rules_replica.py",
+      "target": "function:snort_validation/real_rules_replica.py:coverage_report",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/real_rules_replica.py",
+      "target": "function:snort_validation/real_rules_replica.py:coverage_report",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/real_rules_replica.py",
+      "target": "function:snort_validation/real_rules_replica.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/real_rules_replica.py",
+      "target": "function:snort_validation/real_rules_replica.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/real_rules_replica.py",
+      "target": "class:snort_validation/real_rules_replica.py:ContentMatch",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/real_rules_replica.py",
+      "target": "class:snort_validation/real_rules_replica.py:ContentMatch",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/real_rules_replica.py",
+      "target": "class:snort_validation/real_rules_replica.py:Rule",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/real_rules_replica.py",
+      "target": "class:snort_validation/real_rules_replica.py:Rule",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/real_rules_replica.py",
+      "target": "class:snort_validation/real_rules_replica.py:RealRulesReplica",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/real_rules_replica.py",
+      "target": "class:snort_validation/real_rules_replica.py:RealRulesReplica",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

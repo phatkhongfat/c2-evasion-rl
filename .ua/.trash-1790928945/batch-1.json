@@ -1,0 +1,527 @@
+{
+  "nodes": [
+    {
+      "id": "document:CHANGELOG.md",
+      "type": "document",
+      "name": "CHANGELOG.md",
+      "filePath": "CHANGELOG.md",
+      "summary": "Nhật ký thay đổi kể từ mốc tích hợp Snort (commit 95cb9cd): ghi lại phương pháp luận, chênh lệch metrics, các decision gate, bug fix và hàm ý cho luận văn. Điểm cốt lõi là phân biệt metrics 'unseeded' (không đủ tin cậy để so sánh policy) với metrics 'seeded' (đã kiểm soát, là số liệu nên trích dẫn).",
+      "tags": [
+        "documentation",
+        "changelog",
+        "metrics",
+        "surrogate",
+        "snort"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Mỗi mục có cột 'Evidence' trỏ tới file tương ứng trong repo để mọi con số đều truy vết được."
+    },
+    {
+      "id": "service:Makefile",
+      "type": "service",
+      "name": "Makefile",
+      "filePath": "Makefile",
+      "summary": "Makefile gói các entry point cấp gói tin: feasibility gate, bộ giải frontier chính xác, đo độ biến thiên harness, chạy pytest và dọn dẹp. Cố tình bỏ các target flow-level đã ngừng dùng và chỉ dùng interpreter .venv cục bộ của repo.",
+      "tags": [
+        "build-system",
+        "automation",
+        "testing",
+        "infrastructure",
+        "makefile"
+      ],
+      "complexity": "simple",
+      "languageNotes": "Biến PY := .venv/bin/python ghim interpreter; .DEFAULT_GOAL := help khiến lệnh `make` trần in phần trợ giúp."
+    },
+    {
+      "id": "document:PROGRESS_REPORT.md",
+      "type": "document",
+      "name": "PROGRESS_REPORT.md",
+      "filePath": "PROGRESS_REPORT.md",
+      "summary": "Báo cáo tiến độ đồ án: mục tiêu, kết quả hiện tại (evasion 16/16, surrogate XGBoost AUC 0.9993), thành tựu kỹ thuật, known issues (negative control, blocker resident-mode), cấu trúc code, timeline và cheatsheet lệnh.",
+      "tags": [
+        "documentation",
+        "progress-report",
+        "metrics",
+        "snort",
+        "thesis"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:README.md",
+      "type": "document",
+      "name": "README.md",
+      "filePath": "README.md",
+      "summary": "README tiếng Anh của dự án: mô tả agent RL biến đổi beacon C2 để né Snort 2.9.20 (ruleset ET Open C2), kết quả headline 16/16, bố cục repo, hướng dẫn setup/run, cờ train và các caveat trung thực.",
+      "tags": [
+        "documentation",
+        "entry-point",
+        "overview",
+        "snort",
+        "reinforcement-learning"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:README.vi.md",
+      "type": "document",
+      "name": "README.vi.md",
+      "filePath": "README.vi.md",
+      "summary": "Bản dịch tiếng Việt của README.md: giới thiệu agent red-team RL né Snort thật, kết quả 16/16 luồng held-out, bố cục thư mục, cài đặt, cách chạy và các lưu ý trung thực.",
+      "tags": [
+        "documentation",
+        "entry-point",
+        "vietnamese",
+        "snort",
+        "reinforcement-learning"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:WINDOWS_COMPAT.md",
+      "type": "document",
+      "name": "WINDOWS_COMPAT.md",
+      "filePath": "WINDOWS_COMPAT.md",
+      "summary": "Theo dõi tiến độ port dự án từ Linux sang Windows 10/11: môi trường Python đã xong, Snort IDS là blocker, cùng các hạng mục hardcoded path, thư mục /tmp, shell script, encoding và checklist trước khi merge.",
+      "tags": [
+        "documentation",
+        "windows",
+        "compatibility",
+        "porting",
+        "snort"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "config:environment.yml",
+      "type": "config",
+      "name": "environment.yml",
+      "filePath": "environment.yml",
+      "summary": "Định nghĩa conda environment 'rl_c2_evasion' (Python 3.11) cho pipeline cấp gói tin: numpy/pandas/scipy/sklearn/xgboost, PyTorch bản CPU, scapy, stable-baselines3 + sb3-contrib (MaskablePPO), gymnasium, flask/requests và pytest; cố tình không gồm package plotting/notebook/lint.",
+      "tags": [
+        "configuration",
+        "dependencies",
+        "conda",
+        "build-system",
+        "reinforcement-learning"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Phiên bản được ghim theo số đo thực tế; Snort là system dependency nên không thể cài từ conda."
+    }
+  ],
+  "edges": [
+    {
+      "source": "config:environment.yml",
+      "target": "file:ai_agent/hidden_defender_env.py",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:environment.yml",
+      "target": "file:ai_agent/train_hidden_defender_ppo.py",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:environment.yml",
+      "target": "file:snort_validation/label_feasibility.py",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:environment.yml",
+      "target": "file:snort_validation/frontier_exact.py",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "service:Makefile",
+      "target": "file:snort_validation/label_feasibility.py",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "service:Makefile",
+      "target": "file:snort_validation/frontier_exact.py",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "service:Makefile",
+      "target": "file:snort_validation/harness_variance.py",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "service:Makefile",
+      "target": "config:environment.yml",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:ai_agent/hidden_defender_env.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:ai_agent/train_hidden_defender_ppo.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:ai_agent/eval_masked_ppo_test.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:controls/control_noop_real_snort.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:controls/surrogate_vs_real_snort.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:controls/surrogate_sweep_14mech.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:snort_validation/README.md",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "config:environment.yml",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "document:README.vi.md",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.vi.md",
+      "target": "file:ai_agent/hidden_defender_env.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.vi.md",
+      "target": "file:ai_agent/train_hidden_defender_ppo.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.vi.md",
+      "target": "file:ai_agent/eval_masked_ppo_test.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.vi.md",
+      "target": "file:controls/control_noop_real_snort.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.vi.md",
+      "target": "file:controls/surrogate_vs_real_snort.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.vi.md",
+      "target": "file:controls/surrogate_sweep_14mech.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.vi.md",
+      "target": "file:snort_validation/README.md",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.vi.md",
+      "target": "config:environment.yml",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.vi.md",
+      "target": "document:README.md",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:CHANGELOG.md",
+      "target": "file:snort_validation/extract_ctu13_features.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:CHANGELOG.md",
+      "target": "file:ai_agent/flow_features.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:CHANGELOG.md",
+      "target": "file:snort_validation/prepare_enhanced_surrogate_data.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:CHANGELOG.md",
+      "target": "file:snort_validation/surrogate_dataset.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:CHANGELOG.md",
+      "target": "file:snort_validation/train_snort_surrogate.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:CHANGELOG.md",
+      "target": "file:snort_validation/validate_features_vs_snort.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:CHANGELOG.md",
+      "target": "file:snort_validation/validate_with_snort.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:CHANGELOG.md",
+      "target": "file:ai_agent/train_agent.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:CHANGELOG.md",
+      "target": "file:ai_agent/c2_evasion_env.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:CHANGELOG.md",
+      "target": "file:ai_agent/config.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:PROGRESS_REPORT.md",
+      "target": "file:ai_agent/train_hidden_defender_ppo.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:PROGRESS_REPORT.md",
+      "target": "file:ai_agent/hidden_defender_env.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:PROGRESS_REPORT.md",
+      "target": "file:ai_agent/packet_modifier.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:PROGRESS_REPORT.md",
+      "target": "file:ai_agent/snort_bandit.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:PROGRESS_REPORT.md",
+      "target": "file:snort_validation/snort_batch_service.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:PROGRESS_REPORT.md",
+      "target": "file:snort_validation/snort_resident_service.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:PROGRESS_REPORT.md",
+      "target": "file:snort_validation/train_real_snort_surrogate.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:PROGRESS_REPORT.md",
+      "target": "file:snort_validation/train_snort_surrogate.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:PROGRESS_REPORT.md",
+      "target": "file:snort_validation/test_snort_batch_service.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:PROGRESS_REPORT.md",
+      "target": "document:WINDOWS_COMPAT.md",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:WINDOWS_COMPAT.md",
+      "target": "file:ai_agent/hidden_defender_env.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:WINDOWS_COMPAT.md",
+      "target": "file:ai_agent/train_hidden_defender_ppo.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:WINDOWS_COMPAT.md",
+      "target": "file:ai_agent/train_agent.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:WINDOWS_COMPAT.md",
+      "target": "file:snort_validation/build_hidden_defender_corpus.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:WINDOWS_COMPAT.md",
+      "target": "file:snort_validation/extract_ctu13_real_features.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:WINDOWS_COMPAT.md",
+      "target": "file:snort_validation/label_real_flows_with_snort.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:WINDOWS_COMPAT.md",
+      "target": "file:snort_validation/rules/snort.conf",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:WINDOWS_COMPAT.md",
+      "target": "file:snort_validation/run_evaluation.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:WINDOWS_COMPAT.md",
+      "target": "file:snort_validation/snort_batch_service.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:WINDOWS_COMPAT.md",
+      "target": "file:snort_validation/snort_resident_service.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:WINDOWS_COMPAT.md",
+      "target": "file:snort_validation/fetch_stratosphere.sh",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:WINDOWS_COMPAT.md",
+      "target": "file:snort_validation/extract_stratosphere.sh",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:WINDOWS_COMPAT.md",
+      "target": "document:README.md",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

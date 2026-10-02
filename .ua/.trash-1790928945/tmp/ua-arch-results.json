@@ -1,0 +1,559 @@
+{
+  "scriptCompleted": true,
+  "directoryGroups": {
+    "(root)": [
+      "document:CHANGELOG.md",
+      "service:Makefile",
+      "document:PROGRESS_REPORT.md",
+      "document:README.md",
+      "document:README.vi.md",
+      "document:WINDOWS_COMPAT.md",
+      "config:environment.yml",
+      "file:setup_check.py",
+      "file:test_direction_1.py",
+      "file:test_direction_2.py"
+    ],
+    "ai_agent": [
+      "file:ai_agent/ablate_actions.py",
+      "file:ai_agent/c2_evasion_env.py",
+      "file:ai_agent/callback_metric_proof.py",
+      "file:ai_agent/config.py",
+      "file:ai_agent/enhanced_packet_level_env.py",
+      "file:ai_agent/eval_cross_capture.py",
+      "file:ai_agent/eval_enhanced_agent.py",
+      "file:ai_agent/eval_masked_ppo_test.py",
+      "file:ai_agent/eval_packet_level_agent.py",
+      "file:ai_agent/eval_real_snort_agent.py",
+      "file:ai_agent/evaluate.py",
+      "file:ai_agent/evasion_metrics_callback.py",
+      "file:ai_agent/flow_features.py",
+      "file:ai_agent/hidden_defender_env.py",
+      "file:ai_agent/packet_level_env.py",
+      "file:ai_agent/packet_modifier.py",
+      "file:ai_agent/pool_loader.py",
+      "file:ai_agent/real_packet_env.py",
+      "file:ai_agent/snort_bandit.py",
+      "file:ai_agent/train_agent.py",
+      "file:ai_agent/train_enhanced.py",
+      "file:ai_agent/train_enhanced_packet_agent.py",
+      "file:ai_agent/train_hidden_defender_ppo.py",
+      "file:ai_agent/train_packet_level_agent.py",
+      "file:ai_agent/train_packet_level_tcp10.py",
+      "file:ai_agent/train_real_snort_agent.py",
+      "file:ai_agent/train_replica_agent.py",
+      "file:ai_agent/verify_against_real_snort.py",
+      "file:ai_agent/verify_real_env.py"
+    ],
+    "blue_team": [
+      "file:blue_team/train_ids.ipynb",
+      "file:blue_team/train_surrogate.ipynb",
+      "file:blue_team/train_surrogate_xgboost.ipynb"
+    ],
+    "controls": [
+      "file:controls/control_noop_real_snort.py",
+      "file:controls/surrogate_sweep_14mech.py",
+      "file:controls/surrogate_vs_real_snort.py",
+      "file:controls/verify_report_claims.py"
+    ],
+    "models": [
+      "file:models/.gitkeep",
+      "file:models/xgboost_judge_ctu13_10_directional.joblib",
+      "config:models/xgboost_judge_ctu13_10_directional_features.json",
+      "file:models/xgboost_judge_directional_10feat.joblib",
+      "config:models/xgboost_judge_directional_10feat_features.json"
+    ],
+    "red_team": [
+      "file:red_team/mock_client.py",
+      "file:red_team/mock_server.py"
+    ],
+    "scripts": [
+      "file:scripts/measure_action_impact.py",
+      "file:scripts/test_enhanced_replica.py",
+      "file:scripts/trace_action_to_reward.py"
+    ],
+    "snort_validation": [
+      "document:snort_validation/README.md",
+      "file:snort_validation/extract_stratosphere.sh",
+      "file:snort_validation/fetch_stratosphere.sh",
+      "file:snort_validation/fetch_stratosphere_captures.sh",
+      "file:snort_validation/run_stratosphere_sweep.sh",
+      "file:snort_validation/aggregate_results.py",
+      "file:snort_validation/aggregate_scale_up.py",
+      "file:snort_validation/aggressive_snort_replica.py",
+      "file:snort_validation/augment_corpus_no_gym.py",
+      "file:snort_validation/augment_corpus_with_framing.py",
+      "file:snort_validation/baseline_hidden_defender.py",
+      "file:snort_validation/batch_integrity.py",
+      "file:snort_validation/build_et_open_c2_ruleset.py",
+      "file:snort_validation/build_hidden_defender_corpus.py",
+      "file:snort_validation/build_mcfp_snort_dataset.py",
+      "file:snort_validation/build_real_snort_dataset.py",
+      "file:snort_validation/c2_semantics.py",
+      "file:snort_validation/capture_pool_sizes.py",
+      "file:snort_validation/compare_snort_direct.py",
+      "file:snort_validation/control_gate.py",
+      "file:snort_validation/corpus_framing_report.py",
+      "file:snort_validation/detection_rate_by_framing.py",
+      "file:snort_validation/diagnose_generalization.py",
+      "file:snort_validation/endpoint_model.py",
+      "file:snort_validation/enhanced_snort_replica.py",
+      "file:snort_validation/eval_all_real_snort.py",
+      "file:snort_validation/eval_policy_horizon.py",
+      "file:snort_validation/eval_surrogate_cross_validate.py",
+      "file:snort_validation/evasion_fidelity_test.py",
+      "file:snort_validation/extract_ctu13_features.py",
+      "file:snort_validation/extract_ctu13_real_features.py",
+      "file:snort_validation/final_aggregate_scale_up.py",
+      "file:snort_validation/flow_to_pcap.py",
+      "file:snort_validation/frag3_policy_comparison.py",
+      "file:snort_validation/fragment_ops.py",
+      "file:snort_validation/fragment_validity_test.py",
+      "file:snort_validation/frontier_exact.py",
+      "file:snort_validation/harness_variance.py",
+      "file:snort_validation/joint_outcomes.py",
+      "file:snort_validation/label_feasibility.py",
+      "file:snort_validation/label_real_flows_with_snort.py",
+      "file:snort_validation/offset_sweep_test.py",
+      "file:snort_validation/parse_http_eval.py",
+      "file:snort_validation/prepare_enhanced_surrogate_data.py",
+      "file:snort_validation/probe_overlap_evasion.py",
+      "file:snort_validation/real_rules_replica.py",
+      "file:snort_validation/register_stratosphere_captures.py",
+      "config:snort_validation/rules/botnet-aggressive.rules",
+      "config:snort_validation/rules/botnet-behavior.rules",
+      "config:snort_validation/rules/classification.config",
+      "config:snort_validation/rules/reference.config",
+      "config:snort_validation/rules/snort.conf",
+      "file:snort_validation/run_evaluation.py",
+      "file:snort_validation/semantics_strict_test.py",
+      "file:snort_validation/smoke_test.py",
+      "file:snort_validation/snort_batch_service.py",
+      "file:snort_validation/snort_query_service.py",
+      "file:snort_validation/snort_resident_service.py",
+      "file:snort_validation/surrogate_dataset.py",
+      "file:snort_validation/test_snort_batch_service.py",
+      "file:snort_validation/test_stratosphere_sweep.py",
+      "file:snort_validation/test_surrogate_data.py",
+      "file:snort_validation/train_real_snort_surrogate.py",
+      "file:snort_validation/train_snort_surrogate.py",
+      "file:snort_validation/validate_features_vs_snort.py",
+      "file:snort_validation/validate_real_features_vs_snort.py",
+      "file:snort_validation/validate_with_snort.py",
+      "file:snort_validation/verify_snort_replica.py"
+    ],
+    "tests": [
+      "file:tests/_packets.py",
+      "file:tests/test_alert_id_independence.py",
+      "file:tests/test_beats_control.py",
+      "file:tests/test_c2_semantics.py",
+      "file:tests/test_corrupted_bookkeeping.py",
+      "file:tests/test_direction_2_masking.py",
+      "file:tests/test_endpoint_model.py",
+      "file:tests/test_eval_cross_capture_determinism.py",
+      "file:tests/test_fragment_ops.py",
+      "file:tests/test_hidden_defender_env.py",
+      "file:tests/test_mechanisms_ab.py",
+      "file:tests/test_packet_features.py",
+      "file:tests/test_packet_level_env.py",
+      "file:tests/test_packet_modifier.py",
+      "file:tests/test_snort_verdict_integrity.py"
+    ]
+  },
+  "nodeTypeGroups": {
+    "config": [
+      "config:environment.yml",
+      "config:models/xgboost_judge_ctu13_10_directional_features.json",
+      "config:models/xgboost_judge_directional_10feat_features.json",
+      "config:snort_validation/rules/botnet-aggressive.rules",
+      "config:snort_validation/rules/botnet-behavior.rules",
+      "config:snort_validation/rules/classification.config",
+      "config:snort_validation/rules/reference.config",
+      "config:snort_validation/rules/snort.conf"
+    ],
+    "document": [
+      "document:CHANGELOG.md",
+      "document:PROGRESS_REPORT.md",
+      "document:README.md",
+      "document:README.vi.md",
+      "document:WINDOWS_COMPAT.md",
+      "document:snort_validation/README.md"
+    ],
+    "file": [
+      "file:snort_validation/extract_stratosphere.sh",
+      "file:snort_validation/fetch_stratosphere.sh",
+      "file:snort_validation/fetch_stratosphere_captures.sh",
+      "file:snort_validation/run_stratosphere_sweep.sh",
+      "file:ai_agent/ablate_actions.py",
+      "file:ai_agent/c2_evasion_env.py",
+      "file:ai_agent/callback_metric_proof.py",
+      "file:ai_agent/config.py",
+      "file:ai_agent/enhanced_packet_level_env.py",
+      "file:ai_agent/eval_cross_capture.py",
+      "file:ai_agent/eval_enhanced_agent.py",
+      "file:ai_agent/eval_masked_ppo_test.py",
+      "file:ai_agent/eval_packet_level_agent.py",
+      "file:ai_agent/eval_real_snort_agent.py",
+      "file:ai_agent/evaluate.py",
+      "file:ai_agent/evasion_metrics_callback.py",
+      "file:ai_agent/flow_features.py",
+      "file:ai_agent/hidden_defender_env.py",
+      "file:ai_agent/packet_level_env.py",
+      "file:ai_agent/packet_modifier.py",
+      "file:ai_agent/pool_loader.py",
+      "file:ai_agent/real_packet_env.py",
+      "file:ai_agent/snort_bandit.py",
+      "file:ai_agent/train_agent.py",
+      "file:ai_agent/train_enhanced.py",
+      "file:ai_agent/train_enhanced_packet_agent.py",
+      "file:ai_agent/train_hidden_defender_ppo.py",
+      "file:ai_agent/train_packet_level_agent.py",
+      "file:ai_agent/train_packet_level_tcp10.py",
+      "file:ai_agent/train_real_snort_agent.py",
+      "file:ai_agent/train_replica_agent.py",
+      "file:ai_agent/verify_against_real_snort.py",
+      "file:ai_agent/verify_real_env.py",
+      "file:blue_team/train_ids.ipynb",
+      "file:blue_team/train_surrogate.ipynb",
+      "file:blue_team/train_surrogate_xgboost.ipynb",
+      "file:controls/control_noop_real_snort.py",
+      "file:controls/surrogate_sweep_14mech.py",
+      "file:controls/surrogate_vs_real_snort.py",
+      "file:controls/verify_report_claims.py",
+      "file:models/.gitkeep",
+      "file:models/xgboost_judge_ctu13_10_directional.joblib",
+      "file:models/xgboost_judge_directional_10feat.joblib",
+      "file:red_team/mock_client.py",
+      "file:red_team/mock_server.py",
+      "file:scripts/measure_action_impact.py",
+      "file:scripts/test_enhanced_replica.py",
+      "file:scripts/trace_action_to_reward.py",
+      "file:setup_check.py",
+      "file:snort_validation/aggregate_results.py",
+      "file:snort_validation/aggregate_scale_up.py",
+      "file:snort_validation/aggressive_snort_replica.py",
+      "file:snort_validation/augment_corpus_no_gym.py",
+      "file:snort_validation/augment_corpus_with_framing.py",
+      "file:snort_validation/baseline_hidden_defender.py",
+      "file:snort_validation/batch_integrity.py",
+      "file:snort_validation/build_et_open_c2_ruleset.py",
+      "file:snort_validation/build_hidden_defender_corpus.py",
+      "file:snort_validation/build_mcfp_snort_dataset.py",
+      "file:snort_validation/build_real_snort_dataset.py",
+      "file:snort_validation/c2_semantics.py",
+      "file:snort_validation/capture_pool_sizes.py",
+      "file:snort_validation/compare_snort_direct.py",
+      "file:snort_validation/control_gate.py",
+      "file:snort_validation/corpus_framing_report.py",
+      "file:snort_validation/detection_rate_by_framing.py",
+      "file:snort_validation/diagnose_generalization.py",
+      "file:snort_validation/endpoint_model.py",
+      "file:snort_validation/enhanced_snort_replica.py",
+      "file:snort_validation/eval_all_real_snort.py",
+      "file:snort_validation/eval_policy_horizon.py",
+      "file:snort_validation/eval_surrogate_cross_validate.py",
+      "file:snort_validation/evasion_fidelity_test.py",
+      "file:snort_validation/extract_ctu13_features.py",
+      "file:snort_validation/extract_ctu13_real_features.py",
+      "file:snort_validation/final_aggregate_scale_up.py",
+      "file:snort_validation/flow_to_pcap.py",
+      "file:snort_validation/frag3_policy_comparison.py",
+      "file:snort_validation/fragment_ops.py",
+      "file:snort_validation/fragment_validity_test.py",
+      "file:snort_validation/frontier_exact.py",
+      "file:snort_validation/harness_variance.py",
+      "file:snort_validation/joint_outcomes.py",
+      "file:snort_validation/label_feasibility.py",
+      "file:snort_validation/label_real_flows_with_snort.py",
+      "file:snort_validation/offset_sweep_test.py",
+      "file:snort_validation/parse_http_eval.py",
+      "file:snort_validation/prepare_enhanced_surrogate_data.py",
+      "file:snort_validation/probe_overlap_evasion.py",
+      "file:snort_validation/real_rules_replica.py",
+      "file:snort_validation/register_stratosphere_captures.py",
+      "file:snort_validation/run_evaluation.py",
+      "file:snort_validation/semantics_strict_test.py",
+      "file:snort_validation/smoke_test.py",
+      "file:snort_validation/snort_batch_service.py",
+      "file:snort_validation/snort_query_service.py",
+      "file:snort_validation/snort_resident_service.py",
+      "file:snort_validation/surrogate_dataset.py",
+      "file:snort_validation/test_snort_batch_service.py",
+      "file:snort_validation/test_stratosphere_sweep.py",
+      "file:snort_validation/test_surrogate_data.py",
+      "file:snort_validation/train_real_snort_surrogate.py",
+      "file:snort_validation/train_snort_surrogate.py",
+      "file:snort_validation/validate_features_vs_snort.py",
+      "file:snort_validation/validate_real_features_vs_snort.py",
+      "file:snort_validation/validate_with_snort.py",
+      "file:snort_validation/verify_snort_replica.py",
+      "file:test_direction_1.py",
+      "file:test_direction_2.py",
+      "file:tests/_packets.py",
+      "file:tests/test_alert_id_independence.py",
+      "file:tests/test_beats_control.py",
+      "file:tests/test_c2_semantics.py",
+      "file:tests/test_corrupted_bookkeeping.py",
+      "file:tests/test_direction_2_masking.py",
+      "file:tests/test_endpoint_model.py",
+      "file:tests/test_eval_cross_capture_determinism.py",
+      "file:tests/test_fragment_ops.py",
+      "file:tests/test_hidden_defender_env.py",
+      "file:tests/test_mechanisms_ab.py",
+      "file:tests/test_packet_features.py",
+      "file:tests/test_packet_level_env.py",
+      "file:tests/test_packet_modifier.py",
+      "file:tests/test_snort_verdict_integrity.py"
+    ],
+    "service": [
+      "service:Makefile"
+    ]
+  },
+  "crossCategoryEdges": [
+    {
+      "fromType": "file",
+      "toType": "function",
+      "edgeType": "contains",
+      "count": 350
+    },
+    {
+      "fromType": "file",
+      "toType": "function",
+      "edgeType": "exports",
+      "count": 349
+    },
+    {
+      "fromType": "document",
+      "toType": "file",
+      "edgeType": "documents",
+      "count": 45
+    },
+    {
+      "fromType": "file",
+      "toType": "file",
+      "edgeType": "depends_on",
+      "count": 31
+    },
+    {
+      "fromType": "file",
+      "toType": "file",
+      "edgeType": "tested_by",
+      "count": 26
+    },
+    {
+      "fromType": "file",
+      "toType": "class",
+      "edgeType": "contains",
+      "count": 21
+    },
+    {
+      "fromType": "file",
+      "toType": "class",
+      "edgeType": "exports",
+      "count": 21
+    },
+    {
+      "fromType": "file",
+      "toType": "file",
+      "edgeType": "related",
+      "count": 18
+    },
+    {
+      "fromType": "file",
+      "toType": "file",
+      "edgeType": "imports",
+      "count": 10
+    },
+    {
+      "fromType": "config",
+      "toType": "file",
+      "edgeType": "configures",
+      "count": 9
+    },
+    {
+      "fromType": "function",
+      "toType": "function",
+      "edgeType": "calls",
+      "count": 9
+    },
+    {
+      "fromType": "document",
+      "toType": "document",
+      "edgeType": "documents",
+      "count": 4
+    },
+    {
+      "fromType": "function",
+      "toType": "class",
+      "edgeType": "calls",
+      "count": 4
+    },
+    {
+      "fromType": "service",
+      "toType": "file",
+      "edgeType": "depends_on",
+      "count": 3
+    },
+    {
+      "fromType": "document",
+      "toType": "config",
+      "edgeType": "documents",
+      "count": 3
+    },
+    {
+      "fromType": "config",
+      "toType": "config",
+      "edgeType": "configures",
+      "count": 2
+    },
+    {
+      "fromType": "config",
+      "toType": "file",
+      "edgeType": "related",
+      "count": 2
+    },
+    {
+      "fromType": "service",
+      "toType": "config",
+      "edgeType": "depends_on",
+      "count": 1
+    }
+  ],
+  "interGroupImports": [
+    {
+      "from": "snort_validation",
+      "to": "ai_agent",
+      "count": 1
+    }
+  ],
+  "intraGroupDensity": {
+    "(root)": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0.0
+    },
+    "snort_validation": {
+      "internalEdges": 9,
+      "totalEdges": 10,
+      "density": 0.9
+    },
+    "ai_agent": {
+      "internalEdges": 0,
+      "totalEdges": 1,
+      "density": 0.0
+    },
+    "blue_team": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0.0
+    },
+    "controls": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0.0
+    },
+    "models": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0.0
+    },
+    "red_team": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0.0
+    },
+    "scripts": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0.0
+    },
+    "tests": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0.0
+    }
+  },
+  "patternMatches": {
+    "models": "data",
+    "tests": "test",
+    "(file-pattern)": "test"
+  },
+  "deploymentTopology": {
+    "hasDockerfile": false,
+    "hasCompose": false,
+    "hasK8s": false,
+    "hasTerraform": false,
+    "hasCI": false,
+    "infraFiles": [
+      "Makefile"
+    ]
+  },
+  "dataPipeline": {
+    "schemaFiles": [],
+    "migrationFiles": [],
+    "dataModelFiles": [
+      "models/xgboost_judge_ctu13_10_directional.joblib",
+      "models/xgboost_judge_ctu13_10_directional_features.json",
+      "models/xgboost_judge_directional_10feat.joblib",
+      "models/xgboost_judge_directional_10feat_features.json"
+    ],
+    "apiHandlerFiles": []
+  },
+  "docCoverage": {
+    "groupsWithDocs": 2,
+    "totalGroups": 9,
+    "coverageRatio": 0.222,
+    "undocumentedGroups": [
+      "ai_agent",
+      "blue_team",
+      "controls",
+      "models",
+      "red_team",
+      "scripts",
+      "tests"
+    ]
+  },
+  "dependencyDirection": [
+    {
+      "dependent": "snort_validation",
+      "dependsOn": "ai_agent"
+    }
+  ],
+  "fileStats": {
+    "totalFileNodes": 139,
+    "filesPerGroup": {
+      "(root)": 10,
+      "ai_agent": 29,
+      "blue_team": 3,
+      "controls": 4,
+      "models": 5,
+      "red_team": 2,
+      "scripts": 3,
+      "snort_validation": 68,
+      "tests": 15
+    },
+    "nodeTypeCounts": {
+      "config": 8,
+      "document": 6,
+      "file": 124,
+      "service": 1
+    }
+  },
+  "fileFanIn": {
+    "file:snort_validation/snort_batch_service.py": 3,
+    "file:snort_validation/c2_semantics.py": 2,
+    "file:snort_validation/surrogate_dataset.py": 1,
+    "file:snort_validation/fragment_ops.py": 1,
+    "file:ai_agent/real_packet_env.py": 1,
+    "file:snort_validation/extract_ctu13_real_features.py": 1,
+    "file:snort_validation/flow_to_pcap.py": 1
+  },
+  "fileFanOut": {
+    "file:snort_validation/probe_overlap_evasion.py": 4,
+    "file:snort_validation/frag3_policy_comparison.py": 1,
+    "file:snort_validation/fragment_ops.py": 1,
+    "file:snort_validation/offset_sweep_test.py": 1,
+    "file:snort_validation/prepare_enhanced_surrogate_data.py": 1,
+    "file:snort_validation/register_stratosphere_captures.py": 1,
+    "file:snort_validation/snort_query_service.py": 1
+  }
+}

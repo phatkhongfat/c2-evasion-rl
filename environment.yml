@@ -86,8 +86,8 @@ dependencies:
 #         bash snort_validation/fetch_stratosphere.sh            # CTU-13
 #         bash snort_validation/fetch_stratosphere_captures.sh 43 # MCFP
 #
-# NOTE ON entry points: the Makefile targets are stale -- they invoke the
-#   flow-level PPO trainer (ai_agent/train_agent.py) and call bare `python3`.
-#   The packet-level work runs through snort_validation/label_feasibility.py
-#   and snort_validation/frontier_exact.py, and must be run with the env
-#   interpreter explicitly: `python snort_validation/label_feasibility.py`.
+# NOTE ON entry points: use the Makefile from the repo root with the repo-local
+#   .venv (the only interpreter with gymnasium + stable-baselines3 + scapy).
+#   `make train` / `make eval` / `make control` / `make verify` / `make test`
+#   are the live targets for the hidden-defender system. Retired generations
+#   were deleted in the one-version cleanup; they remain in git history.

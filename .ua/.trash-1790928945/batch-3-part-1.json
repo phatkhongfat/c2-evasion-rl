@@ -1,0 +1,662 @@
+{
+  "nodes": [
+    {
+      "id": "file:ai_agent/ablate_actions.py",
+      "type": "file",
+      "name": "ablate_actions.py",
+      "filePath": "ai_agent/ablate_actions.py",
+      "summary": "Script ablation từng action/mutation đơn lẻ trên các flow C2 thật để đo tác động lên số alert của Snort, hỗ trợ chẩn đoán cơ chế né tránh.",
+      "tags": [
+        "entry-point",
+        "ablation",
+        "evaluation",
+        "c2-evasion",
+        "snort"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:ai_agent/c2_evasion_env.py",
+      "type": "file",
+      "name": "c2_evasion_env.py",
+      "filePath": "ai_agent/c2_evasion_env.py",
+      "summary": "Môi trường RL flow-level mô phỏng né Snort: trích xuất đặc trưng flow, dùng surrogate IDS và bộ phân loại judge để chấm điểm, thưởng cho hành vi né tránh.",
+      "tags": [
+        "rl-environment",
+        "c2-evasion",
+        "gymnasium",
+        "surrogate",
+        "reward-shaping"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:ai_agent/callback_metric_proof.py",
+      "type": "file",
+      "name": "callback_metric_proof.py",
+      "filePath": "ai_agent/callback_metric_proof.py",
+      "summary": "Script chứng minh callback metric: nạp model PPO đã huấn luyện, chạy nhiều episode và thống kê tỷ lệ né tránh để xác thực số liệu.",
+      "tags": [
+        "evaluation",
+        "proof",
+        "ppo",
+        "metrics",
+        "c2-evasion"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:ai_agent/config.py",
+      "type": "file",
+      "name": "config.py",
+      "filePath": "ai_agent/config.py",
+      "summary": "Tập trung hằng số cấu hình: đường dẫn data/model, đặc trưng observation, reward shaping, chi phí mutation và siêu tham số PPO.",
+      "tags": [
+        "configuration",
+        "constants",
+        "hyperparameters",
+        "reward-shaping",
+        "paths"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:ai_agent/enhanced_packet_level_env.py",
+      "type": "file",
+      "name": "enhanced_packet_level_env.py",
+      "filePath": "ai_agent/enhanced_packet_level_env.py",
+      "summary": "Biến thể packet-level nâng cao của môi trường RL, nơi TTL, phân mảnh và chồng lấp TCP thực sự ảnh hưởng tới reward qua enhanced replica Snort.",
+      "tags": [
+        "rl-environment",
+        "packet-level",
+        "ttl",
+        "fragmentation",
+        "c2-evasion"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:ai_agent/eval_cross_capture.py",
+      "type": "file",
+      "name": "eval_cross_capture.py",
+      "filePath": "ai_agent/eval_cross_capture.py",
+      "summary": "Harness đánh giá cross-capture: huấn luyện trên một capture và đánh giá trên capture khác để kiểm tra khả năng tổng quát hóa của agent.",
+      "tags": [
+        "evaluation",
+        "cross-capture",
+        "generalization",
+        "ppo",
+        "c2-evasion"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:ai_agent/eval_enhanced_agent.py",
+      "type": "file",
+      "name": "eval_enhanced_agent.py",
+      "filePath": "ai_agent/eval_enhanced_agent.py",
+      "summary": "Đánh giá agent PPO trên EnhancedPacketLevelEnv, thống kê tỷ lệ né tránh và mức thay đổi gói tin qua nhiều episode.",
+      "tags": [
+        "evaluation",
+        "packet-level",
+        "ppo",
+        "metrics"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:ai_agent/eval_masked_ppo_test.py",
+      "type": "file",
+      "name": "eval_masked_ppo_test.py",
+      "filePath": "ai_agent/eval_masked_ppo_test.py",
+      "summary": "Script kiểm thử agent MaskablePPO trên HiddenDefenderEnv, đếm tần suất chọn từng cơ chế né tránh và ghi kết quả JSON.",
+      "tags": [
+        "evaluation",
+        "maskable-ppo",
+        "hidden-defender",
+        "mechanism-analysis"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:ai_agent/eval_packet_level_agent.py",
+      "type": "file",
+      "name": "eval_packet_level_agent.py",
+      "filePath": "ai_agent/eval_packet_level_agent.py",
+      "summary": "Đánh giá agent packet-level PPO so với baseline ngẫu nhiên trên Snort replica với 80 episode cố định seed, ghi báo cáo JSON.",
+      "tags": [
+        "evaluation",
+        "packet-level",
+        "ppo",
+        "baseline",
+        "snort"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:ai_agent/eval_real_snort_agent.py",
+      "type": "file",
+      "name": "eval_real_snort_agent.py",
+      "filePath": "ai_agent/eval_real_snort_agent.py",
+      "summary": "Đánh giá agent PPO chống lại Snort thật: đo số alert trước/sau mutation và so sánh với mutation ngẫu nhiên, xuất báo cáo JSON.",
+      "tags": [
+        "evaluation",
+        "real-snort",
+        "packet-level",
+        "ppo",
+        "reporting"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:ai_agent/evaluate.py",
+      "type": "file",
+      "name": "evaluate.py",
+      "filePath": "ai_agent/evaluate.py",
+      "summary": "Cung cấp hàm nạp test pool các flow botnet từ dữ liệu parquet để phục vụ đánh giá.",
+      "tags": [
+        "utility",
+        "data-loading",
+        "test-pool",
+        "evaluation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:ai_agent/evasion_metrics_callback.py",
+      "type": "file",
+      "name": "evasion_metrics_callback.py",
+      "filePath": "ai_agent/evasion_metrics_callback.py",
+      "summary": "Callback Stable-Baselines3 ghi các metric né tránh (evasion, padding, jitter, độ dài episode) vào logger trong quá trình huấn luyện.",
+      "tags": [
+        "callback",
+        "metrics",
+        "monitoring",
+        "training",
+        "stable-baselines3"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:ai_agent/flow_features.py",
+      "type": "file",
+      "name": "flow_features.py",
+      "filePath": "ai_agent/flow_features.py",
+      "summary": "Suy diễn các đặc trưng flow cấp cao (tỷ lệ gói, entropy payload, cờ TCP) từ flow thô để cấp cho surrogate Snort và candidate vector.",
+      "tags": [
+        "feature-engineering",
+        "flow-features",
+        "utility",
+        "c2-evasion"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai_agent/ablate_actions.py:run",
+      "type": "function",
+      "name": "run",
+      "filePath": "ai_agent/ablate_actions.py",
+      "lineRange": [
+        31,
+        56
+      ],
+      "summary": "Áp dụng một mutation đơn lẻ với cường độ và tỷ lệ chỉ định lên flow, chấm điểm qua Snort replica và trả về số alert.",
+      "tags": [
+        "ablation",
+        "mutation",
+        "scoring"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai_agent/ablate_actions.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "ai_agent/ablate_actions.py",
+      "lineRange": [
+        59,
+        104
+      ],
+      "summary": "Chạy ablation toàn bộ action space trên tập flow, in bảng so sánh số alert so với baseline và mutation ngẫu nhiên.",
+      "tags": [
+        "entry-point",
+        "ablation",
+        "reporting"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:ai_agent/c2_evasion_env.py:C2EvasionEnv",
+      "type": "class",
+      "name": "C2EvasionEnv",
+      "filePath": "ai_agent/c2_evasion_env.py",
+      "lineRange": [
+        31,
+        363
+      ],
+      "summary": "Lớp Gymnasium flow-level với action space liên tục gồm byte padding, jitter và thay đổi đặc trưng; dùng surrogate Snort và bộ phân loại judge để tính reward evasion.",
+      "tags": [
+        "rl-environment",
+        "surrogate",
+        "reward-shaping",
+        "gymnasium"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:ai_agent/callback_metric_proof.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "ai_agent/callback_metric_proof.py",
+      "lineRange": [
+        22,
+        84
+      ],
+      "summary": "Nạp pool botnet và model PPO, chạy các episode đánh giá, tổng hợp cờ phát hiện và tỷ lệ né tránh để kiểm chứng metric của callback.",
+      "tags": [
+        "proof",
+        "metrics",
+        "ppo",
+        "evaluation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:ai_agent/enhanced_packet_level_env.py:EnhancedPacketLevelEnv",
+      "type": "class",
+      "name": "EnhancedPacketLevelEnv",
+      "filePath": "ai_agent/enhanced_packet_level_env.py",
+      "lineRange": [
+        20,
+        163
+      ],
+      "summary": "Môi trường packet-level dùng PacketModifier và enhanced_replica_snort_verdict để phạt/thưởng theo TTL, phân mảnh và chồng lấp gói tin.",
+      "tags": [
+        "rl-environment",
+        "packet-level",
+        "ttl",
+        "fragmentation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai_agent/eval_cross_capture.py:eval_policy",
+      "type": "function",
+      "name": "eval_policy",
+      "filePath": "ai_agent/eval_cross_capture.py",
+      "lineRange": [
+        38,
+        69
+      ],
+      "summary": "Chạy policy trên pool chỉ định trong nhiều episode, so sánh né tránh giữa agent và baseline ngẫu nhiên.",
+      "tags": [
+        "evaluation",
+        "policy",
+        "generalization"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai_agent/eval_cross_capture.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "ai_agent/eval_cross_capture.py",
+      "lineRange": [
+        72,
+        137
+      ],
+      "summary": "Chia dữ liệu theo capture train/eval, nạp model PPO và chạy đánh giá chéo rồi ghi báo cáo JSON.",
+      "tags": [
+        "entry-point",
+        "cross-capture",
+        "reporting"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai_agent/eval_enhanced_agent.py:eval_policy",
+      "type": "function",
+      "name": "eval_policy",
+      "filePath": "ai_agent/eval_enhanced_agent.py",
+      "lineRange": [
+        36,
+        74
+      ],
+      "summary": "Chạy policy trên môi trường enhanced trong n episode, ghi lại kết quả phát hiện và biến đổi gói tin.",
+      "tags": [
+        "evaluation",
+        "packet-level",
+        "metrics"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai_agent/eval_masked_ppo_test.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "ai_agent/eval_masked_ppo_test.py",
+      "lineRange": [
+        28,
+        84
+      ],
+      "summary": "Nạp model MaskablePPO, chạy các flow với action mask, thống kê cơ chế được chọn và xuất báo cáo JSON.",
+      "tags": [
+        "entry-point",
+        "maskable-ppo",
+        "mechanism-analysis"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai_agent/eval_real_snort_agent.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "ai_agent/eval_real_snort_agent.py",
+      "lineRange": [
+        30,
+        102
+      ],
+      "summary": "Chạy agent và baseline ngẫu nhiên trên các flow thật qua SnortBatchService, tổng hợp alert counts và ghi báo cáo.",
+      "tags": [
+        "entry-point",
+        "real-snort",
+        "reporting"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai_agent/evaluate.py:load_test_pool",
+      "type": "function",
+      "name": "load_test_pool",
+      "filePath": "ai_agent/evaluate.py",
+      "lineRange": [
+        8,
+        27
+      ],
+      "summary": "Đọc và gộp các file parquet, lọc các dòng nhãn botnet và chuẩn hóa thành danh sách flow phục vụ đánh giá.",
+      "tags": [
+        "data-loading",
+        "test-pool",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:ai_agent/evasion_metrics_callback.py:EvasionMetricsCallback",
+      "type": "class",
+      "name": "EvasionMetricsCallback",
+      "filePath": "ai_agent/evasion_metrics_callback.py",
+      "lineRange": [
+        4,
+        66
+      ],
+      "summary": "Kế thừa BaseCallback, thu thập info từ mỗi bước và ghi trung bình các metric né tránh vào TensorBoard/logger.",
+      "tags": [
+        "callback",
+        "metrics",
+        "stable-baselines3"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ai_agent/flow_features.py:_f",
+      "type": "function",
+      "name": "_f",
+      "filePath": "ai_agent/flow_features.py",
+      "lineRange": [
+        98,
+        105
+      ],
+      "summary": "Chuyển giá trị sang float an toàn, trả về mặc định khi giá trị thiếu hoặc không hợp lệ.",
+      "tags": [
+        "utility",
+        "numeric-safety"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ai_agent/flow_features.py:derive_flow_features",
+      "type": "function",
+      "name": "derive_flow_features",
+      "filePath": "ai_agent/flow_features.py",
+      "lineRange": [
+        108,
+        195
+      ],
+      "summary": "Tính toán bộ đặc trưng flow dẫn xuất (kích thước, tốc độ, entropy, cờ TCP, tỷ lệ hướng) từ một flow thô.",
+      "tags": [
+        "feature-engineering",
+        "flow-features"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:ai_agent/flow_features.py:candidate_vector",
+      "type": "function",
+      "name": "candidate_vector",
+      "filePath": "ai_agent/flow_features.py",
+      "lineRange": [
+        198,
+        201
+      ],
+      "summary": "Tạo vector đặc trưng theo thứ tự feature_names từ flow, phục vụ surrogate/judge.",
+      "tags": [
+        "utility",
+        "feature-extraction"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:ai_agent/ablate_actions.py",
+      "target": "function:ai_agent/ablate_actions.py:run",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai_agent/ablate_actions.py",
+      "target": "function:ai_agent/ablate_actions.py:run",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai_agent/ablate_actions.py",
+      "target": "function:ai_agent/ablate_actions.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai_agent/ablate_actions.py",
+      "target": "function:ai_agent/ablate_actions.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai_agent/c2_evasion_env.py",
+      "target": "class:ai_agent/c2_evasion_env.py:C2EvasionEnv",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai_agent/c2_evasion_env.py",
+      "target": "class:ai_agent/c2_evasion_env.py:C2EvasionEnv",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai_agent/callback_metric_proof.py",
+      "target": "function:ai_agent/callback_metric_proof.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai_agent/callback_metric_proof.py",
+      "target": "function:ai_agent/callback_metric_proof.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai_agent/enhanced_packet_level_env.py",
+      "target": "class:ai_agent/enhanced_packet_level_env.py:EnhancedPacketLevelEnv",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai_agent/enhanced_packet_level_env.py",
+      "target": "class:ai_agent/enhanced_packet_level_env.py:EnhancedPacketLevelEnv",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai_agent/eval_cross_capture.py",
+      "target": "function:ai_agent/eval_cross_capture.py:eval_policy",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai_agent/eval_cross_capture.py",
+      "target": "function:ai_agent/eval_cross_capture.py:eval_policy",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai_agent/eval_cross_capture.py",
+      "target": "function:ai_agent/eval_cross_capture.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai_agent/eval_cross_capture.py",
+      "target": "function:ai_agent/eval_cross_capture.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai_agent/eval_enhanced_agent.py",
+      "target": "function:ai_agent/eval_enhanced_agent.py:eval_policy",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai_agent/eval_enhanced_agent.py",
+      "target": "function:ai_agent/eval_enhanced_agent.py:eval_policy",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai_agent/eval_masked_ppo_test.py",
+      "target": "function:ai_agent/eval_masked_ppo_test.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai_agent/eval_masked_ppo_test.py",
+      "target": "function:ai_agent/eval_masked_ppo_test.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai_agent/eval_real_snort_agent.py",
+      "target": "function:ai_agent/eval_real_snort_agent.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai_agent/eval_real_snort_agent.py",
+      "target": "function:ai_agent/eval_real_snort_agent.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai_agent/evaluate.py",
+      "target": "function:ai_agent/evaluate.py:load_test_pool",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai_agent/evaluate.py",
+      "target": "function:ai_agent/evaluate.py:load_test_pool",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai_agent/evasion_metrics_callback.py",
+      "target": "class:ai_agent/evasion_metrics_callback.py:EvasionMetricsCallback",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai_agent/evasion_metrics_callback.py",
+      "target": "class:ai_agent/evasion_metrics_callback.py:EvasionMetricsCallback",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai_agent/flow_features.py",
+      "target": "function:ai_agent/flow_features.py:_f",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai_agent/flow_features.py",
+      "target": "function:ai_agent/flow_features.py:_f",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai_agent/flow_features.py",
+      "target": "function:ai_agent/flow_features.py:derive_flow_features",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai_agent/flow_features.py",
+      "target": "function:ai_agent/flow_features.py:derive_flow_features",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ai_agent/flow_features.py",
+      "target": "function:ai_agent/flow_features.py:candidate_vector",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ai_agent/flow_features.py",
+      "target": "function:ai_agent/flow_features.py:candidate_vector",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

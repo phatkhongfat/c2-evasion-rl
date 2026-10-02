@@ -1,0 +1,31 @@
+{
+  "projectRoot": "/root/.hermes/c2-evasion-rl",
+  "batchFiles": [
+    {"path": "ai_agent/train_real_snort_agent.py", "language": "python", "sizeLines": 134, "fileCategory": "code"},
+    {"path": "ai_agent/train_replica_agent.py", "language": "python", "sizeLines": 307, "fileCategory": "code"},
+    {"path": "ai_agent/verify_against_real_snort.py", "language": "python", "sizeLines": 75, "fileCategory": "code"},
+    {"path": "ai_agent/verify_real_env.py", "language": "python", "sizeLines": 65, "fileCategory": "code"},
+    {"path": "blue_team/train_ids.ipynb", "language": "ipynb", "sizeLines": 437, "fileCategory": "code"},
+    {"path": "blue_team/train_surrogate.ipynb", "language": "ipynb", "sizeLines": 287, "fileCategory": "code"},
+    {"path": "blue_team/train_surrogate_xgboost.ipynb", "language": "ipynb", "sizeLines": 273, "fileCategory": "code"},
+    {"path": "controls/control_noop_real_snort.py", "language": "python", "sizeLines": 61, "fileCategory": "code"},
+    {"path": "controls/surrogate_sweep_14mech.py", "language": "python", "sizeLines": 146, "fileCategory": "code"},
+    {"path": "controls/surrogate_vs_real_snort.py", "language": "python", "sizeLines": 103, "fileCategory": "code"},
+    {"path": "controls/verify_report_claims.py", "language": "python", "sizeLines": 117, "fileCategory": "code"},
+    {"path": "models/.gitkeep", "language": "unknown", "sizeLines": 0, "fileCategory": "code"},
+    {"path": "models/xgboost_judge_ctu13_10_directional.joblib", "language": "joblib", "sizeLines": 314, "fileCategory": "code"},
+    {"path": "models/xgboost_judge_ctu13_10_directional_features.json", "language": "json", "sizeLines": 18, "fileCategory": "config"},
+    {"path": "models/xgboost_judge_directional_10feat.joblib", "language": "joblib", "sizeLines": 349, "fileCategory": "code"},
+    {"path": "models/xgboost_judge_directional_10feat_features.json", "language": "json", "sizeLines": 13, "fileCategory": "config"},
+    {"path": "red_team/mock_client.py", "language": "python", "sizeLines": 12, "fileCategory": "code"},
+    {"path": "red_team/mock_server.py", "language": "python", "sizeLines": 12, "fileCategory": "code"},
+    {"path": "scripts/measure_action_impact.py", "language": "python", "sizeLines": 74, "fileCategory": "code"},
+    {"path": "scripts/test_enhanced_replica.py", "language": "python", "sizeLines": 32, "fileCategory": "code"},
+    {"path": "scripts/trace_action_to_reward.py", "language": "python", "sizeLines": 152, "fileCategory": "code"},
+    {"path": "setup_check.py", "language": "python", "sizeLines": 118, "fileCategory": "code"},
+    {"path": "snort_validation/aggregate_results.py", "language": "python", "sizeLines": 196, "fileCategory": "code"},
+    {"path": "snort_validation/aggregate_scale_up.py", "language": "python", "sizeLines": 53, "fileCategory": "code"},
+    {"path": "snort_validation/aggressive_snort_replica.py", "language": "python", "sizeLines": 246, "fileCategory": "code"}
+  ],
+  "batchImportData": {"ai_agent/train_real_snort_agent.py": [], "ai_agent/train_replica_agent.py": [], "ai_agent/verify_against_real_snort.py": [], "ai_agent/verify_real_env.py": [], "blue_team/train_ids.ipynb": [], "blue_team/train_surrogate.ipynb": [], "blue_team/train_surrogate_xgboost.ipynb": [], "controls/control_noop_real_snort.py": [], "controls/surrogate_sweep_14mech.py": [], "controls/surrogate_vs_real_snort.py": [], "controls/verify_report_claims.py": [], "models/.gitkeep": [], "models/xgboost_judge_ctu13_10_directional.joblib": [], "models/xgboost_judge_ctu13_10_directional_features.json": [], "models/xgboost_judge_directional_10feat.joblib": [], "models/xgboost_judge_directional_10feat_features.json": [], "red_team/mock_client.py": [], "red_team/mock_server.py": [], "scripts/measure_action_impact.py": [], "scripts/test_enhanced_replica.py": [], "scripts/trace_action_to_reward.py": [], "setup_check.py": [], "snort_validation/aggregate_results.py": [], "snort_validation/aggregate_scale_up.py": [], "snort_validation/aggressive_snort_replica.py": []}
+}

@@ -1,0 +1,1109 @@
+{
+  "scriptCompleted": true,
+  "entryPointCandidates": [
+    {
+      "id": "document:README.md",
+      "score": 5,
+      "name": "README.md",
+      "summary": "README tiếng Anh của dự án: mô tả agent RL biến đổi beacon C2 để né Snort 2.9.20 (ruleset ET Open C2), kết quả headline 16/16, bố cục repo, hướng dẫn setup/run, cờ train và các caveat trung thực."
+    },
+    {
+      "id": "file:snort_validation/aggressive_snort_replica.py",
+      "score": 3,
+      "name": "aggressive_snort_replica.py",
+      "summary": "Replica Snort 'hung hãn' (baseline phát hiện 70-80%) phục vụ huấn luyện thưởng trực tiếp: mã hóa ngữ nghĩa rule thực nghiệm (flow:established bỏ qua gói tiền-thiết-lập, ...), kèm stub mock và ground-truth real_snort_verdict."
+    },
+    {
+      "id": "file:snort_validation/endpoint_model.py",
+      "score": 3,
+      "name": "endpoint_model.py",
+      "summary": "Mô hình endpoint theo giao thức: xác định framing của flow và trả về lệnh mà handler thật sẽ đọc (HTTP, IRC, length-prefixed, Neris), hoặc None khi handler từ chối stream."
+    },
+    {
+      "id": "file:snort_validation/real_rules_replica.py",
+      "score": 3,
+      "name": "real_rules_replica.py",
+      "summary": "Bản sao Python của chính các rule ET Open C2 thật sự nổ trên một capture: phân tích content/nocase/offset/depth/distance/within và flow:established rồi đánh giá trên payload gói thật, để tối ưu đúng bề mặt khớp của Snort ở tốc độ Python thay vì ~10s mỗi lần gọi Snort."
+    },
+    {
+      "id": "config:models/xgboost_judge_ctu13_10_directional_features.json",
+      "score": 2,
+      "name": "xgboost_judge_ctu13_10_directional_features.json",
+      "summary": "Danh sách 15 tên đặc trưng Snort (dur, tot_pkts, tot_bytes, ..., bidirectional_activity) mà model Judge XGBoost CTU-13 kỳ vọng theo đúng thứ tự."
+    }
+  ],
+  "fanInRanking": [
+    {
+      "id": "file:ai_agent/hidden_defender_env.py",
+      "fanIn": 11,
+      "name": "hidden_defender_env.py"
+    },
+    {
+      "id": "file:snort_validation/snort_batch_service.py",
+      "fanIn": 7,
+      "name": "snort_batch_service.py"
+    },
+    {
+      "id": "file:snort_validation/snort_resident_service.py",
+      "fanIn": 6,
+      "name": "snort_resident_service.py"
+    },
+    {
+      "id": "file:ai_agent/snort_bandit.py",
+      "fanIn": 5,
+      "name": "snort_bandit.py"
+    },
+    {
+      "id": "file:ai_agent/train_hidden_defender_ppo.py",
+      "fanIn": 5,
+      "name": "train_hidden_defender_ppo.py"
+    },
+    {
+      "id": "file:ai_agent/real_packet_env.py",
+      "fanIn": 4,
+      "name": "real_packet_env.py"
+    },
+    {
+      "id": "file:snort_validation/snort_query_service.py",
+      "fanIn": 4,
+      "name": "snort_query_service.py"
+    },
+    {
+      "id": "config:environment.yml",
+      "fanIn": 3,
+      "name": "environment.yml"
+    },
+    {
+      "id": "config:snort_validation/rules/snort.conf",
+      "fanIn": 3,
+      "name": "snort.conf"
+    },
+    {
+      "id": "file:ai_agent/flow_features.py",
+      "fanIn": 3,
+      "name": "flow_features.py"
+    },
+    {
+      "id": "file:ai_agent/train_real_snort_agent.py",
+      "fanIn": 3,
+      "name": "train_real_snort_agent.py"
+    },
+    {
+      "id": "file:ai_agent/train_replica_agent.py",
+      "fanIn": 3,
+      "name": "train_replica_agent.py"
+    },
+    {
+      "id": "file:controls/surrogate_vs_real_snort.py",
+      "fanIn": 3,
+      "name": "surrogate_vs_real_snort.py"
+    },
+    {
+      "id": "file:snort_validation/aggregate_results.py",
+      "fanIn": 3,
+      "name": "aggregate_results.py"
+    },
+    {
+      "id": "file:snort_validation/fetch_stratosphere.sh",
+      "fanIn": 3,
+      "name": "fetch_stratosphere.sh"
+    },
+    {
+      "id": "file:snort_validation/flow_to_pcap.py",
+      "fanIn": 3,
+      "name": "flow_to_pcap.py"
+    },
+    {
+      "id": "file:snort_validation/surrogate_dataset.py",
+      "fanIn": 3,
+      "name": "surrogate_dataset.py"
+    },
+    {
+      "id": "file:snort_validation/test_stratosphere_sweep.py",
+      "fanIn": 3,
+      "name": "test_stratosphere_sweep.py"
+    },
+    {
+      "id": "file:snort_validation/validate_with_snort.py",
+      "fanIn": 3,
+      "name": "validate_with_snort.py"
+    },
+    {
+      "id": "file:tests/test_snort_verdict_integrity.py",
+      "fanIn": 3,
+      "name": "test_snort_verdict_integrity.py"
+    }
+  ],
+  "fanOutRanking": [
+    {
+      "id": "file:ai_agent/snort_bandit.py",
+      "fanOut": 29,
+      "name": "snort_bandit.py"
+    },
+    {
+      "id": "file:tests/test_endpoint_model.py",
+      "fanOut": 26,
+      "name": "test_endpoint_model.py"
+    },
+    {
+      "id": "file:tests/test_fragment_ops.py",
+      "fanOut": 26,
+      "name": "test_fragment_ops.py"
+    },
+    {
+      "id": "file:snort_validation/real_rules_replica.py",
+      "fanOut": 24,
+      "name": "real_rules_replica.py"
+    },
+    {
+      "id": "file:tests/test_hidden_defender_env.py",
+      "fanOut": 24,
+      "name": "test_hidden_defender_env.py"
+    },
+    {
+      "id": "file:ai_agent/hidden_defender_env.py",
+      "fanOut": 20,
+      "name": "hidden_defender_env.py"
+    },
+    {
+      "id": "file:tests/test_beats_control.py",
+      "fanOut": 20,
+      "name": "test_beats_control.py"
+    },
+    {
+      "id": "file:tests/test_packet_features.py",
+      "fanOut": 20,
+      "name": "test_packet_features.py"
+    },
+    {
+      "id": "file:tests/test_mechanisms_ab.py",
+      "fanOut": 18,
+      "name": "test_mechanisms_ab.py"
+    },
+    {
+      "id": "file:snort_validation/snort_query_service.py",
+      "fanOut": 17,
+      "name": "snort_query_service.py"
+    },
+    {
+      "id": "file:snort_validation/aggressive_snort_replica.py",
+      "fanOut": 16,
+      "name": "aggressive_snort_replica.py"
+    },
+    {
+      "id": "file:snort_validation/endpoint_model.py",
+      "fanOut": 16,
+      "name": "endpoint_model.py"
+    },
+    {
+      "id": "file:snort_validation/test_stratosphere_sweep.py",
+      "fanOut": 16,
+      "name": "test_stratosphere_sweep.py"
+    },
+    {
+      "id": "file:snort_validation/verify_snort_replica.py",
+      "fanOut": 15,
+      "name": "verify_snort_replica.py"
+    },
+    {
+      "id": "file:snort_validation/c2_semantics.py",
+      "fanOut": 14,
+      "name": "c2_semantics.py"
+    },
+    {
+      "id": "file:snort_validation/fragment_ops.py",
+      "fanOut": 14,
+      "name": "fragment_ops.py"
+    },
+    {
+      "id": "file:ai_agent/real_packet_env.py",
+      "fanOut": 13,
+      "name": "real_packet_env.py"
+    },
+    {
+      "id": "file:snort_validation/surrogate_dataset.py",
+      "fanOut": 13,
+      "name": "surrogate_dataset.py"
+    },
+    {
+      "id": "document:WINDOWS_COMPAT.md",
+      "fanOut": 12,
+      "name": "WINDOWS_COMPAT.md"
+    },
+    {
+      "id": "file:snort_validation/aggregate_results.py",
+      "fanOut": 12,
+      "name": "aggregate_results.py"
+    }
+  ],
+  "bfsTraversal": {
+    "startNode": "file:snort_validation/label_feasibility.py",
+    "order": [
+      "file:snort_validation/label_feasibility.py",
+      "file:ai_agent/real_packet_env.py",
+      "file:ai_agent/snort_bandit.py",
+      "file:snort_validation/control_gate.py",
+      "file:snort_validation/snort_resident_service.py"
+    ],
+    "depthMap": {
+      "file:snort_validation/label_feasibility.py": 0,
+      "file:ai_agent/real_packet_env.py": 1,
+      "file:ai_agent/snort_bandit.py": 1,
+      "file:snort_validation/control_gate.py": 1,
+      "file:snort_validation/snort_resident_service.py": 1
+    },
+    "byDepth": {
+      "0": [
+        "file:snort_validation/label_feasibility.py"
+      ],
+      "1": [
+        "file:ai_agent/real_packet_env.py",
+        "file:ai_agent/snort_bandit.py",
+        "file:snort_validation/control_gate.py",
+        "file:snort_validation/snort_resident_service.py"
+      ]
+    }
+  },
+  "nonCodeFiles": {
+    "documentation": [
+      {
+        "id": "document:CHANGELOG.md",
+        "name": "CHANGELOG.md",
+        "type": "document",
+        "summary": "Nhật ký thay đổi kể từ mốc tích hợp Snort (commit 95cb9cd): ghi lại phương pháp luận, chênh lệch metrics, các decision gate, bug fix và hàm ý cho luận văn. Điểm cốt lõi là phân biệt metrics 'unseeded' (không đủ tin cậy để so sánh policy) với metrics 'seeded' (đã kiểm soát, là số liệu nên trích dẫn)."
+      },
+      {
+        "id": "document:PROGRESS_REPORT.md",
+        "name": "PROGRESS_REPORT.md",
+        "type": "document",
+        "summary": "Báo cáo tiến độ đồ án: mục tiêu, kết quả hiện tại (evasion 16/16, surrogate XGBoost AUC 0.9993), thành tựu kỹ thuật, known issues (negative control, blocker resident-mode), cấu trúc code, timeline và cheatsheet lệnh."
+      },
+      {
+        "id": "document:README.md",
+        "name": "README.md",
+        "type": "document",
+        "summary": "README tiếng Anh của dự án: mô tả agent RL biến đổi beacon C2 để né Snort 2.9.20 (ruleset ET Open C2), kết quả headline 16/16, bố cục repo, hướng dẫn setup/run, cờ train và các caveat trung thực."
+      },
+      {
+        "id": "document:README.vi.md",
+        "name": "README.vi.md",
+        "type": "document",
+        "summary": "Bản dịch tiếng Việt của README.md: giới thiệu agent red-team RL né Snort thật, kết quả 16/16 luồng held-out, bố cục thư mục, cài đặt, cách chạy và các lưu ý trung thực."
+      },
+      {
+        "id": "document:WINDOWS_COMPAT.md",
+        "name": "WINDOWS_COMPAT.md",
+        "type": "document",
+        "summary": "Theo dõi tiến độ port dự án từ Linux sang Windows 10/11: môi trường Python đã xong, Snort IDS là blocker, cùng các hạng mục hardcoded path, thư mục /tmp, shell script, encoding và checklist trước khi merge."
+      },
+      {
+        "id": "document:snort_validation/README.md",
+        "name": "README.md",
+        "type": "document",
+        "summary": "Tài liệu mô tả lớp kiểm chứng (validation layer) chạy Snort IDS thật sau khi huấn luyện RL: giải thích kiến trúc flow → pcap → Snort, quy trình chạy ba policy agent/random/baseline, và công bố kết quả đo được cho thấy mô hình học né XGBoost nhưng vẫn bị Snort phát hiện nhiều hơn cả random."
+      }
+    ],
+    "infrastructure": [
+      {
+        "id": "service:Makefile",
+        "name": "Makefile",
+        "type": "service",
+        "summary": "Makefile gói các entry point cấp gói tin: feasibility gate, bộ giải frontier chính xác, đo độ biến thiên harness, chạy pytest và dọn dẹp. Cố tình bỏ các target flow-level đã ngừng dùng và chỉ dùng interpreter .venv cục bộ của repo."
+      }
+    ],
+    "data": [],
+    "config": [
+      {
+        "id": "config:environment.yml",
+        "name": "environment.yml",
+        "type": "config",
+        "summary": "Định nghĩa conda environment 'rl_c2_evasion' (Python 3.11) cho pipeline cấp gói tin: numpy/pandas/scipy/sklearn/xgboost, PyTorch bản CPU, scapy, stable-baselines3 + sb3-contrib (MaskablePPO), gymnasium, flask/requests và pytest; cố tình không gồm package plotting/notebook/lint."
+      },
+      {
+        "id": "config:models/xgboost_judge_ctu13_10_directional_features.json",
+        "name": "xgboost_judge_ctu13_10_directional_features.json",
+        "type": "config",
+        "summary": "Danh sách 15 tên đặc trưng Snort (dur, tot_pkts, tot_bytes, ..., bidirectional_activity) mà model Judge XGBoost CTU-13 kỳ vọng theo đúng thứ tự."
+      },
+      {
+        "id": "config:models/xgboost_judge_directional_10feat_features.json",
+        "name": "xgboost_judge_directional_10feat_features.json",
+        "type": "config",
+        "summary": "Danh sách 10 tên đặc trưng hướng (dur, tot_pkts, tot_bytes, ..., bidirectional_activity) mà model Judge directional_10feat kỳ vọng theo đúng thứ tự."
+      },
+      {
+        "id": "config:snort_validation/rules/botnet-aggressive.rules",
+        "name": "botnet-aggressive.rules",
+        "type": "config",
+        "summary": "Ruleset botnet 'hung hãn' với ngưỡng hạ thấp cho baseline nghiên cứu: nhắm bắt 70-80% flow độc hại CTU-13 để tạo môi trường IDS khó cho RL, cảnh báo rõ đây là cấu hình nghiên cứu gây nhiều false positive trong production."
+      },
+      {
+        "id": "config:snort_validation/rules/botnet-behavior.rules",
+        "name": "botnet-behavior.rules",
+        "type": "config",
+        "summary": "Ruleset phát hiện hành vi botnet theo ngưỡng cho flow tổng hợp: bắt cụm payload lớn, beacon gói nhỏ lặp lại và mẫu kết thúc bất thường; ngưỡng hiệu chỉnh theo phân bố flow CTU-13, kèm các rule đặc thù họ Neris/Rbot/Virut."
+      },
+      {
+        "id": "config:snort_validation/rules/classification.config",
+        "name": "classification.config",
+        "type": "config",
+        "summary": "Định nghĩa shortname/description/priority cho các classtype dùng trong rule (trojan-activity, attempted-recon, malware-cnc...), gồm cả các phân loại mở rộng cho rule botnet."
+      },
+      {
+        "id": "config:snort_validation/rules/reference.config",
+        "name": "reference.config",
+        "type": "config",
+        "summary": "Ánh xạ các tiền tố reference (bugtraq, cve, url, msb...) sang URL hệ thống để rule có thể gắn tham chiếu ngoài."
+      },
+      {
+        "id": "config:snort_validation/rules/snort.conf",
+        "name": "snort.conf",
+        "type": "config",
+        "summary": "Cấu hình Snort tối giản cho phân tích pcap offline (chỉ dùng để validate sau huấn luyện): khai báo RULE_PATH, HOME_NET/EXTERNAL_NET any, bật output alert_fast, preprocessor frag3/stream5 và include botnet-behavior.rules; ghi chú rõ emerging-botcc.rules đã bị bỏ vì include nó khiến Snort thoát lỗi."
+      }
+    ]
+  },
+  "clusters": [
+    {
+      "nodes": [
+        "document:README.md",
+        "document:README.vi.md",
+        "config:environment.yml",
+        "file:ai_agent/eval_masked_ppo_test.py",
+        "file:ai_agent/hidden_defender_env.py"
+      ],
+      "edgeCount": 9
+    },
+    {
+      "nodes": [
+        "file:ai_agent/packet_modifier.py",
+        "file:tests/test_packet_modifier.py"
+      ],
+      "edgeCount": 2
+    },
+    {
+      "nodes": [
+        "file:ai_agent/hidden_defender_env.py",
+        "file:tests/test_snort_verdict_integrity.py"
+      ],
+      "edgeCount": 2
+    },
+    {
+      "nodes": [
+        "file:snort_validation/snort_batch_service.py",
+        "file:tests/test_snort_verdict_integrity.py"
+      ],
+      "edgeCount": 2
+    },
+    {
+      "nodes": [
+        "file:snort_validation/eval_all_real_snort.py",
+        "file:tests/test_snort_verdict_integrity.py"
+      ],
+      "edgeCount": 2
+    }
+  ],
+  "layers": {
+    "count": 0,
+    "list": []
+  },
+  "nodeSummaryIndex": {
+    "document:CHANGELOG.md": {
+      "name": "CHANGELOG.md",
+      "type": "document",
+      "summary": "Nhật ký thay đổi kể từ mốc tích hợp Snort (commit 95cb9cd): ghi lại phương pháp luận, chênh lệch metrics, các decision gate, bug fix và hàm ý cho luận văn. Điểm cốt lõi là phân biệt metrics 'unseeded' (không đủ tin cậy để so sánh policy) với metrics 'seeded' (đã kiểm soát, là số liệu nên trích dẫn)."
+    },
+    "service:Makefile": {
+      "name": "Makefile",
+      "type": "service",
+      "summary": "Makefile gói các entry point cấp gói tin: feasibility gate, bộ giải frontier chính xác, đo độ biến thiên harness, chạy pytest và dọn dẹp. Cố tình bỏ các target flow-level đã ngừng dùng và chỉ dùng interpreter .venv cục bộ của repo."
+    },
+    "document:PROGRESS_REPORT.md": {
+      "name": "PROGRESS_REPORT.md",
+      "type": "document",
+      "summary": "Báo cáo tiến độ đồ án: mục tiêu, kết quả hiện tại (evasion 16/16, surrogate XGBoost AUC 0.9993), thành tựu kỹ thuật, known issues (negative control, blocker resident-mode), cấu trúc code, timeline và cheatsheet lệnh."
+    },
+    "document:README.md": {
+      "name": "README.md",
+      "type": "document",
+      "summary": "README tiếng Anh của dự án: mô tả agent RL biến đổi beacon C2 để né Snort 2.9.20 (ruleset ET Open C2), kết quả headline 16/16, bố cục repo, hướng dẫn setup/run, cờ train và các caveat trung thực."
+    },
+    "document:README.vi.md": {
+      "name": "README.vi.md",
+      "type": "document",
+      "summary": "Bản dịch tiếng Việt của README.md: giới thiệu agent red-team RL né Snort thật, kết quả 16/16 luồng held-out, bố cục thư mục, cài đặt, cách chạy và các lưu ý trung thực."
+    },
+    "document:WINDOWS_COMPAT.md": {
+      "name": "WINDOWS_COMPAT.md",
+      "type": "document",
+      "summary": "Theo dõi tiến độ port dự án từ Linux sang Windows 10/11: môi trường Python đã xong, Snort IDS là blocker, cùng các hạng mục hardcoded path, thư mục /tmp, shell script, encoding và checklist trước khi merge."
+    },
+    "config:environment.yml": {
+      "name": "environment.yml",
+      "type": "config",
+      "summary": "Định nghĩa conda environment 'rl_c2_evasion' (Python 3.11) cho pipeline cấp gói tin: numpy/pandas/scipy/sklearn/xgboost, PyTorch bản CPU, scapy, stable-baselines3 + sb3-contrib (MaskablePPO), gymnasium, flask/requests và pytest; cố tình không gồm package plotting/notebook/lint."
+    },
+    "document:snort_validation/README.md": {
+      "name": "README.md",
+      "type": "document",
+      "summary": "Tài liệu mô tả lớp kiểm chứng (validation layer) chạy Snort IDS thật sau khi huấn luyện RL: giải thích kiến trúc flow → pcap → Snort, quy trình chạy ba policy agent/random/baseline, và công bố kết quả đo được cho thấy mô hình học né XGBoost nhưng vẫn bị Snort phát hiện nhiều hơn cả random."
+    },
+    "file:snort_validation/extract_stratosphere.sh": {
+      "name": "extract_stratosphere.sh",
+      "type": "file",
+      "summary": "Script trích xuất chọn lọc từ archive CTU-13-Dataset.tar.bz2, chỉ lấy file .pcap, .binetflow và README và cố ý bỏ qua các mã độc .exe đi kèm, sau đó in ra kiểm kê pcap theo dung lượng giảm dần."
+    },
+    "file:snort_validation/fetch_stratosphere.sh": {
+      "name": "fetch_stratosphere.sh",
+      "type": "file",
+      "summary": "Script tải và giải nén archive CTU-13 nguyên bản (~1.9 GB) từ mirror chính thức mcfp.felk.cvut.cz, có kiểm tra tồn tại trước khi tải, rồi liệt kê pcap thu được và dung lượng đĩa đã dùng."
+    },
+    "file:snort_validation/fetch_stratosphere_captures.sh": {
+      "name": "fetch_stratosphere_captures.sh",
+      "type": "file",
+      "summary": "Script tải các capture dài hạn CTU-Malware-Capture-Botnet-N từ MCFP: có danh sách mặc định 11 capture thuộc nhiều họ mã độc khác nhau (DonBot, Sogou, Virut, Conficker…), cho phép chọn theo số qua tham số, không ghi đè file đã có và trả về mã lỗi nếu có capture tải thất bại."
+    },
+    "file:snort_validation/run_stratosphere_sweep.sh": {
+      "name": "run_stratosphere_sweep.sh",
+      "type": "file",
+      "summary": "Script điều phối toàn bộ kế hoạch sweep của Stratosphere gồm bốn pha tuần tự: kiểm chứng cross-capture (24 flow, cost 0.6), quét corrupt-cost trên capture nhiều flow nhất, mở rộng quy mô flow 24→200, và dựng bảng kết quả cuối; có cơ chế bỏ qua pha đã có báo cáo trừ khi FORCE=1."
+    },
+    "file:ai_agent/ablate_actions.py": {
+      "name": "ablate_actions.py",
+      "type": "file",
+      "summary": "Script ablation từng action/mutation đơn lẻ trên các flow C2 thật để đo tác động lên số alert của Snort, hỗ trợ chẩn đoán cơ chế né tránh."
+    },
+    "file:ai_agent/c2_evasion_env.py": {
+      "name": "c2_evasion_env.py",
+      "type": "file",
+      "summary": "Môi trường RL flow-level mô phỏng né Snort: trích xuất đặc trưng flow, dùng surrogate IDS và bộ phân loại judge để chấm điểm, thưởng cho hành vi né tránh."
+    },
+    "file:ai_agent/callback_metric_proof.py": {
+      "name": "callback_metric_proof.py",
+      "type": "file",
+      "summary": "Script chứng minh callback metric: nạp model PPO đã huấn luyện, chạy nhiều episode và thống kê tỷ lệ né tránh để xác thực số liệu."
+    },
+    "file:ai_agent/config.py": {
+      "name": "config.py",
+      "type": "file",
+      "summary": "Tập trung hằng số cấu hình: đường dẫn data/model, đặc trưng observation, reward shaping, chi phí mutation và siêu tham số PPO."
+    },
+    "file:ai_agent/enhanced_packet_level_env.py": {
+      "name": "enhanced_packet_level_env.py",
+      "type": "file",
+      "summary": "Biến thể packet-level nâng cao của môi trường RL, nơi TTL, phân mảnh và chồng lấp TCP thực sự ảnh hưởng tới reward qua enhanced replica Snort."
+    },
+    "file:ai_agent/eval_cross_capture.py": {
+      "name": "eval_cross_capture.py",
+      "type": "file",
+      "summary": "Harness đánh giá cross-capture: huấn luyện trên một capture và đánh giá trên capture khác để kiểm tra khả năng tổng quát hóa của agent."
+    },
+    "file:ai_agent/eval_enhanced_agent.py": {
+      "name": "eval_enhanced_agent.py",
+      "type": "file",
+      "summary": "Đánh giá agent PPO trên EnhancedPacketLevelEnv, thống kê tỷ lệ né tránh và mức thay đổi gói tin qua nhiều episode."
+    },
+    "file:ai_agent/eval_masked_ppo_test.py": {
+      "name": "eval_masked_ppo_test.py",
+      "type": "file",
+      "summary": "Script kiểm thử agent MaskablePPO trên HiddenDefenderEnv, đếm tần suất chọn từng cơ chế né tránh và ghi kết quả JSON."
+    },
+    "file:ai_agent/eval_packet_level_agent.py": {
+      "name": "eval_packet_level_agent.py",
+      "type": "file",
+      "summary": "Đánh giá agent packet-level PPO so với baseline ngẫu nhiên trên Snort replica với 80 episode cố định seed, ghi báo cáo JSON."
+    },
+    "file:ai_agent/eval_real_snort_agent.py": {
+      "name": "eval_real_snort_agent.py",
+      "type": "file",
+      "summary": "Đánh giá agent PPO chống lại Snort thật: đo số alert trước/sau mutation và so sánh với mutation ngẫu nhiên, xuất báo cáo JSON."
+    },
+    "file:ai_agent/evaluate.py": {
+      "name": "evaluate.py",
+      "type": "file",
+      "summary": "Cung cấp hàm nạp test pool các flow botnet từ dữ liệu parquet để phục vụ đánh giá."
+    },
+    "file:ai_agent/evasion_metrics_callback.py": {
+      "name": "evasion_metrics_callback.py",
+      "type": "file",
+      "summary": "Callback Stable-Baselines3 ghi các metric né tránh (evasion, padding, jitter, độ dài episode) vào logger trong quá trình huấn luyện."
+    },
+    "file:ai_agent/flow_features.py": {
+      "name": "flow_features.py",
+      "type": "file",
+      "summary": "Suy diễn các đặc trưng flow cấp cao (tỷ lệ gói, entropy payload, cờ TCP) từ flow thô để cấp cho surrogate Snort và candidate vector."
+    },
+    "file:ai_agent/hidden_defender_env.py": {
+      "name": "hidden_defender_env.py",
+      "type": "file",
+      "summary": "Môi trường RL 14 cơ chế né tránh (hidden defender): biến đổi gói tin C2 thật, kiểm tra ngữ nghĩa còn nguyên vẹn và chấm điểm bằng Snort thật, có action masking."
+    },
+    "file:ai_agent/packet_level_env.py": {
+      "name": "packet_level_env.py",
+      "type": "file",
+      "summary": "Môi trường RL packet-level dùng PacketModifier để biến đổi gói tin và replica_snort_verdict để chấm điểm né tránh."
+    },
+    "file:ai_agent/packet_modifier.py": {
+      "name": "packet_modifier.py",
+      "type": "file",
+      "summary": "Lớp tiện ích áp dụng action lên danh sách gói tin và chuyển kết quả thành đặc trưng flow."
+    },
+    "file:ai_agent/pool_loader.py": {
+      "name": "pool_loader.py",
+      "type": "file",
+      "summary": "Nạp pool flow botnet từ kho parquet, lọc theo nhãn botnet và chuẩn hóa tên cột thành các flow dùng cho huấn luyện."
+    },
+    "file:ai_agent/real_packet_env.py": {
+      "name": "real_packet_env.py",
+      "type": "file",
+      "summary": "Môi trường RL packet-level thao tác trên PCAP thật: nạp flow, áp mutation, hỏi SnortBatchService và tính reward dựa trên alert thật."
+    },
+    "file:ai_agent/snort_bandit.py": {
+      "name": "snort_bandit.py",
+      "type": "file",
+      "summary": "Bandit policy-gradient học mặt nạ corrupt gói tin để né Snort thật, kèm baseline ngẫu nhiên và phân tích chi phí/hiệu quả."
+    },
+    "file:ai_agent/train_agent.py": {
+      "name": "train_agent.py",
+      "type": "file",
+      "summary": "Script huấn luyện PPO trên C2EvasionEnv với các tham số dòng lệnh cấu hình timesteps và đường dẫn model."
+    },
+    "file:ai_agent/train_enhanced.py": {
+      "name": "train_enhanced.py",
+      "type": "file",
+      "summary": "Huấn luyện PPO trên EnhancedPacketLevelEnv để TTL/phân mảnh/chồng lấp ảnh hưởng tới reward, có checkpoint và metadata."
+    },
+    "file:ai_agent/train_enhanced_packet_agent.py": {
+      "name": "train_enhanced_packet_agent.py",
+      "type": "file",
+      "summary": "Huấn luyện PPO agent với EnhancedPacketLevelEnv, lưu checkpoint và metadata huấn luyện."
+    },
+    "file:ai_agent/train_hidden_defender_ppo.py": {
+      "name": "train_hidden_defender_ppo.py",
+      "type": "file",
+      "summary": "Huấn luyện MaskablePPO trên HiddenDefenderEnv với BatchEnv bọc và QueryCounter theo dõi số truy vấn Snort."
+    },
+    "file:ai_agent/train_packet_level_agent.py": {
+      "name": "train_packet_level_agent.py",
+      "type": "file",
+      "summary": "Huấn luyện PPO agent packet-level với reward từ replica Snort (không dùng surrogate), lưu model và metadata."
+    },
+    "file:ai_agent/train_packet_level_tcp10.py": {
+      "name": "train_packet_level_tcp10.py",
+      "type": "file",
+      "summary": "Huấn luyện PPO packet-level trên tập con TCP có >=10 gói để có tín hiệu sạch hơn, lưu model và metadata."
+    },
+    "file:ai_agent/train_real_snort_agent.py": {
+      "name": "train_real_snort_agent.py",
+      "type": "file",
+      "summary": "Huấn luyện PPO né Snort thật: phần thưởng lấy trực tiếp từ binary Snort 2.9.20 chạy ruleset ET Open C2, gom verdict theo batch để chia nhỏ chi phí nạp rule (~10 giây). Callback theo dõi tỉ lệ né và lưu model cùng báo cáo JSON."
+    },
+    "file:ai_agent/train_replica_agent.py": {
+      "name": "train_replica_agent.py",
+      "type": "file",
+      "summary": "Huấn luyện PPO ở tốc độ Python dựa trên RealRulesReplica — bản sao trung thực ngữ nghĩa ruleset ET Open C2 — thay vì gọi Snort thật, giúp mỗi bước chỉ tốn mili-giây. ReplicaPacketEnv định nghĩa không gian hành động 14 cơ chế biến đổi gói tin."
+    },
+    "file:ai_agent/verify_against_real_snort.py": {
+      "name": "verify_against_real_snort.py",
+      "type": "file",
+      "summary": "Chấm lại policy PPO đã học trên 16 flow held-out bằng binary Snort thật (không dùng surrogate) để con số headline không phụ thuộc bản sao."
+    },
+    "file:ai_agent/verify_real_env.py": {
+      "name": "verify_real_env.py",
+      "type": "file",
+      "summary": "Chứng minh end-to-end rằng môi trường dùng Snort thật là học được: chạy policy 'làm hỏng phần đầu payload mọi gói' và báo cáo tỉ lệ né trước/sau."
+    },
+    "file:blue_team/train_ids.ipynb": {
+      "name": "train_ids.ipynb",
+      "type": "file",
+      "summary": "Notebook huấn luyện 'Judge' RandomForest trên bộ CICIDS2017 (Friday-WorkingHours-Morning): làm sạch dữ liệu, chọn đặc trưng kích thước/thời gian gói, cân bằng bằng SMOTE rồi train và lưu model."
+    },
+    "file:blue_team/train_surrogate.ipynb": {
+      "name": "train_surrogate.ipynb",
+      "type": "file",
+      "summary": "Notebook trích xuất tập malicious (botnet) từ dữ liệu CTU-13 và huấn luyện surrogate RandomForest chỉ dùng đặc trưng hành vi (bỏ IP/port) để tránh học vẹt mục tiêu."
+    },
+    "file:blue_team/train_surrogate_xgboost.ipynb": {
+      "name": "train_surrogate_xgboost.ipynb",
+      "type": "file",
+      "summary": "Notebook huấn luyện surrogate XGBoost trên tập malicious CTU-13 và lưu tập malicious ra parquet cho môi trường RL."
+    },
+    "file:controls/control_noop_real_snort.py": {
+      "name": "control_noop_real_snort.py",
+      "type": "file",
+      "summary": "Đối chứng âm: lưu lượng không biến đổi (noop) phải bị Snort thật alert trên mọi flow; nếu không, đường chấm điểm real-Snort bị hỏng và con số headline vô nghĩa."
+    },
+    "file:controls/surrogate_sweep_14mech.py": {
+      "name": "surrogate_sweep_14mech.py",
+      "type": "file",
+      "summary": "Quét cả 14 cơ chế trên nhiều flow, chấm cùng gói đã biến đổi qua cả surrogate lẫn Snort thật để tìm chính xác chỗ surrogate sai (đặc biệt ô false-negative nguy hiểm). Kết quả ghi nối tiếp vào JSON sau mỗi ô để timeout không mất dữ liệu."
+    },
+    "file:controls/surrogate_vs_real_snort.py": {
+      "name": "surrogate_vs_real_snort.py",
+      "type": "file",
+      "summary": "Audit surrogate-vs-thực tế theo từng flow: áp một cơ chế rồi chấm cùng gói qua cả surrogate và Snort thật, in confusion matrix thay vì chỉ tổng tỉ lệ né."
+    },
+    "file:controls/verify_report_claims.py": {
+      "name": "verify_report_claims.py",
+      "type": "file",
+      "summary": "Kiểm chứng chéo mọi con số nêu trong docs/RESULTS_PRESENTATION.md bằng cách nạp các báo cáo JSON và so khớp với giá trị kỳ vọng."
+    },
+    "file:models/.gitkeep": {
+      "name": ".gitkeep",
+      "type": "file",
+      "summary": "File rỗng giữ chỗ cho thư mục models trong Git."
+    },
+    "file:models/xgboost_judge_ctu13_10_directional.joblib": {
+      "name": "xgboost_judge_ctu13_10_directional.joblib",
+      "type": "file",
+      "summary": "Model XGBoost 'Judge' huấn luyện trên CTU-13 với 10 đặc trưng hướng (directional), dùng để chấm điểm flow; lưu ở định dạng joblib pickle."
+    },
+    "config:models/xgboost_judge_ctu13_10_directional_features.json": {
+      "name": "xgboost_judge_ctu13_10_directional_features.json",
+      "type": "config",
+      "summary": "Danh sách 15 tên đặc trưng Snort (dur, tot_pkts, tot_bytes, ..., bidirectional_activity) mà model Judge XGBoost CTU-13 kỳ vọng theo đúng thứ tự."
+    },
+    "file:models/xgboost_judge_directional_10feat.joblib": {
+      "name": "xgboost_judge_directional_10feat.joblib",
+      "type": "file",
+      "summary": "Model XGBoost Judge với 10 đặc trưng hướng dùng cho chấm điểm flow; lưu ở định dạng joblib pickle."
+    },
+    "config:models/xgboost_judge_directional_10feat_features.json": {
+      "name": "xgboost_judge_directional_10feat_features.json",
+      "type": "config",
+      "summary": "Danh sách 10 tên đặc trưng hướng (dur, tot_pkts, tot_bytes, ..., bidirectional_activity) mà model Judge directional_10feat kỳ vọng theo đúng thứ tự."
+    },
+    "file:red_team/mock_client.py": {
+      "name": "mock_client.py",
+      "type": "file",
+      "summary": "Client beacon giả lập gửi POST JSON định kỳ 3 giây tới server C2 tại 127.0.0.1:8080/beacon, dùng để sinh lưu lượng C2 mẫu."
+    },
+    "file:red_team/mock_server.py": {
+      "name": "mock_server.py",
+      "type": "file",
+      "summary": "Server C2 giả lập bằng Flask, nhận beacon tại /beacon và trả lệnh 'sleep'; dùng để dựng lưu lượng C2 mẫu."
+    },
+    "file:scripts/measure_action_impact.py": {
+      "name": "measure_action_impact.py",
+      "type": "file",
+      "summary": "Đo tác động: quét từng chiều hành động trên toàn dải [-1,1] để tìm chiều 'chết' không làm thay đổi reward; chạy cho cả PacketLevelEnv và EnhancedPacketLevelEnv."
+    },
+    "file:scripts/test_enhanced_replica.py": {
+      "name": "test_enhanced_replica.py",
+      "type": "file",
+      "summary": "Script test thủ công kiểm tra enhanced replica phát hiện đúng TTL thấp, phân mảnh 100% và chồng lấn; in ✓/✗ cho từng ca."
+    },
+    "file:scripts/trace_action_to_reward.py": {
+      "name": "trace_action_to_reward.py",
+      "type": "file",
+      "summary": "Truy vết xem thay đổi TTL/frag/overlap có thực sự tới được replica_snort_verdict: so sánh feature dict, verdict của flow-level replica và enhanced replica trên một flow TCP 10 gói tổng hợp."
+    },
+    "file:setup_check.py": {
+      "name": "setup_check.py",
+      "type": "file",
+      "summary": "Kiểm tra môi trường trước khi huấn luyện: phiên bản Python, thư viện phụ thuộc, file dữ liệu, file model và tạo các thư mục còn thiếu."
+    },
+    "file:snort_validation/aggregate_results.py": {
+      "name": "aggregate_results.py",
+      "type": "file",
+      "summary": "Gộp các báo cáo sweep/scale/cross-capture thành bảng kết quả cuối; giá trị thiếu được coi là lỗi FATAL thay vì mặc định 0 để không biến 'run hỏng' thành 'không né được gì'."
+    },
+    "file:snort_validation/aggregate_scale_up.py": {
+      "name": "aggregate_scale_up.py",
+      "type": "file",
+      "summary": "Gộp kết quả scale-up (24 → 100 → 300 flow, eval trên 500) thành bảng tỉ lệ né và chi phí biến đổi trung bình."
+    },
+    "file:snort_validation/aggressive_snort_replica.py": {
+      "name": "aggressive_snort_replica.py",
+      "type": "file",
+      "summary": "Replica Snort 'hung hãn' (baseline phát hiện 70-80%) phục vụ huấn luyện thưởng trực tiếp: mã hóa ngữ nghĩa rule thực nghiệm (flow:established bỏ qua gói tiền-thiết-lập, ...), kèm stub mock và ground-truth real_snort_verdict."
+    },
+    "file:snort_validation/augment_corpus_no_gym.py": {
+      "name": "augment_corpus_no_gym.py",
+      "type": "file",
+      "summary": "Bổ sung trường `framing` cho từng flow trong corpus pickle của hidden-defender bằng `detect_framing`, không cần import gym hay thư viện RL. Là biến thể nhẹ của `augment_corpus_with_framing.py` để chạy được khi môi trường gym chưa sẵn sàng."
+    },
+    "file:snort_validation/augment_corpus_with_framing.py": {
+      "name": "augment_corpus_with_framing.py",
+      "type": "file",
+      "summary": "Bổ sung trường `framing` cho mỗi flow trong corpus pickle, dùng `detect_framing` từ endpoint_model cùng đường dẫn `CORPUS_PKL` và `payloads_of` từ hidden_defender_env."
+    },
+    "file:snort_validation/baseline_hidden_defender.py": {
+      "name": "baseline_hidden_defender.py",
+      "type": "file",
+      "summary": "Cung cấp ba baseline phi-RL (random_sweep, greedy, supervised_tree) cho bài toán hidden-defender, dùng chung một quy tắc tính ngân sách truy vấn để so sánh công bằng với policy RL."
+    },
+    "file:snort_validation/batch_integrity.py": {
+      "name": "batch_integrity.py",
+      "type": "file",
+      "summary": "Diagnostic kiểm tra độ tin cậy của `score()` khi chấm nhiều candidate trong một batch: so sánh cùng 252 candidate qua một batch lớn, chunk 24 và chunk 4 để phát hiện verdict không nhất quán."
+    },
+    "file:snort_validation/build_et_open_c2_ruleset.py": {
+      "name": "build_et_open_c2_ruleset.py",
+      "type": "file",
+      "summary": "Xây ruleset Snort tập trung C2 từ phân phối ET Open: chỉ giữ rule `alert` có `content:` và gắn nhãn C2/botnet/backdoor, loại rule flowbits mồ côi; xuất ruleset và báo cáo build để kiểm toán."
+    },
+    "file:snort_validation/build_hidden_defender_corpus.py": {
+      "name": "build_hidden_defender_corpus.py",
+      "type": "file",
+      "summary": "Xây corpus hidden-defender gồm 80 flow bị Snort phát hiện, cache ra đĩa; chọn flow trùng với ma trận mechanism và trích 8 đặc trưng black-box không lộ thông tin ruleset, chấm bằng RealRulesReplica."
+    },
+    "file:snort_validation/build_mcfp_snort_dataset.py": {
+      "name": "build_mcfp_snort_dataset.py",
+      "type": "file",
+      "summary": "Xây bảng flow gán nhãn Snort cho các capture Stratosphere/MCFP: chạy Snort một lần trên toàn pcap, join alert theo 5-tuple với đặc trưng đo được, hỗ trợ cả nhãn binetflow lẫn nhãn botnet-only."
+    },
+    "file:snort_validation/build_real_snort_dataset.py": {
+      "name": "build_real_snort_dataset.py",
+      "type": "file",
+      "summary": "Xây tập huấn luyện gán nhãn Snort từ các capture CTU-13: chạy Snort thật (ET Open C2) trên từng capture, join verdict theo 5-tuple hai chiều và ghi ra một parquet có cột `snort_alert`."
+    },
+    "file:snort_validation/c2_semantics.py": {
+      "name": "c2_semantics.py",
+      "type": "file",
+      "summary": "Quyết định một biến đổi có bảo toàn lệnh C2 hay không bằng cách tái lắp ghép fragment theo policy first/last; evasion chỉ được tính khi Snort không alert VÀ lệnh gốc vẫn khôi phục được."
+    },
+    "file:snort_validation/capture_pool_sizes.py": {
+      "name": "capture_pool_sizes.py",
+      "type": "file",
+      "summary": "Đo số flow thực sự dùng được của mỗi capture đã gán nhãn, vì `--flows N` chỉ là yêu cầu còn env chỉ giữ flow có >=4 packet; giúp chọn cấu hình sweep và scale-up đúng ngưỡng thật."
+    },
+    "file:snort_validation/compare_snort_direct.py": {
+      "name": "compare_snort_direct.py",
+      "type": "file",
+      "summary": "So sánh detection/evasion thật của Snort giữa các policy trên eval đã seed, in bảng cạnh nhau kèm ảnh XGBoost và áp ngưỡng cổng quyết định cho hướng snort-direct."
+    },
+    "file:snort_validation/control_gate.py": {
+      "name": "control_gate.py",
+      "type": "file",
+      "summary": "Chấm điểm policy so với đối chứng corrupt-all, chỉ dùng stdlib để cả bandit lẫn aggregate_results đều gọi được; thắng chỉ khi evict được ít nhất số flow bằng đối chứng nhưng corrupt ít packet hơn."
+    },
+    "file:snort_validation/corpus_framing_report.py": {
+      "name": "corpus_framing_report.py",
+      "type": "file",
+      "summary": "Báo cáo framing giao thức của mọi flow trong corpus hidden-defender và xác định có flow length-prefixed hay không, để nói thẳng khi mechanism B không thể chấm trên traffic thật."
+    },
+    "file:snort_validation/detection_rate_by_framing.py": {
+      "name": "detection_rate_by_framing.py",
+      "type": "file",
+      "summary": "Đo số flow Snort thật thực sự phát hiện theo từng framing, làm rõ rằng headline test-set dựa trên các flow Snort vốn không alert ngay cả khi chưa mutate."
+    },
+    "file:snort_validation/diagnose_generalization.py": {
+      "name": "diagnose_generalization.py",
+      "type": "file",
+      "summary": "Chẩn đoán khoảng cách tổng quát hóa giữa các capture: kiểm tra `snort_alert` có phải một khái niệm thống nhất, tìm đặc trưng 'dấu vân tay capture' và đo hiệu quả các biện pháp cải thiện AUC."
+    },
+    "file:snort_validation/endpoint_model.py": {
+      "name": "endpoint_model.py",
+      "type": "file",
+      "summary": "Mô hình endpoint theo giao thức: xác định framing của flow và trả về lệnh mà handler thật sẽ đọc (HTTP, IRC, length-prefixed, Neris), hoặc None khi handler từ chối stream."
+    },
+    "file:snort_validation/enhanced_snort_replica.py": {
+      "name": "enhanced_snort_replica.py",
+      "type": "file",
+      "summary": "Bản replica Snort mức packet mở rộng, kiểm tra thêm TTL bất thường, mẫu phân mảnh đáng ngờ và chồng lấn TCP bên cạnh các rule mức flow gốc."
+    },
+    "file:snort_validation/eval_all_real_snort.py": {
+      "name": "eval_all_real_snort.py",
+      "type": "file",
+      "summary": "Chạy lại mọi phương pháp trên test set bằng binary Snort thật: chấm trước 16x12 cặp (flow, mechanism) theo batch rồi phát lại thứ tự quyết định của từng policy, tính cache miss như truy vấn."
+    },
+    "file:snort_validation/eval_policy_horizon.py": {
+      "name": "eval_policy_horizon.py",
+      "type": "file",
+      "summary": "Chấm điểm evasion Snort thật của policy theo horizon biến đổi (H=0..10): chạy cùng flow đã seed với số bước cố định, tái tạo pcap và hỏi Snort thật, loại bỏ confound về horizon của harness."
+    },
+    "file:snort_validation/eval_surrogate_cross_validate.py": {
+      "name": "eval_surrogate_cross_validate.py",
+      "type": "file",
+      "summary": "Cross-validate agent đã huấn luyện trên họ botnet khác (train neris, test win13) dùng surrogate XGBoost thay cho Snort thật để chấm điểm nhanh."
+    },
+    "file:snort_validation/evasion_fidelity_test.py": {
+      "name": "evasion_fidelity_test.py",
+      "type": "file",
+      "summary": "Kiểm tra `prepend` là evasion thật hay chỉ là kênh C2 hỏng: in byte thực tế và phân loại mỗi mechanism theo việc lệnh còn nằm ở offset 0 hay không."
+    },
+    "file:snort_validation/extract_ctu13_features.py": {
+      "name": "extract_ctu13_features.py",
+      "type": "file",
+      "summary": "Trích 20 đặc trưng ứng viên từ corpus parquet CTU-13 (13 file, 10.6M flow): ghi mẫu CSV có seed và phân phối tham chiếu trên toàn bộ quần thể botnet, có đối chiếu với bản cài đặt scalar."
+    },
+    "file:snort_validation/extract_ctu13_real_features.py": {
+      "name": "extract_ctu13_real_features.py",
+      "type": "file",
+      "summary": "Trích đặc trưng đo từ packet thật của các pcap CTU-13: đếm byte/packet hai chiều, phân phối kích thước packet, inter-arrival time, cờ TCP và thống kê payload; gán nhãn malicious theo binetflow."
+    },
+    "file:snort_validation/final_aggregate_scale_up.py": {
+      "name": "final_aggregate_scale_up.py",
+      "type": "file",
+      "summary": "Tổng hợp kết quả mọi lần scale-up (24, 100, 300, 500 flow) từ các báo cáo JSON, in bảng evasion/corrupt/rounds và lưu summary."
+    },
+    "file:snort_validation/flow_to_pcap.py": {
+      "name": "flow_to_pcap.py",
+      "type": "file",
+      "summary": "Tổng hợp file pcap từ metadata mức flow (6 đặc trưng): tạo packet TCP/UDP/ICMP khớp thống kê dur, tot_pkts, tot_bytes, src_bytes, proto, state."
+    },
+    "file:snort_validation/frag3_policy_comparison.py": {
+      "name": "frag3_policy_comparison.py",
+      "type": "file",
+      "summary": "So sánh hai chính sách ghép mảnh của Snort — `first` (chỉ soi mảnh đầu) và `last` (ghép đủ rồi mới soi) — bằng cách quét cùng dải offset split/prepend trên flow C2 thật, chấm bằng Snort thật để phát hiện benchmark đang đo thiên lệch cấu hình thay vì kỹ năng kẻ tấn công."
+    },
+    "file:snort_validation/fragment_ops.py": {
+      "name": "fragment_ops.py",
+      "type": "file",
+      "summary": "Bộ phép biến đổi dựa trên mập mờ ở tầng phân mảnh IP: chèn mảnh chồng lấn để Snort (policy first) và endpoint (policy last) nhìn thấy byte khác nhau, kèm tiện ích dựng gói scapy thật và tính lại checksum."
+    },
+    "file:snort_validation/fragment_validity_test.py": {
+      "name": "fragment_validity_test.py",
+      "type": "file",
+      "summary": "Kiểm tra gói đã biến đổi có hợp lệ theo RFC 791 hay chỉ là gói hỏng bị Snort loại bỏ — phân biệt 'né tránh thật' với 'kênh C2 đã chết', vì điều đó quyết định nghiên cứu đo kỹ năng hay đo sự hỏng gói."
+    },
+    "file:snort_validation/frontier_exact.py": {
+      "name": "frontier_exact.py",
+      "type": "file",
+      "summary": "Giải chính xác bài toán biên: với mỗi flow, tìm tập gói nhỏ nhất cần làm hỏng để né Snort bằng cách thử mọi tổ hợp k-mục theo độ sâu tăng dần, rồi xuất nhãn giám sát tối ưu cho behaviour cloning."
+    },
+    "file:snort_validation/harness_variance.py": {
+      "name": "harness_variance.py",
+      "type": "file",
+      "summary": "Đo độ bất định run-to-run của harness chấm điểm: chạy lại y hệt kế hoạch làm-hỏng-tất-cả 5 lần trong các service độc lập để phát hiện verdict dao động, vì một verdict đổi giữa các lần chạy sẽ vô hiệu mọi so sánh."
+    },
+    "file:snort_validation/joint_outcomes.py": {
+      "name": "joint_outcomes.py",
+      "type": "file",
+      "summary": "Script tổng hợp không định nghĩa hàm: đối chiếu kết quả né XGBoost với kết quả né Snort thật cho từng policy qua các lần chạy blind/l10/enh10, đếm bốn tổ hợp cùng né, chỉ XGB, chỉ Snort, không né."
+    },
+    "file:snort_validation/label_feasibility.py": {
+      "name": "label_feasibility.py",
+      "type": "file",
+      "summary": "Cổng khả thi: kiểm tra mạng nơ-ron trên đặc trưng per-packet hiện có có tái tạo được mask tối ưu của frontier không, từ đó quyết định behaviour cloning có vô nghĩa và phải đổi đặc trưng trước hay không."
+    },
+    "file:snort_validation/label_real_flows_with_snort.py": {
+      "name": "label_real_flows_with_snort.py",
+      "type": "file",
+      "summary": "Gán nhãn verdict Snort thật (ET Open C2) cho flow CTU-13 thật rồi xếp hạng đặc trưng đo được theo mức phân tách alert/sạch, bằng cách chạy Snort một lần trên capture thật (payload thật) rồi join theo 5-tuple."
+    },
+    "file:snort_validation/offset_sweep_test.py": {
+      "name": "offset_sweep_test.py",
+      "type": "file",
+      "summary": "Thí nghiệm quyết định: offset thắng có phụ thuộc từng flow hay không — quét offset cho split và prepend trên 16 flow held-out bằng Snort thật để xem có cần tham số hoá không gian hành động theo offset hay không."
+    },
+    "file:snort_validation/parse_http_eval.py": {
+      "name": "parse_http_eval.py",
+      "type": "file",
+      "summary": "Script nhỏ đọc báo cáo JSON đánh giá HTTP-only và in bảng tổng hợp tỷ lệ né theo từng cơ chế so với Snort thật."
+    },
+    "file:snort_validation/prepare_enhanced_surrogate_data.py": {
+      "name": "prepare_enhanced_surrogate_data.py",
+      "type": "file",
+      "summary": "Chuẩn bị tập huấn luyện surrogate tăng cường: đóng băng hai ma trận .npz (baseline 6 đặc trưng, enhanced 6+10) cùng manifest ghi số dòng, số dương, SHA-256, thứ tự đặc trưng và split phân tầng dùng chung."
+    },
+    "file:snort_validation/probe_overlap_evasion.py": {
+      "name": "probe_overlap_evasion.py",
+      "type": "file",
+      "summary": "Probe GO/NO-GO quyết định né tránh dựa trên chồng lấn mảnh có thật trên setup này hay không: so ba nhánh original/split/overlap trên một flow, tất cả chấm bằng Snort thật, đồng thời yêu cầu endpoint vẫn khôi phục đúng lệnh C2."
+    },
+    "file:snort_validation/real_rules_replica.py": {
+      "name": "real_rules_replica.py",
+      "type": "file",
+      "summary": "Bản sao Python của chính các rule ET Open C2 thật sự nổ trên một capture: phân tích content/nocase/offset/depth/distance/within và flow:established rồi đánh giá trên payload gói thật, để tối ưu đúng bề mặt khớp của Snort ở tốc độ Python thay vì ~10s mỗi lần gọi Snort."
+    },
+    "file:snort_validation/register_stratosphere_captures.py": {
+      "name": "register_stratosphere_captures.py",
+      "type": "file",
+      "summary": "Đăng ký capture Stratosphere/CTU-13 vào project: kiểm tra sự tồn tại của pcap, tải nếu thiếu, trích đặc trưng flow thật và cập nhật registry để các harness khác dùng chung."
+    },
+    "config:snort_validation/rules/botnet-aggressive.rules": {
+      "name": "botnet-aggressive.rules",
+      "type": "config",
+      "summary": "Ruleset botnet 'hung hãn' với ngưỡng hạ thấp cho baseline nghiên cứu: nhắm bắt 70-80% flow độc hại CTU-13 để tạo môi trường IDS khó cho RL, cảnh báo rõ đây là cấu hình nghiên cứu gây nhiều false positive trong production."
+    },
+    "config:snort_validation/rules/botnet-behavior.rules": {
+      "name": "botnet-behavior.rules",
+      "type": "config",
+      "summary": "Ruleset phát hiện hành vi botnet theo ngưỡng cho flow tổng hợp: bắt cụm payload lớn, beacon gói nhỏ lặp lại và mẫu kết thúc bất thường; ngưỡng hiệu chỉnh theo phân bố flow CTU-13, kèm các rule đặc thù họ Neris/Rbot/Virut."
+    },
+    "config:snort_validation/rules/classification.config": {
+      "name": "classification.config",
+      "type": "config",
+      "summary": "Định nghĩa shortname/description/priority cho các classtype dùng trong rule (trojan-activity, attempted-recon, malware-cnc...), gồm cả các phân loại mở rộng cho rule botnet."
+    },
+    "config:snort_validation/rules/reference.config": {
+      "name": "reference.config",
+      "type": "config",
+      "summary": "Ánh xạ các tiền tố reference (bugtraq, cve, url, msb...) sang URL hệ thống để rule có thể gắn tham chiếu ngoài."
+    },
+    "config:snort_validation/rules/snort.conf": {
+      "name": "snort.conf",
+      "type": "config",
+      "summary": "Cấu hình Snort tối giản cho phân tích pcap offline (chỉ dùng để validate sau huấn luyện): khai báo RULE_PATH, HOME_NET/EXTERNAL_NET any, bật output alert_fast, preprocessor frag3/stream5 và include botnet-behavior.rules; ghi chú rõ emerging-botcc.rules đã bị bỏ vì include nó khiến Snort thoát lỗi."
+    },
+    "file:snort_validation/run_evaluation.py": {
+      "name": "run_evaluation.py",
+      "type": "file",
+      "summary": "Wrapper quanh ai_agent/evaluate.py: chạy đánh giá agent PPO (mặc định 80 episode), ghi lại đặc trưng flow gốc và đã biến đổi mỗi episode để validate_with_snort.py dùng lại, đảm bảo mọi policy chấm trên CÙNG chuỗi episode nhờ seed."
+    },
+    "file:snort_validation/semantics_strict_test.py": {
+      "name": "semantics_strict_test.py",
+      "type": "file",
+      "summary": "Thanh ngữ nghĩa nghiêm ngặt hơn: ghép mảnh đúng theo TỪNG datagram (nhóm theo IP id thay vì coi cả flow TCP là một datagram) và yêu cầu stream ghép lại phải BẮT ĐẦU bằng lệnh gốc — request line HTTP ở offset khác 0 không còn là HTTP request."
+    },
+    "file:snort_validation/smoke_test.py": {
+      "name": "smoke_test.py",
+      "type": "file",
+      "summary": "Smoke test nhanh: chạy SnortValidator trên một tập episode nhỏ từ test_evaluation.json và in tỷ lệ phát hiện để xác nhận chuỗi validate hoạt động."
+    },
+    "file:snort_validation/snort_batch_service.py": {
+      "name": "snort_batch_service.py",
+      "type": "file",
+      "summary": "Dịch vụ chấm verdict bằng Snort thật theo lô: gộp N flow vào MỘT pcap để khấu hao ~10s nạp 21k rule, mỗi query được gán 5-tuple nguồn riêng (rewrite hướng-aware) và ánh xạ alert về flow độc lập chiều, kèm self-test đối chiếu batch với ground truth từng flow."
+    },
+    "file:snort_validation/snort_query_service.py": {
+      "name": "snort_query_service.py",
+      "type": "file",
+      "summary": "Tra cứu verdict Snort cho phần thưởng snort-direct: replica Python nhanh của đúng ngữ nghĩa rule botnet-behavior.rules (dùng làm reward huấn luyện), stub mock làm đối chứng âm, và real_snort_verdict chạy Snort thật làm ground truth."
+    },
+    "file:snort_validation/snort_resident_service.py": {
+      "name": "snort_resident_service.py",
+      "type": "file",
+      "summary": "Dịch vụ Snort thường trú: khởi động Snort MỘT lần ở chế độ IDS trên loopback rồi bơm frame theo lô để chấm verdict, khấu hao ~9.9s nạp rule xuống còn vài chục ms/flow; alert ghi ra file đọc theo offset, mỗi query một địa chỉ/port duy nhất để ET rule throttle by_src không nuốt alert."
+    },
+    "file:snort_validation/surrogate_dataset.py": {
+      "name": "surrogate_dataset.py",
+      "type": "file",
+      "summary": "Bộ dựng dataset nhãn dùng chung cho surrogate phán quyết Snort: gom bốn lần chạy policy (240 mẫu blind + 80 mẫu lambda=10) thành ma trận feature/verdict nhất quán về thứ tự cột, để mọi script tiêu thụ nhìn thấy cùng một định nghĩa."
+    },
+    "file:snort_validation/test_snort_batch_service.py": {
+      "name": "test_snort_batch_service.py",
+      "type": "file",
+      "summary": "Kiểm tra tính đúng đắn của service phán quyết Snort theo lô: kết quả batch phải khớp ground truth chạy từng flow trên tập trộn cả positive lẫn negative thật, buộc phải có alert thật để phép ánh xạ ngược về đúng flow được kiểm chứng."
+    },
+    "file:snort_validation/test_stratosphere_sweep.py": {
+      "name": "test_stratosphere_sweep.py",
+      "type": "file",
+      "summary": "Các kiểm tra assert-based cho code sweep Stratosphere: registry capture hợp lệ, định tuyến pcap theo dataset, chi phí corrupt đếm đúng số packet bị biến đổi, và aggregator từ chối dòng thiếu giá trị thay vì mặc định về 0."
+    },
+    "file:snort_validation/test_surrogate_data.py": {
+      "name": "test_surrogate_data.py",
+      "type": "file",
+      "summary": "Script kiểm tra snapshot nhãn: xác nhận mỗi policy có đủ 80 episode và số positive (agent 66 / random 55 / baseline 4) khớp với bộ báo cáo hiện tại, kèm chú thích lý do các con số từng thay đổi."
+    },
+    "file:snort_validation/train_real_snort_surrogate.py": {
+      "name": "train_real_snort_surrogate.py",
+      "type": "file",
+      "summary": "Huấn luyện surrogate Snort trên feature CTU-13 đo thật với nhãn Snort thật (ruleset ET Open C2), đánh giá cross-capture leave-one-capture-out để tránh rò rỉ giữa các flow cùng một capture botnet."
+    },
+    "file:snort_validation/train_snort_surrogate.py": {
+      "name": "train_snort_surrogate.py",
+      "type": "file",
+      "summary": "Trainer surrogate phán quyết Snort với hai chế độ baseline/enhanced dùng chung ma trận và chỉ số train/test, gắn tên feature vào model để reward của RL env đọc đúng thứ tự cột."
+    },
+    "file:snort_validation/validate_features_vs_snort.py": {
+      "name": "validate_features_vs_snort.py",
+      "type": "file",
+      "summary": "Kiểm định 20 feature ứng viên với phán quyết Snort thật qua tương quan point-biserial/Spearman và cổng chọn tuyên bố trước khi nhìn số liệu (|r|>0.15, p<0.05, không suy biến, không cộng tuyến, tối đa top 10)."
+    },
+    "file:snort_validation/validate_real_features_vs_snort.py": {
+      "name": "validate_real_features_vs_snort.py",
+      "type": "file",
+      "summary": "Kiểm định feature CTU-13 đo thật với nhãn Snort thật: dựng lại pcap từ thống kê packet đo được, chạy Snort CLI, rồi tính tương quan, AUC xếp hạng và Cohen's d cho từng feature."
+    },
+    "file:snort_validation/validate_with_snort.py": {
+      "name": "validate_with_snort.py",
+      "type": "file",
+      "summary": "Runner đánh giá episode của agent bằng Snort: tổng hợp pcap từ flow đã biến đổi, chạy Snort offline, đo tỷ lệ flow còn bị gắn cờ và so sánh agent với random/baseline."
+    },
+    "file:snort_validation/verify_snort_replica.py": {
+      "name": "verify_snort_replica.py",
+      "type": "file",
+      "summary": "Chấm điểm replica snort_query_service so với Snort thật trên hai tập bằng chứng (seeded 240 flow + probe 107 flow); replica chỉ được dùng làm reward huấn luyện nếu tái tạo được cả hai tập."
+    },
+    "file:test_direction_1.py": {
+      "name": "test_direction_1.py",
+      "type": "file",
+      "summary": "Kiểm tra Direction 1: chi phí hành động bị trừ đúng vào reward của các cơ chế đắt đỏ, so sánh reward kỳ vọng với reward thực tế mà env trả về."
+    },
+    "file:test_direction_2.py": {
+      "name": "test_direction_2.py",
+      "type": "file",
+      "summary": "Kiểm tra Direction 2: action masking theo protocol chặn các cơ chế không áp dụng được cho từng loại framing (http/neris), xác minh qua env._compute_action_mask()."
+    },
+    "file:tests/_packets.py": {
+      "name": "_packets.py",
+      "type": "file",
+      "summary": "Bộ dựng packet scapy dùng chung cho các test env: tạo flow TCP gồm 3 gói handshake không payload rồi tới n gói dữ liệu mang payload, không cần Snort hay pcap."
+    },
+    "file:tests/test_alert_id_independence.py": {
+      "name": "test_alert_id_independence.py",
+      "type": "file",
+      "summary": "Kiểm tra phán quyết alert không phụ thuộc id của caller: vạch ra lỗi wrap địa chỉ uid khiến flow bị báo 0 alert (false negative âm thầm) với mọi id vượt biên /24."
+    },
+    "file:tests/test_beats_control.py": {
+      "name": "test_beats_control.py",
+      "type": "file",
+      "summary": "Kiểm tra việc đánh bại control corrupt-all: điểm hòa vốn phải tính theo số packet thực sự corrupt được chứ không theo độ rộng action space, và rows_from_cross phải giữ nguyên số đếm đo được."
+    },
+    "file:tests/test_c2_semantics.py": {
+      "name": "test_c2_semantics.py",
+      "type": "file",
+      "summary": "Kiểm tra oracle ngữ nghĩa C2: một evasion chỉ là thật nếu endpoint vẫn dựng lại được payload gốc; việc làm mất gói mang payload là phá hủy chứ không phải né tránh."
+    },
+    "file:tests/test_corrupted_bookkeeping.py": {
+      "name": "test_corrupted_bookkeeping.py",
+      "type": "file",
+      "summary": "Kiểm tra bookkeeping _corrupted chỉ ghi nhận packet thực sự mang payload, và action space phải là hằng số độc lập dữ liệu để checkpoint nạp lại được trên mọi tập flow."
+    },
+    "file:tests/test_direction_2_masking.py": {
+      "name": "test_direction_2_masking.py",
+      "type": "file",
+      "summary": "Kiểm tra action mask theo protocol: flow HTTP được dùng http_header_pad, flow Neris thì không, mọi flow đều cho phép noop, và env tôn trọng mask trong reset()."
+    },
+    "file:tests/test_endpoint_model.py": {
+      "name": "test_endpoint_model.py",
+      "type": "file",
+      "summary": "Kiểm tra endpoint_model: parse command theo từng framing (http/irc/length2/neris), phát hiện framing và từ chối prepend thô không protocol-aware."
+    },
+    "file:tests/test_eval_cross_capture_determinism.py": {
+      "name": "test_eval_cross_capture_determinism.py",
+      "type": "file",
+      "summary": "Test hồi quy tính tất định của ai_agent/eval_cross_capture.py: ba lần chạy liên tiếp phải sinh báo cáo giống hệt từng byte, sau khi sửa hai nguồn RNG chưa được seed."
+    },
+    "file:tests/test_fragment_ops.py": {
+      "name": "test_fragment_ops.py",
+      "type": "file",
+      "summary": "Kiểm tra dựng fragment: split/overlap giữ được command nhưng giấu pattern khỏi reassembler policy first, và fix_checksums cập nhật đúng checksum UDP/TCP trên payload đã đổi."
+    },
+    "file:tests/test_hidden_defender_env.py": {
+      "name": "test_hidden_defender_env.py",
+      "type": "file",
+      "summary": "Bộ test cho HiddenDefenderEnv: reward chỉ +10 khi alert biến mất VÀ command C2 vẫn dựng lại được, cùng các bất biến về corpus, action space 14 cơ chế và tính tất định."
+    },
+    "file:tests/test_mechanisms_ab.py": {
+      "name": "test_mechanisms_ab.py",
+      "type": "file",
+      "summary": "Kiểm tra cơ chế A (đệm header HTTP protocol-aware) và B (wrapper tiền tố độ dài): giữ được command phía endpoint nhưng vẫn thực sự thay đổi byte trên đường truyền."
+    },
+    "file:tests/test_packet_features.py": {
+      "name": "test_packet_features.py",
+      "type": "file",
+      "summary": "Kiểm tra contract của packet_features(): shape, tính hữu hạn trên flow rỗng/gói không payload, và độ 'sống' của cột feature (không có cột chết dạy policy vô ích)."
+    },
+    "file:tests/test_packet_level_env.py": {
+      "name": "test_packet_level_env.py",
+      "type": "file",
+      "summary": "Smoke test cho PacketLevelEnv: reset/step/episode trả về observation shape (7,) và reward đúng định dạng gymnasium với pool flow giả."
+    },
+    "file:tests/test_packet_modifier.py": {
+      "name": "test_packet_modifier.py",
+      "type": "file",
+      "summary": "Kiểm thử đơn vị cho PacketModifier: xác minh việc áp dụng action (TTL, phân mảnh, padding, overlap) lên gói tin và chuyển đổi ngược các gói đã biến đổi thành đặc trưng flow."
+    },
+    "file:tests/test_snort_verdict_integrity.py": {
+      "name": "test_snort_verdict_integrity.py",
+      "type": "file",
+      "summary": "Kiểm thử hồi quy bảo vệ tính toàn vẹn verdict của Snort: đảm bảo flow không bị biến đổi luôn bị phát hiện khi gom batch, chế độ batch khớp với chấm điểm riêng lẻ, và score_matrix mặc định chấm từng flow."
+    }
+  },
+  "totalNodes": 139,
+  "totalEdges": 908
+}

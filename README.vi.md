@@ -115,7 +115,7 @@ PYTHONPATH=ai_agent:snort_validation .venv/bin/python3 \
 ## Tài liệu
 
 `docs/surrogate_vs_reality_audit.md` — audit đầy đủ surrogate so với Snort thật (224 lần gọi
-Snort thật). `snort_validation/README.md` — chi tiết harness Snort.
+Snort thật). `docs/RESULTS_PRESENTATION.md` — cách mọi số liệu chính được tạo ra và kiểm chứng.
 
 ## Tham khảo
 

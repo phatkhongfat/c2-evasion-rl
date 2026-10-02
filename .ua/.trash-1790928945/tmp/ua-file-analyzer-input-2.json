@@ -1,0 +1,11 @@
+{
+  "projectRoot": "/root/.hermes/c2-evasion-rl",
+  "batchFiles": [
+    {"path": "snort_validation/README.md", "language": "markdown", "sizeLines": 203, "fileCategory": "docs"},
+    {"path": "snort_validation/extract_stratosphere.sh", "language": "shell", "sizeLines": 22, "fileCategory": "script"},
+    {"path": "snort_validation/fetch_stratosphere.sh", "language": "shell", "sizeLines": 29, "fileCategory": "script"},
+    {"path": "snort_validation/fetch_stratosphere_captures.sh", "language": "shell", "sizeLines": 84, "fileCategory": "script"},
+    {"path": "snort_validation/run_stratosphere_sweep.sh", "language": "shell", "sizeLines": 101, "fileCategory": "script"}
+  ],
+  "batchImportData": {"snort_validation/README.md": [], "snort_validation/extract_stratosphere.sh": [], "snort_validation/fetch_stratosphere.sh": [], "snort_validation/fetch_stratosphere_captures.sh": [], "snort_validation/run_stratosphere_sweep.sh": []}
+}

@@ -1,0 +1,2227 @@
+{
+  "nodes": [
+    {
+      "id": "file:tests/test_endpoint_model.py",
+      "type": "file",
+      "name": "test_endpoint_model.py",
+      "filePath": "tests/test_endpoint_model.py",
+      "summary": "Kiểm tra endpoint_model: parse command theo từng framing (http/irc/length2/neris), phát hiện framing và từ chối prepend thô không protocol-aware.",
+      "tags": [
+        "test",
+        "endpoint",
+        "parsing",
+        "framing",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:tests/test_endpoint_model.py:test_http_request_line_parsed",
+      "type": "function",
+      "name": "test_http_request_line_parsed",
+      "filePath": "tests/test_endpoint_model.py",
+      "lineRange": [
+        9,
+        11
+      ],
+      "summary": "GET không body: command là path của request line.",
+      "tags": [
+        "test",
+        "parsing",
+        "endpoint"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_endpoint_model.py:test_http_extra_headers_are_ignored",
+      "type": "function",
+      "name": "test_http_extra_headers_are_ignored",
+      "filePath": "tests/test_endpoint_model.py",
+      "lineRange": [
+        14,
+        29
+      ],
+      "summary": "Cơ chế A: header rác bị server thật bỏ qua, body không đổi.",
+      "tags": [
+        "test",
+        "mechanism",
+        "endpoint"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_endpoint_model.py:test_irc_privmsg_parsed",
+      "type": "function",
+      "name": "test_irc_privmsg_parsed",
+      "filePath": "tests/test_endpoint_model.py",
+      "lineRange": [
+        32,
+        33
+      ],
+      "summary": "Parse command từ PRIVMSG của IRC.",
+      "tags": [
+        "test",
+        "parsing",
+        "endpoint"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_endpoint_model.py:test_length_prefixed_framing",
+      "type": "function",
+      "name": "test_length_prefixed_framing",
+      "filePath": "tests/test_endpoint_model.py",
+      "lineRange": [
+        36,
+        44
+      ],
+      "summary": "Cơ chế B: header khai báo offset nơi dữ liệu thật bắt đầu.",
+      "tags": [
+        "test",
+        "mechanism",
+        "endpoint"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_endpoint_model.py:test_garbage_is_rejected",
+      "type": "function",
+      "name": "test_garbage_is_rejected",
+      "filePath": "tests/test_endpoint_model.py",
+      "lineRange": [
+        47,
+        50
+      ],
+      "summary": "Prepend thô không protocol-aware nên handler phải từ chối.",
+      "tags": [
+        "test",
+        "parsing",
+        "endpoint"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_endpoint_model.py:test_framings_are_distinct",
+      "type": "function",
+      "name": "test_framings_are_distinct",
+      "filePath": "tests/test_endpoint_model.py",
+      "lineRange": [
+        53,
+        54
+      ],
+      "summary": "Tập framing phải đúng {http, irc, length2, neris}.",
+      "tags": [
+        "test",
+        "framing",
+        "endpoint"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_endpoint_model.py:test_detect_framing_http",
+      "type": "function",
+      "name": "test_detect_framing_http",
+      "filePath": "tests/test_endpoint_model.py",
+      "lineRange": [
+        57,
+        58
+      ],
+      "summary": "Phát hiện đúng framing HTTP.",
+      "tags": [
+        "test",
+        "framing",
+        "endpoint"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_endpoint_model.py:test_detect_framing_irc",
+      "type": "function",
+      "name": "test_detect_framing_irc",
+      "filePath": "tests/test_endpoint_model.py",
+      "lineRange": [
+        61,
+        62
+      ],
+      "summary": "Phát hiện đúng framing IRC.",
+      "tags": [
+        "test",
+        "framing",
+        "endpoint"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_endpoint_model.py:test_detect_framing_length2",
+      "type": "function",
+      "name": "test_detect_framing_length2",
+      "filePath": "tests/test_endpoint_model.py",
+      "lineRange": [
+        65,
+        66
+      ],
+      "summary": "Phát hiện đúng framing length2.",
+      "tags": [
+        "test",
+        "framing",
+        "endpoint"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_endpoint_model.py:test_detect_framing_neris_binary",
+      "type": "function",
+      "name": "test_detect_framing_neris_binary",
+      "filePath": "tests/test_endpoint_model.py",
+      "lineRange": [
+        72,
+        74
+      ],
+      "summary": "Phát hiện đúng framing Neris nhị phân.",
+      "tags": [
+        "test",
+        "framing",
+        "endpoint"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_endpoint_model.py:test_neris_chain_parsed",
+      "type": "function",
+      "name": "test_neris_chain_parsed",
+      "filePath": "tests/test_endpoint_model.py",
+      "lineRange": [
+        77,
+        78
+      ],
+      "summary": "Parse đúng chuỗi record của Neris.",
+      "tags": [
+        "test",
+        "parsing",
+        "endpoint"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_endpoint_model.py:test_neris_rejects_prefix",
+      "type": "function",
+      "name": "test_neris_rejects_prefix",
+      "filePath": "tests/test_endpoint_model.py",
+      "lineRange": [
+        81,
+        83
+      ],
+      "summary": "Neris từ chối tiền tố lạ không hợp lệ.",
+      "tags": [
+        "test",
+        "parsing",
+        "endpoint"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_endpoint_model.py:test_neris_treats_trailing_pad_conservatively",
+      "type": "function",
+      "name": "test_neris_treats_trailing_pad_conservatively",
+      "filePath": "tests/test_endpoint_model.py",
+      "lineRange": [
+        86,
+        91
+      ],
+      "summary": "Neris xử lý phần đệm cuối một cách thận trọng.",
+      "tags": [
+        "test",
+        "parsing",
+        "endpoint"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:tests/test_eval_cross_capture_determinism.py",
+      "type": "file",
+      "name": "test_eval_cross_capture_determinism.py",
+      "filePath": "tests/test_eval_cross_capture_determinism.py",
+      "summary": "Test hồi quy tính tất định của ai_agent/eval_cross_capture.py: ba lần chạy liên tiếp phải sinh báo cáo giống hệt từng byte, sau khi sửa hai nguồn RNG chưa được seed.",
+      "tags": [
+        "test",
+        "determinism",
+        "regression",
+        "evaluation",
+        "reproducibility"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:tests/test_eval_cross_capture_determinism.py:_load_module",
+      "type": "function",
+      "name": "_load_module",
+      "filePath": "tests/test_eval_cross_capture_determinism.py",
+      "lineRange": [
+        43,
+        49
+      ],
+      "summary": "Nạp script eval như module (main được guard bởi __main__).",
+      "tags": [
+        "test",
+        "helper",
+        "determinism"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_eval_cross_capture_determinism.py:_run_script",
+      "type": "function",
+      "name": "_run_script",
+      "filePath": "tests/test_eval_cross_capture_determinism.py",
+      "lineRange": [
+        52,
+        66
+      ],
+      "summary": "Chạy script eval trong tiến trình mới, trả về byte báo cáo và stdout.",
+      "tags": [
+        "test",
+        "helper",
+        "determinism"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_eval_cross_capture_determinism.py:_dummy_pool",
+      "type": "function",
+      "name": "_dummy_pool",
+      "filePath": "tests/test_eval_cross_capture_determinism.py",
+      "lineRange": [
+        69,
+        82
+      ],
+      "summary": "Tạo pool flow giả để kiểm tra đường đi của eval_policy.",
+      "tags": [
+        "test",
+        "helper",
+        "determinism"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_eval_cross_capture_determinism.py:test_three_consecutive_runs_produce_identical_report_bytes",
+      "type": "function",
+      "name": "test_three_consecutive_runs_produce_identical_report_bytes",
+      "filePath": "tests/test_eval_cross_capture_determinism.py",
+      "lineRange": [
+        85,
+        95
+      ],
+      "summary": "Ba lần chạy liên tiếp phải tạo báo cáo giống hệt từng byte.",
+      "tags": [
+        "test",
+        "determinism",
+        "regression"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_eval_cross_capture_determinism.py:test_eval_policy_is_reproducible_in_process",
+      "type": "function",
+      "name": "test_eval_policy_is_reproducible_in_process",
+      "filePath": "tests/test_eval_cross_capture_determinism.py",
+      "lineRange": [
+        98,
+        103
+      ],
+      "summary": "eval_policy phải tái lập được trong cùng một tiến trình.",
+      "tags": [
+        "test",
+        "determinism",
+        "regression"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_eval_cross_capture_determinism.py:test_eval_policy_walks_the_pool_one_to_one",
+      "type": "function",
+      "name": "test_eval_policy_walks_the_pool_one_to_one",
+      "filePath": "tests/test_eval_cross_capture_determinism.py",
+      "lineRange": [
+        106,
+        119
+      ],
+      "summary": "eval_policy phải duyệt pool theo tỉ lệ 1-1.",
+      "tags": [
+        "test",
+        "determinism",
+        "regression"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:tests/test_fragment_ops.py",
+      "type": "file",
+      "name": "test_fragment_ops.py",
+      "filePath": "tests/test_fragment_ops.py",
+      "summary": "Kiểm tra dựng fragment: split/overlap giữ được command nhưng giấu pattern khỏi reassembler policy first, và fix_checksums cập nhật đúng checksum UDP/TCP trên payload đã đổi.",
+      "tags": [
+        "test",
+        "fragmentation",
+        "checksum",
+        "packet-manipulation",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:tests/test_fragment_ops.py:_dht_payload",
+      "type": "function",
+      "name": "_dht_payload",
+      "filePath": "tests/test_fragment_ops.py",
+      "lineRange": [
+        20,
+        22
+      ],
+      "summary": "Tạo payload DHT mẫu có pattern 12 byte tại offset 0 như đo trên flow thật.",
+      "tags": [
+        "helper",
+        "test",
+        "fragmentation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_fragment_ops.py:test_split_then_overlap_keeps_command_but_hides_pattern",
+      "type": "function",
+      "name": "test_split_then_overlap_keeps_command_but_hides_pattern",
+      "filePath": "tests/test_fragment_ops.py",
+      "lineRange": [
+        25,
+        33
+      ],
+      "summary": "Split rồi overlap giữ command nhưng giấu pattern với reassembler policy first.",
+      "tags": [
+        "test",
+        "fragmentation",
+        "checksum"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_fragment_ops.py:test_split_fragments_reassemble_to_original",
+      "type": "function",
+      "name": "test_split_fragments_reassemble_to_original",
+      "filePath": "tests/test_fragment_ops.py",
+      "lineRange": [
+        36,
+        40
+      ],
+      "summary": "Fragment split ráp lại đúng bản gốc ở mọi policy.",
+      "tags": [
+        "test",
+        "fragmentation",
+        "checksum"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_fragment_ops.py:test_overlap_fragments_have_valid_offsets",
+      "type": "function",
+      "name": "test_overlap_fragments_have_valid_offsets",
+      "filePath": "tests/test_fragment_ops.py",
+      "lineRange": [
+        43,
+        46
+      ],
+      "summary": "Offset fragment hợp lệ theo đơn vị 8 byte.",
+      "tags": [
+        "test",
+        "fragmentation",
+        "checksum"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_fragment_ops.py:test_fragment_plan_to_packets_preserves_all_bytes",
+      "type": "function",
+      "name": "test_fragment_plan_to_packets_preserves_all_bytes",
+      "filePath": "tests/test_fragment_ops.py",
+      "lineRange": [
+        49,
+        70
+      ],
+      "summary": "Chuyển kế hoạch fragment thành packet phải bảo toàn mọi byte của payload.",
+      "tags": [
+        "test",
+        "fragmentation",
+        "checksum"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:tests/test_fragment_ops.py:_pkt",
+      "type": "function",
+      "name": "_pkt",
+      "filePath": "tests/test_fragment_ops.py",
+      "lineRange": [
+        73,
+        75
+      ],
+      "summary": "Dựng packet test với lớp transport cho trước.",
+      "tags": [
+        "helper",
+        "test",
+        "fragmentation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_fragment_ops.py:test_fix_checksums_udp",
+      "type": "function",
+      "name": "test_fix_checksums_udp",
+      "filePath": "tests/test_fragment_ops.py",
+      "lineRange": [
+        78,
+        82
+      ],
+      "summary": "fix_checksums tính lại đúng checksum UDP.",
+      "tags": [
+        "test",
+        "checksum",
+        "fragmentation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_fragment_ops.py:test_fix_checksums_tcp",
+      "type": "function",
+      "name": "test_fix_checksums_tcp",
+      "filePath": "tests/test_fragment_ops.py",
+      "lineRange": [
+        85,
+        87
+      ],
+      "summary": "fix_checksums tính lại đúng checksum TCP.",
+      "tags": [
+        "test",
+        "checksum",
+        "fragmentation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_fragment_ops.py:test_fix_checksums_original_untouched",
+      "type": "function",
+      "name": "test_fix_checksums_original_untouched",
+      "filePath": "tests/test_fragment_ops.py",
+      "lineRange": [
+        90,
+        94
+      ],
+      "summary": "fix_checksums không được sửa packet gốc.",
+      "tags": [
+        "test",
+        "checksum",
+        "fragmentation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_fragment_ops.py:test_fix_checksums_preserves_a_grown_payload",
+      "type": "function",
+      "name": "test_fix_checksums_preserves_a_grown_payload",
+      "filePath": "tests/test_fragment_ops.py",
+      "lineRange": [
+        97,
+        103
+      ],
+      "summary": "fix_checksums vẫn đúng khi payload đã phình to.",
+      "tags": [
+        "test",
+        "checksum",
+        "fragmentation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_fragment_ops.py:test_fix_checksums_on_padded_tcp_packet",
+      "type": "function",
+      "name": "test_fix_checksums_on_padded_tcp_packet",
+      "filePath": "tests/test_fragment_ops.py",
+      "lineRange": [
+        106,
+        118
+      ],
+      "summary": "fix_checksums đúng trên packet TCP đã được đệm.",
+      "tags": [
+        "test",
+        "checksum",
+        "fragmentation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_fragment_ops.py:test_fix_checksums_keeps_the_ethernet_header",
+      "type": "function",
+      "name": "test_fix_checksums_keeps_the_ethernet_header",
+      "filePath": "tests/test_fragment_ops.py",
+      "lineRange": [
+        121,
+        133
+      ],
+      "summary": "fix_checksums giữ nguyên header Ethernet.",
+      "tags": [
+        "test",
+        "checksum",
+        "fragmentation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_fragment_ops.py:test_fix_checksums_value_reflects_new_payload",
+      "type": "function",
+      "name": "test_fix_checksums_value_reflects_new_payload",
+      "filePath": "tests/test_fragment_ops.py",
+      "lineRange": [
+        136,
+        142
+      ],
+      "summary": "Giá trị checksum phải phản ánh payload mới.",
+      "tags": [
+        "test",
+        "checksum",
+        "fragmentation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:tests/test_hidden_defender_env.py",
+      "type": "file",
+      "name": "test_hidden_defender_env.py",
+      "filePath": "tests/test_hidden_defender_env.py",
+      "summary": "Bộ test cho HiddenDefenderEnv: reward chỉ +10 khi alert biến mất VÀ command C2 vẫn dựng lại được, cùng các bất biến về corpus, action space 14 cơ chế và tính tất định.",
+      "tags": [
+        "test",
+        "reinforcement-learning",
+        "reward",
+        "environment",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:tests/test_hidden_defender_env.py:test_corpus_loads_with_expected_shape",
+      "type": "function",
+      "name": "test_corpus_loads_with_expected_shape",
+      "filePath": "tests/test_hidden_defender_env.py",
+      "lineRange": [
+        28,
+        33
+      ],
+      "summary": "Corpus nạp đúng shape 64 train/16 test và obs được chuẩn hoá về [0,1].",
+      "tags": [
+        "test",
+        "corpus",
+        "reinforcement-learning"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_hidden_defender_env.py:test_corpus_has_both_captures_in_both_splits",
+      "type": "function",
+      "name": "test_corpus_has_both_captures_in_both_splits",
+      "filePath": "tests/test_hidden_defender_env.py",
+      "lineRange": [
+        36,
+        39
+      ],
+      "summary": "Cả hai split phải chứa cả hai capture.",
+      "tags": [
+        "test",
+        "corpus",
+        "reinforcement-learning"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_hidden_defender_env.py:test_obs_carries_no_rule_information",
+      "type": "function",
+      "name": "test_obs_carries_no_rule_information",
+      "filePath": "tests/test_hidden_defender_env.py",
+      "lineRange": [
+        42,
+        47
+      ],
+      "summary": "Observation phải defender-blind, chỉ chứa feature số.",
+      "tags": [
+        "test",
+        "environment",
+        "reinforcement-learning"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_hidden_defender_env.py:test_action_space_is_discrete_fourteen",
+      "type": "function",
+      "name": "test_action_space_is_discrete_fourteen",
+      "filePath": "tests/test_hidden_defender_env.py",
+      "lineRange": [
+        50,
+        57
+      ],
+      "summary": "Action space phải là Discrete(14) và chứa các cơ chế A/B.",
+      "tags": [
+        "test",
+        "environment",
+        "reinforcement-learning"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_hidden_defender_env.py:test_step_returns_wellformed_gym_tuple",
+      "type": "function",
+      "name": "test_step_returns_wellformed_gym_tuple",
+      "filePath": "tests/test_hidden_defender_env.py",
+      "lineRange": [
+        60,
+        75
+      ],
+      "summary": "step trả về tuple gymnasium đúng định dạng.",
+      "tags": [
+        "test",
+        "gymnasium",
+        "reinforcement-learning"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:tests/test_hidden_defender_env.py:test_environment_terminates_after_all_flows",
+      "type": "function",
+      "name": "test_environment_terminates_after_all_flows",
+      "filePath": "tests/test_hidden_defender_env.py",
+      "lineRange": [
+        78,
+        87
+      ],
+      "summary": "Env phải kết thúc sau khi đi hết toàn bộ flow.",
+      "tags": [
+        "test",
+        "environment",
+        "reinforcement-learning"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_hidden_defender_env.py:test_noop_still_alerts_on_every_baseline_flow",
+      "type": "function",
+      "name": "test_noop_still_alerts_on_every_baseline_flow",
+      "filePath": "tests/test_hidden_defender_env.py",
+      "lineRange": [
+        90,
+        102
+      ],
+      "summary": "Noop vẫn bị alert trên mọi flow baseline.",
+      "tags": [
+        "test",
+        "baseline",
+        "reinforcement-learning"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:tests/test_hidden_defender_env.py:test_corrupt_breaks_semantics_and_scores_minus_ten",
+      "type": "function",
+      "name": "test_corrupt_breaks_semantics_and_scores_minus_ten",
+      "filePath": "tests/test_hidden_defender_env.py",
+      "lineRange": [
+        105,
+        119
+      ],
+      "summary": "corrupt8 phá ngữ nghĩa phải bị -10, không được tính là evasion hợp lệ.",
+      "tags": [
+        "test",
+        "reward",
+        "reinforcement-learning"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:tests/test_hidden_defender_env.py:test_prepend_breaks_the_channel",
+      "type": "function",
+      "name": "test_prepend_breaks_the_channel",
+      "filePath": "tests/test_hidden_defender_env.py",
+      "lineRange": [
+        122,
+        142
+      ],
+      "summary": "prepend phá kênh C2 nên phải bị từ chối.",
+      "tags": [
+        "test",
+        "mechanism",
+        "reinforcement-learning"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:tests/test_hidden_defender_env.py:test_split_preserves_semantics_and_evades",
+      "type": "function",
+      "name": "test_split_preserves_semantics_and_evades",
+      "filePath": "tests/test_hidden_defender_env.py",
+      "lineRange": [
+        145,
+        159
+      ],
+      "summary": "split giữ ngữ nghĩa và né được alert.",
+      "tags": [
+        "test",
+        "mechanism",
+        "reinforcement-learning"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:tests/test_hidden_defender_env.py:test_semantics_intact_is_conservative",
+      "type": "function",
+      "name": "test_semantics_intact_is_conservative",
+      "filePath": "tests/test_hidden_defender_env.py",
+      "lineRange": [
+        162,
+        167
+      ],
+      "summary": "Hàm semantics_intact phải thận trọng khi phán xét.",
+      "tags": [
+        "test",
+        "semantics",
+        "reinforcement-learning"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_hidden_defender_env.py:test_deterministic_given_fixed_action_sequence",
+      "type": "function",
+      "name": "test_deterministic_given_fixed_action_sequence",
+      "filePath": "tests/test_hidden_defender_env.py",
+      "lineRange": [
+        170,
+        176
+      ],
+      "summary": "Env phải tất định với chuỗi hành động cố định.",
+      "tags": [
+        "test",
+        "determinism",
+        "reinforcement-learning"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:tests/test_mechanisms_ab.py",
+      "type": "file",
+      "name": "test_mechanisms_ab.py",
+      "filePath": "tests/test_mechanisms_ab.py",
+      "summary": "Kiểm tra cơ chế A (đệm header HTTP protocol-aware) và B (wrapper tiền tố độ dài): giữ được command phía endpoint nhưng vẫn thực sự thay đổi byte trên đường truyền.",
+      "tags": [
+        "test",
+        "mechanism",
+        "protocol",
+        "environment",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:tests/test_mechanisms_ab.py:_flow",
+      "type": "function",
+      "name": "_flow",
+      "filePath": "tests/test_mechanisms_ab.py",
+      "lineRange": [
+        26,
+        31
+      ],
+      "summary": "Tìm flow theo framing trong corpus, báo lỗi nếu không có.",
+      "tags": [
+        "helper",
+        "test",
+        "mechanism"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_mechanisms_ab.py:test_corpus_has_both_framings",
+      "type": "function",
+      "name": "test_corpus_has_both_framings",
+      "filePath": "tests/test_mechanisms_ab.py",
+      "lineRange": [
+        34,
+        39
+      ],
+      "summary": "Corpus phải chứa cả http và neris.",
+      "tags": [
+        "test",
+        "corpus",
+        "mechanism"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_mechanisms_ab.py:test_http_header_pad_keeps_the_command",
+      "type": "function",
+      "name": "test_http_header_pad_keeps_the_command",
+      "filePath": "tests/test_mechanisms_ab.py",
+      "lineRange": [
+        42,
+        47
+      ],
+      "summary": "Cơ chế A giữ command vì server bỏ qua header rác.",
+      "tags": [
+        "test",
+        "mechanism",
+        "protocol"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_mechanisms_ab.py:test_http_header_pad_actually_changes_the_wire",
+      "type": "function",
+      "name": "test_http_header_pad_actually_changes_the_wire",
+      "filePath": "tests/test_mechanisms_ab.py",
+      "lineRange": [
+        50,
+        55
+      ],
+      "summary": "Cơ chế A phải thực sự thay đổi byte trên đường truyền.",
+      "tags": [
+        "test",
+        "mechanism",
+        "protocol"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_mechanisms_ab.py:test_http_header_pad_is_inapplicable_to_neris",
+      "type": "function",
+      "name": "test_http_header_pad_is_inapplicable_to_neris",
+      "filePath": "tests/test_mechanisms_ab.py",
+      "lineRange": [
+        58,
+        65
+      ],
+      "summary": "Cơ chế A không áp dụng được cho Neris.",
+      "tags": [
+        "test",
+        "mechanism",
+        "protocol"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_mechanisms_ab.py:test_both_mechanisms_are_registered",
+      "type": "function",
+      "name": "test_both_mechanisms_are_registered",
+      "filePath": "tests/test_mechanisms_ab.py",
+      "lineRange": [
+        68,
+        70
+      ],
+      "summary": "Cả hai cơ chế A và B phải được đăng ký.",
+      "tags": [
+        "test",
+        "mechanism",
+        "protocol"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_mechanisms_ab.py:test_length_wrapper_round_trips",
+      "type": "function",
+      "name": "test_length_wrapper_round_trips",
+      "filePath": "tests/test_mechanisms_ab.py",
+      "lineRange": [
+        73,
+        79
+      ],
+      "summary": "Wrapper độ dài round-trip đúng.",
+      "tags": [
+        "test",
+        "mechanism",
+        "protocol"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_mechanisms_ab.py:test_length_wrapper_is_not_readable_by_the_original_handler",
+      "type": "function",
+      "name": "test_length_wrapper_is_not_readable_by_the_original_handler",
+      "filePath": "tests/test_mechanisms_ab.py",
+      "lineRange": [
+        82,
+        87
+      ],
+      "summary": "Handler gốc không đọc được wrapper độ dài.",
+      "tags": [
+        "test",
+        "mechanism",
+        "protocol"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_mechanisms_ab.py:test_prepend_still_breaks_the_http_request_line",
+      "type": "function",
+      "name": "test_prepend_still_breaks_the_http_request_line",
+      "filePath": "tests/test_mechanisms_ab.py",
+      "lineRange": [
+        90,
+        94
+      ],
+      "summary": "prepend vẫn phá request line HTTP.",
+      "tags": [
+        "test",
+        "mechanism",
+        "protocol"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:tests/test_packet_features.py",
+      "type": "file",
+      "name": "test_packet_features.py",
+      "filePath": "tests/test_packet_features.py",
+      "summary": "Kiểm tra contract của packet_features(): shape, tính hữu hạn trên flow rỗng/gói không payload, và độ 'sống' của cột feature (không có cột chết dạy policy vô ích).",
+      "tags": [
+        "test",
+        "feature-engineering",
+        "entropy",
+        "reinforcement-learning",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:tests/test_packet_features.py:_pkt",
+      "type": "function",
+      "name": "_pkt",
+      "filePath": "tests/test_packet_features.py",
+      "lineRange": [
+        22,
+        27
+      ],
+      "summary": "Dựng packet test với payload và cờ UDP tùy chọn.",
+      "tags": [
+        "helper",
+        "test",
+        "feature-engineering"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_packet_features.py:test_entropy_of_maximal_payload",
+      "type": "function",
+      "name": "test_entropy_of_maximal_payload",
+      "filePath": "tests/test_packet_features.py",
+      "lineRange": [
+        30,
+        33
+      ],
+      "summary": "Entropy payload tối đa 32 giá trị byte là 5/8.",
+      "tags": [
+        "test",
+        "entropy",
+        "feature-engineering"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_packet_features.py:test_entropy_of_constant_bytes_is_zero",
+      "type": "function",
+      "name": "test_entropy_of_constant_bytes_is_zero",
+      "filePath": "tests/test_packet_features.py",
+      "lineRange": [
+        36,
+        37
+      ],
+      "summary": "Entropy của byte hằng số là 0.",
+      "tags": [
+        "test",
+        "entropy",
+        "feature-engineering"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_packet_features.py:test_entropy_is_length_normalised",
+      "type": "function",
+      "name": "test_entropy_is_length_normalised",
+      "filePath": "tests/test_packet_features.py",
+      "lineRange": [
+        40,
+        43
+      ],
+      "summary": "Entropy chuẩn hoá theo log2(256) nên nằm trong [0,1].",
+      "tags": [
+        "test",
+        "entropy",
+        "feature-engineering"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_packet_features.py:test_entropy_of_empty_payload_is_zero",
+      "type": "function",
+      "name": "test_entropy_of_empty_payload_is_zero",
+      "filePath": "tests/test_packet_features.py",
+      "lineRange": [
+        46,
+        47
+      ],
+      "summary": "Entropy payload rỗng là 0.",
+      "tags": [
+        "test",
+        "entropy",
+        "feature-engineering"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_packet_features.py:test_features_are_finite_on_empty_flow",
+      "type": "function",
+      "name": "test_features_are_finite_on_empty_flow",
+      "filePath": "tests/test_packet_features.py",
+      "lineRange": [
+        51,
+        55
+      ],
+      "summary": "Flow rỗng không được sinh NaN.",
+      "tags": [
+        "test",
+        "edge-case",
+        "feature-engineering"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_packet_features.py:test_features_are_finite_on_packets_without_payload",
+      "type": "function",
+      "name": "test_features_are_finite_on_packets_without_payload",
+      "filePath": "tests/test_packet_features.py",
+      "lineRange": [
+        58,
+        65
+      ],
+      "summary": "Packet không payload vẫn cho feature hữu hạn.",
+      "tags": [
+        "test",
+        "edge-case",
+        "feature-engineering"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_packet_features.py:test_features_have_expected_shape_on_real_flow",
+      "type": "function",
+      "name": "test_features_have_expected_shape_on_real_flow",
+      "filePath": "tests/test_packet_features.py",
+      "lineRange": [
+        68,
+        73
+      ],
+      "summary": "Shape feature đúng trên flow thật.",
+      "tags": [
+        "test",
+        "feature-engineering",
+        "entropy"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_packet_features.py:_all_real_features",
+      "type": "function",
+      "name": "_all_real_features",
+      "filePath": "tests/test_packet_features.py",
+      "lineRange": [
+        77,
+        95
+      ],
+      "summary": "Gom feature từ mọi flow thật của hai capture để kiểm tra liveness.",
+      "tags": [
+        "helper",
+        "test",
+        "feature-engineering"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:tests/test_packet_features.py:test_no_dead_feature_columns",
+      "type": "function",
+      "name": "test_no_dead_feature_columns",
+      "filePath": "tests/test_packet_features.py",
+      "lineRange": [
+        98,
+        111
+      ],
+      "summary": "Không được có cột feature chết (mọi giá trị giống nhau).",
+      "tags": [
+        "test",
+        "feature-engineering",
+        "entropy"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:tests/test_packet_level_env.py",
+      "type": "file",
+      "name": "test_packet_level_env.py",
+      "filePath": "tests/test_packet_level_env.py",
+      "summary": "Smoke test cho PacketLevelEnv: reset/step/episode trả về observation shape (7,) và reward đúng định dạng gymnasium với pool flow giả.",
+      "tags": [
+        "test",
+        "reinforcement-learning",
+        "environment",
+        "gymnasium",
+        "smoke-test"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:tests/test_packet_level_env.py:test_env_reset",
+      "type": "function",
+      "name": "test_env_reset",
+      "filePath": "tests/test_packet_level_env.py",
+      "lineRange": [
+        10,
+        23
+      ],
+      "summary": "Kiểm tra reset trả về obs shape (7,) và info có flow_id/n_packets.",
+      "tags": [
+        "test",
+        "environment",
+        "reinforcement-learning"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_packet_level_env.py:test_env_step",
+      "type": "function",
+      "name": "test_env_step",
+      "filePath": "tests/test_packet_level_env.py",
+      "lineRange": [
+        26,
+        43
+      ],
+      "summary": "Kiểm tra step trả reward/terminated/info đúng kiểu.",
+      "tags": [
+        "test",
+        "environment",
+        "reinforcement-learning"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_packet_level_env.py:test_env_episode",
+      "type": "function",
+      "name": "test_env_episode",
+      "filePath": "tests/test_packet_level_env.py",
+      "lineRange": [
+        46,
+        65
+      ],
+      "summary": "Chạy trọn một episode và in tổng reward.",
+      "tags": [
+        "test",
+        "environment",
+        "reinforcement-learning"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:tests/test_endpoint_model.py",
+      "target": "function:tests/test_endpoint_model.py:test_http_request_line_parsed",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_endpoint_model.py",
+      "target": "function:tests/test_endpoint_model.py:test_http_request_line_parsed",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_endpoint_model.py",
+      "target": "function:tests/test_endpoint_model.py:test_http_extra_headers_are_ignored",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_endpoint_model.py",
+      "target": "function:tests/test_endpoint_model.py:test_http_extra_headers_are_ignored",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_endpoint_model.py",
+      "target": "function:tests/test_endpoint_model.py:test_irc_privmsg_parsed",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_endpoint_model.py",
+      "target": "function:tests/test_endpoint_model.py:test_irc_privmsg_parsed",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_endpoint_model.py",
+      "target": "function:tests/test_endpoint_model.py:test_length_prefixed_framing",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_endpoint_model.py",
+      "target": "function:tests/test_endpoint_model.py:test_length_prefixed_framing",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_endpoint_model.py",
+      "target": "function:tests/test_endpoint_model.py:test_garbage_is_rejected",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_endpoint_model.py",
+      "target": "function:tests/test_endpoint_model.py:test_garbage_is_rejected",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_endpoint_model.py",
+      "target": "function:tests/test_endpoint_model.py:test_framings_are_distinct",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_endpoint_model.py",
+      "target": "function:tests/test_endpoint_model.py:test_framings_are_distinct",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_endpoint_model.py",
+      "target": "function:tests/test_endpoint_model.py:test_detect_framing_http",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_endpoint_model.py",
+      "target": "function:tests/test_endpoint_model.py:test_detect_framing_http",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_endpoint_model.py",
+      "target": "function:tests/test_endpoint_model.py:test_detect_framing_irc",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_endpoint_model.py",
+      "target": "function:tests/test_endpoint_model.py:test_detect_framing_irc",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_endpoint_model.py",
+      "target": "function:tests/test_endpoint_model.py:test_detect_framing_length2",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_endpoint_model.py",
+      "target": "function:tests/test_endpoint_model.py:test_detect_framing_length2",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_endpoint_model.py",
+      "target": "function:tests/test_endpoint_model.py:test_detect_framing_neris_binary",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_endpoint_model.py",
+      "target": "function:tests/test_endpoint_model.py:test_detect_framing_neris_binary",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_endpoint_model.py",
+      "target": "function:tests/test_endpoint_model.py:test_neris_chain_parsed",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_endpoint_model.py",
+      "target": "function:tests/test_endpoint_model.py:test_neris_chain_parsed",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_endpoint_model.py",
+      "target": "function:tests/test_endpoint_model.py:test_neris_rejects_prefix",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_endpoint_model.py",
+      "target": "function:tests/test_endpoint_model.py:test_neris_rejects_prefix",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_endpoint_model.py",
+      "target": "function:tests/test_endpoint_model.py:test_neris_treats_trailing_pad_conservatively",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_endpoint_model.py",
+      "target": "function:tests/test_endpoint_model.py:test_neris_treats_trailing_pad_conservatively",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_eval_cross_capture_determinism.py",
+      "target": "function:tests/test_eval_cross_capture_determinism.py:_load_module",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_eval_cross_capture_determinism.py",
+      "target": "function:tests/test_eval_cross_capture_determinism.py:_load_module",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_eval_cross_capture_determinism.py",
+      "target": "function:tests/test_eval_cross_capture_determinism.py:_run_script",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_eval_cross_capture_determinism.py",
+      "target": "function:tests/test_eval_cross_capture_determinism.py:_run_script",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_eval_cross_capture_determinism.py",
+      "target": "function:tests/test_eval_cross_capture_determinism.py:_dummy_pool",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_eval_cross_capture_determinism.py",
+      "target": "function:tests/test_eval_cross_capture_determinism.py:_dummy_pool",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_eval_cross_capture_determinism.py",
+      "target": "function:tests/test_eval_cross_capture_determinism.py:test_three_consecutive_runs_produce_identical_report_bytes",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_eval_cross_capture_determinism.py",
+      "target": "function:tests/test_eval_cross_capture_determinism.py:test_three_consecutive_runs_produce_identical_report_bytes",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_eval_cross_capture_determinism.py",
+      "target": "function:tests/test_eval_cross_capture_determinism.py:test_eval_policy_is_reproducible_in_process",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_eval_cross_capture_determinism.py",
+      "target": "function:tests/test_eval_cross_capture_determinism.py:test_eval_policy_is_reproducible_in_process",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_eval_cross_capture_determinism.py",
+      "target": "function:tests/test_eval_cross_capture_determinism.py:test_eval_policy_walks_the_pool_one_to_one",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_eval_cross_capture_determinism.py",
+      "target": "function:tests/test_eval_cross_capture_determinism.py:test_eval_policy_walks_the_pool_one_to_one",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_fragment_ops.py",
+      "target": "function:tests/test_fragment_ops.py:_dht_payload",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_fragment_ops.py",
+      "target": "function:tests/test_fragment_ops.py:_dht_payload",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_fragment_ops.py",
+      "target": "function:tests/test_fragment_ops.py:test_split_then_overlap_keeps_command_but_hides_pattern",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_fragment_ops.py",
+      "target": "function:tests/test_fragment_ops.py:test_split_then_overlap_keeps_command_but_hides_pattern",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_fragment_ops.py",
+      "target": "function:tests/test_fragment_ops.py:test_split_fragments_reassemble_to_original",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_fragment_ops.py",
+      "target": "function:tests/test_fragment_ops.py:test_split_fragments_reassemble_to_original",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_fragment_ops.py",
+      "target": "function:tests/test_fragment_ops.py:test_overlap_fragments_have_valid_offsets",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_fragment_ops.py",
+      "target": "function:tests/test_fragment_ops.py:test_overlap_fragments_have_valid_offsets",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_fragment_ops.py",
+      "target": "function:tests/test_fragment_ops.py:test_fragment_plan_to_packets_preserves_all_bytes",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_fragment_ops.py",
+      "target": "function:tests/test_fragment_ops.py:test_fragment_plan_to_packets_preserves_all_bytes",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_fragment_ops.py",
+      "target": "function:tests/test_fragment_ops.py:_pkt",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_fragment_ops.py",
+      "target": "function:tests/test_fragment_ops.py:_pkt",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_fragment_ops.py",
+      "target": "function:tests/test_fragment_ops.py:test_fix_checksums_udp",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_fragment_ops.py",
+      "target": "function:tests/test_fragment_ops.py:test_fix_checksums_udp",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_fragment_ops.py",
+      "target": "function:tests/test_fragment_ops.py:test_fix_checksums_tcp",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_fragment_ops.py",
+      "target": "function:tests/test_fragment_ops.py:test_fix_checksums_tcp",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_fragment_ops.py",
+      "target": "function:tests/test_fragment_ops.py:test_fix_checksums_original_untouched",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_fragment_ops.py",
+      "target": "function:tests/test_fragment_ops.py:test_fix_checksums_original_untouched",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_fragment_ops.py",
+      "target": "function:tests/test_fragment_ops.py:test_fix_checksums_preserves_a_grown_payload",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_fragment_ops.py",
+      "target": "function:tests/test_fragment_ops.py:test_fix_checksums_preserves_a_grown_payload",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_fragment_ops.py",
+      "target": "function:tests/test_fragment_ops.py:test_fix_checksums_on_padded_tcp_packet",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_fragment_ops.py",
+      "target": "function:tests/test_fragment_ops.py:test_fix_checksums_on_padded_tcp_packet",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_fragment_ops.py",
+      "target": "function:tests/test_fragment_ops.py:test_fix_checksums_keeps_the_ethernet_header",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_fragment_ops.py",
+      "target": "function:tests/test_fragment_ops.py:test_fix_checksums_keeps_the_ethernet_header",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_fragment_ops.py",
+      "target": "function:tests/test_fragment_ops.py:test_fix_checksums_value_reflects_new_payload",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_fragment_ops.py",
+      "target": "function:tests/test_fragment_ops.py:test_fix_checksums_value_reflects_new_payload",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_hidden_defender_env.py",
+      "target": "function:tests/test_hidden_defender_env.py:test_corpus_loads_with_expected_shape",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_hidden_defender_env.py",
+      "target": "function:tests/test_hidden_defender_env.py:test_corpus_loads_with_expected_shape",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_hidden_defender_env.py",
+      "target": "function:tests/test_hidden_defender_env.py:test_corpus_has_both_captures_in_both_splits",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_hidden_defender_env.py",
+      "target": "function:tests/test_hidden_defender_env.py:test_corpus_has_both_captures_in_both_splits",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_hidden_defender_env.py",
+      "target": "function:tests/test_hidden_defender_env.py:test_obs_carries_no_rule_information",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_hidden_defender_env.py",
+      "target": "function:tests/test_hidden_defender_env.py:test_obs_carries_no_rule_information",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_hidden_defender_env.py",
+      "target": "function:tests/test_hidden_defender_env.py:test_action_space_is_discrete_fourteen",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_hidden_defender_env.py",
+      "target": "function:tests/test_hidden_defender_env.py:test_action_space_is_discrete_fourteen",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_hidden_defender_env.py",
+      "target": "function:tests/test_hidden_defender_env.py:test_step_returns_wellformed_gym_tuple",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_hidden_defender_env.py",
+      "target": "function:tests/test_hidden_defender_env.py:test_step_returns_wellformed_gym_tuple",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_hidden_defender_env.py",
+      "target": "function:tests/test_hidden_defender_env.py:test_environment_terminates_after_all_flows",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_hidden_defender_env.py",
+      "target": "function:tests/test_hidden_defender_env.py:test_environment_terminates_after_all_flows",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_hidden_defender_env.py",
+      "target": "function:tests/test_hidden_defender_env.py:test_noop_still_alerts_on_every_baseline_flow",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_hidden_defender_env.py",
+      "target": "function:tests/test_hidden_defender_env.py:test_noop_still_alerts_on_every_baseline_flow",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_hidden_defender_env.py",
+      "target": "function:tests/test_hidden_defender_env.py:test_corrupt_breaks_semantics_and_scores_minus_ten",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_hidden_defender_env.py",
+      "target": "function:tests/test_hidden_defender_env.py:test_corrupt_breaks_semantics_and_scores_minus_ten",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_hidden_defender_env.py",
+      "target": "function:tests/test_hidden_defender_env.py:test_prepend_breaks_the_channel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_hidden_defender_env.py",
+      "target": "function:tests/test_hidden_defender_env.py:test_prepend_breaks_the_channel",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_hidden_defender_env.py",
+      "target": "function:tests/test_hidden_defender_env.py:test_split_preserves_semantics_and_evades",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_hidden_defender_env.py",
+      "target": "function:tests/test_hidden_defender_env.py:test_split_preserves_semantics_and_evades",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_hidden_defender_env.py",
+      "target": "function:tests/test_hidden_defender_env.py:test_semantics_intact_is_conservative",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_hidden_defender_env.py",
+      "target": "function:tests/test_hidden_defender_env.py:test_semantics_intact_is_conservative",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_hidden_defender_env.py",
+      "target": "function:tests/test_hidden_defender_env.py:test_deterministic_given_fixed_action_sequence",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_hidden_defender_env.py",
+      "target": "function:tests/test_hidden_defender_env.py:test_deterministic_given_fixed_action_sequence",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_mechanisms_ab.py",
+      "target": "function:tests/test_mechanisms_ab.py:_flow",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_mechanisms_ab.py",
+      "target": "function:tests/test_mechanisms_ab.py:_flow",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_mechanisms_ab.py",
+      "target": "function:tests/test_mechanisms_ab.py:test_corpus_has_both_framings",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_mechanisms_ab.py",
+      "target": "function:tests/test_mechanisms_ab.py:test_corpus_has_both_framings",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_mechanisms_ab.py",
+      "target": "function:tests/test_mechanisms_ab.py:test_http_header_pad_keeps_the_command",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_mechanisms_ab.py",
+      "target": "function:tests/test_mechanisms_ab.py:test_http_header_pad_keeps_the_command",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_mechanisms_ab.py",
+      "target": "function:tests/test_mechanisms_ab.py:test_http_header_pad_actually_changes_the_wire",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_mechanisms_ab.py",
+      "target": "function:tests/test_mechanisms_ab.py:test_http_header_pad_actually_changes_the_wire",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_mechanisms_ab.py",
+      "target": "function:tests/test_mechanisms_ab.py:test_http_header_pad_is_inapplicable_to_neris",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_mechanisms_ab.py",
+      "target": "function:tests/test_mechanisms_ab.py:test_http_header_pad_is_inapplicable_to_neris",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_mechanisms_ab.py",
+      "target": "function:tests/test_mechanisms_ab.py:test_both_mechanisms_are_registered",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_mechanisms_ab.py",
+      "target": "function:tests/test_mechanisms_ab.py:test_both_mechanisms_are_registered",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_mechanisms_ab.py",
+      "target": "function:tests/test_mechanisms_ab.py:test_length_wrapper_round_trips",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_mechanisms_ab.py",
+      "target": "function:tests/test_mechanisms_ab.py:test_length_wrapper_round_trips",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_mechanisms_ab.py",
+      "target": "function:tests/test_mechanisms_ab.py:test_length_wrapper_is_not_readable_by_the_original_handler",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_mechanisms_ab.py",
+      "target": "function:tests/test_mechanisms_ab.py:test_length_wrapper_is_not_readable_by_the_original_handler",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_mechanisms_ab.py",
+      "target": "function:tests/test_mechanisms_ab.py:test_prepend_still_breaks_the_http_request_line",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_mechanisms_ab.py",
+      "target": "function:tests/test_mechanisms_ab.py:test_prepend_still_breaks_the_http_request_line",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_packet_features.py",
+      "target": "function:tests/test_packet_features.py:_pkt",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_packet_features.py",
+      "target": "function:tests/test_packet_features.py:_pkt",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_packet_features.py",
+      "target": "function:tests/test_packet_features.py:test_entropy_of_maximal_payload",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_packet_features.py",
+      "target": "function:tests/test_packet_features.py:test_entropy_of_maximal_payload",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_packet_features.py",
+      "target": "function:tests/test_packet_features.py:test_entropy_of_constant_bytes_is_zero",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_packet_features.py",
+      "target": "function:tests/test_packet_features.py:test_entropy_of_constant_bytes_is_zero",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_packet_features.py",
+      "target": "function:tests/test_packet_features.py:test_entropy_is_length_normalised",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_packet_features.py",
+      "target": "function:tests/test_packet_features.py:test_entropy_is_length_normalised",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_packet_features.py",
+      "target": "function:tests/test_packet_features.py:test_entropy_of_empty_payload_is_zero",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_packet_features.py",
+      "target": "function:tests/test_packet_features.py:test_entropy_of_empty_payload_is_zero",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_packet_features.py",
+      "target": "function:tests/test_packet_features.py:test_features_are_finite_on_empty_flow",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_packet_features.py",
+      "target": "function:tests/test_packet_features.py:test_features_are_finite_on_empty_flow",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_packet_features.py",
+      "target": "function:tests/test_packet_features.py:test_features_are_finite_on_packets_without_payload",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_packet_features.py",
+      "target": "function:tests/test_packet_features.py:test_features_are_finite_on_packets_without_payload",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_packet_features.py",
+      "target": "function:tests/test_packet_features.py:test_features_have_expected_shape_on_real_flow",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_packet_features.py",
+      "target": "function:tests/test_packet_features.py:test_features_have_expected_shape_on_real_flow",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_packet_features.py",
+      "target": "function:tests/test_packet_features.py:_all_real_features",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_packet_features.py",
+      "target": "function:tests/test_packet_features.py:_all_real_features",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_packet_features.py",
+      "target": "function:tests/test_packet_features.py:test_no_dead_feature_columns",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_packet_features.py",
+      "target": "function:tests/test_packet_features.py:test_no_dead_feature_columns",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_packet_level_env.py",
+      "target": "function:tests/test_packet_level_env.py:test_env_reset",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_packet_level_env.py",
+      "target": "function:tests/test_packet_level_env.py:test_env_reset",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_packet_level_env.py",
+      "target": "function:tests/test_packet_level_env.py:test_env_step",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_packet_level_env.py",
+      "target": "function:tests/test_packet_level_env.py:test_env_step",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_packet_level_env.py",
+      "target": "function:tests/test_packet_level_env.py:test_env_episode",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_packet_level_env.py",
+      "target": "function:tests/test_packet_level_env.py:test_env_episode",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_endpoint_model.py",
+      "target": "file:snort_validation/endpoint_model.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:tests/test_eval_cross_capture_determinism.py",
+      "target": "file:ai_agent/eval_cross_capture.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:tests/test_fragment_ops.py",
+      "target": "file:snort_validation/c2_semantics.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:tests/test_fragment_ops.py",
+      "target": "file:snort_validation/fragment_ops.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:tests/test_hidden_defender_env.py",
+      "target": "file:ai_agent/hidden_defender_env.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:tests/test_mechanisms_ab.py",
+      "target": "file:snort_validation/endpoint_model.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:tests/test_mechanisms_ab.py",
+      "target": "file:ai_agent/hidden_defender_env.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:tests/test_packet_features.py",
+      "target": "file:ai_agent/snort_bandit.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:tests/test_packet_features.py",
+      "target": "file:ai_agent/real_packet_env.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:tests/test_packet_level_env.py",
+      "target": "file:ai_agent/packet_level_env.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

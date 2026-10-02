@@ -1,0 +1,275 @@
+{
+  "nodes": [
+    {
+      "id": "file:tests/test_packet_modifier.py",
+      "type": "file",
+      "name": "test_packet_modifier.py",
+      "filePath": "tests/test_packet_modifier.py",
+      "summary": "Kiểm thử đơn vị cho PacketModifier: xác minh việc áp dụng action (TTL, phân mảnh, padding, overlap) lên gói tin và chuyển đổi ngược các gói đã biến đổi thành đặc trưng flow.",
+      "tags": ["test", "packet-modifier", "unit-test", "validation", "flow-features"],
+      "complexity": "simple",
+      "languageNotes": "Chèn thư mục ai_agent vào sys.path để nạp PacketModifier thay vì cài đặt package, nên import không hiện trong đồ thị import tĩnh."
+    },
+    {
+      "id": "file:tests/test_snort_verdict_integrity.py",
+      "type": "file",
+      "name": "test_snort_verdict_integrity.py",
+      "filePath": "tests/test_snort_verdict_integrity.py",
+      "summary": "Kiểm thử hồi quy bảo vệ tính toàn vẹn verdict của Snort: đảm bảo flow không bị biến đổi luôn bị phát hiện khi gom batch, chế độ batch khớp với chấm điểm riêng lẻ, và score_matrix mặc định chấm từng flow.",
+      "tags": ["test", "regression", "snort", "verdict-integrity", "batching"],
+      "complexity": "simple",
+      "languageNotes": "Nạp module từ ai_agent và snort_validation qua sys.path.insert; docstring module ghi lại số liệu đo thực tế trên eval chunk 0 để giải thích lỗi bị chặn."
+    },
+    {
+      "id": "function:tests/test_packet_modifier.py:test_apply_actions_basic",
+      "type": "function",
+      "name": "test_apply_actions_basic",
+      "filePath": "tests/test_packet_modifier.py",
+      "lineRange": [10, 35],
+      "summary": "Kiểm tra apply_actions biến đổi đúng TTL, kích thước dữ liệu, cờ phân mảnh và offset chồng lấn cho hai gói tin đầu vào.",
+      "tags": ["test", "packet-modifier", "validation", "actions"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_packet_modifier.py:test_to_flow_features",
+      "type": "function",
+      "name": "test_to_flow_features",
+      "filePath": "tests/test_packet_modifier.py",
+      "lineRange": [38, 54],
+      "summary": "Kiểm tra to_flow_features tổng hợp đúng số gói, tổng byte, byte phía nguồn và thời lượng từ danh sách gói đã biến đổi.",
+      "tags": ["test", "flow-features", "validation", "aggregation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_snort_verdict_integrity.py:_noop_verdicts",
+      "type": "function",
+      "name": "_noop_verdicts",
+      "filePath": "tests/test_snort_verdict_integrity.py",
+      "lineRange": [22, 26],
+      "summary": "Hàm trợ giúp nạp N flow từ corpus test, áp dụng cơ chế noop rồi lấy verdict từ SnortBatchService theo kích thước batch cho trước.",
+      "tags": ["test", "helper", "snort", "batching"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_snort_verdict_integrity.py:test_unmutated_flows_are_detected_when_batched",
+      "type": "function",
+      "name": "test_unmutated_flows_are_detected_when_batched",
+      "filePath": "tests/test_snort_verdict_integrity.py",
+      "lineRange": [29, 33],
+      "summary": "Khẳng định mọi flow không bị biến đổi vẫn bị Snort phát hiện khi gom chung vào một pcap — bất biến chống lỗi che khuất verdict.",
+      "tags": ["test", "regression", "snort", "verdict-integrity"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_snort_verdict_integrity.py:test_batching_agrees_with_isolation_at_n8",
+      "type": "function",
+      "name": "test_batching_agrees_with_isolation_at_n8",
+      "filePath": "tests/test_snort_verdict_integrity.py",
+      "lineRange": [36, 50],
+      "summary": "Đối chiếu kết quả chấm theo batch với chấm từng flow riêng lẻ ở ngưỡng N=8, phát hiện kiểu hỏng khác làm mất flow hoặc gán sai qid.",
+      "tags": ["test", "regression", "snort", "batching", "validation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_snort_verdict_integrity.py:test_score_matrix_scores_isolated_by_default",
+      "type": "function",
+      "name": "test_score_matrix_scores_isolated_by_default",
+      "filePath": "tests/test_snort_verdict_integrity.py",
+      "lineRange": [53, 59],
+      "summary": "Dùng inspect kiểm tra chữ ký hàm score_matrix có batch_size mặc định bằng 1, đảm bảo không caller nào âm thầm gom batch trở lại.",
+      "tags": ["test", "regression", "api-contract", "snort"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:tests/test_packet_modifier.py",
+      "target": "function:tests/test_packet_modifier.py:test_apply_actions_basic",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_packet_modifier.py",
+      "target": "function:tests/test_packet_modifier.py:test_to_flow_features",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_packet_modifier.py",
+      "target": "function:tests/test_packet_modifier.py:test_apply_actions_basic",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_packet_modifier.py",
+      "target": "function:tests/test_packet_modifier.py:test_to_flow_features",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_snort_verdict_integrity.py",
+      "target": "function:tests/test_snort_verdict_integrity.py:_noop_verdicts",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_snort_verdict_integrity.py",
+      "target": "function:tests/test_snort_verdict_integrity.py:test_unmutated_flows_are_detected_when_batched",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_snort_verdict_integrity.py",
+      "target": "function:tests/test_snort_verdict_integrity.py:test_batching_agrees_with_isolation_at_n8",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_snort_verdict_integrity.py",
+      "target": "function:tests/test_snort_verdict_integrity.py:test_score_matrix_scores_isolated_by_default",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_snort_verdict_integrity.py",
+      "target": "function:tests/test_snort_verdict_integrity.py:_noop_verdicts",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_snort_verdict_integrity.py",
+      "target": "function:tests/test_snort_verdict_integrity.py:test_unmutated_flows_are_detected_when_batched",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_snort_verdict_integrity.py",
+      "target": "function:tests/test_snort_verdict_integrity.py:test_batching_agrees_with_isolation_at_n8",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_snort_verdict_integrity.py",
+      "target": "function:tests/test_snort_verdict_integrity.py:test_score_matrix_scores_isolated_by_default",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:tests/test_packet_modifier.py:test_apply_actions_basic",
+      "target": "class:ai_agent/packet_modifier.py:PacketModifier",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:tests/test_packet_modifier.py:test_to_flow_features",
+      "target": "class:ai_agent/packet_modifier.py:PacketModifier",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:tests/test_snort_verdict_integrity.py:_noop_verdicts",
+      "target": "function:ai_agent/hidden_defender_env.py:load_corpus",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:tests/test_snort_verdict_integrity.py:_noop_verdicts",
+      "target": "function:ai_agent/hidden_defender_env.py:apply_mech",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:tests/test_snort_verdict_integrity.py:_noop_verdicts",
+      "target": "class:snort_validation/snort_batch_service.py:SnortBatchService",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:tests/test_snort_verdict_integrity.py:test_batching_agrees_with_isolation_at_n8",
+      "target": "class:snort_validation/snort_batch_service.py:SnortBatchService",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:tests/test_snort_verdict_integrity.py:test_score_matrix_scores_isolated_by_default",
+      "target": "function:snort_validation/eval_all_real_snort.py:score_matrix",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_packet_modifier.py",
+      "target": "file:ai_agent/packet_modifier.py",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:tests/test_snort_verdict_integrity.py",
+      "target": "file:ai_agent/hidden_defender_env.py",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:tests/test_snort_verdict_integrity.py",
+      "target": "file:snort_validation/snort_batch_service.py",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:tests/test_snort_verdict_integrity.py",
+      "target": "file:snort_validation/eval_all_real_snort.py",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:ai_agent/packet_modifier.py",
+      "target": "file:tests/test_packet_modifier.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:ai_agent/hidden_defender_env.py",
+      "target": "file:tests/test_snort_verdict_integrity.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:snort_validation/snort_batch_service.py",
+      "target": "file:tests/test_snort_verdict_integrity.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:snort_validation/eval_all_real_snort.py",
+      "target": "file:tests/test_snort_verdict_integrity.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

@@ -115,7 +115,7 @@ PYTHONPATH=ai_agent:snort_validation .venv/bin/python3 \
 ## Docs
 
 `docs/surrogate_vs_reality_audit.md` — full surrogate-vs-Snort audit (224 real Snort calls).
-`snort_validation/README.md` — Snort harness details.
+`docs/RESULTS_PRESENTATION.md` — how every headline number is produced and verified.
 
 ## References
 

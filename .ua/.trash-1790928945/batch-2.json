@@ -1,0 +1,136 @@
+{
+  "nodes": [
+    {
+      "id": "document:snort_validation/README.md",
+      "type": "document",
+      "name": "README.md",
+      "filePath": "snort_validation/README.md",
+      "summary": "Tài liệu mô tả lớp kiểm chứng (validation layer) chạy Snort IDS thật sau khi huấn luyện RL: giải thích kiến trúc flow → pcap → Snort, quy trình chạy ba policy agent/random/baseline, và công bố kết quả đo được cho thấy mô hình học né XGBoost nhưng vẫn bị Snort phát hiện nhiều hơn cả random.",
+      "tags": ["documentation", "validation", "snort", "ids", "benchmark"],
+      "complexity": "moderate",
+      "languageNotes": "README dùng sơ đồ ASCII cho pipeline và bảng markdown để đối chiếu tỷ lệ né XGBoost với tỷ lệ phát hiện của Snort."
+    },
+    {
+      "id": "file:snort_validation/extract_stratosphere.sh",
+      "type": "file",
+      "name": "extract_stratosphere.sh",
+      "filePath": "snort_validation/extract_stratosphere.sh",
+      "summary": "Script trích xuất chọn lọc từ archive CTU-13-Dataset.tar.bz2, chỉ lấy file .pcap, .binetflow và README và cố ý bỏ qua các mã độc .exe đi kèm, sau đó in ra kiểm kê pcap theo dung lượng giảm dần.",
+      "tags": ["script", "dataset", "extraction", "stratosphere", "automation"],
+      "complexity": "simple",
+      "languageNotes": "Dùng `tar xjf --wildcards` với mẫu glob để trích xuất chọn lọc, và `find -printf` để kiểm kê; bật `set -euo pipefail` để dừng ngay khi lỗi."
+    },
+    {
+      "id": "file:snort_validation/fetch_stratosphere.sh",
+      "type": "file",
+      "name": "fetch_stratosphere.sh",
+      "filePath": "snort_validation/fetch_stratosphere.sh",
+      "summary": "Script tải và giải nén archive CTU-13 nguyên bản (~1.9 GB) từ mirror chính thức mcfp.felk.cvut.cz, có kiểm tra tồn tại trước khi tải, rồi liệt kê pcap thu được và dung lượng đĩa đã dùng.",
+      "tags": ["script", "dataset", "download", "stratosphere", "automation"],
+      "complexity": "simple",
+      "languageNotes": "`curl -C -` cho phép tải tiếp khi đứt kết nối, và `--retry 3 --fail` giúp tải xuống có khả năng phục hồi."
+    },
+    {
+      "id": "file:snort_validation/fetch_stratosphere_captures.sh",
+      "type": "file",
+      "name": "fetch_stratosphere_captures.sh",
+      "filePath": "snort_validation/fetch_stratosphere_captures.sh",
+      "summary": "Script tải các capture dài hạn CTU-Malware-Capture-Botnet-N từ MCFP: có danh sách mặc định 11 capture thuộc nhiều họ mã độc khác nhau (DonBot, Sogou, Virut, Conficker…), cho phép chọn theo số qua tham số, không ghi đè file đã có và trả về mã lỗi nếu có capture tải thất bại.",
+      "tags": ["script", "dataset", "download", "malware-capture", "automation"],
+      "complexity": "moderate",
+      "languageNotes": "Mảng bash `DEFAULT_PAIRS` với cặp \"dir:pcap\" tách bằng `%%:*`/`##*:`, và tải về qua file tạm `.part` rồi `mv` để tránh pcap cụt; exit code `$((fail > 0))` báo hiệu thất bại cho CI."
+    },
+    {
+      "id": "file:snort_validation/run_stratosphere_sweep.sh",
+      "type": "file",
+      "name": "run_stratosphere_sweep.sh",
+      "filePath": "snort_validation/run_stratosphere_sweep.sh",
+      "summary": "Script điều phối toàn bộ kế hoạch sweep của Stratosphere gồm bốn pha tuần tự: kiểm chứng cross-capture (24 flow, cost 0.6), quét corrupt-cost trên capture nhiều flow nhất, mở rộng quy mô flow 24→200, và dựng bảng kết quả cuối; có cơ chế bỏ qua pha đã có báo cáo trừ khi FORCE=1.",
+      "tags": ["script", "orchestration", "sweep", "benchmark", "automation"],
+      "complexity": "moderate",
+      "languageNotes": "Cấu hình được chọn từ kích thước pool đo được (471/45/29 flow) chứ không đoán; các pha chạy tuần tự vì service resident dùng chung interface `lo`, và bảng cuối được in bằng heredoc Python nhúng."
+    },
+    {
+      "id": "function:snort_validation/run_stratosphere_sweep.sh:phase",
+      "type": "function",
+      "name": "phase",
+      "filePath": "snort_validation/run_stratosphere_sweep.sh",
+      "lineRange": [41, 49],
+      "summary": "Hàm trợ giúp kiểm tra tính khả năng tiếp tục (resumable) của một pha: nếu file báo cáo đã tồn tại và FORCE khác 1 thì in thông báo bỏ qua và trả về 1, ngược lại in nhãn pha và trả về 0 để pha đó được chạy.",
+      "tags": ["utility", "resumable", "orchestration", "shell"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:snort_validation/run_stratosphere_sweep.sh",
+      "target": "function:snort_validation/run_stratosphere_sweep.sh:phase",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "document:snort_validation/README.md",
+      "target": "file:snort_validation/flow_to_pcap.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:snort_validation/README.md",
+      "target": "file:snort_validation/run_evaluation.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:snort_validation/README.md",
+      "target": "file:snort_validation/validate_with_snort.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:snort_validation/README.md",
+      "target": "config:snort_validation/rules/snort.conf",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:snort_validation/run_stratosphere_sweep.sh",
+      "target": "file:ai_agent/snort_bandit.py",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:snort_validation/run_stratosphere_sweep.sh",
+      "target": "file:snort_validation/aggregate_results.py",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:snort_validation/run_stratosphere_sweep.sh",
+      "target": "file:snort_validation/capture_pool_sizes.py",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:snort_validation/extract_stratosphere.sh",
+      "target": "file:snort_validation/fetch_stratosphere.sh",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:snort_validation/fetch_stratosphere_captures.sh",
+      "target": "file:snort_validation/fetch_stratosphere.sh",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

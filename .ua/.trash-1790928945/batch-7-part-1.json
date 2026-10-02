@@ -1,0 +1,1259 @@
+{
+  "nodes": [
+    {
+      "id": "file:snort_validation/surrogate_dataset.py",
+      "type": "file",
+      "name": "surrogate_dataset.py",
+      "filePath": "snort_validation/surrogate_dataset.py",
+      "summary": "Bộ dựng dataset nhãn dùng chung cho surrogate phán quyết Snort: gom bốn lần chạy policy (240 mẫu blind + 80 mẫu lambda=10) thành ma trận feature/verdict nhất quán về thứ tự cột, để mọi script tiêu thụ nhìn thấy cùng một định nghĩa.",
+      "tags": [
+        "data-pipeline",
+        "dataset",
+        "surrogate",
+        "feature-engineering",
+        "training-data"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Định nghĩa một nguồn sự thật duy nhất cho thứ tự cột feature; lệch thứ tự cột sẽ tạo ra cải thiện surrogate giả."
+    },
+    {
+      "id": "function:snort_validation/surrogate_dataset.py:_load_encoders",
+      "type": "function",
+      "name": "_load_encoders",
+      "filePath": "snort_validation/surrogate_dataset.py",
+      "lineRange": [
+        62,
+        66
+      ],
+      "summary": "Nạp hai label encoder proto và state từ thư mục data bằng joblib.",
+      "tags": [
+        "utility",
+        "encoding",
+        "data-loading"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/surrogate_dataset.py:_encode",
+      "type": "function",
+      "name": "_encode",
+      "filePath": "snort_validation/surrogate_dataset.py",
+      "lineRange": [
+        69,
+        74
+      ],
+      "summary": "Mã hoá một giá trị phân loại bằng encoder đã nạp, trả về giá trị mặc định khi không khớp.",
+      "tags": [
+        "utility",
+        "encoding",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/surrogate_dataset.py:build_dataset",
+      "type": "function",
+      "name": "build_dataset",
+      "filePath": "snort_validation/surrogate_dataset.py",
+      "lineRange": [
+        77,
+        120
+      ],
+      "summary": "Dựng DataFrame nhãn 320 dòng bằng cách ghép feature của flow đã biến đổi với phán quyết Snort theo từng episode của bốn lần chạy policy.",
+      "tags": [
+        "data-pipeline",
+        "dataset",
+        "feature-engineering"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/surrogate_dataset.py:load_selected_features",
+      "type": "function",
+      "name": "load_selected_features",
+      "filePath": "snort_validation/surrogate_dataset.py",
+      "lineRange": [
+        123,
+        128
+      ],
+      "summary": "Đọc danh sách feature được chọn từ báo cáo feature_validation_report.json.",
+      "tags": [
+        "utility",
+        "config",
+        "data-loading"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/surrogate_dataset.py:enhanced_feature_names",
+      "type": "function",
+      "name": "enhanced_feature_names",
+      "filePath": "snort_validation/surrogate_dataset.py",
+      "lineRange": [
+        131,
+        132
+      ],
+      "summary": "Ghép 6 feature baseline đã encode với các feature ứng viên được chọn để tạo tên vector enhanced.",
+      "tags": [
+        "utility",
+        "feature-engineering",
+        "data-pipeline"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/surrogate_dataset.py:xy",
+      "type": "function",
+      "name": "xy",
+      "filePath": "snort_validation/surrogate_dataset.py",
+      "lineRange": [
+        135,
+        142
+      ],
+      "summary": "Tách DataFrame thành ma trận X và vector nhãn y theo đúng thứ tự feature cho trước.",
+      "tags": [
+        "utility",
+        "data-model",
+        "data-pipeline"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:snort_validation/test_snort_batch_service.py",
+      "type": "file",
+      "name": "test_snort_batch_service.py",
+      "filePath": "snort_validation/test_snort_batch_service.py",
+      "summary": "Kiểm tra tính đúng đắn của service phán quyết Snort theo lô: kết quả batch phải khớp ground truth chạy từng flow trên tập trộn cả positive lẫn negative thật, buộc phải có alert thật để phép ánh xạ ngược về đúng flow được kiểm chứng.",
+      "tags": [
+        "test",
+        "snort",
+        "batch",
+        "ground-truth",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/test_snort_batch_service.py:_extract_flows",
+      "type": "function",
+      "name": "_extract_flows",
+      "filePath": "snort_validation/test_snort_batch_service.py",
+      "lineRange": [
+        40,
+        61
+      ],
+      "summary": "Trích các packet thuộc những 5-tuple cho trước ra khỏi file capture bằng PcapReader.",
+      "tags": [
+        "test",
+        "scapy",
+        "extraction"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/test_snort_batch_service.py:_per_flow_truth",
+      "type": "function",
+      "name": "_per_flow_truth",
+      "filePath": "snort_validation/test_snort_batch_service.py",
+      "lineRange": [
+        64,
+        84
+      ],
+      "summary": "Chạy Snort riêng cho từng flow để lấy ground truth đắt đỏ, đếm alert từ file log.",
+      "tags": [
+        "test",
+        "snort",
+        "ground-truth"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/test_snort_batch_service.py:mixed_flows",
+      "type": "function",
+      "name": "mixed_flows",
+      "filePath": "snort_validation/test_snort_batch_service.py",
+      "lineRange": [
+        88,
+        110
+      ],
+      "summary": "Fixture tạo tập flow trộn positive/negative dựa trên nhãn đã biết từ dataset.",
+      "tags": [
+        "test",
+        "fixture",
+        "snort"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/test_snort_batch_service.py:test_batch_matches_per_flow_ground_truth",
+      "type": "function",
+      "name": "test_batch_matches_per_flow_ground_truth",
+      "filePath": "snort_validation/test_snort_batch_service.py",
+      "lineRange": [
+        113,
+        131
+      ],
+      "summary": "Khẳng định phán quyết theo lô khớp ground truth chạy từng flow trên tập trộn.",
+      "tags": [
+        "test",
+        "assertion",
+        "snort"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:snort_validation/test_stratosphere_sweep.py",
+      "type": "file",
+      "name": "test_stratosphere_sweep.py",
+      "filePath": "snort_validation/test_stratosphere_sweep.py",
+      "summary": "Các kiểm tra assert-based cho code sweep Stratosphere: registry capture hợp lệ, định tuyến pcap theo dataset, chi phí corrupt đếm đúng số packet bị biến đổi, và aggregator từ chối dòng thiếu giá trị thay vì mặc định về 0.",
+      "tags": [
+        "test",
+        "snort",
+        "stratosphere",
+        "accounting",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/test_stratosphere_sweep.py:_pkts",
+      "type": "function",
+      "name": "_pkts",
+      "filePath": "snort_validation/test_stratosphere_sweep.py",
+      "lineRange": [
+        33,
+        42
+      ],
+      "summary": "Dựng danh sách packet test gồm các gói có payload và các gói SYN không payload.",
+      "tags": [
+        "test",
+        "helper",
+        "scapy"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/test_stratosphere_sweep.py:test_corrupt_accounting_matches_mutation",
+      "type": "function",
+      "name": "test_corrupt_accounting_matches_mutation",
+      "filePath": "snort_validation/test_stratosphere_sweep.py",
+      "lineRange": [
+        45,
+        61
+      ],
+      "summary": "Chi phí corrupt phải đếm đúng số packet mutator thay đổi và phép corrupt phải idempotent.",
+      "tags": [
+        "test",
+        "accounting",
+        "snort"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/test_stratosphere_sweep.py:test_partial_mask_selects_only_those_packets",
+      "type": "function",
+      "name": "test_partial_mask_selects_only_those_packets",
+      "filePath": "snort_validation/test_stratosphere_sweep.py",
+      "lineRange": [
+        64,
+        72
+      ],
+      "summary": "Mask bán phần chỉ chọn đúng các packet được chỉ định.",
+      "tags": [
+        "test",
+        "masking",
+        "snort"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/test_stratosphere_sweep.py:test_capture_routing",
+      "type": "function",
+      "name": "test_capture_routing",
+      "filePath": "snort_validation/test_stratosphere_sweep.py",
+      "lineRange": [
+        75,
+        83
+      ],
+      "summary": "Kiểm tra _capture_pcap định tuyến tham số dataset= tới đúng thư mục gốc capture.",
+      "tags": [
+        "test",
+        "routing",
+        "snort"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/test_stratosphere_sweep.py:test_registry_shape",
+      "type": "function",
+      "name": "test_registry_shape",
+      "filePath": "snort_validation/test_stratosphere_sweep.py",
+      "lineRange": [
+        86,
+        99
+      ],
+      "summary": "Registry capture phải đúng cấu trúc và các con số đếm phải phản ánh dữ liệu thật.",
+      "tags": [
+        "test",
+        "registry",
+        "snort"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/test_stratosphere_sweep.py:test_aggregator_rejects_missing_values",
+      "type": "function",
+      "name": "test_aggregator_rejects_missing_values",
+      "filePath": "snort_validation/test_stratosphere_sweep.py",
+      "lineRange": [
+        102,
+        133
+      ],
+      "summary": "Aggregator phải từ chối dòng thiếu giá trị thay vì mặc định về 0.",
+      "tags": [
+        "test",
+        "aggregator",
+        "snort"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/test_stratosphere_sweep.py:test_rewrite_keeps_the_session_coherent",
+      "type": "function",
+      "name": "test_rewrite_keeps_the_session_coherent",
+      "filePath": "snort_validation/test_stratosphere_sweep.py",
+      "lineRange": [
+        136,
+        182
+      ],
+      "summary": "Việc ghi lại flow phải giữ phiên C2 mạch lạc sau khi biến đổi packet.",
+      "tags": [
+        "test",
+        "rewrite",
+        "snort"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/test_stratosphere_sweep.py:test_env_loads_both_directions",
+      "type": "function",
+      "name": "test_env_loads_both_directions",
+      "filePath": "snort_validation/test_stratosphere_sweep.py",
+      "lineRange": [
+        185,
+        208
+      ],
+      "summary": "Env phải nạp được cả hai hướng ứng với hai capture.",
+      "tags": [
+        "test",
+        "environment",
+        "snort"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:snort_validation/test_surrogate_data.py",
+      "type": "file",
+      "name": "test_surrogate_data.py",
+      "filePath": "snort_validation/test_surrogate_data.py",
+      "summary": "Script kiểm tra snapshot nhãn: xác nhận mỗi policy có đủ 80 episode và số positive (agent 66 / random 55 / baseline 4) khớp với bộ báo cáo hiện tại, kèm chú thích lý do các con số từng thay đổi.",
+      "tags": [
+        "test",
+        "dataset",
+        "regression",
+        "labels",
+        "validation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:snort_validation/train_real_snort_surrogate.py",
+      "type": "file",
+      "name": "train_real_snort_surrogate.py",
+      "filePath": "snort_validation/train_real_snort_surrogate.py",
+      "summary": "Huấn luyện surrogate Snort trên feature CTU-13 đo thật với nhãn Snort thật (ruleset ET Open C2), đánh giá cross-capture leave-one-capture-out để tránh rò rỉ giữa các flow cùng một capture botnet.",
+      "tags": [
+        "training",
+        "surrogate",
+        "machine-learning",
+        "xgboost",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/train_real_snort_surrogate.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "snort_validation/train_real_snort_surrogate.py",
+      "lineRange": [
+        87,
+        204
+      ],
+      "summary": "Nạp parquet feature CTU-13 đo thật, huấn luyện XGBoost theo leave-one-capture-out, ghi model và báo cáo JSON kèm AUC từng capture.",
+      "tags": [
+        "training",
+        "xgboost",
+        "validation"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:snort_validation/train_snort_surrogate.py",
+      "type": "file",
+      "name": "train_snort_surrogate.py",
+      "filePath": "snort_validation/train_snort_surrogate.py",
+      "summary": "Trainer surrogate phán quyết Snort với hai chế độ baseline/enhanced dùng chung ma trận và chỉ số train/test, gắn tên feature vào model để reward của RL env đọc đúng thứ tự cột.",
+      "tags": [
+        "training",
+        "surrogate",
+        "machine-learning",
+        "xgboost",
+        "reward"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/train_snort_surrogate.py:load_matrix",
+      "type": "function",
+      "name": "load_matrix",
+      "filePath": "snort_validation/train_snort_surrogate.py",
+      "lineRange": [
+        51,
+        60
+      ],
+      "summary": "Nạp ma trận feature/nhãn cùng chỉ số train/test đã đóng băng từ file npz.",
+      "tags": [
+        "data-loading",
+        "utility",
+        "training"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/train_snort_surrogate.py:metrics",
+      "type": "function",
+      "name": "metrics",
+      "filePath": "snort_validation/train_snort_surrogate.py",
+      "lineRange": [
+        63,
+        74
+      ],
+      "summary": "Tính AUC, accuracy, precision, recall, F1 và Brier từ nhãn thật và xác suất dự đoán.",
+      "tags": [
+        "metrics",
+        "utility",
+        "training"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/train_snort_surrogate.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "snort_validation/train_snort_surrogate.py",
+      "lineRange": [
+        77,
+        147
+      ],
+      "summary": "Huấn luyện surrogate theo mode baseline/enhanced, gắn snort_feature_names_ và áp cổng chấp nhận AUC>=0.95 cho enhanced.",
+      "tags": [
+        "training",
+        "xgboost",
+        "cli"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:snort_validation/validate_features_vs_snort.py",
+      "type": "file",
+      "name": "validate_features_vs_snort.py",
+      "filePath": "snort_validation/validate_features_vs_snort.py",
+      "summary": "Kiểm định 20 feature ứng viên với phán quyết Snort thật qua tương quan point-biserial/Spearman và cổng chọn tuyên bố trước khi nhìn số liệu (|r|>0.15, p<0.05, không suy biến, không cộng tuyến, tối đa top 10).",
+      "tags": [
+        "validation",
+        "statistics",
+        "feature-selection",
+        "snort",
+        "analysis"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:snort_validation/validate_features_vs_snort.py:correlate",
+      "type": "function",
+      "name": "correlate",
+      "filePath": "snort_validation/validate_features_vs_snort.py",
+      "lineRange": [
+        62,
+        93
+      ],
+      "summary": "Tính tương quan Pearson/Spearman và p-value giữa từng feature ứng viên với phán quyết nhị phân của Snort.",
+      "tags": [
+        "statistics",
+        "correlation",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/validate_features_vs_snort.py:select",
+      "type": "function",
+      "name": "select",
+      "filePath": "snort_validation/validate_features_vs_snort.py",
+      "lineRange": [
+        96,
+        162
+      ],
+      "summary": "Áp cổng chọn feature tuyên bố trước: hiệu ứng, ý nghĩa, không suy biến, không cộng tuyến, tối đa top 10.",
+      "tags": [
+        "feature-selection",
+        "statistics",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/validate_features_vs_snort.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "snort_validation/validate_features_vs_snort.py",
+      "lineRange": [
+        165,
+        325
+      ],
+      "summary": "Chạy toàn bộ pipeline kiểm định feature và ghi báo cáo JSON cùng bảng Markdown sẵn sàng cho luận văn.",
+      "tags": [
+        "cli",
+        "analysis",
+        "validation"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:snort_validation/validate_real_features_vs_snort.py",
+      "type": "file",
+      "name": "validate_real_features_vs_snort.py",
+      "filePath": "snort_validation/validate_real_features_vs_snort.py",
+      "summary": "Kiểm định feature CTU-13 đo thật với nhãn Snort thật: dựng lại pcap từ thống kê packet đo được, chạy Snort CLI, rồi tính tương quan, AUC xếp hạng và Cohen's d cho từng feature.",
+      "tags": [
+        "validation",
+        "statistics",
+        "snort",
+        "feature-engineering",
+        "analysis"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:snort_validation/validate_real_features_vs_snort.py:auc_score",
+      "type": "function",
+      "name": "auc_score",
+      "filePath": "snort_validation/validate_real_features_vs_snort.py",
+      "lineRange": [
+        67,
+        87
+      ],
+      "summary": "AUC xếp hạng theo Mann-Whitney U, bền vững với lệch và outlier.",
+      "tags": [
+        "statistics",
+        "metrics",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/validate_real_features_vs_snort.py:cohens_d",
+      "type": "function",
+      "name": "cohens_d",
+      "filePath": "snort_validation/validate_real_features_vs_snort.py",
+      "lineRange": [
+        90,
+        99
+      ],
+      "summary": "Tính độ lớn hiệu ứng chuẩn hoá Cohen's d giữa nhóm bị alert và không bị alert.",
+      "tags": [
+        "statistics",
+        "metrics",
+        "validation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/validate_real_features_vs_snort.py:build_pcap_for_flow",
+      "type": "function",
+      "name": "build_pcap_for_flow",
+      "filePath": "snort_validation/validate_real_features_vs_snort.py",
+      "lineRange": [
+        102,
+        138
+      ],
+      "summary": "Dựng lại pcap cho một flow từ thống kê packet đo được.",
+      "tags": [
+        "pcap",
+        "scapy",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/validate_real_features_vs_snort.py:run_snort_on_pcap",
+      "type": "function",
+      "name": "run_snort_on_pcap",
+      "filePath": "snort_validation/validate_real_features_vs_snort.py",
+      "lineRange": [
+        141,
+        155
+      ],
+      "summary": "Chạy Snort CLI trên pcap và trả về kết quả phán quyết.",
+      "tags": [
+        "snort",
+        "subprocess",
+        "validation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/validate_real_features_vs_snort.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "snort_validation/validate_real_features_vs_snort.py",
+      "lineRange": [
+        158,
+        253
+      ],
+      "summary": "Lấy mẫu flow, gán nhãn bằng Snort thật, tính tách biệt từng feature và ghi báo cáo xếp hạng.",
+      "tags": [
+        "cli",
+        "analysis",
+        "validation"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:snort_validation/validate_with_snort.py",
+      "type": "file",
+      "name": "validate_with_snort.py",
+      "filePath": "snort_validation/validate_with_snort.py",
+      "summary": "Runner đánh giá episode của agent bằng Snort: tổng hợp pcap từ flow đã biến đổi, chạy Snort offline, đo tỷ lệ flow còn bị gắn cờ và so sánh agent với random/baseline.",
+      "tags": [
+        "validation",
+        "snort",
+        "evaluation",
+        "pcap",
+        "service"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "class:snort_validation/validate_with_snort.py:SnortValidator",
+      "type": "class",
+      "name": "SnortValidator",
+      "filePath": "snort_validation/validate_with_snort.py",
+      "lineRange": [
+        26,
+        175
+      ],
+      "summary": "Lớp bọc quanh Snort CLI: kiểm tra Snort có trong PATH, dọn log cũ trước mỗi lần chạy để tránh đếm alert cũ, và xác thực theo từng episode.",
+      "tags": [
+        "validation",
+        "snort",
+        "service"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:snort_validation/validate_with_snort.py:load_evaluation_results",
+      "type": "function",
+      "name": "load_evaluation_results",
+      "filePath": "snort_validation/validate_with_snort.py",
+      "lineRange": [
+        178,
+        181
+      ],
+      "summary": "Đọc kết quả đánh giá episode từ file JSON.",
+      "tags": [
+        "data-loading",
+        "validation",
+        "snort"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/validate_with_snort.py:parse_args",
+      "type": "function",
+      "name": "parse_args",
+      "filePath": "snort_validation/validate_with_snort.py",
+      "lineRange": [
+        184,
+        192
+      ],
+      "summary": "Phân tích tham số dòng lệnh cho runner xác thực.",
+      "tags": [
+        "cli",
+        "validation",
+        "snort"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:snort_validation/validate_with_snort.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "snort_validation/validate_with_snort.py",
+      "lineRange": [
+        195,
+        287
+      ],
+      "summary": "Chạy vòng lặp xác thực: tổng hợp pcap mỗi episode, chạy Snort và so sánh agent/random/baseline.",
+      "tags": [
+        "cli",
+        "evaluation",
+        "validation"
+      ],
+      "complexity": "complex"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:snort_validation/surrogate_dataset.py",
+      "target": "function:snort_validation/surrogate_dataset.py:_load_encoders",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/surrogate_dataset.py",
+      "target": "function:snort_validation/surrogate_dataset.py:_load_encoders",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/surrogate_dataset.py",
+      "target": "function:snort_validation/surrogate_dataset.py:_encode",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/surrogate_dataset.py",
+      "target": "function:snort_validation/surrogate_dataset.py:_encode",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/surrogate_dataset.py",
+      "target": "function:snort_validation/surrogate_dataset.py:build_dataset",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/surrogate_dataset.py",
+      "target": "function:snort_validation/surrogate_dataset.py:build_dataset",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/surrogate_dataset.py",
+      "target": "function:snort_validation/surrogate_dataset.py:load_selected_features",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/surrogate_dataset.py",
+      "target": "function:snort_validation/surrogate_dataset.py:load_selected_features",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/surrogate_dataset.py",
+      "target": "function:snort_validation/surrogate_dataset.py:enhanced_feature_names",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/surrogate_dataset.py",
+      "target": "function:snort_validation/surrogate_dataset.py:enhanced_feature_names",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/surrogate_dataset.py",
+      "target": "function:snort_validation/surrogate_dataset.py:xy",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/surrogate_dataset.py",
+      "target": "function:snort_validation/surrogate_dataset.py:xy",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/test_snort_batch_service.py",
+      "target": "function:snort_validation/test_snort_batch_service.py:_extract_flows",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/test_snort_batch_service.py",
+      "target": "function:snort_validation/test_snort_batch_service.py:_extract_flows",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/test_snort_batch_service.py",
+      "target": "function:snort_validation/test_snort_batch_service.py:_per_flow_truth",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/test_snort_batch_service.py",
+      "target": "function:snort_validation/test_snort_batch_service.py:_per_flow_truth",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/test_snort_batch_service.py",
+      "target": "function:snort_validation/test_snort_batch_service.py:mixed_flows",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/test_snort_batch_service.py",
+      "target": "function:snort_validation/test_snort_batch_service.py:mixed_flows",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/test_snort_batch_service.py",
+      "target": "function:snort_validation/test_snort_batch_service.py:test_batch_matches_per_flow_ground_truth",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/test_snort_batch_service.py",
+      "target": "function:snort_validation/test_snort_batch_service.py:test_batch_matches_per_flow_ground_truth",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/test_stratosphere_sweep.py",
+      "target": "function:snort_validation/test_stratosphere_sweep.py:_pkts",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/test_stratosphere_sweep.py",
+      "target": "function:snort_validation/test_stratosphere_sweep.py:_pkts",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/test_stratosphere_sweep.py",
+      "target": "function:snort_validation/test_stratosphere_sweep.py:test_corrupt_accounting_matches_mutation",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/test_stratosphere_sweep.py",
+      "target": "function:snort_validation/test_stratosphere_sweep.py:test_corrupt_accounting_matches_mutation",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/test_stratosphere_sweep.py",
+      "target": "function:snort_validation/test_stratosphere_sweep.py:test_partial_mask_selects_only_those_packets",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/test_stratosphere_sweep.py",
+      "target": "function:snort_validation/test_stratosphere_sweep.py:test_partial_mask_selects_only_those_packets",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/test_stratosphere_sweep.py",
+      "target": "function:snort_validation/test_stratosphere_sweep.py:test_capture_routing",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/test_stratosphere_sweep.py",
+      "target": "function:snort_validation/test_stratosphere_sweep.py:test_capture_routing",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/test_stratosphere_sweep.py",
+      "target": "function:snort_validation/test_stratosphere_sweep.py:test_registry_shape",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/test_stratosphere_sweep.py",
+      "target": "function:snort_validation/test_stratosphere_sweep.py:test_registry_shape",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/test_stratosphere_sweep.py",
+      "target": "function:snort_validation/test_stratosphere_sweep.py:test_aggregator_rejects_missing_values",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/test_stratosphere_sweep.py",
+      "target": "function:snort_validation/test_stratosphere_sweep.py:test_aggregator_rejects_missing_values",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/test_stratosphere_sweep.py",
+      "target": "function:snort_validation/test_stratosphere_sweep.py:test_rewrite_keeps_the_session_coherent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/test_stratosphere_sweep.py",
+      "target": "function:snort_validation/test_stratosphere_sweep.py:test_rewrite_keeps_the_session_coherent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/test_stratosphere_sweep.py",
+      "target": "function:snort_validation/test_stratosphere_sweep.py:test_env_loads_both_directions",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/test_stratosphere_sweep.py",
+      "target": "function:snort_validation/test_stratosphere_sweep.py:test_env_loads_both_directions",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/train_real_snort_surrogate.py",
+      "target": "function:snort_validation/train_real_snort_surrogate.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/train_real_snort_surrogate.py",
+      "target": "function:snort_validation/train_real_snort_surrogate.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/train_snort_surrogate.py",
+      "target": "function:snort_validation/train_snort_surrogate.py:load_matrix",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/train_snort_surrogate.py",
+      "target": "function:snort_validation/train_snort_surrogate.py:load_matrix",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/train_snort_surrogate.py",
+      "target": "function:snort_validation/train_snort_surrogate.py:metrics",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/train_snort_surrogate.py",
+      "target": "function:snort_validation/train_snort_surrogate.py:metrics",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/train_snort_surrogate.py",
+      "target": "function:snort_validation/train_snort_surrogate.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/train_snort_surrogate.py",
+      "target": "function:snort_validation/train_snort_surrogate.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/validate_features_vs_snort.py",
+      "target": "function:snort_validation/validate_features_vs_snort.py:correlate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/validate_features_vs_snort.py",
+      "target": "function:snort_validation/validate_features_vs_snort.py:correlate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/validate_features_vs_snort.py",
+      "target": "function:snort_validation/validate_features_vs_snort.py:select",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/validate_features_vs_snort.py",
+      "target": "function:snort_validation/validate_features_vs_snort.py:select",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/validate_features_vs_snort.py",
+      "target": "function:snort_validation/validate_features_vs_snort.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/validate_features_vs_snort.py",
+      "target": "function:snort_validation/validate_features_vs_snort.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/validate_real_features_vs_snort.py",
+      "target": "function:snort_validation/validate_real_features_vs_snort.py:auc_score",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/validate_real_features_vs_snort.py",
+      "target": "function:snort_validation/validate_real_features_vs_snort.py:auc_score",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/validate_real_features_vs_snort.py",
+      "target": "function:snort_validation/validate_real_features_vs_snort.py:cohens_d",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/validate_real_features_vs_snort.py",
+      "target": "function:snort_validation/validate_real_features_vs_snort.py:cohens_d",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/validate_real_features_vs_snort.py",
+      "target": "function:snort_validation/validate_real_features_vs_snort.py:build_pcap_for_flow",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/validate_real_features_vs_snort.py",
+      "target": "function:snort_validation/validate_real_features_vs_snort.py:build_pcap_for_flow",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/validate_real_features_vs_snort.py",
+      "target": "function:snort_validation/validate_real_features_vs_snort.py:run_snort_on_pcap",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/validate_real_features_vs_snort.py",
+      "target": "function:snort_validation/validate_real_features_vs_snort.py:run_snort_on_pcap",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/validate_real_features_vs_snort.py",
+      "target": "function:snort_validation/validate_real_features_vs_snort.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/validate_real_features_vs_snort.py",
+      "target": "function:snort_validation/validate_real_features_vs_snort.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/validate_with_snort.py",
+      "target": "class:snort_validation/validate_with_snort.py:SnortValidator",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/validate_with_snort.py",
+      "target": "class:snort_validation/validate_with_snort.py:SnortValidator",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/validate_with_snort.py",
+      "target": "function:snort_validation/validate_with_snort.py:load_evaluation_results",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/validate_with_snort.py",
+      "target": "function:snort_validation/validate_with_snort.py:load_evaluation_results",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/validate_with_snort.py",
+      "target": "function:snort_validation/validate_with_snort.py:parse_args",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/validate_with_snort.py",
+      "target": "function:snort_validation/validate_with_snort.py:parse_args",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/validate_with_snort.py",
+      "target": "function:snort_validation/validate_with_snort.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:snort_validation/validate_with_snort.py",
+      "target": "function:snort_validation/validate_with_snort.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:snort_validation/validate_features_vs_snort.py",
+      "target": "file:snort_validation/surrogate_dataset.py",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:snort_validation/test_snort_batch_service.py",
+      "target": "file:snort_validation/snort_batch_service.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:snort_validation/test_stratosphere_sweep.py",
+      "target": "file:ai_agent/snort_bandit.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:snort_validation/test_stratosphere_sweep.py",
+      "target": "file:snort_validation/aggregate_results.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:snort_validation/test_stratosphere_sweep.py",
+      "target": "file:ai_agent/real_packet_env.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:snort_validation/surrogate_dataset.py",
+      "target": "file:ai_agent/flow_features.py",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:snort_validation/train_snort_surrogate.py",
+      "target": "file:ai_agent/hidden_defender_env.py",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:snort_validation/validate_features_vs_snort.py",
+      "target": "file:ai_agent/flow_features.py",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:snort_validation/validate_with_snort.py",
+      "target": "file:snort_validation/flow_to_pcap.py",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    }
+  ]
+}

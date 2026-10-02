@@ -5,41 +5,50 @@
 # `python3` has none of them, and running from a subdirectory breaks the
 # repo-module imports.
 #
-# ponytail: only the packet-level entry points are wired up. The old flow-level
-# targets (train_agent.py / evaluate.py / c2_ppo_tensorboard) are gone because
-# that approach is retired -- see README "Project History" -- and `make check`
-# is gone because setup_check.py predates the packet-level work. The live
-# scripts take no CLI flags; they write fixed report paths. Add a target when
-# there is a command worth running twice.
+# ponytail: only the hidden-defender (current) system's entry points are wired
+# up. Retired generations (flow-level, packet-level, directional, snort-aware,
+# bandit sweeps, feasibility/frontier solvers) were deleted in the one-version
+# cleanup -- everything remains recoverable from git history.
 
 PY := .venv/bin/python
+ENV := PYTHONPATH=ai_agent:snort_validation
 
-.PHONY: help install feasibility frontier variance test clean
+.PHONY: help install train train-real eval control audit verify test clean
 
 help:
-	@echo "C2 Evasion RL -- available targets:"
-	@echo "  make install       Create the conda env from environment.yml"
-	@echo "  make feasibility   Per-capture feasibility gate (label_feasibility.py)"
-	@echo "  make frontier      Exact corruption solver (frontier_exact.py)"
-	@echo "  make variance      Harness run-to-run spread (harness_variance.py)"
-	@echo "  make test          Run the pytest suite"
-	@echo "  make clean         Remove __pycache__, .pyc, pytest cache"
+	@echo "C2 Evasion RL (hidden-defender system) -- targets:"
+	@echo "  make install     Create the conda env from environment.yml"
+	@echo "  make train       Train MaskablePPO (fast surrogate, ~5 min)"
+	@echo "  make train-real  Train scored by real Snort (~2 h)"
+	@echo "  make eval        Headline: evaluate held-out flows with real Snort (~3 min)"
+	@echo "  make control     Negative control: unmutated traffic must alert (~3 min)"
+	@echo "  make audit       Surrogate vs real Snort + 14-mechanism sweep (~40 min)"
+	@echo "  make verify      Cross-check every report number (instant)"
+	@echo "  make test        Run the pytest suite (~8 min)"
+	@echo "  make clean       Remove __pycache__, .pyc, pytest cache"
 
 install:
 	@echo "[*] Installing conda environment..."
 	conda env create -f environment.yml -y
 
-feasibility:
-	@echo "[*] Feasibility gate..."
-	$(PY) snort_validation/label_feasibility.py
+train:
+	$(ENV) $(PY) ai_agent/train_hidden_defender_ppo.py
 
-frontier:
-	@echo "[*] Exact frontier solver..."
-	$(PY) snort_validation/frontier_exact.py
+train-real:
+	$(ENV) $(PY) ai_agent/train_hidden_defender_ppo.py --real-snort
 
-variance:
-	@echo "[*] Harness variance..."
-	$(PY) snort_validation/harness_variance.py
+eval:
+	$(ENV) $(PY) ai_agent/eval_masked_ppo_test.py --real-snort
+
+control:
+	$(ENV) $(PY) controls/control_noop_real_snort.py
+
+audit:
+	$(ENV) $(PY) controls/surrogate_vs_real_snort.py
+	$(ENV) $(PY) controls/surrogate_sweep_14mech.py
+
+verify:
+	$(PY) controls/verify_report_claims.py
 
 test:
 	@echo "[*] Running tests..."

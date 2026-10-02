@@ -1,0 +1,31 @@
+{
+  "projectRoot": "/root/.hermes/c2-evasion-rl",
+  "batchFiles": [
+    {"path": "ai_agent/ablate_actions.py", "language": "python", "sizeLines": 108, "fileCategory": "code"},
+    {"path": "ai_agent/c2_evasion_env.py", "language": "python", "sizeLines": 362, "fileCategory": "code"},
+    {"path": "ai_agent/callback_metric_proof.py", "language": "python", "sizeLines": 87, "fileCategory": "code"},
+    {"path": "ai_agent/config.py", "language": "python", "sizeLines": 51, "fileCategory": "code"},
+    {"path": "ai_agent/enhanced_packet_level_env.py", "language": "python", "sizeLines": 163, "fileCategory": "code"},
+    {"path": "ai_agent/eval_cross_capture.py", "language": "python", "sizeLines": 141, "fileCategory": "code"},
+    {"path": "ai_agent/eval_enhanced_agent.py", "language": "python", "sizeLines": 110, "fileCategory": "code"},
+    {"path": "ai_agent/eval_masked_ppo_test.py", "language": "python", "sizeLines": 88, "fileCategory": "code"},
+    {"path": "ai_agent/eval_packet_level_agent.py", "language": "python", "sizeLines": 119, "fileCategory": "code"},
+    {"path": "ai_agent/eval_real_snort_agent.py", "language": "python", "sizeLines": 106, "fileCategory": "code"},
+    {"path": "ai_agent/evaluate.py", "language": "python", "sizeLines": 89, "fileCategory": "code"},
+    {"path": "ai_agent/evasion_metrics_callback.py", "language": "python", "sizeLines": 66, "fileCategory": "code"},
+    {"path": "ai_agent/flow_features.py", "language": "python", "sizeLines": 201, "fileCategory": "code"},
+    {"path": "ai_agent/hidden_defender_env.py", "language": "python", "sizeLines": 417, "fileCategory": "code"},
+    {"path": "ai_agent/packet_level_env.py", "language": "python", "sizeLines": 195, "fileCategory": "code"},
+    {"path": "ai_agent/packet_modifier.py", "language": "python", "sizeLines": 85, "fileCategory": "code"},
+    {"path": "ai_agent/pool_loader.py", "language": "python", "sizeLines": 83, "fileCategory": "code"},
+    {"path": "ai_agent/real_packet_env.py", "language": "python", "sizeLines": 584, "fileCategory": "code"},
+    {"path": "ai_agent/snort_bandit.py", "language": "python", "sizeLines": 587, "fileCategory": "code"},
+    {"path": "ai_agent/train_agent.py", "language": "python", "sizeLines": 122, "fileCategory": "code"},
+    {"path": "ai_agent/train_enhanced.py", "language": "python", "sizeLines": 110, "fileCategory": "code"},
+    {"path": "ai_agent/train_enhanced_packet_agent.py", "language": "python", "sizeLines": 97, "fileCategory": "code"},
+    {"path": "ai_agent/train_hidden_defender_ppo.py", "language": "python", "sizeLines": 166, "fileCategory": "code"},
+    {"path": "ai_agent/train_packet_level_agent.py", "language": "python", "sizeLines": 112, "fileCategory": "code"},
+    {"path": "ai_agent/train_packet_level_tcp10.py", "language": "python", "sizeLines": 122, "fileCategory": "code"}
+  ],
+  "batchImportData": {"ai_agent/ablate_actions.py": [], "ai_agent/c2_evasion_env.py": [], "ai_agent/callback_metric_proof.py": [], "ai_agent/config.py": [], "ai_agent/enhanced_packet_level_env.py": [], "ai_agent/eval_cross_capture.py": [], "ai_agent/eval_enhanced_agent.py": [], "ai_agent/eval_masked_ppo_test.py": [], "ai_agent/eval_packet_level_agent.py": [], "ai_agent/eval_real_snort_agent.py": [], "ai_agent/evaluate.py": [], "ai_agent/evasion_metrics_callback.py": [], "ai_agent/flow_features.py": [], "ai_agent/hidden_defender_env.py": [], "ai_agent/packet_level_env.py": [], "ai_agent/packet_modifier.py": [], "ai_agent/pool_loader.py": [], "ai_agent/real_packet_env.py": [], "ai_agent/snort_bandit.py": [], "ai_agent/train_agent.py": [], "ai_agent/train_enhanced.py": [], "ai_agent/train_enhanced_packet_agent.py": [], "ai_agent/train_hidden_defender_ppo.py": [], "ai_agent/train_packet_level_agent.py": [], "ai_agent/train_packet_level_tcp10.py": []}
+}
