@@ -1,96 +1,51 @@
 # Documentation Index
 
-Welcome to the C2-Evasion RL project documentation. Start here to find what you need.
+The repo keeps **one version** of the system: the 14-mechanism `HiddenDefenderEnv`
+trained with MaskablePPO, scored by real Snort 2.9.20 (ET Open C2). Retired
+generations (flow-level surrogate, packet-level, directional, snort-aware, bandit
+sweeps) were deleted in the one-version cleanup — everything remains recoverable
+from git history (see commit `2dc23af`).
 
-## Quick Navigation
+## Read in this order
 
-### 📘 For First-Time Readers
-1. Start with [`/README.md`](../README.md) (English quick start) or [`/README.vi.md`](../README.vi.md) (Tiếng Việt)
-2. Then read [`01-overview/`](01-overview/) for project scope
+| # | Document | What it gives you |
+|---|----------|-------------------|
+| 1 | [`/README.md`](../README.md) · [`/README.vi.md`](../README.vi.md) | Quick start, layout, headline results, honest caveats |
+| 2 | [`RESULTS_PRESENTATION.md`](RESULTS_PRESENTATION.md) | **How every headline number is produced and verified.** The authoritative results doc — `controls/verify_report_claims.py` re-derives all 53 claims from it |
+| 3 | [`hidden_defender_results.md`](hidden_defender_results.md) | Current-system measurement detail: PPO vs greedy vs baselines, mechanism matrix, why the task saturates, the retracted 100% artifact |
+| 4 | [`surrogate_vs_reality_audit.md`](surrogate_vs_reality_audit.md) | 224 real-Snort-call audit of where the fast surrogate agrees/diverges |
+| 5 | [`REAL_SNORT_IN_THE_LOOP.md`](REAL_SNORT_IN_THE_LOOP.md) | Real-Snort training loop, resident-service findings (12/12 verified, bandit integration caveat) |
 
-### 🏗️ For Technical Details
-- [`02-technical/`](02-technical/) — Architecture, math, implementation
-- [`03-experiments/`](03-experiments/) — Datasets, setup, results
-- [`04-challenges/`](04-challenges/) — How we debugged and fixed critical bugs
+## Supporting references
 
-### 🔬 For Validation & Results
-- [`05-validation/`](05-validation/) — Snort IDS validation layer
-- [`03-experiments/results-final.md`](03-experiments/results-final.md) — 11 measurements (latest)
+| Document | Content |
+|----------|---------|
+| [`dataset-sources.md`](dataset-sources.md) | Where CTU-13 / Stratosphere captures and ET Open rules come from |
+| [`DATASET_AND_RULESET_SWITCH.md`](DATASET_AND_RULESET_SWITCH.md) | Why the project moved to ET Open C2 + raw pcaps |
+| [`CHANGELOG_SNORT_INTEGRATION.md`](CHANGELOG_SNORT_INTEGRATION.md) | Chronological log of the Snort integration work |
+| [`SNORT_DECISION_BOUNDARIES.md`](SNORT_DECISION_BOUNDARIES.md) | What the ET Open C2 ruleset actually keys on (depth, content anchors) |
+| [`http_only_eval_results.md`](http_only_eval_results.md) | Per-mechanism results on the HTTP-only test slice (feeds RESULTS_PRESENTATION §4) |
+| [`mechanisms_ab_results.md`](mechanisms_ab_results.md) | Mechanism A (http_header_pad) / B (length_wrapper) design + measurements |
+| [`academic_mechanisms_mapping.md`](academic_mechanisms_mapping.md) | Mapping of academic evasion techniques (NOP-sled analogues, fragmentation, morphing) onto the C2 problem |
 
-### 📚 For Academic Submission
-- `thesis/thesis_en.md` — Full English thesis (1650 lines, Phase 3)
-- `thesis/thesis_vi.md` — Full Vietnamese thesis (1660 lines, Phase 3)
+## Working documents (may be acted on or deleted later)
 
-### 📦 For Historical Context
-- [`06-archive/old-reports/`](06-archive/old-reports/) — Earlier comprehensive reports
-- [`06-archive/investigation-notes/`](06-archive/investigation-notes/) — Task notes, intermediate results
-- [`06-archive/documentation-audit.md`](06-archive/documentation-audit.md) — Phase 1 inventory & categorization audit
+| Document | Content |
+|----------|---------|
+| [`advisor_email_draft.md`](advisor_email_draft.md) | Draft email: surrogate→real-Snort transition, 9 issues, 5 questions |
+| [`questions_for_advisor.md`](questions_for_advisor.md) | Open questions for the thesis advisor |
+| [`surrogate_to_real_snort_issues.md`](surrogate_to_real_snort_issues.md) | Issue log from the transition (feeds the advisor email) |
+| [`three_directions_implementation_plan.md`](three_directions_implementation_plan.md) | Plan for cost-penalty / protocol-masking / heterogeneous-defender directions — Directions 1–2 are implemented and tested; Direction 3 (heterogeneous defender) is the open research item |
 
----
+## Thesis
 
-## Folder Structure
+[`thesis/`](thesis/) — LaTeX theses (EN + VI) with Makefile. **Known stale:** the
+`.tex` files still describe the retired bandit/Stratosphere generation (no mention
+of the 16/16 headline, `split8`, `http_header_pad`, or MaskablePPO). Rewriting them
+against `RESULTS_PRESENTATION.md` + `hidden_defender_results.md` is an open task —
+do not treat the current PDFs as accurate.
 
-```
-docs/
-├── README.md (this file)
-├── 01-overview/
-│   ├── README.md — folder guide
-│   ├── introduction.md
-│   ├── threat-model.md
-│   └── project-scope.md
-├── 02-technical/
-│   ├── README.md — folder guide
-│   ├── system-architecture.md
-│   ├── mathematical-formulation.md
-│   └── implementation-details.md
-├── 03-experiments/
-│   ├── README.md — folder guide
-│   ├── datasets.md
-│   ├── experimental-setup.md
-│   └── results-final.md (← LATEST MEASUREMENTS)
-├── 04-challenges/
-│   ├── README.md — folder guide
-│   ├── bug-1-unidirectional-flows.md
-│   ├── bug-2-naive-rewrites.md
-│   ├── lessons-learned.md
-│   └── root-cause-analysis.md
-├── 05-validation/
-│   ├── README.md — folder guide
-│   ├── snort-validation-overview.md
-│   └── measurements-11-points.md
-├── 06-archive/
-│   ├── README.md — folder guide
-│   ├── old-reports/ (6 earlier comprehensive reports)
-│   └── investigation-notes/ (13 task notes, intermediate results)
-└── thesis/
-    ├── README.md — folder guide
-    ├── thesis_en.md (will be created)
-    └── thesis_vi.md (will be created)
-```
+## Repo-root docs
 
----
-
-## Document Purpose Guide
-
-| Document | Purpose | Audience | Length |
-|----------|---------|----------|--------|
-| `/README.md` | Quick start, overview | Developers, researchers | 200 lines |
-| `/README.vi.md` | Quick start (Vietnamese) | Vietnamese readers | 200 lines |
-| `thesis/thesis_en.md` | Full academic thesis | KMA submission, peer review | 1650 lines |
-| `thesis/thesis_vi.md` | Full thesis (Vietnamese) | KMA cybersecurity program | 1660 lines |
-| `03-experiments/results-final.md` | Measurement details | Technical audience | Reference |
-| `04-challenges/` | How we debugged | Engineers learning from pitfalls | Reference |
-| `06-archive/` | Historical context | Project historians | Archive only |
-
----
-
-## How to Contribute
-
-1. **Updating results?** → Edit `03-experiments/results-final.md` and update `/README.md` references
-2. **Found a bug?** → Document in `04-challenges/` before fixing
-3. **Adding new section?** → Create folder in `docs/`, add README.md, link from this index
-4. **Archiving old work?** → Move to `06-archive/` and note in git commit
-
----
-
-**Last updated**: September 25, 2026
+[`/CHANGELOG.md`](../CHANGELOG.md) · [`/PROGRESS_REPORT.md`](../PROGRESS_REPORT.md) ·
+[`/WINDOWS_COMPAT.md`](../WINDOWS_COMPAT.md)

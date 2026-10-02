@@ -51,6 +51,12 @@ cross-references resolve. Requires TeX Live with `texlive-lang-other`
 
 ## References & Links
 
-- [Root Cause Analysis](../04-challenges/root-cause-analysis.md)
-- [Final Measurements](../03-experiments/results-final.md)
-- [System Architecture Details](../02-technical/)
+> ⚠️ **Known stale:** the `.tex` sources still describe the retired
+> bandit/Stratosphere generation — they contain no mention of the current
+> system (16/16 headline, `split8`, `http_header_pad`, MaskablePPO).
+> Rewriting them against the current results docs is an open task; do not
+> treat the built PDFs as accurate.
+
+- [Results presentation (authoritative)](../RESULTS_PRESENTATION.md)
+- [Hidden-defender measurement detail](../hidden_defender_results.md)
+- [Surrogate vs reality audit](../surrogate_vs_reality_audit.md)
