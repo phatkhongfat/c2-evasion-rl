@@ -115,3 +115,6 @@ models/checkpoints_*/
 venv_gym/
 venv_gymnasium/
 .session_state
+
+# Understand-Anything tool workspace (knowledge graph + intermediates)
+.ua/

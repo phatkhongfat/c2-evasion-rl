@@ -1,8 +1,0 @@
-{
-  "projectRoot": "/root/.hermes/c2-evasion-rl",
-  "batchFiles": [
-    {"path": "tests/test_packet_modifier.py", "language": "python", "sizeLines": 60, "fileCategory": "code"},
-    {"path": "tests/test_snort_verdict_integrity.py", "language": "python", "sizeLines": 59, "fileCategory": "code"}
-  ],
-  "batchImportData": {"tests/test_packet_modifier.py": [], "tests/test_snort_verdict_integrity.py": []}
-}
