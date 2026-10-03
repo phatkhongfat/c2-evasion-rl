@@ -51,12 +51,17 @@ ai_agent/logs/
 ai_agent/c2_ppo_tensorboard/
 c2_ppo_tensorboard/
 models/*.zip
+!models/ppo_hidden_defender.zip
 *.pkl
 !data/label_encoder_*.pkl
 !data/surrogate_ids_ctu13.pkl
 !data/snort_surrogate.pkl
 !data/snort_surrogate_enhanced.pkl
 !data/snort_surrogate_v2.pkl
+# The corpus pickle embeds the 80 flows' PACKETS (343 KB), so it is the only
+# dataset a fresh clone needs to reproduce the headline 16/16. Without it
+# HiddenDefenderEnv cannot load any flow and every entry point dies at load.
+!snort_validation/reports/hidden_defender_corpus.pkl
 
 # Large data files
 data/archive/
