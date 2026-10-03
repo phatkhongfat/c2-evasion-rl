@@ -27,8 +27,8 @@ from hidden_defender_env import (  # noqa: E402
 
 def test_corpus_loads_with_expected_shape():
     train, test = load_corpus("train"), load_corpus("test")
-    assert len(train) == 64
-    assert len(test) == 16
+    assert len(train) == 1153
+    assert len(test) == 40
     assert len(train[0]["obs"]) == 8
     assert all(0.0 <= v <= 1.0 for v in train[0]["obs"]), "obs must be normalised"
 
@@ -83,8 +83,8 @@ def test_environment_terminates_after_all_flows():
     while not terminated:
         _obs, _r, terminated, _tr, _i = env.step(3)   # prepend4
         n += 1
-        assert n <= 64, "episode failed to terminate"
-    assert n == 64
+        assert n <= len(env._flows), "episode failed to terminate"
+    assert n == len(env._flows)
 
 
 def test_noop_still_alerts_on_every_baseline_flow():
@@ -99,7 +99,8 @@ def test_noop_still_alerts_on_every_baseline_flow():
             alerts += 1
         if term:
             break
-    assert alerts == 64, f"noop evaded {64 - alerts}/64 flows, corpus is not all-positive"
+    total = len(env._flows)
+    assert alerts == total, f"noop evaded {total - alerts}/{total} flows, corpus is not all-positive"
 
 
 def test_corrupt_breaks_semantics_and_scores_minus_ten():

@@ -32,6 +32,7 @@ sys.path.insert(0, str(REPO / "snort_validation"))
 from real_packet_env import RealPacketEnv  # noqa: E402
 from real_rules_replica import RealRulesReplica  # noqa: E402
 from scapy.all import IP, Raw, TCP, UDP  # noqa: E402
+from endpoint_model import detect_framing  # noqa: E402
 
 CAPTURES = [("stratosphere", "botnet-capture-20110811-neris"),
             ("ctu13", "botnet-capture-20110819-bot")]
@@ -92,6 +93,7 @@ def build():
                 "key": key,
                 "packets": pkts,
                 "obs": flow_features(pkts),
+                "framing": detect_framing(b"".join(payloads_of(pkts))),
                 "replica": rep,       # kept for scoring, not for features
             })
             kept += 1

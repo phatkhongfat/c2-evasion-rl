@@ -12,7 +12,8 @@ sys.path.insert(0, "ai_agent")
 sys.path.insert(0, "snort_validation")
 
 import numpy as np
-from hidden_defender_env import HiddenDefenderEnv, ACTION_NAMES
+from hidden_defender_env import HiddenDefenderEnv, ACTION_NAMES, payloads_of
+from endpoint_model import detect_framing
 
 
 def test_action_mask_http_flow():
@@ -26,7 +27,7 @@ def test_action_mask_http_flow():
     
     # Check current flow framing
     current_flow = env._flows[env._idx]
-    framing = current_flow.get("framing", "unknown")
+    framing = detect_framing(b"".join(payloads_of(current_flow["packets"])))
     
     # If it's HTTP, action 12 (http_header_pad) should be allowed (mask[12] == True)
     if framing == "http":
@@ -46,7 +47,7 @@ def test_action_mask_neris_flow():
     # makes this test pass for the wrong reason.
     for i in range(min(10, len(env._flows))):
         env._idx = i
-        if env._flows[i].get("framing", "unknown") == "neris":
+        if detect_framing(b"".join(payloads_of(env._flows[i]["packets"]))) == "neris":
             mask = env.action_masks()
             assert mask[12] == 0, f"Neris flow should NOT allow http_header_pad (action 12), but mask={mask}"
             assert mask[3] == 0 and mask[4] == 0 and mask[5] == 0, (
@@ -63,8 +64,8 @@ def test_action_masks_tracks_current_flow():
     env = HiddenDefenderEnv(split="train", real_snort=False)
     env.reset()
 
-    http = next(i for i, f in enumerate(env._flows) if f.get("framing") == "http")
-    neris = next(i for i, f in enumerate(env._flows) if f.get("framing") == "neris")
+    http = next(i for i, f in enumerate(env._flows) if detect_framing(b"".join(payloads_of(f["packets"]))) == "http")
+    neris = next(i for i, f in enumerate(env._flows) if detect_framing(b"".join(payloads_of(f["packets"]))) == "neris")
 
     env._idx = http
     m_http = env.action_masks()

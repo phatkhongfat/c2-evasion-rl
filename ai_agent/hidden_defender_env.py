@@ -410,7 +410,10 @@ class HiddenDefenderEnv(gym.Env):
             "flow_id": flow["flow_id"],
             "action_cost": action_cost,
         }
-        obs = self._flows[self._idx]["obs"] if not terminated else self._obs()
+        if terminated:
+            obs = np.zeros(OBS_DIM, dtype=np.float32)
+        else:
+            obs = self._flows[self._idx]["obs"]
         return np.asarray(obs, dtype=np.float32), reward, terminated, truncated, info
 
     def service_stats(self):
