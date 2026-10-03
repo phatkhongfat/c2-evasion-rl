@@ -70,9 +70,9 @@ REWARD_ALERTED = -1.0
 # HTTP header padding is stealthy (legitimate traffic has custom headers).
 # RL should learn: "Split only when necessary; prefer padding on HTTP flows."
 ACTION_COSTS = {
-    0: 0.5,      # split8 (highest cost — many fragments, bandwidth)
-    1: 0.4,      # split16
-    2: 0.3,      # split24 (lowest split cost)
+    0: 0.60,     # split8 (highest cost — many fragments, bandwidth)
+    1: 0.50,     # split16
+    2: 0.40,     # split24 (lowest split cost)
     3: 0.2,      # prepend4
     4: 0.2,      # prepend8
     5: 0.2,      # prepend12
@@ -85,6 +85,10 @@ ACTION_COSTS = {
     12: 0.05,    # http_header_pad (cheap, natural — legitimate HTTP has custom headers)
     13: 0.25,    # length_wrapper (medium cost — needs protocol awareness)
 }
+
+
+# Shaping bonus for picking the primitive that matches the flow's framing.
+PROTOCOL_MATCH_BONUS = 0.15
 
 
 def payloads_of(pkts):
@@ -398,6 +402,16 @@ class HiddenDefenderEnv(gym.Env):
         # This forces RL to learn trade-offs: "cheap actions are better when they work."
         action_cost = ACTION_COSTS[int(action)]
         reward = reward - action_cost
+
+        # Tiny protocol-appropriate preference.  The generic split mechanisms
+        # work on every framing, so on a mixed corpus they are a global optimum
+        # and the policy collapses onto them, never sampling the cheaper
+        # HTTP-native primitive on the flows where it applies.  This bonus is
+        # granted ONLY when the action already produced a valid evasion, so it
+        # cannot manufacture evasion or mask a failing mechanism.
+        if evaded and sem and mech == "http_header_pad" \
+                and flow.get("framing", "unknown") == "http":
+            reward += PROTOCOL_MATCH_BONUS
 
         self._idx += 1
         terminated = self._idx >= len(self._flows)

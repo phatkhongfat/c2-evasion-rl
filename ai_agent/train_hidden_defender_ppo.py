@@ -123,7 +123,7 @@ def main() -> int:
     scorer = "real_snort" if args.real_snort else "replica"
     print(f"[*] training with scorer={scorer}")
     model = MaskablePPO("MlpPolicy", env, n_steps=N_FLOWS, batch_size=N_FLOWS,
-                        n_epochs=10, learning_rate=3e-4, ent_coef=0.01,
+                        n_epochs=10, learning_rate=3e-4, ent_coef=0.0151,
                         gamma=0.0, seed=SEED, verbose=0)
     counter = QueryCounter()
 
