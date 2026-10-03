@@ -21,5 +21,20 @@
     2008581,
     2008583,
     2008585
+  ],
+  "stratosphere:capture-win13": [
+    2016413
+  ],
+  "stratosphere:botnet-capture-20110810-neris": [
+    2012533,
+    2014169
+  ],
+  "ctu13:botnet-capture-20110810-neris": [
+    2012533,
+    2014169
+  ],
+  "ctu13:botnet-capture-20110815-fast-flux": [
+    2012533,
+    2014635
   ]
 }

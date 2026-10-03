@@ -36,8 +36,8 @@ from scapy.all import IP, Raw, TCP, UDP  # noqa: E402
 CAPTURES = [("stratosphere", "botnet-capture-20110811-neris"),
             ("ctu13", "botnet-capture-20110819-bot")]
 
-N_TRAIN = 64
-N_TEST = 16
+N_TRAIN = 160
+N_TEST = 40
 SEED = 42
 
 CORPUS_PKL = REPO / "snort_validation/reports/hidden_defender_corpus.pkl"
@@ -77,7 +77,7 @@ def flow_features(pkts) -> list:
 def build():
     flows = []
     for dataset, capture in CAPTURES:
-        env = RealPacketEnv(n_flows=40, batch_size=1, capture=capture,
+        env = RealPacketEnv(n_flows=800, batch_size=1, capture=capture,
                             dataset=dataset)
         rep = RealRulesReplica.for_capture(capture, dataset)
         kept = 0
