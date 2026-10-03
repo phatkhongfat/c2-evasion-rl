@@ -1,10 +1,10 @@
 {
   "method": "ppo",
-  "queries": 1024,
-  "evaded": 119,
+  "queries": 896,
+  "evaded": 127,
   "n_flows": 128,
-  "evasion_pct": 93.0,
-  "epochs": 8,
-  "semantics_breaks": 191,
+  "evasion_pct": 99.2,
+  "epochs": 7,
+  "semantics_breaks": 96,
   "scorer": "replica"
 }
