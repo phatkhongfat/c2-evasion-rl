@@ -22,21 +22,22 @@ def ck(label, got, want):
 
 # --- headline
 d = load("ppo_masked_test.json")
-ck("masked test n_flows", d["n_flows"], 16)
+ck("masked test n_flows", d["n_flows"], 40)
 ck("masked test alerted", d["alerted"], 0)
-ck("masked test valid_evasion", d["valid_evasion"], 16)
+ck("masked test valid_evasion", d["valid_evasion"], 40)
 ck("masked test pct", d["valid_evasion_pct"], 100.0)
 
 # --- control
 c = load("control_noop_real_snort.json")
-ck("control n", c["n"], 16)
-ck("control alerted", c["alerted"], 16)
+ck("control n", c["n"], 40)
+ck("control alerted", c["alerted"], 40)
 
 # --- training
 t = load("ppo_hidden_defender.json")
-ck("surrogate train evaded", t["evaded"], 61)
-ck("surrogate train queries", t["queries"], 704)
-ck("surrogate train epochs", t["epochs"], 11)
+ck("surrogate train n_flows", t["n_flows"], 128)
+ck("surrogate train evaded", t["evaded"], 119)
+ck("surrogate train queries", t["queries"], 1024)
+ck("surrogate train epochs", t["epochs"], 8)
 t2 = load("ppo_realsnort_train.json")
 ck("real train evaded", t2["evaded"], 58)
 ck("real train queries", t2["queries"], 640)
@@ -75,8 +76,8 @@ ck("baseline ppo queries", b["ppo"]["queries"], 8)
 
 # --- corpus
 co = load("hidden_defender_corpus.json")
-ck("corpus n_train", co["n_train"], 64)
-ck("corpus n_test", co["n_test"], 16)
+ck("corpus n_train", co["n_train"], 1153)
+ck("corpus n_test", co["n_test"], 40)
 
 # --- surrogate audit
 s = load("surrogate_sweep_14mech.json")
