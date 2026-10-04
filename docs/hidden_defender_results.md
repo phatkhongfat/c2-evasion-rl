@@ -1,5 +1,7 @@
 # Hidden-defender RL: measured results and the finding that blocks the current framing
 
+> **Note (updated Oct 2026):** This document was written for an earlier corpus (64 train / 16 test). The **current measured headline** is recorded under `snort_validation/reports/ppo_masked_test.json` (masked PPO, real Snort): **40/40 valid evasion**, negative control **40/40 alerted** (`controls/control_noop_real_snort.json`). Training surrogate numbers: **127/128 @ 896 queries / 7 epochs** (`snort_validation/reports/ppo_hidden_defender.json`, 128-flow train). Sections 1–7 below remain as the original historical snapshot; see §8 for the current measured state.
+
 Date: 2026-09-27. All numbers below come from real executions, not estimates.
 Defender = real `snort` binary with the ET Open C2 ruleset (21374 rules).
 
@@ -110,11 +112,30 @@ function changes.
 
 ## 7. Reproduce
 
+## 8. Current measured state (2026-10, after corpus refactor + retrain)
+
+**Corpus:** `snort_validation/reports/hidden_defender_corpus.pkl` — 1153 train / 40 test (N_TEST=40 frozen; `split_flows` stratified). Train framing: 698 Neris / 455 HTTP.
+
+**Training (surrogate):** `ppo_hidden_defender.json`
+- n_flows=128, epochs=7, queries=896, evaded=127/128 (99.2%), semantics_breaks=0, scorer=surrogate (replica). Stopped at ≥90% target (early stopping). This matches the committed report.
+
+**Headline (real Snort, masked PPO):** `ppo_masked_test.json`
+- split=test, n_flows=40, scorer=real_snort, **valid_evasion=40/40 (100%)**, alerted=0, masked_actions_used=0.
+- Actions: `split8=24`, `split24=16` (no `split16` used). Policy still concentrates on fragmentation.
+- Per-flow semantics_ok=true for all, and alert=false.
+
+**Negative control (real Snort, unmutated):** `controls/control_noop_real_snort.json`
+- control=unmutated, n=40, split=test, **alerted=40/40** → PASS.
+
+**Verifier:** `controls/verify_report_claims.py` → **54/54 checks passed** (uses invariants, not pinned literal training numbers).
+
+**Notes vs historical (16-test):** The 16-flow test was the historical held-out set; the current test is **40 flows** frozen for comparability. The qualitative finding (optimal action near-constant under static ET Open depth) remains the same; the quantitative headline is now 40/40 with real Snort. The 20.6% surrogate rule coverage and 0 false-safe on audited sets remain caveats.
+
+### Reproduce (current)
 ```bash
-.venv/bin/python snort_validation/build_hidden_defender_corpus.py
-.venv/bin/python -m pytest tests/test_hidden_defender_env.py -q      # 12 passed
-.venv/bin/python snort_validation/baseline_hidden_defender.py
-.venv/bin/python ai_agent/train_hidden_defender_ppo.py
-.venv/bin/python snort_validation/eval_all_real_snort.py             # real snort
-.venv/bin/python snort_validation/semantics_strict_test.py
+cd /root/.hermes/c2-evasion-rl
+PYTHONPATH=ai_agent:snort_validation .venv/bin/python3 -m pytest tests/ -q   # 86 passed
+PYTHONPATH=ai_agent:snort_validation .venv/bin/python3 ai_agent/eval_masked_ppo_test.py --real-snort
+PYTHONPATH=ai_agent:snort_validation .venv/bin/python3 controls/control_noop_real_snort.py
+PYTHONPATH=ai_agent:snort_validation .venv/bin/python3 controls/verify_report_claims.py
 ```
