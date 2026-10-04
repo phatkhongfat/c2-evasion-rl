@@ -1,10 +1,30 @@
 #!/usr/bin/env python3
-"""Cross-check every number claimed in docs/RESULTS_PRESENTATION.md."""
+"""Cross-check every number this project publishes against the reports.
+
+Two kinds of check:
+
+* **Report invariants** -- the summary/table files must agree with the
+  per-capture reports they aggregate, and the headline must be internally
+  consistent.  These are invariants rather than pinned literals on purpose: a
+  literal can only re-detect a stale aggregate one run late, which is exactly
+  how ``cross_capture_summary.json`` came to publish
+  ``baseline_detected=0`` for neris-20110811 while the report, the frozen noop
+  control and the PPO eval all measured 24/24.
+
+* **Doc claims** -- the numbers printed in ``docs/RESULTS_PRESENTATION.md``
+  must appear in the reports, so the write-up cannot quietly drift away from
+  the measurements.
+
+Run: PYTHONPATH=ai_agent:snort_validation .venv/bin/python controls/verify_report_claims.py
+"""
 import json
 import re
+import statistics
 from pathlib import Path
 
 R = Path("/root/.hermes/c2-evasion-rl/snort_validation/reports")
+REPORTS = R
+DOC = Path("/root/.hermes/c2-evasion-rl/docs/RESULTS_PRESENTATION.md")
 
 
 def load(n):
@@ -106,12 +126,82 @@ ck("scale 300 evaded", rows[2]["deterministic_evaded"], 287)
 ck("scale 323 evaded", rows[3]["deterministic_evaded"], 69)
 
 # --- cross capture
+# Invariants, not literals.  These four numbers were once pinned
+# (mean 62.5, std 44.49, 0810 87.5%) and they described a STALE summary: the
+# committed cross_capture_summary.json predated the per-capture reports it
+# summarised, so it published baseline_detected=0 for neris-20110811 while the
+# report, the frozen noop control and the PPO eval all measured 24/24.
+# Pinning a literal can only ever re-detect that class of bug one run late.
+# What must hold is that the summary is DERIVED from the reports: same
+# baselines, same counts, same spread.
 x = load("cross_capture_summary.json")
-ck("cross mean", x["mean_evasion_pct"], 62.5)
-ck("cross std", x["std_evasion_pct"], 44.49)
+per_capture = {}
+for p in sorted(REPORTS.glob("cross_capture_*.json")):
+    d = json.loads(p.read_text())
+    if all(d.get(k) is not None for k in
+           ("capture", "deterministic_pct", "deterministic_evaded",
+            "baseline_detected")):
+        per_capture[d["capture"]] = d
+
 byc = {r["capture"]: r for r in x["summary"]}
-ck("cross win13 pct", byc["capture-win13"]["evasion_pct"], 0.0)
-ck("cross 1108 pct", byc["botnet-capture-20110810-neris"]["evasion_pct"], 87.5)
+ck("cross summaries every report", set(byc), set(per_capture))
+for cap, src in sorted(per_capture.items()):
+    ck(f"cross {cap[-14:]} baseline", byc[cap]["baseline_detected"],
+       src["baseline_detected"])
+    ck(f"cross {cap[-14:]} evaded", byc[cap]["deterministic_evaded"],
+       src["deterministic_evaded"])
+    ck(f"cross {cap[-14:]} pct", byc[cap]["evasion_pct"],
+       src["deterministic_pct"])
+
+pcts = [r["evasion_pct"] for r in x["summary"]]
+ck("cross mean is the mean of its rows",
+   x["mean_evasion_pct"], round(statistics.mean(pcts), 2))
+ck("cross std is the spread of its rows",
+   x["std_evasion_pct"], round(statistics.pstdev(pcts), 2))
+ck("cross min/max bound the rows", (x["min_evasion_pct"], x["max_evasion_pct"]),
+   (min(pcts), max(pcts)))
+# A low baseline inflates evasion: if nothing is detected unmutated, the
+# evasion number is vacuous.  Every capture must have a real baseline.
+ck("cross every baseline is a real measurement",
+   all((byc[c]["baseline_detected"] or 0) > 0 for c in byc), True)
+# The honest reading of the current data: the policy ties corrupt-all on all
+# three captures, so cross-capture evasion is NOT an RL achievement.  Pin the
+# verdict distribution rather than any single number, and fail loudly if a
+# future run starts claiming wins that the counts do not support.
+verdicts = [e["vs_control"]["verdict"] for e in x["summary"] if "vs_control" in e]
+ck("cross vs_control counts match verdicts", x["vs_control_counts"],
+   {v: verdicts.count(v) for v in ("beats", "tie", "loses") if verdicts.count(v)})
+for e in x["summary"]:
+    if "vs_control" not in e:
+        continue
+    vc = e["vs_control"]
+    src = per_capture[e["capture"]]
+    ck(f"cross {e['capture'][-14:]} tie is explained",
+       vc["beats"] is False and e["deterministic_evaded"] == src["corrupt_all_evaded"],
+       True)
+
+# --- the write-up must print the same numbers
+# The stale-summary bug was invisible precisely because nothing compared the doc
+# to the report.  Check the cross-capture table row by row: the doc must carry
+# each capture's baseline, its policy count and its control count, and must NOT
+# still carry the superseded figures (which the doc now quotes only inside its
+# own correction note, hence the negative lookups are scoped to table rows).
+doc = DOC.read_text(encoding="utf-8") if DOC.exists() else ""
+table = next((blk for blk in doc.split("\n\n")
+              if blk.lstrip().startswith("| capture | baseline detected |")), "")
+for e in x["summary"]:
+    cap, row = e["capture"], table
+    ck(f"doc lists {cap[-14:]} baseline",
+       f"| {cap} | {e['baseline_detected']}/{e['n_flows']} |" in row, True)
+    ck(f"doc lists {cap[-14:]} policy count",
+       f"| {e['deterministic_evaded']} | {e['corrupt_all_evaded']} |" in row, True)
+ck("doc prints the regenerated mean", f"mean {x['mean_evasion_pct']}%" in doc, True)
+ck("doc prints the regenerated std", f"std {x['std_evasion_pct']}%" in doc, True)
+# The superseded figures, spelled out.  They may still appear in the prose
+# correction note; what must not survive is the TABLE claiming them.
+for stale in ("62.5%", "44.49%", "87.5%", "| **0/24** |"):
+    ck(f"doc table drops {stale}", stale in table, False)
+ck("doc table shows the control column", "| policy evaded | corrupt-all evaded |" in table, True)
 
 # --- report
 print(f"{'':3s} {'check':44s} {'got':>10s} {'want':>10s}")

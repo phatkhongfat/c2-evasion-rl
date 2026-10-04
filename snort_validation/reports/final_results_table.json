@@ -116,12 +116,14 @@
       "capture": "botnet-capture-20110810-neris",
       "n_flows": 24,
       "corrupt_cost": 0.6,
-      "evasion_pct": 87.5,
+      "evasion_pct": 16.67,
       "mean_corrupt": 0.62,
-      "deterministic_evaded": 21,
+      "deterministic_evaded": 4,
       "baseline_detected": 23,
       "random_evaded": 2,
-      "corrupt_all_evaded": 8,
+      "corrupt_all_evaded": 4,
+      "corrupt_all_mean_corrupt": 0.62,
+      "corrupt_all_pct": 16.67,
       "source": "cross_capture"
     },
     {
@@ -130,11 +132,13 @@
       "n_flows": 24,
       "corrupt_cost": 0.6,
       "evasion_pct": 100.0,
-      "mean_corrupt": 0.0,
+      "mean_corrupt": 2.88,
       "deterministic_evaded": 24,
-      "baseline_detected": 0,
-      "random_evaded": 24,
+      "baseline_detected": 24,
+      "random_evaded": 10,
       "corrupt_all_evaded": 24,
+      "corrupt_all_mean_corrupt": 2.88,
+      "corrupt_all_pct": 100.0,
       "source": "cross_capture"
     },
     {
@@ -258,6 +262,8 @@
       "baseline_detected": 24,
       "random_evaded": 0,
       "corrupt_all_evaded": 0,
+      "corrupt_all_mean_corrupt": 0.0,
+      "corrupt_all_pct": 0.0,
       "source": "cross_capture"
     }
   ]

@@ -182,13 +182,16 @@ function sec(title, inner){
           r.mean_corrupt]))),
 
       sec("cross-capture", table(
-        "Generalisation across captures. A capture with baseline 0/24 has nothing to evade, so its 100% is meaningless.",
-        ["capture","n","baseline alerted","evaded","evasion %"],
+        "Generalisation across captures, measured against the corrupt-all control. <b>Tie on all three</b> — the policy evades exactly as many flows as corrupting every reachable packet does, so this table is a null result, not a score.",
+        ["capture","n","baseline alerted","policy evaded","corrupt-all evaded","verdict","evasion %"],
         (cross.summary||cross).map(r => [
           esc(r.capture), r.n_flows,
           r.baseline_detected === 0 ? `<span class="warn">0/${r.n_flows} — nothing to evade</span>`
                                     : `${r.baseline_detected}/${r.n_flows}`,
-          r.deterministic_evaded,
+          `${r.deterministic_evaded}/${r.n_flows}`,
+          r.corrupt_all_evaded === undefined ? "—"
+            : `<span class="${r.corrupt_all_evaded===r.deterministic_evaded?'bad':'ok'}">${r.corrupt_all_evaded}/${r.n_flows}</span>`,
+          r.vs_control ? `<span class="${r.vs_control.beats?'ok':'bad'}">${r.vs_control.verdict}</span>` : "—",
           `<span class="num ${r.evasion_pct>=90?'ok':r.evasion_pct>=60?'warn':'bad'}">${pct(r.deterministic_evaded,r.n_flows)}</span>`]))),
 
       sec("surrogate vs real Snort", table(
@@ -203,16 +206,15 @@ function sec(title, inner){
           <li>Single seed, single frozen 40-flow split. No confidence interval.</li>
           <li>Static ET Open C2 ruleset. The winning action is near-constant per framing, so there is little per-flow structure for RL to exploit.</li>
           <li>The surrogate drops ~20.6% of real rules (<code>pcre</code>, <code>byte_test</code>, <code>byte_jump</code>).</li>
-          <li>Does not generalise across captures — see cross-capture above.</li>
+          <li>Does not generalise across captures, and does not beat the corrupt-all control on any of them (3/3 tie) — see cross-capture above. Any cross-capture evasion figure is what "corrupt everything" already achieves.</li>
           <li>Scaling is non-monotonic; the drop at 323 flows is undiagnosed.</li>
         </ul>`),
 
       sec("provenance", `
         <p class="sub" style="margin:0">Every number above is read at page load from
-        <code>snort_validation/reports/*.json</code> and
-        <code>controls/control_noop_real_snort.json</code>.
-        Nothing is hardcoded. Cross-check with
-        <code>PYTHONPATH=ai_agent:snort_validation .venv/bin/python controls/verify_report_claims.py</code>.</p>`),
+        <code>snort_validation/reports/*.json</code>. Nothing is hardcoded. Cross-check with
+        <code>PYTHONPATH=ai_agent:snort_validation .venv/bin/python controls/verify_report_claims.py</code>
+        (68 checks, asserts the cross-capture summary agrees with every per-capture report).</p>`),
     ].filter(Boolean).join("");
 
     document.querySelector(".controls").addEventListener("click", e => {

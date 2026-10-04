@@ -231,15 +231,37 @@ explicit "we do not know" in the report. Do not smooth over it.
 
 ### Cross-capture (`cross_capture_summary.json`, cost 0.6)
 
-| capture | baseline detected | evaded | evasion % |
-|---|---|---|---|
-| botnet-capture-20110810-neris | 23/24 | 21 | 87.5% |
-| botnet-capture-20110811-neris | **0/24** | 24 | 100.0% |
-| capture-win13 | 24/24 | 0 | **0.0%** |
+**Regenerated 2026-10 from the per-capture reports. The numbers below are lower than
+the ones this file used to carry — see the correction note under the table.**
 
-mean 62.5%, **std 44.49%**. The `botnet-capture-20110811-neris` row has baseline 0/24 —
-nothing to evade, so its 100% is meaningless. `capture-win13` at 0% is the real signal:
-**the policy does not generalise across captures.**
+| capture | baseline detected | policy evaded | corrupt-all evaded | verdict | evasion % |
+|---|---|---|---|---|---|
+| botnet-capture-20110810-neris | 23/24 | 4 | 4 | tie | 16.7% |
+| botnet-capture-20110811-neris | 24/24 | 24 | 24 | tie | 100.0% |
+| capture-win13 | 24/24 | 0 | 0 | tie | **0.0%** |
+
+mean 38.89%, **std 43.74%**.
+
+**Correction (2026-10).** This section previously reported mean 62.5% / std 44.49%,
+with `botnet-capture-20110810-neris` at 87.5% and `botnet-capture-20110811-neris`
+at baseline **0/24**. All four numbers were wrong, from one cause: the committed
+`cross_capture_summary.json` predated the per-capture reports it summarises, because
+`aggregate_results.py` filtered its input glob by the filename substring `"summary"`
+only. The glob `cross_capture_*.json` also matched `cross_capture_eval.json`, a
+differently-shaped report; that row failed the required-field check, `main()` exited
+non-zero **without writing**, and the stale file survived unnoticed. The aggregator now
+selects inputs by schema (`is_cross_capture_report`) and `controls/verify_report_claims.py`
+asserts the summary agrees with every per-capture report, so a stale summary fails the
+verifier instead of being published. The 0811 baseline of 0 was never real: the
+per-capture report, the frozen noop control and the PPO eval all measured 24/24.
+
+**Read this as a null result, not a score.** The `corrupt_all_evaded` column is the
+point: on all three captures the policy evades exactly as many flows as corrupting
+every reachable packet does, and at the same mean corruption. The policy ties the
+control 3/3 — it learned nothing that the trivially-optimal "corrupt everything" action
+does not already achieve. So the 100% on 0811 is a property of the control being
+sufficient, not evidence for the RL agent. `capture-win13` at 0% remains the honest
+signal that the policy does not generalise across captures.
 
 ### Corrupt-cost sweep (`sweep_corrupt_cost.json`)
 

@@ -5,18 +5,42 @@
     {
       "capture": "botnet-capture-20110810-neris",
       "n_flows": 24,
-      "deterministic_evaded": 21,
-      "evasion_pct": 87.5,
+      "deterministic_evaded": 4,
+      "evasion_pct": 16.67,
       "mean_corrupt": 0.62,
-      "baseline_detected": 23
+      "baseline_detected": 23,
+      "corrupt_all_evaded": 4,
+      "corrupt_all_mean_corrupt": 0.62,
+      "vs_control": {
+        "beats": false,
+        "verdict": "tie",
+        "policy_evaded": 4,
+        "control_evaded": 4,
+        "n_flows": 24,
+        "policy_mean_corrupt": 0.62,
+        "control_mean_corrupt": 0.62,
+        "corrupt_saved": 0.0
+      }
     },
     {
       "capture": "botnet-capture-20110811-neris",
       "n_flows": 24,
       "deterministic_evaded": 24,
       "evasion_pct": 100.0,
-      "mean_corrupt": 0.0,
-      "baseline_detected": 0
+      "mean_corrupt": 2.88,
+      "baseline_detected": 24,
+      "corrupt_all_evaded": 24,
+      "corrupt_all_mean_corrupt": 2.88,
+      "vs_control": {
+        "beats": false,
+        "verdict": "tie",
+        "policy_evaded": 24,
+        "control_evaded": 24,
+        "n_flows": 24,
+        "policy_mean_corrupt": 2.88,
+        "control_mean_corrupt": 2.88,
+        "corrupt_saved": 0.0
+      }
     },
     {
       "capture": "capture-win13",
@@ -24,11 +48,26 @@
       "deterministic_evaded": 0,
       "evasion_pct": 0.0,
       "mean_corrupt": 0.0,
-      "baseline_detected": 24
+      "baseline_detected": 24,
+      "corrupt_all_evaded": 0,
+      "corrupt_all_mean_corrupt": 0.0,
+      "vs_control": {
+        "beats": false,
+        "verdict": "tie",
+        "policy_evaded": 0,
+        "control_evaded": 0,
+        "n_flows": 24,
+        "policy_mean_corrupt": 0.0,
+        "control_mean_corrupt": 0.0,
+        "corrupt_saved": 0.0
+      }
     }
   ],
-  "mean_evasion_pct": 62.5,
-  "std_evasion_pct": 44.49,
+  "mean_evasion_pct": 38.89,
+  "std_evasion_pct": 43.74,
   "min_evasion_pct": 0.0,
-  "max_evasion_pct": 100.0
+  "max_evasion_pct": 100.0,
+  "vs_control_counts": {
+    "tie": 3
+  }
 }

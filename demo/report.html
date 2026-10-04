@@ -1,13 +1,242 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><title>C2 Evasion RL — Demo</title>
-<style>:root{--bg:#080c1f;--text:#dfe3ec;--muted:#8a91b5;--line:#22264d;--ok:#35c759}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.6 ui-mono,menlo,monaco,monospace}header{padding:16px 20px;border-bottom:1px solid var(--line)}h1{margin:0;font:700 18px/1.4 ui-sans-serif,system-ui}main{padding:16px 20px;display:grid;gap:12px;max-width:880px}section{border:1px solid var(--line);border-radius:8px;padding:12px}h2{margin:0 0 10px;font:700 14px/1.4 ui-sans-serif,system-ui;color:var(--muted)}table{border-collapse:collapse;width:100%}td,th{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left}th{color:var(--muted);font-weight:400}tr:last-child td{border-bottom:none}.num{font-weight:700}.ok{color:var(--ok)}</style>
-<body><header><h1>C2 Evasion RL — 40/40 valid evasion | 40/40 negative control | 54/54 verifier</h1></header><main>
-<section><h2>Corpus</h2><table><tr><th>train/test</th><th>train caps</th><th>test caps</th></tr><tr><td>1153/40</td><td>botnet-capture-20110811-neris, botnet-capture-20110819-bot</td><td>botnet-capture-20110811-neris, botnet-capture-20110819-bot</td></tr></table></section>
-<section><h2>Train (surrogate)</h2><table><tr><th>flows</th><th>queries</th><th>evaded</th><th>epochs</th><th>scorer</th></tr><tr><td>128</td><td>896</td><td><span class="num">127/128</span> (99.2%)</td><td>7</td><td>replica</td></tr></table></section>
-<section><h2>Eval (real Snort, masked PPO)</h2><table><tr><th>valid evasion</th><th>alerted</th><th>actions</th><th>test framing</th></tr><tr><td><span class="num ok">40/40</span> (100%)</td><td><span class="num ok">0</span></td><td>split8:24 split24:16</td><td>neris:24 http:16</td></tr></table></section>
-<section><h2>Control (noop, real Snort)</h2><table><tr><th>n</th><th>alerted</th><th>status</th></tr><tr><td>40</td><td>40/40</td><td><span class="num ok">PASS</span></td></tr></table></section>
-<section><h2>Checks</h2><table><tr><th>verifier</th><th>semantics breaks</th><th>masked actions</th></tr><tr><td><span class="num ok">54/54</span></td><td><span class="num ok">0</span></td><td><span class="num ok">0</span></td></tr></table></section>
-<section><h2>Scale snapshot</h2><table><tr><th>scale</th><th>n</th><th>evaded</th></tr><tr><td>24</td><td>24</td><td>24/24 (100%)</td></tr><tr><td>100</td><td>100</td><td>94/100 (94.0%)</td></tr><tr><td>300</td><td>300</td><td>287/300 (95.7%)</td></tr><tr><td>323</td><td>323</td><td>69/323 (21.4%)</td></tr></table></section>
-<section><h2>Cross-capture</h2><table><tr><th>capture</th><th>n</th><th>evaded</th><th>baseline alerted</th></tr><tr><td>botnet-capture-20110810-neris</td><td>24</td><td>21/24 (87.5%)</td><td>23/24</td></tr><tr><td>botnet-capture-20110811-neris</td><td>24</td><td>24/24 (100%)</td><td>0/24</td></tr><tr><td>capture-win13</td><td>24</td><td>0/24 (0%)</td><td>24/24</td></tr></table></section>
-<section><h2>Surrogate vs real</h2><table><tr><th>overall</th><th>eligible-only</th><th>false-safe</th></tr><tr><td>161/224 (71.9%)</td><td>103/116 (88.8%)</td><td>0</td></tr></table></section>
-<section><h2>Threats to validity</h2><table><tr><th>caveat</th><th>notes</th></tr><tr><td>single seed/frozen split</td><td>N_TEST=40 (comparability)</td></tr><tr><td>rule coverage</td><td>surrogate drops ~20.6% (pcre/byte_test/byte_jump)</td></tr><tr><td>cross-capture</td><td>win13 0%; 11-neris baseline 0/24 (meaningless 100%)</td></tr><tr><td>scaling</td><td>non-monotonic: 323 → 21.4%</td></tr><tr><td>defender static</td><td>split8/split24 dominate; near-constant action</td></tr></table></section>
-</main></body></html>
+<!doctype html>
+<html lang="en" data-theme="dark" data-density="comfy">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>C2 Evasion RL — results</title>
+<style>
+:root{
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --pad: 14px;
+}
+html[data-theme="dark"]{
+  --bg:#080c1f; --panel:#0d1226; --line:#22264d;
+  --ink:#dfe3ec; --muted:#8a91b5; --ok:#35c759; --bad:#ff5f57; --warn:#f8b94b;
+}
+html[data-theme="light"]{
+  --bg:#fbfbfd; --panel:#ffffff; --line:#dfe1ea;
+  --ink:#12141c; --muted:#5b6180; --ok:#12833b; --bad:#c0271f; --warn:#8a5a00;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 var(--mono)}
+header{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;gap:16px;align-items:baseline;flex-wrap:wrap}
+h1{margin:0;font:700 17px/1.3 var(--sans);letter-spacing:-.01em}
+.sub{color:var(--muted);font-size:12.5px}
+main{padding:16px 20px 60px;max-width:960px;margin:0 auto}
+section{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:var(--pad);margin-bottom:12px}
+html[data-density="dense"]{--pad:8px}
+h2{margin:0 0 10px;font:700 13px/1.3 var(--sans);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{text-align:left;color:var(--muted);font-weight:400;border-bottom:1px solid var(--line)}
+td,th{padding:5px 8px;vertical-align:top}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:color-mix(in oklab, var(--ink) 4%, transparent)}
+.num{font-weight:700;font-variant-numeric:tabular-nums}
+.ok{color:var(--ok)} .bad{color:var(--bad)} .warn{color:var(--warn)}
+.strip{height:6px;background:var(--line);border-radius:3px;overflow:hidden;min-width:60px}
+.strip>i{display:block;height:100%;background:var(--ok)}
+.strip>i.b{background:var(--bad)}
+.strip>i.w{background:var(--warn)}
+.bar{width:42px;display:inline-block;vertical-align:middle}
+figure{margin:0}
+caption{caption-side:top;text-align:left;color:var(--muted);font-size:12.5px;padding-bottom:8px}
+button{font:12px var(--mono);color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:6px;padding:4px 9px;cursor:pointer;min-height:28px}
+button[aria-pressed="true"]{border-color:var(--ink)}
+.controls{position:fixed;right:14px;bottom:14px;display:flex;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px}
+.scroll{max-height:340px;overflow:auto;border:1px solid var(--line);border-radius:6px}
+.err{color:var(--bad)}
+code{font-family:var(--mono)}
+@media (prefers-reduced-motion:no-preference){.strip>i{transition:width .5s ease}}
+</style>
+</head>
+<body>
+<header>
+  <h1>C2 Evasion RL</h1>
+  <span class="sub" id="headline">loading…</span>
+</header>
+<main id="app">
+  <section><h2>loading</h2><p class="sub" id="err"></p></section>
+</main>
+<div class="controls" role="group" aria-label="Display">
+  <button id="theme" aria-pressed="false">light</button>
+  <button id="dense" aria-pressed="false">dense</button>
+</div>
+
+<script>
+const BASE = "../snort_validation/reports/";
+const FILES = {
+  corpus:   "hidden_defender_corpus.json",
+  train:    "ppo_hidden_defender.json",
+  eval:     "ppo_masked_test.json",
+  control:  "control_noop_real_snort.json",
+  scale:    "final_scale_up_summary.json",
+  cross:    "cross_capture_summary.json",
+  sweep:    "surrogate_sweep_14mech.json",
+};
+
+async function get(name){
+  const r = await fetch(BASE + name, {cache:"no-store"});
+  if(!r.ok) throw new Error(name + ": HTTP " + r.status);
+  return r.json();
+}
+
+const pct = (n,d) => d ? (100*n/d).toFixed(1) + "%" : "—";
+const esc = s => String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+function strip(n,d){
+  const p = d ? n/d*100 : 0;
+  const cls = p >= 90 ? "" : p >= 60 ? "w" : "b";
+  return `<span class="strip bar"><i class="${cls}" style="width:${p.toFixed(1)}%"></i></span>`;
+}
+
+function table(caption, head, rows){
+  return `<figure><table><caption>${caption}</caption><thead><tr>${
+    head.map(h=>`<th>${h}</th>`).join("")
+  }</tr></thead><tbody>${
+    rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")
+  }</tbody></table></figure>`;
+}
+
+function sec(title, inner){
+  return `<section><h2>${title}</h2>${inner}</section>`;
+}
+
+(async function(){
+  const app = document.getElementById("app");
+  try{
+    const [corpus, train, ev, control, scale, cross, sweep] = await Promise.all(
+      Object.values(FILES).map(get)
+    );
+    const tr = train, te = ev, ct = control;
+
+    // headline numbers, all from the loaded reports
+    const valid = te.valid_evasion, n = te.n_flows;
+    document.getElementById("headline").textContent =
+      `${valid}/${n} valid evasion · control ${ct.alerted}/${ct.n} · scorer ${te.scororer}`;
+
+    // per-flow breakdown from the eval report if present
+    const pf = Array.isArray(te.per_flow) ? te.per_flow : [];
+    const byFraming = {};
+    const byAction = te.actions_chosen || {};
+    pf.forEach(f => {
+      const k = f.framing || "?";
+      byFraming[k] = byFraming[k] || {n:0, ok:0};
+      byFraming[k].n++;
+      if(f.evaded && f.semantics_ok) byFraming[k].ok++;
+    });
+
+    app.innerHTML = [
+      sec("headline", table(
+        "Both rows are the same 40 held-out flows: the policy's result, and the unmutated control that must alert.",
+        ["run","scorer","n","evaded","valid evasion","alerted"],
+        [
+          ["policy (MaskablePPO)", te.scororer, n, te.evaded,
+           `<span class="num ok">${valid}/${n} · ${pct(valid,n)}</span>`, te.alerted],
+          ["negative control (noop)", ct.scorer || "real_snort", ct.n, "—",
+           `<span class="num">${ct.alerted}/${ct.n} alerted</span>`, ct.alerted],
+        ])),
+
+      sec("corpus", table(
+        "Frozen test split for comparability with earlier evaluations.",
+        ["train","test","obs features","train captures"],
+        [[corpus.n_train, corpus.n_test, corpus.obs_dim,
+          (corpus.train_captures||[]).map(esc).join(", ")]])),
+
+      sec("training", table(
+        `Surrogate scorer, ${tr.n_flows} flows, stopped at the target after ${tr.epochs} epochs. Not the same quantity as the real-Snort headline above.`,
+        ["flows","queries","evaded","evasion %","epochs","semantics breaks"],
+        [[tr.n_flows, tr.queries, `${tr.evaded}/${tr.n_flows}`,
+          `${strip(tr.evaded,tr.n_flows)} <span class="num">${pct(tr.evaded,tr.n_flows)}</span>`,
+          tr.epochs, tr.semantics_breaks]])),
+
+      sec("actions chosen", table(
+        "Counts over the test split. Fragmentation mechanisms only.",
+        ["action","count","share"],
+        Object.entries(byAction).sort((a,b)=>b[1]-a[1]).map(([k,v]) =>
+          [k, v, `${strip(v,n)} <span class="num">${pct(v,n)}</span>`]))),
+
+      pf.length ? sec("per-flow", `<div class="scroll">${
+        table("Every held-out flow, straight from the eval report.",
+          ["flow_id","framing","action","alert","evaded","semantics ok"],
+          pf.map(f => [
+            `<code style="font-size:11.5px">${esc(String(f.flow_id).slice(0,46))}…</code>`,
+            f.framing, f.action,
+            f.alert ? `<span class="bad">yes</span>` : `<span class="ok">no</span>`,
+            f.evaded ? `<span class="ok">yes</span>` : `<span class="bad">no</span>`,
+            f.semantics_ok ? `<span class="ok">true</span>` : `<span class="bad">false</span>`,
+          ]))}</div>`) : "",
+
+      Object.keys(byFraming).length ? sec("by framing", table(
+        "Framing is the only thing the policy observes beyond packet statistics.",
+        ["framing","n","valid evasion"],
+        Object.entries(byFraming).map(([k,v]) =>
+          [k, v.n, `<span class="num ok">${v.ok}/${v.n}</span>`])) ) : "",
+
+      sec("scale", table(
+        "Scaling sweep on one capture. Non-monotonic — the 323-flow collapse is unexplained and left as-is.",
+        ["flows","evaded","evasion %","mean corrupt"],
+        (scale.results||[]).map(r => [
+          r.n_flows, r.deterministic_evaded,
+          `${strip(r.deterministic_evaded,r.n_flows)} <span class="num ${r.evasion_pct>=90?'ok':r.evasion_pct>=60?'warn':'bad'}">${pct(r.deterministic_evaded,r.n_flows)}</span>`,
+          r.mean_corrupt]))),
+
+      sec("cross-capture", table(
+        "Generalisation across captures, measured against the corrupt-all control. <b>Tie on all three</b> — the policy evades exactly as many flows as corrupting every reachable packet does, so this table is a null result, not a score.",
+        ["capture","n","baseline alerted","policy evaded","corrupt-all evaded","verdict","evasion %"],
+        (cross.summary||cross).map(r => [
+          esc(r.capture), r.n_flows,
+          r.baseline_detected === 0 ? `<span class="warn">0/${r.n_flows} — nothing to evade</span>`
+                                    : `${r.baseline_detected}/${r.n_flows}`,
+          `${r.deterministic_evaded}/${r.n_flows}`,
+          r.corrupt_all_evaded === undefined ? "—"
+            : `<span class="${r.corrupt_all_evaded===r.deterministic_evaded?'bad':'ok'}">${r.corrupt_all_evaded}/${r.n_flows}</span>`,
+          r.vs_control ? `<span class="${r.vs_control.beats?'ok':'bad'}">${r.vs_control.verdict}</span>` : "—",
+          `<span class="num ${r.evasion_pct>=90?'ok':r.evasion_pct>=60?'warn':'bad'}">${pct(r.deterministic_evaded,r.n_flows)}</span>`]))),
+
+      sec("surrogate vs real Snort", table(
+        "Does the fast scorer that trains agree with the binary that scores?",
+        ["overall agreement","eligible-only","surrogate false-safe"],
+        [[`${sweep.overall.n_agree}/${sweep.overall.n} (${sweep.overall.agreement_pct}%)`,
+          sweep.eligible_only ? `${sweep.eligible_only.n_agree}/${sweep.eligible_only.n} (${sweep.eligible_only.agreement_pct}%)` : "—",
+          `<span class="num ok">${sweep.overall.surrogate_false_safe}</span>`]])),
+
+      sec("threats to validity", `
+        <ul class="sub" style="margin:0;padding-left:18px;line-height:1.8">
+          <li>Single seed, single frozen 40-flow split. No confidence interval.</li>
+          <li>Static ET Open C2 ruleset. The winning action is near-constant per framing, so there is little per-flow structure for RL to exploit.</li>
+          <li>The surrogate drops ~20.6% of real rules (<code>pcre</code>, <code>byte_test</code>, <code>byte_jump</code>).</li>
+          <li>Does not generalise across captures, and does not beat the corrupt-all control on any of them (3/3 tie) — see cross-capture above. Any cross-capture evasion figure is what "corrupt everything" already achieves.</li>
+          <li>Scaling is non-monotonic; the drop at 323 flows is undiagnosed.</li>
+        </ul>`),
+
+      sec("provenance", `
+        <p class="sub" style="margin:0">Every number above is read at page load from
+        <code>snort_validation/reports/*.json</code>. Nothing is hardcoded. Cross-check with
+        <code>PYTHONPATH=ai_agent:snort_validation .venv/bin/python controls/verify_report_claims.py</code>
+        (68 checks, asserts the cross-capture summary agrees with every per-capture report).</p>`),
+    ].filter(Boolean).join("");
+
+    document.querySelector(".controls").addEventListener("click", e => {
+      const b = e.target.closest("button"); if(!b) return;
+      if(b.id === "theme"){
+        const dark = document.documentElement.dataset.theme === "dark";
+        document.documentElement.dataset.theme = dark ? "light" : "dark";
+        b.textContent = dark ? "dark" : "light";
+        b.setAttribute("aria-pressed", String(!dark));
+      } else {
+        const dense = document.documentElement.dataset.density === "dense";
+        document.documentElement.dataset.density = dense ? "comfy" : "dense";
+        b.setAttribute("aria-pressed", String(!dense));
+      }
+    });
+  }catch(e){
+    app.innerHTML = `<section><h2>could not load reports</h2><p class="err">${esc(e.message)}</p>
+      <p class="sub">Serve the repository root over HTTP and open <code>/demo/</code> —
+      <code>file://</code> blocks the fetch.</p></section>`;
+    document.getElementById("headline").textContent = "load failed";
+  }
+})();
+</script>
+</body>
+</html>

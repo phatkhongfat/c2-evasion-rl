@@ -4,5 +4,5 @@ Static, offline-safe report UI. It reads all numbers from `snort_validation/repo
 
 - Open: `http://127.0.0.1:8899/demo/index.html` (local) or serve repo root and browse `/demo/`.
 - Files consumed: `hidden_defender_corpus.json`, `ppo_hidden_defender.json`, `ppo_masked_test.json`, `control_noop_real_snort.json`, `final_scale_up_summary.json`, `cross_capture_summary.json`, `surrogate_sweep_14mech.json`.
-- Provenance: every KPI is traceable to the reports; verify with `controls/verify_report_claims.py` (54/54).
+- Provenance: every KPI is traceable to the reports; verify with `controls/verify_report_claims.py` (81 checks — includes checks that `cross_capture_summary.json` agrees with every per-capture report, so a stale aggregate fails instead of being published).
 - Toggle: light/dark, dense/comfy. Stats are tabular (not charts) to preserve literal numbers.
