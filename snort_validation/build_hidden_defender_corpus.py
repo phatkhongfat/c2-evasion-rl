@@ -37,7 +37,6 @@ from endpoint_model import detect_framing  # noqa: E402
 CAPTURES = [("stratosphere", "botnet-capture-20110811-neris"),
             ("ctu13", "botnet-capture-20110819-bot")]
 
-N_TRAIN = 160
 N_TEST = 40
 SEED = 42
 
@@ -101,35 +100,50 @@ def build():
     return flows
 
 
-def main() -> int:
-    CORPUS_PKL.parent.mkdir(parents=True, exist_ok=True)
-    flows = build()
-    if len(flows) < N_TRAIN + N_TEST:
-        print(f"[!] only {len(flows)} flows, need {N_TRAIN + N_TEST}")
-        return 1
+def split_flows(flows, seed: int = SEED):
+    """Stratified split: keep both captures represented in train and test, so a
+    method cannot pass by memorising "which capture is this".
 
-    # Stratified split: keep both captures represented in train and test, so a
-    # method cannot pass by memorising "which capture is this".
-    rng = np.random.default_rng(SEED)
+    Test gets exactly ``N_TEST`` flows, drawn proportionally from each capture;
+    train keeps every remaining detected flow.  There is deliberately no
+    N_TRAIN cap -- a previous version reconciled towards N_TRAIN with two
+    opposite `while` loops that cancelled out, so the constant was dead and the
+    corpus was silently far larger than it claimed.
+    """
+    rng = np.random.default_rng(seed)
     by_cap = {}
     for f in flows:
         by_cap.setdefault(f["capture"], []).append(f)
     train, test = [], []
-    for cap, group in by_cap.items():
+    for group in by_cap.values():
         idx = rng.permutation(len(group))
-        # 80/20 proportional, then reconcile to exactly 64/16
         n_test_cap = max(1, int(round(len(group) * (N_TEST / len(flows)))))
         for j, i in enumerate(idx):
             (test if j < n_test_cap else train).append(group[i])
-    # reconcile sizes
-    while len(train) > N_TRAIN:
-        test.append(train.pop())
+    # Proportional rounding can miss N_TEST by a flow or two; trim/pad the
+    # largest training group rather than shuffling test membership around.
     while len(test) > N_TEST:
         train.append(test.pop())
-    while len(train) < N_TRAIN:
-        train.append(test.pop())
+    while len(test) < N_TEST:
+        biggest = max(by_cap.values(), key=len)
+        pool = [f for f in train if f["capture"] == biggest[0]["capture"]]
+        if not pool:
+            break
+        train.remove(pool[0])
+        test.append(pool[0])
     rng.shuffle(train)
     rng.shuffle(test)
+    return train, test
+
+
+def main() -> int:
+    CORPUS_PKL.parent.mkdir(parents=True, exist_ok=True)
+    flows = build()
+    if len(flows) < N_TEST:
+        print(f"[!] only {len(flows)} flows, need at least {N_TEST}")
+        return 1
+
+    train, test = split_flows(flows, seed=SEED)
 
     # pickle holds scapy packets + replica objects; JSON holds only features so
     # the corpus is inspectable without unpickling anything.
