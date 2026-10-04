@@ -1,0 +1,9 @@
+{
+  "model": "ppo_packet_level_agent.zip",
+  "environment": "PacketLevelEnv",
+  "reward_source": "replica_snort_verdict",
+  "total_timesteps": 10000,
+  "training_time_s": 16.23265314102173,
+  "seed": 42,
+  "max_packets_per_flow": 50
+}

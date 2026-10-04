@@ -123,3 +123,25 @@ venv_gymnasium/
 
 # Understand-Anything tool workspace (knowledge graph + intermediates)
 .ua/
+
+# Generated thesis PDF
+docs/thesis/thesis_en.pdf
+docs/thesis/thesis_vi.pdf
+
+# Trained models (regenerate via `make train`)
+models/*.zip
+models/*.pkl
+
+# Training labels (regenerate via snort_validation scripts)
+labels/oracle_*.json
+
+# IDE & environment
+.codebase
+.vscode/
+*.swp
+*.swo
+*~
+
+# Logs (keep only in session)
+logs/*.log
+logs/*1790*.log

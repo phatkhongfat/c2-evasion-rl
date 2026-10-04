@@ -1,0 +1,9 @@
+{
+  "timestamp": "998421.28",
+  "judge_model": "xgboost_judge_directional_10feat.joblib",
+  "judge_features": 10,
+  "judge_test_accuracy": 0.969,
+  "training_steps": 50000,
+  "seed": 42,
+  "output_model": "ppo_c2_evasion_agent_directional_10feat.zip"
+}

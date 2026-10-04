@@ -1,0 +1,9 @@
+{
+  "env": "EnhancedPacketLevelEnv",
+  "reward": "enhanced_replica_snort_verdict(flow, packets)",
+  "timesteps": 15000,
+  "elapsed_s": 31.21,
+  "fps": 480.6,
+  "pool_size": 262504,
+  "seed": 42
+}

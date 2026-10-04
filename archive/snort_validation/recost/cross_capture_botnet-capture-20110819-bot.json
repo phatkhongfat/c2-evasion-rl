@@ -1,0 +1,105 @@
+{
+  "capture": "botnet-capture-20110819-bot",
+  "flows": 24,
+  "rounds": 8,
+  "batch": 96,
+  "corrupt_cost": 1.0,
+  "baseline_detected": 24,
+  "history": [
+    {
+      "round": 0,
+      "evaded": 16,
+      "batch": 96,
+      "evasion_pct": 16.7,
+      "mean_reward": -5.01,
+      "mean_corrupt_all": 5.62,
+      "mean_corrupt_when_evaded": 4.44
+    },
+    {
+      "round": 1,
+      "evaded": 22,
+      "batch": 96,
+      "evasion_pct": 22.9,
+      "mean_reward": -4.115,
+      "mean_corrupt_all": 5.41,
+      "mean_corrupt_when_evaded": 5.05
+    },
+    {
+      "round": 2,
+      "evaded": 22,
+      "batch": 96,
+      "evasion_pct": 22.9,
+      "mean_reward": -3.552,
+      "mean_corrupt_all": 4.88,
+      "mean_corrupt_when_evaded": 4.77
+    },
+    {
+      "round": 3,
+      "evaded": 27,
+      "batch": 96,
+      "evasion_pct": 28.1,
+      "mean_reward": -4.406,
+      "mean_corrupt_all": 6.27,
+      "mean_corrupt_when_evaded": 5.56
+    },
+    {
+      "round": 4,
+      "evaded": 25,
+      "batch": 96,
+      "evasion_pct": 26.0,
+      "mean_reward": -4.51,
+      "mean_corrupt_all": 6.26,
+      "mean_corrupt_when_evaded": 5.2
+    },
+    {
+      "round": 5,
+      "evaded": 26,
+      "batch": 96,
+      "evasion_pct": 27.1,
+      "mean_reward": -4.396,
+      "mean_corrupt_all": 6.12,
+      "mean_corrupt_when_evaded": 4.35
+    },
+    {
+      "round": 6,
+      "evaded": 36,
+      "batch": 96,
+      "evasion_pct": 37.5,
+      "mean_reward": -2.729,
+      "mean_corrupt_all": 5.74,
+      "mean_corrupt_when_evaded": 5.22
+    },
+    {
+      "round": 7,
+      "evaded": 38,
+      "batch": 96,
+      "evasion_pct": 39.6,
+      "mean_reward": -2.625,
+      "mean_corrupt_all": 5.89,
+      "mean_corrupt_when_evaded": 5.71
+    }
+  ],
+  "deterministic_evaded": 24,
+  "deterministic_pct": 100.0,
+  "deterministic_mean_corrupt": 10.5,
+  "random_evaded": 4,
+  "random_pct": 16.67,
+  "random_mean_corrupt": 4.96,
+  "corrupt_all_evaded": 24,
+  "corrupt_all_pct": 100.0,
+  "corrupt_all_mean_corrupt": 10.5,
+  "dataset": "ctu13",
+  "snort_stats": {
+    "mode": "resident",
+    "iface": "lo",
+    "available": true,
+    "error": null,
+    "snort_calls": 12,
+    "flows": 864,
+    "seconds": 30.1,
+    "send_seconds": 4.397,
+    "last_send_s": 0.1167,
+    "last_total_s": 2.5101,
+    "ms_per_flow": 34.85
+  }
+}
