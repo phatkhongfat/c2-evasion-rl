@@ -112,8 +112,12 @@ function sec(title, inner){
 
     // headline numbers, all from the loaded reports
     const valid = te.valid_evasion, n = te.n_flows;
+    // ppo_masked_test.json exposes "scorer" (one 'o'); the control report has
+    // no scorer field at all, so its fallback is load-bearing rather than cosmetic.
+    const POLICY_SCORER = te.scorer;
+    const CONTROL_SCORER = ct.scorer || "real_snort";
     document.getElementById("headline").textContent =
-      `${valid}/${n} valid evasion · control ${ct.alerted}/${ct.n} · scorer ${te.scororer}`;
+      `${valid}/${n} valid evasion · control ${ct.alerted}/${ct.n} · scorer ${POLICY_SCORER}`;
 
     // per-flow breakdown from the eval report if present
     const pf = Array.isArray(te.per_flow) ? te.per_flow : [];
@@ -131,9 +135,9 @@ function sec(title, inner){
         "Both rows are the same 40 held-out flows: the policy's result, and the unmutated control that must alert.",
         ["run","scorer","n","evaded","valid evasion","alerted"],
         [
-          ["policy (MaskablePPO)", te.scororer, n, te.evaded,
+          ["policy (MaskablePPO)", POLICY_SCORER, n, te.evaded,
            `<span class="num ok">${valid}/${n} · ${pct(valid,n)}</span>`, te.alerted],
-          ["negative control (noop)", ct.scorer || "real_snort", ct.n, "—",
+          ["negative control (noop)", CONTROL_SCORER, ct.n, "—",
            `<span class="num">${ct.alerted}/${ct.n} alerted</span>`, ct.alerted],
         ])),
 
@@ -182,7 +186,7 @@ function sec(title, inner){
           r.mean_corrupt]))),
 
       sec("cross-capture", table(
-        "Generalisation across captures, measured against the corrupt-all control. <b>Tie on all three</b> — the policy evades exactly as many flows as corrupting every reachable packet does, so this table is a null result, not a score.",
+        `Generalisation across captures, measured against the corrupt-all control. <b>Tie on all three</b> — the policy evades exactly as many flows as corrupting every reachable packet does, so this table is a null result, not a score. Mean <b>${cross.mean_evasion_pct}%</b>, std ${cross.std_evasion_pct} across ${cross.summary.length} captures.`,
         ["capture","n","baseline alerted","policy evaded","corrupt-all evaded","verdict","evasion %"],
         (cross.summary||cross).map(r => [
           esc(r.capture), r.n_flows,
