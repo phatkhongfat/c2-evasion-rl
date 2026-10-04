@@ -24,7 +24,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "snort_validation"))
 
-from build_hidden_defender_corpus import CAPTURES, N_TEST, SEED, split_flows
+from snort_validation.corpus_config import CAPTURES, N_TEST, SEED, split_flows
 
 
 def _pool(n_neris: int = 698, n_bot: int = 455) -> list[dict]:
