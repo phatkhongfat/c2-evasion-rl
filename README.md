@@ -6,8 +6,8 @@ An RL red-team agent that mutates real C2 beacon packets to **evade Snort 2.9.20
 Open C2 ruleset)** while the traffic still behaves like working C2. Every headline result
 is scored by the real Snort binary.
 
-**Headline:** 16/16 held-out flows evaded real Snort, against a negative control where the
-unmutated traffic alerts 16/16.
+**Headline:** 40/40 held-out flows evaded real Snort, against a negative control where the
+unmutated traffic alerts 40/40.
 
 ---
 
@@ -52,8 +52,9 @@ PYTHONPATH=ai_agent:snort_validation .venv/bin/python3 \
   ai_agent/train_hidden_defender_ppo.py
 ```
 
-MaskablePPO, 64 flows, stops at ≥90% valid evasion. → `reports/ppo_hidden_defender.json`.
-Got 95.3% (61/64) @ 704 queries / 11 epochs.
+MaskablePPO, 128 flows (`--n-flows 128`), stops at ≥90% valid evasion.
+→ `reports/ppo_hidden_defender.json`.
+Got 99.2% (127/128) @ 896 queries / 7 epochs.
 
 ### 2. Train scored by real Snort
 
@@ -71,15 +72,15 @@ PYTHONPATH=ai_agent:snort_validation .venv/bin/python3 \
   ai_agent/eval_masked_ppo_test.py --real-snort
 ```
 
-16/16 valid evasions (100%) under real Snort. Policy used exactly two mechanisms:
-`split8` (UDP) and `http_header_pad` (HTTP). → `reports/ppo_masked_test.json`.
+40/40 valid evasions (100%) under real Snort, 0 broken semantics, 0 masked actions
+used. Policy chose `split8` (24) and `split24` (16). → `reports/ppo_masked_test.json`.
 
 ### 4. Controls and surrogate audit
 
 ```bash
 # negative control: unmutated C2 must alert
 PYTHONPATH=ai_agent:snort_validation .venv/bin/python3 \
-  controls/control_noop_real_snort.py     # -> 16/16 alerted
+  controls/control_noop_real_snort.py     # -> 40/40 alerted
 
 # surrogate vs real Snort, flow by flow
 PYTHONPATH=ai_agent:snort_validation .venv/bin/python3 \
@@ -103,14 +104,18 @@ PYTHONPATH=ai_agent:snort_validation .venv/bin/python3 \
 
 ## Honest caveats
 
-- **Training and eval use different scorers.** The fast surrogate trains; the headline 16/16
-  is measured by real Snort. The surrogate over-alerts, so its ~95% train number is not the
+- **Training and eval use different scorers.** The fast surrogate trains; the headline 40/40
+  is measured by real Snort. The surrogate over-alerts, so its 99.2% train number is not the
   same quantity as the real-Snort train number (90.6%, which also stopped at the 90%
   threshold — neither is a converged, multi-seed ceiling).
 - **The surrogate drops 20.6% of real rules** (`pcre`, `byte_test`, `byte_extract`,
   `byte_jump`). It happens not to matter for this corpus (only 3 sids fire per capture) but
   would on other traffic.
-- **n is small** (64 train / 16 test, single seed).
+- **The headline is a single seed on one capture pair** (1153 train / 40 test flows, all from
+  `botnet-capture-20110811-neris` and `botnet-capture-20110819-bot`). Test is deliberately
+  held at 40 flows so every earlier eval and control stays comparable.
+- **Both surviving mechanisms are fragmentation** (`split8`, `split24`) — the policy picks the
+  cheapest evasion that keeps C2 semantics intact, not a rich repertoire.
 
 ## Docs
 

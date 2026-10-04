@@ -6,8 +6,8 @@ Agent red-team dùng RL để biến đổi gói tin beacon C2 thật nhằm **n
 ET Open C2)**, đồng thời giữ cho lưu lượng trông như C2 vẫn hoạt động. Mọi kết quả chính đều
 được chấm bởi chính nhị phân Snort thật.
 
-**Kết quả chính:** 16/16 luồng held-out né được Snort thật, đối chiếu với control âm tính
-(lưu lượng chưa biến đổi) là 16/16 đều bị báo động.
+**Kết quả chính:** 40/40 luồng held-out né được Snort thật, đối chiếu với control âm tính
+(lưu lượng chưa biến đổi) là 40/40 đều bị báo động.
 
 ---
 
@@ -52,8 +52,8 @@ PYTHONPATH=ai_agent:snort_validation .venv/bin/python3 \
   ai_agent/train_hidden_defender_ppo.py
 ```
 
-MaskablePPO, 64 luồng, dừng khi đạt ≥90% né hợp lệ. → `reports/ppo_hidden_defender.json`.
-Đạt 95,3% (61/64) @ 704 query / 11 epoch.
+MaskablePPO, 128 luồng (`--n-flows 128`), dừng khi đạt ≥90% né hợp lệ.
+→ `reports/ppo_hidden_defender.json`. Đạt 99,2% (127/128) @ 896 query / 7 epoch.
 
 ### 2. Train với Snort thật chấm điểm
 
@@ -71,15 +71,15 @@ PYTHONPATH=ai_agent:snort_validation .venv/bin/python3 \
   ai_agent/eval_masked_ppo_test.py --real-snort
 ```
 
-16/16 né hợp lệ (100%) dưới Snort thật. Policy chỉ dùng đúng hai cơ chế: `split8` (UDP) và
-`http_header_pad` (HTTP). → `reports/ppo_masked_test.json`.
+40/40 né hợp lệ (100%) dưới Snort thật, 0 vỡ ngữ nghĩa, 0 action bị mask. Policy chọn `split8` (24)
+và `split24` (16). → `reports/ppo_masked_test.json`.
 
 ### 4. Control và audit surrogate
 
 ```bash
 # control âm tính: C2 chưa biến đổi phải bị báo động
 PYTHONPATH=ai_agent:snort_validation .venv/bin/python3 \
-  controls/control_noop_real_snort.py     # -> 16/16 bị báo động
+  controls/control_noop_real_snort.py     # -> 40/40 bị báo động
 
 # surrogate so với Snort thật, từng luồng
 PYTHONPATH=ai_agent:snort_validation .venv/bin/python3 \
@@ -103,14 +103,18 @@ PYTHONPATH=ai_agent:snort_validation .venv/bin/python3 \
 
 ## Lưu ý trung thực
 
-- **Train và eval dùng hai bộ chấm khác nhau.** Surrogate nhanh dùng để train; con số 16/16 được
-  đo bằng Snort thật. Surrogate cảnh báo thừa, nên ~95% khi train không phải cùng đại lượng với
+- **Train và eval dùng hai bộ chấm khác nhau.** Surrogate nhanh dùng để train; con số 40/40 được
+  đo bằng Snort thật. Surrogate cảnh báo thừa, nên 99,2% khi train không phải cùng đại lượng với
   90,6% khi train bằng Snort thật (và lần đó cũng dừng ở ngưỡng 90% — chưa lần nào là trần hội tụ
   với nhiều seed).
 - **Surrogate bỏ sót 20,6% luật thật** (`pcre`, `byte_test`, `byte_extract`, `byte_jump`).
   Với bộ dữ liệu này không ảnh hưởng (chỉ 3 sid thực sự kích hoạt mỗi capture) nhưng với lưu
   lượng khác thì sẽ có vấn đề.
-- **Số mẫu nhỏ** (64 train / 16 test, một seed duy nhất).
+- **Headline là một seed duy nhất trên một cặp capture** (1153 train / 40 test, đều từ
+  `botnet-capture-20110811-neris` và `botnet-capture-20110819-bot`). Test cố ý giữ 40 luồng
+  để mọi eval/control trước đó vẫn so sánh được.
+- **Cả hai cơ chế còn lại đều là phân mảnh** (`split8`, `split24`) — policy chọn cách né rẻ nhất
+  còn giữ được ngữ nghĩa C2, chứ không phải một kho cơ chế đa dạng.
 
 ## Tài liệu
 
