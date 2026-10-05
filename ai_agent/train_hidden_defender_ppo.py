@@ -75,23 +75,42 @@ class BatchEnv(gym.Env):
 
 
 class QueryCounter(BaseCallback):
-    """Count distinct flows solved, not raw steps (PPO revisits flows)."""
+    """Count distinct flows solved, not raw steps (PPO revisits flows).
+
+    Epochs are tracked separately from the run.  Now that the train split is
+    reshuffled every epoch, a cumulative ``solved`` set grows past ``n_flows``
+    and ``len(solved) / n_flows`` stops being a rate (it reported 105.9%).
+    The early-stop must therefore be judged on the CURRENT epoch's rollout,
+    and the cumulative figure is kept only as a clearly-named diagnostic.
+    """
 
     def __init__(self):
         super().__init__()
         self.queries = 0
-        self.solved = set()
-        self.sem_break = 0
+        self.solved = set()          # cumulative, across all epochs
+        self.sem_break = 0           # cumulative
+        self.epoch_solved = set()    # current epoch only
+        self.epoch_queries = 0
+        self.epoch_sem_break = 0
+
+    def new_epoch(self):
+        """Reset the per-epoch counters.  Cumulative ones are untouched."""
+        self.epoch_solved = set()
+        self.epoch_queries = 0
+        self.epoch_sem_break = 0
 
     def _on_step(self):
         self.queries += 1
+        self.epoch_queries += 1
         info = self.locals.get("infos", [{}])[0]
         if not info:
             return True
         if info.get("evaded") and info.get("semantics_ok"):
             self.solved.add(info["flow_id"])
+            self.epoch_solved.add(info["flow_id"])
         if info.get("evaded") and not info.get("semantics_ok"):
             self.sem_break += 1
+            self.epoch_sem_break += 1
         return True
 
 
@@ -129,12 +148,16 @@ def main() -> int:
 
     epochs_run = 0
     for epoch in range(MAX_EPOCHS):
+        counter.new_epoch()
         model.learn(total_timesteps=N_FLOWS, callback=counter,
                     reset_num_timesteps=False)
         epochs_run = epoch + 1
-        pct = 100.0 * len(counter.solved) / N_FLOWS
+        # Rate is over THIS epoch's rollout: with a reshuffled corpus the
+        # cumulative set spans different flows and cannot be a percentage.
+        pct = 100.0 * len(counter.epoch_solved) / N_FLOWS
         print(f"[*] epoch {epochs_run:>2}: {counter.queries} queries, "
-              f"{len(counter.solved)}/{N_FLOWS} flows valid ({pct:.1f}%)")
+              f"{len(counter.epoch_solved)}/{N_FLOWS} flows valid this epoch "
+              f"({pct:.1f}%)")
         if pct >= TARGET * 100:
             print(f"[*] reached {TARGET:.0%} at {counter.queries} queries")
             break
@@ -148,9 +171,13 @@ def main() -> int:
         "queries": counter.queries,
         "evaded": len(counter.solved),
         "n_flows": N_FLOWS,
-        "evasion_pct": round(100.0 * len(counter.solved) / N_FLOWS, 1),
+        "evasion_pct": round(100.0 * len(counter.epoch_solved) / N_FLOWS, 1),
         "epochs": epochs_run,
         "semantics_breaks": counter.sem_break,
+        # Cumulative distinct flows ever solved, across all epochs.  NOT a
+        # rate: with the corpus reshuffled each epoch this exceeds n_flows by
+        # design, so it must never be divided by n_flows.
+        "distinct_flows_solved_cumulative": len(counter.solved),
     }
     out = Path(args.out) if args.out else REPORTS / "ppo_hidden_defender.json"
     out.parent.mkdir(parents=True, exist_ok=True)
