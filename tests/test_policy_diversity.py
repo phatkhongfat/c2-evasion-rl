@@ -9,7 +9,10 @@ from endpoint_model import detect_framing  # noqa: E402
 from hidden_defender_env import (  # noqa: E402
     ACTION_COSTS,
     ACTION_NAMES,
+    PROTOCOL_APPROPRIATE,
     PROTOCOL_MATCH_BONUS,
+    REWARD_ALERTED,
+    REWARD_BREAK_SEMANTICS,
     REWARD_EVADE,
     HiddenDefenderEnv,
     payloads_of,
@@ -54,31 +57,36 @@ def test_split_costs_discourage_blanket_split():
     assert ACTION_COSTS[12] < ACTION_COSTS[2]
 
 
-def test_http_header_pad_gets_protocol_bonus_only_when_valid():
+def test_protocol_bonus_applies_to_the_whole_appropriate_family():
+    """The bonus must reward every protocol-appropriate mechanism, not one action."""
+    assert "http_header_pad" in PROTOCOL_APPROPRIATE["http"]
+    assert "length_wrapper" in PROTOCOL_APPROPRIATE["http"]
+    assert "split8" in PROTOCOL_APPROPRIATE["neris"]
+    assert "split16" in PROTOCOL_APPROPRIATE["neris"]
+    assert "split24" in PROTOCOL_APPROPRIATE["neris"]
+    # a mechanism that is wrong for the framing gets nothing
+    assert "http_header_pad" not in PROTOCOL_APPROPRIATE.get("neris", ())
+
+
+def test_bonus_is_zero_when_evasion_or_semantics_fails():
+    assert PROTOCOL_MATCH_BONUS > 0
+    assert PROTOCOL_MATCH_BONUS < abs(REWARD_EVADE) / 10, "bonus must stay a nudge, not a driver"
+
+    # The bonus is gated on a REAL valid evasion: an appropriate mechanism that
+    # still alerts, or that breaks the command, must get no bonus.
     env = HiddenDefenderEnv(split="test")
-    idx = _first_http_index(env)
-    assert idx is not None
+    neris = next(i for i, f in enumerate(env._flows) if f.get("framing") == "neris")
+    split8 = ACTION_NAMES.index("split8")
+    corrupt8 = ACTION_NAMES.index("corrupt8")
 
-    env._detected = lambda flow, pkts: False  # force "evaded"
-    flow = env._flows[idx]
-    evaded, sem, _alert = env.score(flow, "http_header_pad")
-    if not (evaded and sem):
-        # No HTTP flow in the corpus lets header padding evade while keeping
-        # semantics; the shaping branch is then unreachable and untestable.
-        return
+    env._detected = lambda flow, pkts: True          # defender still fires
+    env._idx = neris
+    alerted = env.step(split8)[1]
+    assert abs(alerted - (REWARD_ALERTED - ACTION_COSTS[split8])) < 1e-6, \
+        "no bonus may be granted when the flow is still detected"
 
-    env._idx = idx
-    reward, _term, _trunc, _info = env.step(12)[1], None, None, None
-    expected = REWARD_EVADE - ACTION_COSTS[12] + PROTOCOL_MATCH_BONUS
-    assert abs(reward - expected) < 1e-6, f"got {reward}, expected {expected}"
-
-    # and no bonus leaks to a flow where the mechanism is not protocol-appropriate
-    env.reset()
-    non_http = next(
-        i for i, f in enumerate(env._flows)
-        if detect_framing(b"".join(payloads_of(f["packets"]))) != "http"
-    )
-    env._idx = non_http
-    reward2 = env.step(0)[1]
-    expected2 = REWARD_EVADE - ACTION_COSTS[0]
-    assert abs(reward2 - expected2) < 1e-6, f"got {reward2}, expected {expected2}"
+    env._detected = lambda flow, pkts: False         # alert dodged, command broken
+    env._idx = neris
+    broken = env.step(corrupt8)[1]
+    assert abs(broken - (REWARD_BREAK_SEMANTICS - ACTION_COSTS[corrupt8])) < 1e-6, \
+        "no bonus may be granted when semantics are broken"

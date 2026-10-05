@@ -91,6 +91,15 @@ ACTION_COSTS = {
 # Shaping bonus for picking the primitive that matches the flow's framing.
 PROTOCOL_MATCH_BONUS = 0.15
 
+# Which mechanisms are the *appropriate* primitive for a framing.  The bonus
+# below rewards any of these (gated on a real valid evasion) instead of one
+# hard-coded action, so the policy is free to prefer whichever is cheapest on
+# a given flow while still not collapsing onto the framing-agnostic generic.
+PROTOCOL_APPROPRIATE = {
+    "http": ("http_header_pad", "length_wrapper", "split8", "split16", "split24"),
+    "neris": ("split8", "split16", "split24", "pad16", "reorder", "ttl"),
+}
+
 
 def payloads_of(pkts):
     return [bytes(p[Raw].load) for p in pkts if Raw in p]
@@ -442,9 +451,10 @@ class HiddenDefenderEnv(gym.Env):
         # HTTP-native primitive on the flows where it applies.  This bonus is
         # granted ONLY when the action already produced a valid evasion, so it
         # cannot manufacture evasion or mask a failing mechanism.
-        if evaded and sem and mech == "http_header_pad" \
-                and flow.get("framing", "unknown") == "http":
-            reward += PROTOCOL_MATCH_BONUS
+        if evaded and sem:
+            framing = flow.get("framing", "unknown")
+            if mech in PROTOCOL_APPROPRIATE.get(framing, ()):
+                reward += PROTOCOL_MATCH_BONUS
 
         self._idx += 1
         terminated = self._idx >= len(self._flows)

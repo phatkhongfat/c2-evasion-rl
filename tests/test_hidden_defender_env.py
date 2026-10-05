@@ -21,7 +21,7 @@ sys.path.insert(0, str(REPO / "snort_validation"))
 from hidden_defender_env import (  # noqa: E402
     ACTION_COSTS, ACTION_NAMES, HiddenDefenderEnv, N_ACTIONS, OBS_DIM, load_corpus,
     payloads_of, semantics_intact,
-    REWARD_ALERTED, REWARD_BREAK_SEMANTICS, REWARD_EVADE,
+    PROTOCOL_MATCH_BONUS, REWARD_ALERTED, REWARD_BREAK_SEMANTICS, REWARD_EVADE,
 )
 
 
@@ -64,10 +64,14 @@ def test_step_returns_wellformed_gym_tuple():
     obs2, reward, terminated, truncated, info = env.step(0)
     assert obs2.shape == (OBS_DIM,)
     # Direction 1: reward is the base reward MINUS the action cost, so compare
-    # against the cost-adjusted set rather than the raw constants.
+    # against the cost-adjusted set rather than the raw constants.  split8 (the
+    # action stepped here) is protocol-appropriate on both framings, so a valid
+    # evasion additionally earns the family shaping bonus.
     cost = ACTION_COSTS[0]
     expected = {base - cost for base in
-                (REWARD_EVADE, REWARD_BREAK_SEMANTICS, REWARD_ALERTED)}
+                (REWARD_BREAK_SEMANTICS, REWARD_ALERTED)}
+    expected.add(REWARD_EVADE - cost)
+    expected.add(REWARD_EVADE - cost + PROTOCOL_MATCH_BONUS)
     assert any(abs(reward - e) < 1e-6 for e in expected)
     assert abs(info["action_cost"] - cost) < 1e-6
     assert isinstance(terminated, bool) and isinstance(truncated, bool)
@@ -151,9 +155,12 @@ def test_split_preserves_semantics_and_evades():
     for _ in range(len(env._flows)):
         _o, reward, term, _t, info = env.step(idx)
         if info["evaded"] and info["semantics_ok"]:
-            # Direction 1: base reward minus this action's cost, and the cost
-            # must be reported in info so the penalty is auditable.
-            assert abs(reward - (REWARD_EVADE - ACTION_COSTS[idx])) < 1e-6
+            # Direction 1: base reward minus this action's cost, plus the
+            # protocol-appropriate family bonus (split8 is appropriate on both
+            # framings), and the cost must be reported in info so the penalty
+            # is auditable.
+            assert abs(reward - (REWARD_EVADE - ACTION_COSTS[idx]
+                                 + PROTOCOL_MATCH_BONUS)) < 1e-6
             valid += 1
         if term:
             break
