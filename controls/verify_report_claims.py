@@ -99,6 +99,22 @@ for _fr, _agg in _ff.items():
 _srcs = [r["source_ip"] for r in fx["per_flow"]]
 ck("fixed source IPs unique per flow", len(set(_srcs)), len(_srcs))
 
+# --- overfit check: a TRAIN-split sample scored with the SAME fixed pipeline
+of = load("overfit_check_FIXED.json")
+ck("overfit report present", of is not None, True)
+ck("overfit split is train", of["split"], "train")
+ck("overfit pipeline stamp", of["pipeline"], "fixed_6_fixes")
+ck("overfit sample_size matches rows", of["sample_size"], len(of["per_flow"]))
+ck("overfit baseline alerted == sample",
+   of["baseline_alerted"], of["sample_size"])
+ck("overfit valid == per-flow valid",
+   of["valid_evasion"], sum(r["valid_evasion"] for r in of["per_flow"]))
+# the load-bearing claim: NOT overfit, i.e. the held-out test score is at least
+# the train-sample score.  If this ever inverts, the test number is memorisation.
+ck("overfit test >= train valid evasion", fx["valid_evasion_pct"],
+   max(fx["valid_evasion_pct"], of["valid_evasion_pct"]))
+
+
 
 # --- training
 # Queries/epochs/evaded depend on the run (early stopping at TARGET), so they

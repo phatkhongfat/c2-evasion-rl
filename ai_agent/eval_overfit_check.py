@@ -46,8 +46,8 @@ def main() -> int:
     for i, (fid, mech) in enumerate(sample):
         f = by_id[fid]
         cip = client_ip_of(fid)
-        base = score_flow_real(f["packets"], cip, attempt_id=i, mech=None)
-        act = score_flow_real(f["packets"], cip, attempt_id=500 + i, mech=mech)
+        base = score_flow_real(f["packets"], cip, attempt_id=2 * i, mech=None)
+        act = score_flow_real(f["packets"], cip, attempt_id=2 * i + 1, mech=mech)
         rows.append({
             "flow_id": fid, "framing": f.get("framing", "?"), "action": mech,
             "baseline_alert": base["alert"], "alert": act["alert"],

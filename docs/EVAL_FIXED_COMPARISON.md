@@ -52,16 +52,21 @@ not change this — it confirms the earlier finding that under this
 
 ## Overfit check
 
-| framing | train flows | test flows | test valid % |
-|---|---|---|---|
-| http | 455 | 16 | 100.0% |
-| neris | 698 | 24 | 29.2% |
+Same fixed pipeline, scored on a random 20-flow **train-split** sample
+(`overfit_check_FIXED.json`, seed 7) versus the held-out test split:
 
-Both framings are held out in the 40-flow test split, and the model was not
-trained on any of these flows (`hidden_defender_corpus.json`). The HTTP result
-transfers fully; the neris result is the honest generalisation figure for the
-protocol where the mechanism has less room to act. The gap is a property of the
-mechanism × framing, not of the split.
+| framing | train sample | test split | overfit? |
+|---|---|---|---|
+| http | 7/7 = 100.0% | 16/16 = 100.0% | no |
+| neris | 1/13 = 7.7% | 7/24 = 29.2% | no (test higher) |
+| all | 8/20 = 40.0% | 23/40 = 57.5% | no (test higher) |
+
+The policy does not do better on the flows it trained on than on the held-out
+flows, so the test number is not memorisation. `baseline_alerted: 20/20` on the
+train sample too, so both measurements rest on a real detector response. The
+neris gap runs the "wrong" way (test > train) and is small-sample noise at
+n=13; the honest reading is that neris evasion is framing-limited (~8–29%),
+not that the policy generalises better than it trains.
 
 ## Why the old 40/40 and the 38.89% summary disagreed
 
