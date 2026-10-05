@@ -112,3 +112,114 @@ def split_directions(packets: Sequence) -> Tuple[list, list]:
     return fwd, rev
 
 
+# ---------------------------------------------------------------------------
+# Fix 2 + 5: mutation is client-only, on a dynamically translated source
+# ---------------------------------------------------------------------------
+def mutate_client_only(packets: Sequence, mech: str, client_ip: Optional[str] = None):
+    """Apply a mechanism while touching ONLY the client's packets (Fix 2).
+
+    This does NOT delegate to ``hidden_defender_env.apply_mech``: that function
+    splits/reorders/rewrites TTL on *every* packet regardless of
+    ``payload_indices``, so it mutates the responder's bytes too.  The attacker
+    owns the client side only, so each mechanism is re-implemented here over the
+    client packet set alone.  ``client_ip`` defaults to the flow initiator.
+    """
+    from scapy.all import IP, Raw, TCP, UDP
+    from fragment_ops import (fragment_plan_to_packets, fix_checksums,
+                              overlap_fragments, split_fragments)
+    from endpoint_model import is_http_request
+    from hidden_defender_env import _JUNK_HEADERS, _WRAP_OFFSET
+
+    out = [p.copy() for p in packets]
+    if client_ip is None:
+        ip_pkts = [p for p in out if IP in p]
+        client_ip = ip_pkts[0][IP].src if ip_pkts else None
+
+    client_idx = [i for i, p in enumerate(out)
+                  if IP in p and p[IP].src == client_ip]
+    payload_idx = [i for i in client_idx
+                   if Raw in out[i] and len(bytes(out[i][Raw].load)) > 0]
+
+    if mech.startswith("split"):
+        off = int(mech[5:])
+        rebuilt: list = []
+        for i, p in enumerate(out):
+            if i in payload_idx and 0 < off < len(bytes(p[Raw].load)):
+                frags = split_fragments(bytes(p[Raw].load), off)
+                rebuilt.extend(fragment_plan_to_packets(out, frags, i))
+                continue
+            rebuilt.append(p)
+        return rebuilt
+
+    if mech == "overlap8":
+        rebuilt = []
+        for i, p in enumerate(out):
+            if i in payload_idx and 8 < len(bytes(p[Raw].load)):
+                frags = overlap_fragments(bytes(p[Raw].load), 8)
+                rebuilt.extend(fragment_plan_to_packets(out, frags, i))
+                continue
+            rebuilt.append(p)
+        return rebuilt
+
+    if mech == "http_header_pad":
+        for i in payload_idx:
+            raw = bytes(out[i][Raw].load)
+            if not is_http_request(raw):
+                continue
+            head, sep, body = raw.partition(b"\r\n")
+            if not sep:
+                continue
+            out[i][Raw].load = head + b"\r\n" + _JUNK_HEADERS + body
+
+    elif mech == "length_wrapper":
+        for i in payload_idx:
+            out[i] = fix_checksums(
+                out[i], b"LEN%d:" % _WRAP_OFFSET + bytes(_WRAP_OFFSET)
+                + bytes(out[i][Raw].load))
+            break
+
+    elif mech.startswith("pad"):
+        n = int(mech[3:])
+        for i in payload_idx:
+            out[i][Raw].load = bytes(out[i][Raw].load) + bytes(n)
+
+    elif mech.startswith("prepend"):
+        n = int(mech[7:])
+        for i in payload_idx:
+            out[i][Raw].load = bytes(n) + bytes(out[i][Raw].load)
+
+    elif mech.startswith("corrupt"):
+        k = int(mech[7:])
+        for i in payload_idx:
+            pl = bytearray(bytes(out[i][Raw].load))
+            for j in range(min(k, len(pl))):
+                pl[j] = (j * 97 + 13) % 256
+            out[i][Raw].load = bytes(pl)
+
+    elif mech == "reorder":
+        if len(client_idx) >= 3:
+            a, b = client_idx[1], client_idx[2]
+            out[a], out[b] = out[b], out[a]
+
+    elif mech == "ttl":
+        for i in client_idx:
+            out[i][IP].ttl = 33
+
+    elif mech == "noop":
+        pass
+
+    if mech not in ("reorder", "ttl", "noop"):
+        for p in out:
+            if Raw not in p:
+                continue
+            if IP in p:
+                del p[IP].chksum
+            if UDP in p:
+                del p[UDP].chksum
+            elif TCP in p:
+                del p[TCP].chksum
+    else:
+        for p in out:
+            if IP in p:
+                del p[IP].chksum
+    return out
