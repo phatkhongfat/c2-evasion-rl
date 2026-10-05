@@ -343,3 +343,65 @@ def bytes_equal_semantics(original_packets: Sequence, mutated_packets: Sequence,
             == reassembled_client_bytes(mutated_packets, client_ip))
 
 
+def run_snort_single(pcap: Path, conf: Path, logdir: Path,
+                     timeout: int = 600) -> int:
+    """Run Snort on ONE pcap and count the alert lines it writes (Fix 4)."""
+    logdir.mkdir(parents=True, exist_ok=True)
+    for stale in logdir.glob("alert*"):
+        stale.unlink()
+
+    subprocess.run(
+        ["snort", "-c", str(conf), "-r", str(pcap),
+         "-l", str(logdir), "-q", "-A", "fast"],
+        capture_output=True, text=True, timeout=timeout)
+
+    n = 0
+    for af in sorted(logdir.glob("alert*")):
+        with open(af, errors="ignore") as fh:
+            n += sum(1 for line in fh
+                     if line.strip() and not line.startswith("#"))
+    return n
+
+
+def score_flow_real(packets: Sequence, client_ip: str, attempt_id: int,
+                    conf: Path = SNORT_CONF, workdir: Optional[Path] = None,
+                    mech: Optional[str] = None) -> dict:
+    """Score ONE (flow, mechanism) with real Snort, end to end.
+
+    Returns a dict with the alert verdict, the per-flow Snort call count, the
+    translated source, and the semantics verdict under the byte-equality bar.
+    ``mech=None`` scores the unmodified (baseline) flow.
+    """
+    import tempfile
+
+    from scapy.all import wrpcap
+
+    tmp = Path(workdir) if workdir else Path(
+        tempfile.mkdtemp(prefix="evalflow_"))
+    tmp.mkdir(parents=True, exist_ok=True)
+
+    orig = [p.copy() for p in packets]
+    if mech is not None:
+        mut = mutate_client_only(orig, mech, client_ip)
+    else:
+        mut = orig
+    sem = bytes_equal_semantics(orig, mut, client_ip)
+
+    translated = translate_source(mut, client_ip, attempt_id)
+    pcap = tmp / f"flow_{attempt_id}.pcap"
+    wrpcap(str(pcap), translated)
+
+    n_alerts = run_snort_single(pcap, conf, tmp / "log")
+    return {
+        "attempt_id": attempt_id,
+        "source_ip": attempt_source_ip(attempt_id),
+        "source_port": attempt_source_port(attempt_id),
+        "alert": n_alerts > 0,
+        "n_alerts": n_alerts,
+        "evaded": n_alerts == 0,
+        "semantics_ok": sem,
+        "valid_evasion": (n_alerts == 0) and sem,
+        "n_snort_calls": 1,
+    }
+
+
