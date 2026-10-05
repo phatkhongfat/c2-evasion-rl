@@ -223,3 +223,63 @@ def mutate_client_only(packets: Sequence, mech: str, client_ip: Optional[str] = 
             if IP in p:
                 del p[IP].chksum
     return out
+
+
+def attempt_source_ip(attempt_id: int) -> str:
+    """Deterministic unique source address for one attempt (Fix 5)."""
+    if attempt_id < 0:
+        raise ValueError("attempt_id must be >= 0")
+    if attempt_id >= MAX_ATTEMPTS:
+        raise ValueError(
+            f"attempt_id {attempt_id} exceeds the /24 translation range "
+            f"({MAX_ATTEMPTS} attempts); run in chunks")
+    return f"{ATTEMPT_NET}{1 + (attempt_id % 254)}"
+
+
+def attempt_source_port(attempt_id: int) -> int:
+    return ATTEMPT_PORT_BASE + (attempt_id % 60000)
+
+
+def translate_source(packets: Sequence, client_ip: str, attempt_id: int,
+                     force_new_port: bool = False):
+    """Rewrite the client's (IP, port) to a unique per-attempt pair (Fix 5).
+
+    Only the CLIENT side is translated.  Server packets keep their real address
+    so the session stays coherent; the client's own packets have their source
+    rewritten, and any server->client packet addressed to the old client IP has
+    its destination rewritten so the conversation still pairs up.  Checksums
+    are dropped for scapy to recompute.
+    """
+    from scapy.all import IP, TCP, UDP
+
+    new_ip = attempt_source_ip(attempt_id)
+    new_port = attempt_source_port(attempt_id)
+    out = []
+    for pkt in packets:
+        p = pkt.copy()
+        if IP not in p:
+            out.append(p)
+            continue
+        if p[IP].src == client_ip:
+            p[IP].src = new_ip
+            if TCP in p:
+                p[TCP].sport = new_port
+                del p[TCP].chksum
+            elif UDP in p:
+                p[UDP].sport = new_port
+                del p[UDP].chksum
+            del p[IP].chksum
+        elif p[IP].dst == client_ip:
+            # server -> client: keep the responder's address, retarget the client
+            p[IP].dst = new_ip
+            if TCP in p:
+                p[TCP].dport = new_port
+                del p[TCP].chksum
+            elif UDP in p:
+                p[UDP].dport = new_port
+                del p[UDP].chksum
+            del p[IP].chksum
+        out.append(p)
+    return out
+
+
