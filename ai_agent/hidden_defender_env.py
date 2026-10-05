@@ -318,6 +318,7 @@ class HiddenDefenderEnv(gym.Env):
     def __init__(self, split: str = "train", real_snort: bool = False,
                  seed: int = 42, max_steps: int = 1):
         super().__init__()
+        self.split = split
         self._flows = load_corpus(split)
         self.real_snort = real_snort
         self._svc = SnortBatchService(batch_size=1) if real_snort else None
@@ -400,6 +401,12 @@ class HiddenDefenderEnv(gym.Env):
 
     def reset(self, *, seed=None, options=None):
         super().reset(seed=seed)
+        # Training must not re-walk the same first n_steps flows every epoch:
+        # with n_steps=64 that was 64/1153 flows and the policy learned the
+        # corpus prefix, not the corpus.  The test split stays frozen so
+        # evaluation is comparable run to run.
+        if self.split == "train":
+            self._rng.shuffle(self._flows)
         self._idx = 0
         mask = self._compute_action_mask()
         return self._obs(), {"action_mask": mask}

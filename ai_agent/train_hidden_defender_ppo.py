@@ -32,8 +32,8 @@ from hidden_defender_env import HiddenDefenderEnv  # noqa: E402
 REPORTS = REPO / "snort_validation/reports"
 TARGET = 0.90
 SEED = 42
-N_FLOWS = 64
-MAX_EPOCHS = 40
+N_FLOWS = 256
+MAX_EPOCHS = 200
 
 
 class BatchEnv(gym.Env):
