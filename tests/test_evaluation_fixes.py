@@ -84,13 +84,13 @@ def test_server_packets_are_never_mutated():
                 f"{f['flow_id']}: {mech} changed a server packet"
 
 
-def test_client_only_still_evades():
-    """Client-only mutation must not accidentally break the evasion itself."""
-    from hidden_defender_env import semantics_intact
+def test_client_only_mutation_changes_the_wire():
+    """Client-only mutation must not accidentally become a no-op."""
     f = next(x for x in load_corpus("test")
              if client_ip_of(x["flow_id"]).split(".")[0] == "147")
+    cip = client_ip_of(f["flow_id"])
     orig = payloads_of(f["packets"])
-    mut = mutate_client_only(f["packets"], "split8")
+    mut = mutate_client_only(f["packets"], "split8", cip)
     assert payloads_of(mut) != orig, "split8 was a no-op"
 
 
@@ -108,7 +108,7 @@ def test_exact_byte_match_rejects_any_change():
     assert bytes_equal_semantics(f["packets"], f["packets"], cip)
 
     # split preserves every byte -> equal
-    split = mutate_client_only(f["packets"], "split8")
+    split = mutate_client_only(f["packets"], "split8", cip)
     assert bytes_equal_semantics(f["packets"], split, cip)
 
     # flip one byte in the first client payload -> NOT equal
@@ -122,7 +122,7 @@ def test_exact_byte_match_rejects_any_change():
     assert not bytes_equal_semantics(f["packets"], corrupt, cip)
 
     # prepend adds bytes -> NOT equal
-    pre = mutate_client_only(f["packets"], "prepend4")
+    pre = mutate_client_only(f["packets"], "prepend4", cip)
     assert not bytes_equal_semantics(f["packets"], pre, cip)
 
 
@@ -133,7 +133,7 @@ def test_byte_equality_is_stricter_than_the_old_parser_bar():
     from hidden_defender_env import semantics_intact
     f = next(x for x in load_corpus("test") if x.get("framing") == "http")
     cip = client_ip_of(f["flow_id"])
-    mut = mutate_client_only(f["packets"], "http_header_pad")
+    mut = mutate_client_only(f["packets"], "http_header_pad", cip)
     assert semantics_intact(payloads_of(f["packets"]), mut), \
         "sanity: parser bar accepts header padding"
     assert not bytes_equal_semantics(f["packets"], mut, cip), \
