@@ -283,3 +283,63 @@ def translate_source(packets: Sequence, client_ip: str, attempt_id: int,
     return out
 
 
+# ---------------------------------------------------------------------------
+# Fix 3: byte-equality semantics
+# ---------------------------------------------------------------------------
+def reassembled_client_bytes(packets: Sequence, client_ip: str) -> bytes:
+    """The client command stream a handler recovers: client payloads joined.
+
+    A run of consecutive IP fragments is reassembled by offset before joining,
+    so fragmentation -- which preserves every byte -- compares equal to the
+    original, while a byte-flip or an inserted byte does not.  Grouping by a
+    run rather than by IP id is deliberate: captured traffic reuses IP ids
+    (often 0) across unrelated packets, so id-keyed grouping would silently
+    merge distinct payloads.
+    """
+    from scapy.all import IP, Raw
+
+    def _is_frag(p) -> bool:
+        return int(p[IP].frag) != 0 or (int(p[IP].flags) & 0x1)
+
+    stream = [p for p in packets
+              if IP in p and Raw in p and p[IP].src == client_ip
+              and len(bytes(p[Raw].load)) > 0]
+
+    parts: List[bytes] = []
+    j = 0
+    while j < len(stream):
+        p = stream[j]
+        if _is_frag(p):
+            gid = int(p[IP].id)
+            # Collect the run of same-id fragments, splitting at every
+            # offset-0 fragment.  Captured traffic reuses IP ids (usually 0)
+            # across unrelated packets, so two packets' fragments can be
+            # adjacent with the same id; the offset-0 boundary is what keeps
+            # them from being merged into one bogus payload.
+            cur: List[Tuple[int, bytes]] = []
+            while j < len(stream) and _is_frag(stream[j]) \
+                    and int(stream[j][IP].id) == gid:
+                off = int(stream[j][IP].frag) * 8
+                data = bytes(stream[j][Raw].load)
+                if off == 0 and cur:
+                    cur.sort(key=lambda t: t[0])
+                    parts.append(b"".join(d for _o, d in cur))
+                    cur = []
+                cur.append((off, data))
+                j += 1
+            if cur:
+                cur.sort(key=lambda t: t[0])
+                parts.append(b"".join(d for _o, d in cur))
+        else:
+            parts.append(bytes(p[Raw].load))
+            j += 1
+    return b"".join(parts)
+
+
+def bytes_equal_semantics(original_packets: Sequence, mutated_packets: Sequence,
+                          client_ip: str) -> bool:
+    """True iff the recovered client stream is byte-for-byte identical (Fix 3)."""
+    return (reassembled_client_bytes(original_packets, client_ip)
+            == reassembled_client_bytes(mutated_packets, client_ip))
+
+
