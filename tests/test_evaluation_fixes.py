@@ -126,16 +126,17 @@ def test_exact_byte_match_rejects_any_change():
     assert not bytes_equal_semantics(f["packets"], pre, cip)
 
 
-def test_byte_equality_is_stricter_than_the_old_parser_bar():
-    """http_header_pad changes the wire bytes; under the strict byte bar it must
-    be scored as NOT semantics-preserving (the honest reading), even though the
-    protocol-aware parser would still recover the command."""
+def test_byte_equality_is_the_shared_bar():
+    """The strict byte bar is the ONE semantics rule: the env's
+    ``semantics_intact`` and the eval's ``bytes_equal_semantics`` must agree on
+    http_header_pad (both reject it), so the reward cannot optimise for a
+    mechanism the honest metric scores as a break."""
     from hidden_defender_env import semantics_intact
     f = next(x for x in load_corpus("test") if x.get("framing") == "http")
     cip = client_ip_of(f["flow_id"])
     mut = mutate_client_only(f["packets"], "http_header_pad", cip)
-    assert semantics_intact(payloads_of(f["packets"]), mut), \
-        "sanity: parser bar accepts header padding"
+    assert not semantics_intact(f["packets"], mut, cip), \
+        "env bar must reject header padding"
     assert not bytes_equal_semantics(f["packets"], mut, cip), \
         "byte bar must reject header padding"
 

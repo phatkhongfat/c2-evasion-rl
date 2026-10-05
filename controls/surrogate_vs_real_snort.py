@@ -26,6 +26,7 @@ sys.path.insert(0, str(ROOT / "snort_validation"))
 from hidden_defender_env import (  # noqa: E402
     ACTION_NAMES, HiddenDefenderEnv, apply_mech, payloads_of, semantics_intact,
 )
+from eval_pipeline import client_ip_of  # noqa: E402
 from snort_batch_service import SnortBatchService  # noqa: E402
 
 
@@ -55,8 +56,9 @@ def main() -> int:
         mech = (want if want in [ACTION_NAMES[a] for a in allowed]
                 else ACTION_NAMES[allowed[0]])
 
-        pkts = apply_mech(flow["packets"], mech)
-        sem = semantics_intact(payloads_of(flow["packets"]), pkts)
+        cip = client_ip_of(flow["flow_id"])
+        pkts = apply_mech(flow["packets"], mech, cip)
+        sem = semantics_intact(flow["packets"], pkts, cip)
 
         replica_alert = bool(flow["replica"].verdict(pkts))
         real_alert = bool(svc.verdicts_chunked([(pkts, 0)]).get(0, True))

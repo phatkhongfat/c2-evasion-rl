@@ -29,6 +29,7 @@ sys.path.insert(0, str(ROOT / "snort_validation"))
 from hidden_defender_env import (  # noqa: E402
     ACTION_NAMES, HiddenDefenderEnv, apply_mech, payloads_of, semantics_intact,
 )
+from eval_pipeline import client_ip_of  # noqa: E402
 from snort_batch_service import SnortBatchService  # noqa: E402
 
 
@@ -64,7 +65,8 @@ def main() -> int:
             if (fidx, mech) in done:
                 continue
             try:
-                pkts = apply_mech(flow["packets"], mech)
+                cip = client_ip_of(flow["flow_id"])
+                pkts = apply_mech(flow["packets"], mech, cip)
             except Exception as exc:  # mechanism cannot be applied to this flow
                 rows.append({
                     "flow_idx": fidx, "framing": framing, "mech": mech,
@@ -74,7 +76,7 @@ def main() -> int:
                 })
                 continue
 
-            sem = bool(semantics_intact(orig, pkts))
+            sem = bool(semantics_intact(flow["packets"], pkts, cip))
             replica_alert = bool(flow["replica"].verdict(pkts))
             real_alert = bool(svc.verdicts_chunked([(pkts, 0)]).get(0, True))
 

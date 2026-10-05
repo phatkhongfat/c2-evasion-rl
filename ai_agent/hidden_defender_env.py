@@ -34,6 +34,16 @@ sys.path.insert(0, str(REPO / "snort_validation"))
 from real_packet_env import payload_indices  # noqa: E402
 from snort_batch_service import SnortBatchService  # noqa: E402
 
+# The ONE semantics bar (Fix 3), shared with the honest evaluation.  Module-level
+# import is safe: eval_pipeline imports hidden_defender_env only INSIDE
+# functions (deferred), and c2_semantics imports neither, so there is no cycle.
+from c2_semantics import (  # noqa: E402
+    bytes_equal_semantics,
+    client_ip_of,
+    client_ip_of_packets,
+    reassembled_client_bytes,
+)
+
 CORPUS_PKL = REPO / "snort_validation/reports/hidden_defender_corpus.pkl"
 
 # Mechanism A filler: unknown headers a real server ignores, but a `depth:`
@@ -112,46 +122,25 @@ def framing_of(payloads) -> str:
     return detect_framing(b"".join(payloads))
 
 
-def semantics_intact(original_payloads, pkts) -> bool:
-    """True only when the C2 command still reaches the endpoint intact.
+def semantics_intact(original_packets, mutated_packets, client_ip=None) -> bool:
+    """True only when the recovered CLIENT stream is byte-for-byte identical.
 
-    Byte equality of the joined stream is the right bar for a protocol whose
-    grammar we cannot model -- it is exactly what fragmentation preserves and
-    what prepend/pad/corrupt break.  But it is the WRONG bar for HTTP, where a
-    real server skips unknown headers: header padding changes the bytes while
-    the command is still delivered, and byte equality would throw that away.
+    This is the ONE strict bar (Fix 3), delegated to
+    ``c2_semantics.bytes_equal_semantics`` so the training reward and the honest
+    evaluation cannot drift apart.  The previous, relaxed bar parsed the command
+    per packet and therefore accepted an HTTP header pad whose bytes the honest
+    metric scores as a break -- which is exactly how the reward came to optimise
+    for a mechanism the evaluation rejects.
 
-    So the bar is: for every packet whose ORIGINAL payload yields a command
-    under the flow's framing, the mutated packet must yield the same command.
-    Packets that yield no command (responses, binary segments) impose no
-    constraint, and a flow whose original never parsed keeps the strict
-    byte-equality bar rather than being waved through.
+    ``original_packets`` and ``mutated_packets`` are scapy packet lists (the
+    stream is filtered to the client IP and IP fragments are reassembled).
+    ``client_ip`` defaults to the bot derived from the packets; callers that
+    know the flow id should pass ``client_ip_of(flow_id)`` explicitly so the
+    identity matches the evaluation's exactly.
     """
-    orig = list(original_payloads)
-    new = payloads_of(pkts)
-    from endpoint_model import parse_command
-
-    framing = framing_of(orig)
-
-    if len(orig) != len(new):
-        # Fragmentation changes the packet count.  The handler sees a
-        # reassembled stream, not a packet list, so compare that instead --
-        # otherwise the one mechanism that legitimately works is scored as
-        # breaking the channel.
-        cmd_o = parse_command(b"".join(orig), framing)
-        cmd_n = parse_command(b"".join(new), framing)
-        if cmd_o is not None:
-            return cmd_o == cmd_n
-        return b"".join(orig) == b"".join(new)
-
-    parseable = [i for i, p in enumerate(orig) if parse_command(p, framing) is not None]
-    if not parseable:
-        return orig == new
-
-    for i in parseable:
-        if parse_command(orig[i], framing) != parse_command(new[i], framing):
-            return False
-    return True
+    if client_ip is None:
+        client_ip = client_ip_of_packets(original_packets)
+    return bytes_equal_semantics(original_packets, mutated_packets, client_ip)
 
 
 def mech_applicable(original_payloads, mech: str) -> bool:
@@ -171,21 +160,36 @@ def mech_applicable(original_payloads, mech: str) -> bool:
     return True
 
 
-def apply_mech(pkts, mech: str):
-    """Apply a mechanism.  Logic mirrors /tmp/mechanism_matrix.py exactly.
+def apply_mech(pkts, mech: str, client_ip=None):
+    """Apply a mechanism, touching ONLY the client's packets (Fix 2).
 
-    Rewrites IP/UDP/TCP checksums where a payload changed -- without this Snort
-    drops the packets and every mechanism would 'evade' for the wrong reason.
+    The attacker owns the client side of the session; rewriting the responder's
+    bytes is outside the threat model.  The honest evaluation mutates
+    client-only, so the training env must too -- otherwise a mechanism (e.g.
+    ``reorder``) can look like it broke the command in training while the
+    evaluation's client-only view is unchanged, and the two semantics verdicts
+    disagree.
+
+    ``client_ip`` defaults to the bot derived from the packets; callers that
+    know the flow id should pass ``client_ip_of(flow_id)`` so the identity
+    matches the evaluation's exactly.  Rewrites IP/UDP/TCP checksums where a
+    payload changed -- without this Snort drops the packets and every mechanism
+    would 'evade' for the wrong reason.
     """
     out = [p.copy() for p in pkts]
-    pay_idx = payload_indices(out)
+    if client_ip is None:
+        client_ip = client_ip_of_packets(out)
+    client_idx = [i for i, p in enumerate(out)
+                  if IP in p and p[IP].src == client_ip]
+    pay_idx = [i for i in client_idx
+               if Raw in out[i] and len(bytes(out[i][Raw].load)) > 0]
 
     if mech.startswith("split"):
         from fragment_ops import fragment_plan_to_packets, split_fragments
         off = int(mech[5:])
         rebuilt, i = [], 0
         for p in out:
-            if Raw in p:
+            if i in pay_idx:
                 payload = bytes(p[Raw].load)
                 if 0 < off < len(payload):
                     frags = split_fragments(payload, off)
@@ -200,7 +204,7 @@ def apply_mech(pkts, mech: str):
         from fragment_ops import fragment_plan_to_packets, overlap_fragments
         rebuilt, i = [], 0
         for p in out:
-            if Raw in p:
+            if i in pay_idx:
                 payload = bytes(p[Raw].load)
                 if 8 < len(payload):
                     frags = overlap_fragments(payload, 8)
@@ -230,7 +234,7 @@ def apply_mech(pkts, mech: str):
     elif mech == "length_wrapper":
         # Mechanism B.  A wrapper header declares where the real data starts,
         # so any amount of filler precedes it.  Applied to the first
-        # payload-bearing packet, which is where the stream begins.
+        # payload-bearing CLIENT packet, which is where the stream begins.
         from fragment_ops import fix_checksums
 
         for i in pay_idx:
@@ -262,13 +266,14 @@ def apply_mech(pkts, mech: str):
             p[Raw].load = bytes(pl)
 
     elif mech == "reorder":
-        if len(out) >= 4:
-            out[1], out[2] = out[2], out[1]
+        if len(client_idx) >= 3:
+            a, b = client_idx[1], client_idx[2]
+            out[a], out[b] = out[b], out[a]
 
     elif mech == "ttl":
-        for p in out:
-            if IP in p:
-                p[IP].ttl = 33
+        for i in client_idx:
+            if IP in out[i]:
+                out[i][IP].ttl = 33
 
     elif mech == "noop":
         pass
@@ -351,11 +356,17 @@ class HiddenDefenderEnv(gym.Env):
         return bool(flow["replica"].verdict(pkts))
 
     def score(self, flow, mech: str):
-        """Return (evaded, semantics_ok, alert) for one (flow, mechanism)."""
+        """Return (evaded, semantics_ok, alert) for one (flow, mechanism).
+
+        Uses the SAME client-only mutation and the SAME strict byte-equality
+        bar as the honest evaluation (Fix 2 + Fix 3), so the reward cannot
+        optimise for a mechanism the evaluation scores as a semantics break.
+        """
         pkts = flow["packets"]
-        orig = payloads_of(pkts)
-        mut = apply_mech(pkts, mech)
-        sem = semantics_intact(orig, mut)
+        fid = flow.get("flow_id")
+        cip = client_ip_of(fid) if fid else None
+        mut = apply_mech(pkts, mech, cip)
+        sem = semantics_intact(pkts, mut, cip)
         alert = self._detected(flow, mut)
         return (not alert), sem, alert
 

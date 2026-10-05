@@ -39,12 +39,16 @@ def test_corpus_has_both_framings():
     assert {"http", "neris"} <= found
 
 
-def test_http_header_pad_keeps_the_command():
-    """A: the server skips the junk headers, so the command still arrives."""
+def test_http_header_pad_breaks_the_strict_client_bar():
+    """Under the honest bar -- byte equality of the recovered CLIENT stream --
+    header padding changes the bytes the client sent, so it is NOT
+    semantics-preserving.  The old protocol-aware parser accepted it because a
+    real HTTP server skips unknown headers; that relaxation is exactly what let
+    the reward prefer a mechanism the honest evaluation scores as a break, so
+    the strict bar now rejects it."""
     flow = _flow("train", "http")
-    original = payloads_of(flow["packets"])
     mutated = apply_mech(flow["packets"], "http_header_pad")
-    assert semantics_intact(original, mutated)
+    assert not semantics_intact(flow["packets"], mutated)
 
 
 def test_http_header_pad_actually_changes_the_wire():
@@ -90,5 +94,5 @@ def test_length_wrapper_is_not_readable_by_the_original_handler():
 def test_prepend_still_breaks_the_http_request_line():
     """The old raw prepend must NOT become legal just because A exists."""
     flow = _flow("train", "http")
-    original = payloads_of(flow["packets"])
-    assert not semantics_intact(original, apply_mech(flow["packets"], "prepend8"))
+    assert not semantics_intact(flow["packets"],
+                                apply_mech(flow["packets"], "prepend8"))

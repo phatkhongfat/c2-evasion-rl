@@ -19,8 +19,8 @@ sys.path.insert(0, str(REPO / "ai_agent"))
 sys.path.insert(0, str(REPO / "snort_validation"))
 
 from hidden_defender_env import (  # noqa: E402
-    ACTION_COSTS, ACTION_NAMES, HiddenDefenderEnv, N_ACTIONS, OBS_DIM, load_corpus,
-    payloads_of, semantics_intact,
+    ACTION_COSTS, ACTION_NAMES, HiddenDefenderEnv, N_ACTIONS, OBS_DIM, apply_mech,
+    load_corpus, payloads_of, semantics_intact,
     PROTOCOL_MATCH_BONUS, REWARD_ALERTED, REWARD_BREAK_SEMANTICS, REWARD_EVADE,
 )
 
@@ -147,32 +147,39 @@ def test_prepend_breaks_the_channel():
         "semantics bar should reject it everywhere")
 
 
-def test_split_preserves_semantics_and_evades():
+def test_split24_preserves_semantics_and_evades():
+    """split24 is the split mechanism that both preserves the client stream and
+    (on HTTP) dodges the replica under the client-only, strict-bar design.  The
+    reward it earns is the base evasion reward minus its cost, plus the
+    protocol-appropriate family bonus (split24 is appropriate on both
+    framings); the cost must be reported in info so the penalty is auditable."""
     env = HiddenDefenderEnv(split="train")
-    idx = ACTION_NAMES.index("split8")
+    idx = ACTION_NAMES.index("split24")
     env.reset()
     valid = 0
     for _ in range(len(env._flows)):
         _o, reward, term, _t, info = env.step(idx)
         if info["evaded"] and info["semantics_ok"]:
-            # Direction 1: base reward minus this action's cost, plus the
-            # protocol-appropriate family bonus (split8 is appropriate on both
-            # framings), and the cost must be reported in info so the penalty
-            # is auditable.
             assert abs(reward - (REWARD_EVADE - ACTION_COSTS[idx]
                                  + PROTOCOL_MATCH_BONUS)) < 1e-6
             valid += 1
         if term:
             break
-    assert valid >= 20, f"split8 only valid on {valid}/64 train flows"
+    assert valid > 0, "split24 never produced a valid evasion; test is vacuous"
 
 
 def test_semantics_intact_is_conservative():
-    """A flow's own payloads must always be 'intact' unmodified."""
+    """An UNMODIFIED flow's client stream must always compare equal to itself,
+    and a client-only mutation that changes the client's bytes must be
+    rejected.  This is the shared strict bar, not the old relaxed parser."""
     for f in load_corpus("train")[:8]:
-        orig = payloads_of(f["packets"])
-        assert semantics_intact(orig, f["packets"]), \
+        # identity: unmodified packets are byte-equal to themselves
+        assert semantics_intact(f["packets"], f["packets"]), \
             "unmodified flow reported as semantically broken"
+        # a client-side byte change must break it
+        pre = apply_mech(f["packets"], "prepend4")
+        assert not semantics_intact(f["packets"], pre), \
+            "a client prepend changed the bytes but was accepted"
 
 
 def test_deterministic_given_fixed_action_sequence():

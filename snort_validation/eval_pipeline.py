@@ -57,29 +57,15 @@ _MAX_WAIT_S = 5.0
 # ---------------------------------------------------------------------------
 # Fix 1 helpers: direction / client identification
 # ---------------------------------------------------------------------------
-# Fix 2/5: the attacker controls the infected host.  In these C2 captures the
-# bot (the "client" whose bytes the attacker owns) is the endpoint in the
-# 147.32.84.0/24 honeynet; the other endpoint is the C2 peer/responder, whose
-# bytes are outside the threat model.  A flow's 5-tuple initiator is NOT always
-# the bot: neris C2 flows are captured in both directions.
-HOME_NET_PREFIX = "147.32.84."
-
-
-def client_ip_of(flow_id: str) -> str:
-    """The attacker-controlled (bot) IP for a flow.
-
-    The flow id is ``capture|src:sport->dst:dport|proto``.  The bot is the
-    endpoint in ``HOME_NET_PREFIX`` when one is present; otherwise fall back to
-    the flow initiator, which is the attacker for ordinary client-initiated
-    C2 traffic.
-    """
-    endpoint = flow_id.split("|")[1]
-    src = endpoint.split("->")[0].split(":")[0]
-    dst = endpoint.split("->")[1].split(":")[0]
-    for ip in (src, dst):
-        if ip.startswith(HOME_NET_PREFIX):
-            return ip
-    return src
+# The client identity rule and the strict semantics bar live in c2_semantics so
+# the TRAINING reward and this evaluation cannot drift apart (Fix 3).  Imported
+# at module level: c2_semantics imports nothing from here, so there is no cycle.
+from c2_semantics import (  # noqa: E402
+    HOME_NET_PREFIX as HOME_NET_PREFIX,
+    bytes_equal_semantics as bytes_equal_semantics,
+    client_ip_of as client_ip_of,
+    reassembled_client_bytes as reassembled_client_bytes,
+)
 
 
 def server_ip_of(packets: Sequence, client_ip: str) -> Optional[str]:
@@ -284,63 +270,9 @@ def translate_source(packets: Sequence, client_ip: str, attempt_id: int,
 
 
 # ---------------------------------------------------------------------------
-# Fix 3: byte-equality semantics
+# Fix 3: byte-equality semantics -- imported from c2_semantics (shared with the
+# training reward) so the two bars cannot drift.  See the import block above.
 # ---------------------------------------------------------------------------
-def reassembled_client_bytes(packets: Sequence, client_ip: str) -> bytes:
-    """The client command stream a handler recovers: client payloads joined.
-
-    A run of consecutive IP fragments is reassembled by offset before joining,
-    so fragmentation -- which preserves every byte -- compares equal to the
-    original, while a byte-flip or an inserted byte does not.  Grouping by a
-    run rather than by IP id is deliberate: captured traffic reuses IP ids
-    (often 0) across unrelated packets, so id-keyed grouping would silently
-    merge distinct payloads.
-    """
-    from scapy.all import IP, Raw
-
-    def _is_frag(p) -> bool:
-        return int(p[IP].frag) != 0 or (int(p[IP].flags) & 0x1)
-
-    stream = [p for p in packets
-              if IP in p and Raw in p and p[IP].src == client_ip
-              and len(bytes(p[Raw].load)) > 0]
-
-    parts: List[bytes] = []
-    j = 0
-    while j < len(stream):
-        p = stream[j]
-        if _is_frag(p):
-            gid = int(p[IP].id)
-            # Collect the run of same-id fragments, splitting at every
-            # offset-0 fragment.  Captured traffic reuses IP ids (usually 0)
-            # across unrelated packets, so two packets' fragments can be
-            # adjacent with the same id; the offset-0 boundary is what keeps
-            # them from being merged into one bogus payload.
-            cur: List[Tuple[int, bytes]] = []
-            while j < len(stream) and _is_frag(stream[j]) \
-                    and int(stream[j][IP].id) == gid:
-                off = int(stream[j][IP].frag) * 8
-                data = bytes(stream[j][Raw].load)
-                if off == 0 and cur:
-                    cur.sort(key=lambda t: t[0])
-                    parts.append(b"".join(d for _o, d in cur))
-                    cur = []
-                cur.append((off, data))
-                j += 1
-            if cur:
-                cur.sort(key=lambda t: t[0])
-                parts.append(b"".join(d for _o, d in cur))
-        else:
-            parts.append(bytes(p[Raw].load))
-            j += 1
-    return b"".join(parts)
-
-
-def bytes_equal_semantics(original_packets: Sequence, mutated_packets: Sequence,
-                          client_ip: str) -> bool:
-    """True iff the recovered client stream is byte-for-byte identical (Fix 3)."""
-    return (reassembled_client_bytes(original_packets, client_ip)
-            == reassembled_client_bytes(mutated_packets, client_ip))
 
 
 # ---------------------------------------------------------------------------

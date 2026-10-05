@@ -119,3 +119,114 @@ def reconstructs_command(original: bytes, frags: Sequence[Fragment]) -> bool:
     if want_id is not None and dht_ping_id(got) != want_id:
         return False
     return True
+
+
+# ---------------------------------------------------------------------------
+# The ONE semantics bar, shared by training and evaluation (Fix 3).
+# ---------------------------------------------------------------------------
+# Training and the honest evaluation MUST decide "was the C2 command
+# preserved?" by the same rule, or the reward optimises for something the
+# metric scores as zero.  The rule is byte equality of the reassembled CLIENT
+# stream: the attacker owns the client side only, and a parser that tolerates
+# extra bytes (e.g. an unknown HTTP header) is too loose to certify a real
+# evasion.  Both sides import these from here.
+#
+# The bot (the endpoint whose bytes the attacker owns) is the endpoint in the
+# 147.32.84.0/24 honeynet when one is present; the flow's 5-tuple initiator is
+# NOT always the bot, because neris C2 flows are captured in both directions.
+HOME_NET_PREFIX = "147.32.84."
+
+
+def client_ip_of(flow_id: str) -> str:
+    """The attacker-controlled (bot) IP for a flow.
+
+    The flow id is ``capture|src:sport->dst:dport|proto``.  The bot is the
+    endpoint in ``HOME_NET_PREFIX`` when one is present; otherwise fall back to
+    the flow initiator, which is the attacker for ordinary client-initiated
+    C2 traffic.
+    """
+    endpoint = flow_id.split("|")[1]
+    src = endpoint.split("->")[0].split(":")[0]
+    dst = endpoint.split("->")[1].split(":")[0]
+    for ip in (src, dst):
+        if ip.startswith(HOME_NET_PREFIX):
+            return ip
+    return src
+
+
+def client_ip_of_packets(packets: Sequence) -> Optional[str]:
+    """Best-effort client IP from the packets alone (same rule as flow ids).
+
+    Used where only the packet list is available.  The env passes the flow id's
+    client IP explicitly so it is identical to the evaluation's; this fallback
+    is for diagnostic callers that have no flow id.
+    """
+    from scapy.all import IP
+
+    srcs = [p[IP].src for p in packets if IP in p]
+    for ip in srcs:
+        if ip.startswith(HOME_NET_PREFIX):
+            return ip
+    return srcs[0] if srcs else None
+
+
+def reassembled_client_bytes(packets: Sequence, client_ip: str) -> bytes:
+    """The client command stream a handler recovers: client payloads joined.
+
+    A run of consecutive IP fragments is reassembled by offset before joining,
+    so fragmentation -- which preserves every byte -- compares equal to the
+    original, while a byte-flip or an inserted byte does not.  Grouping by a
+    run rather than by IP id is deliberate: captured traffic reuses IP ids
+    (often 0) across unrelated packets, so id-keyed grouping would silently
+    merge distinct payloads.
+    """
+    from scapy.all import IP, Raw
+
+    def _is_frag(p) -> bool:
+        return int(p[IP].frag) != 0 or bool(int(p[IP].flags) & 0x1)
+
+    stream = [p for p in packets
+              if IP in p and Raw in p and p[IP].src == client_ip
+              and len(bytes(p[Raw].load)) > 0]
+
+    parts: List[bytes] = []
+    j = 0
+    while j < len(stream):
+        p = stream[j]
+        if _is_frag(p):
+            gid = int(p[IP].id)
+            # Collect the run of same-id fragments, splitting at every
+            # offset-0 fragment.  Captured traffic reuses IP ids (usually 0)
+            # across unrelated packets, so two packets' fragments can be
+            # adjacent with the same id; the offset-0 boundary is what keeps
+            # them from being merged into one bogus payload.
+            cur: List[tuple] = []
+            while j < len(stream) and _is_frag(stream[j]) \
+                    and int(stream[j][IP].id) == gid:
+                off = int(stream[j][IP].frag) * 8
+                data = bytes(stream[j][Raw].load)
+                if off == 0 and cur:
+                    cur.sort(key=lambda t: t[0])
+                    parts.append(b"".join(d for _o, d in cur))
+                    cur = []
+                cur.append((off, data))
+                j += 1
+            if cur:
+                cur.sort(key=lambda t: t[0])
+                parts.append(b"".join(d for _o, d in cur))
+        else:
+            parts.append(bytes(p[Raw].load))
+            j += 1
+    return b"".join(parts)
+
+
+def bytes_equal_semantics(original_packets: Sequence, mutated_packets: Sequence,
+                          client_ip: str) -> bool:
+    """True iff the recovered CLIENT stream is byte-for-byte identical.
+
+    This is the single strict bar (Fix 3).  Training's reward and the honest
+    evaluation both call it, so a mechanism the reward treats as
+    semantics-preserving is exactly one the evaluation will too.
+    """
+    return (reassembled_client_bytes(original_packets, client_ip)
+            == reassembled_client_bytes(mutated_packets, client_ip))
