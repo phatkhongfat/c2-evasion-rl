@@ -2,7 +2,8 @@
 """Gym env for the hidden-defender problem.
 
 One episode = one flow = one query.  The agent sees 8 black-box statistical
-features and picks one evasion mechanism; it never sees the ruleset.  Reward is
+features plus a framing/affordance block (OBS_DIM=11) and picks one evasion
+mechanism; it never sees the ruleset.  Reward is
 +10 for a valid evasion (no alert AND semantics preserved), -10 for breaking the
 C2 command while dodging the alert, and -1 for still alerting.
 
@@ -59,7 +60,7 @@ ACTION_NAMES = [
 ]
 N_ACTIONS = len(ACTION_NAMES)
 
-OBS_DIM = 8
+OBS_DIM = 11
 
 REWARD_EVADE = 10.0
 REWARD_BREAK_SEMANTICS = -10.0
@@ -286,6 +287,29 @@ def load_corpus(split: str = "train"):
     return data[split]
 
 
+# Framing/affordance block appended to every observation.  Without it the
+# policy cannot tell an HTTP flow from a neris record stream, so the only
+# representable policy is a constant that the mask clips per framing -- which
+# is exactly the 2-action collapse this fixes.  Three features (one-hot over the
+# two shipped framings + the HTTP-only affordance bit the mask uses for
+# actions 12/13); 8 shallow + 3 = OBS_DIM=11.
+_FRAMING_ONEHOT = ("http", "neris")
+
+
+def framing_features(flow) -> list:
+    """One-hot framing + the affordance bit the mask actually uses.
+
+    The mask opens actions 12/13 (http_header_pad, length_wrapper) only for
+    ``http`` and closes actions 3..5 (prepend*) for ``neris``; both gates are a
+    function of the framing, so the HTTP-only bit plus the one-hot exposes the
+    whole legal-action decision to the policy.
+    """
+    framing = flow.get("framing", "unknown")
+    onehot = [1.0 if framing == name else 0.0 for name in _FRAMING_ONEHOT]
+    http_only_ok = 1.0 if framing == "http" else 0.0        # mask[12], mask[13]
+    return onehot + [http_only_ok]
+
+
 class HiddenDefenderEnv(gym.Env):
     """One flow per episode; the agent never observes the ruleset."""
 
@@ -383,7 +407,9 @@ class HiddenDefenderEnv(gym.Env):
     def _obs(self) -> np.ndarray:
         if self._idx >= len(self._flows):
             return np.zeros(OBS_DIM, dtype=np.float32)
-        return np.asarray(self._flows[self._idx]["obs"], dtype=np.float32)
+        flow = self._flows[self._idx]
+        base = flow["obs"]
+        return np.asarray(list(base) + framing_features(flow), dtype=np.float32)
 
     def step(self, action: int):
         flow = self._flows[self._idx]
@@ -427,7 +453,7 @@ class HiddenDefenderEnv(gym.Env):
         if terminated:
             obs = np.zeros(OBS_DIM, dtype=np.float32)
         else:
-            obs = self._flows[self._idx]["obs"]
+            obs = self._obs()
         return np.asarray(obs, dtype=np.float32), reward, terminated, truncated, info
 
     def service_stats(self):

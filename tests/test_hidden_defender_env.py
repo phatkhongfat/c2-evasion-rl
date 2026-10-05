@@ -19,7 +19,7 @@ sys.path.insert(0, str(REPO / "ai_agent"))
 sys.path.insert(0, str(REPO / "snort_validation"))
 
 from hidden_defender_env import (  # noqa: E402
-    ACTION_COSTS, ACTION_NAMES, HiddenDefenderEnv, N_ACTIONS, load_corpus,
+    ACTION_COSTS, ACTION_NAMES, HiddenDefenderEnv, N_ACTIONS, OBS_DIM, load_corpus,
     payloads_of, semantics_intact,
     REWARD_ALERTED, REWARD_BREAK_SEMANTICS, REWARD_EVADE,
 )
@@ -50,7 +50,7 @@ def test_obs_carries_no_rule_information():
 def test_action_space_is_discrete_fourteen():
     env = HiddenDefenderEnv(split="train")
     assert env.action_space.n == N_ACTIONS == 14
-    assert env.observation_space.shape == (8,)
+    assert env.observation_space.shape == (OBS_DIM,)
     assert ACTION_NAMES[:3] == ["split8", "split16", "split24"]
     assert "prepend4" in ACTION_NAMES and "noop" in ACTION_NAMES
     # Protocol-aware mechanisms A and B.
@@ -60,9 +60,9 @@ def test_action_space_is_discrete_fourteen():
 def test_step_returns_wellformed_gym_tuple():
     env = HiddenDefenderEnv(split="train")
     obs, _ = env.reset()
-    assert obs.shape == (8,) and obs.dtype == np.float32
+    assert obs.shape == (OBS_DIM,) and obs.dtype == np.float32
     obs2, reward, terminated, truncated, info = env.step(0)
-    assert obs2.shape == (8,)
+    assert obs2.shape == (OBS_DIM,)
     # Direction 1: reward is the base reward MINUS the action cost, so compare
     # against the cost-adjusted set rather than the raw constants.
     cost = ACTION_COSTS[0]
