@@ -343,20 +343,50 @@ def bytes_equal_semantics(original_packets: Sequence, mutated_packets: Sequence,
             == reassembled_client_bytes(mutated_packets, client_ip))
 
 
+# ---------------------------------------------------------------------------
+# Fix 4 + 6: one PCAP, one Snort call, synchronized read
+# ---------------------------------------------------------------------------
+_ALERT_LINE = re.compile(r"\[\*\*\]")
+
+
 def run_snort_single(pcap: Path, conf: Path, logdir: Path,
                      timeout: int = 600) -> int:
-    """Run Snort on ONE pcap and count the alert lines it writes (Fix 4)."""
+    """Run Snort on ONE pcap, wait for exit, fsync, then count alerts.
+
+    Fix 6: a non-zero exit RAISES.  Silently returning 0 alerts on a crashed
+    Snort would score every flow as evaded -- the single most dangerous failure
+    mode in this pipeline.  Fix 4: this function is called once per flow.
+    """
     logdir.mkdir(parents=True, exist_ok=True)
     for stale in logdir.glob("alert*"):
         stale.unlink()
 
-    subprocess.run(
+    proc = subprocess.run(
         ["snort", "-c", str(conf), "-r", str(pcap),
          "-l", str(logdir), "-q", "-A", "fast"],
         capture_output=True, text=True, timeout=timeout)
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"Snort exited {proc.returncode} on {pcap}: {proc.stderr.strip()[:400]}")
 
+    # The file is closed once subprocess.run returns, but the page cache may
+    # not be visible to a fresh open on some filesystems; fsync + a bounded
+    # wait removes the race without an unconditional sleep on the happy path.
+    alerts = sorted(logdir.glob("alert*"))
+    deadline = time.time() + _MAX_WAIT_S
+    while not alerts and time.time() < deadline:
+        time.sleep(0.02)
+        alerts = sorted(logdir.glob("alert*"))
     n = 0
-    for af in sorted(logdir.glob("alert*")):
+    for af in alerts:
+        try:
+            fd = os.open(af, os.O_RDONLY)
+            try:
+                os.fsync(fd)
+            finally:
+                os.close(fd)
+        except OSError:
+            pass
         with open(af, errors="ignore") as fh:
             n += sum(1 for line in fh
                      if line.strip() and not line.startswith("#"))
@@ -403,5 +433,4 @@ def score_flow_real(packets: Sequence, client_ip: str, attempt_id: int,
         "valid_evasion": (n_alerts == 0) and sem,
         "n_snort_calls": 1,
     }
-
 
