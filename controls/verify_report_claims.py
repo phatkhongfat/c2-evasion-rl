@@ -52,6 +52,54 @@ c = load("control_noop_real_snort.json")
 ck("control n", c["n"], 40)
 ck("control alerted", c["alerted"], 40)
 
+# --- FIXED 6-fix pipeline (ppo_masked_test_FIXED.json)
+# Invariants, not literals: the headline (57.5%) is a measurement, but the
+# properties that make it trustworthy are structural.  The load-bearing one is
+# that EVERY unmutated baseline flow alerts -- if a noop row reports "evaded"
+# the harness is broken and the evasion number is vacuous.
+fx = load("ppo_masked_test_FIXED.json")
+ck("fixed report present", fx is not None, True)
+ck("fixed n_flows", fx["n_flows"], 40)
+ck("fixed pipeline stamp", fx["pipeline"], "fixed_6_fixes")
+ck("fixed scorer", fx["scorer"], "real_snort")
+ck("fixed per_flow rows == n_flows", len(fx["per_flow"]), fx["n_flows"])
+# every baseline alerts: the harness-integrity invariant
+ck("fixed every baseline alerts", fx["baseline_alerted"], fx["n_flows"])
+ck("fixed baseline pct", fx["baseline_alert_pct"], 100.0)
+ck("fixed per-flow baselines all alert",
+   all(r["baseline_alert"] for r in fx["per_flow"]), True)
+# evasion arithmetic is internally consistent
+ck("fixed evaded == count of per-flow evaded",
+   fx["evaded"], sum(r["evaded"] for r in fx["per_flow"]))
+ck("fixed alerted == n - evaded", fx["alerted"], fx["n_flows"] - fx["evaded"])
+# valid evasion requires BOTH the alert gone AND the client bytes intact
+ck("fixed valid == evaded and semantics",
+   fx["valid_evasion"],
+   sum(r["evaded"] and r["semantics_ok"] for r in fx["per_flow"]))
+ck("fixed semantics_breaks == 0", fx["semantics_breaks"], 0)
+ck("fixed pct matches counts",
+   fx["valid_evasion_pct"], round(100.0 * fx["valid_evasion"] / fx["n_flows"], 1))
+# the honest number must not exceed the naive one (byte bar can only tighten)
+ck("fixed valid <= evaded", fx["valid_evasion"] <= fx["evaded"], True)
+# mechanism diversity is measured, not asserted
+ck("fixed mechanism_diversity == distinct actions",
+   fx["mechanism_diversity"], len(fx["actions_chosen"]))
+ck("fixed actions sum to n_flows", sum(fx["actions_chosen"].values()), fx["n_flows"])
+# per-framing rollup is consistent with the per-flow rows
+_ff = {}
+for r in fx["per_flow"]:
+    _ff.setdefault(r["framing"], {"n": 0, "valid_evasion": 0})
+    _ff[r["framing"]]["n"] += 1
+    _ff[r["framing"]]["valid_evasion"] += int(r["valid_evasion"])
+for _fr, _agg in _ff.items():
+    ck(f"fixed framing {_fr} n", fx["per_framing"][_fr]["n"], _agg["n"])
+    ck(f"fixed framing {_fr} valid", fx["per_framing"][_fr]["valid_evasion"],
+       _agg["valid_evasion"])
+# source translation is per-flow unique (Fix 5): no address reused across flows
+_srcs = [r["source_ip"] for r in fx["per_flow"]]
+ck("fixed source IPs unique per flow", len(set(_srcs)), len(_srcs))
+
+
 # --- training
 # Queries/epochs/evaded depend on the run (early stopping at TARGET), so they
 # cannot be pinned to literals -- an earlier version asserted 119/1024/8 while
