@@ -1,0 +1,8154 @@
+{
+  "semantics_bar": "c2_semantics.bytes_equal_semantics",
+  "elapsed_s": 6091,
+  "overall": {
+    "n": 560,
+    "n_agree": 451,
+    "n_disagree": 109,
+    "agreement_pct": 80.5,
+    "surrogate_false_safe": 0,
+    "disagreements": [
+      {
+        "flow_idx": 0,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 0,
+        "framing": "http",
+        "mech": "prepend4",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 0,
+        "framing": "http",
+        "mech": "prepend8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 0,
+        "framing": "http",
+        "mech": "prepend12",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 0,
+        "framing": "http",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 0,
+        "framing": "http",
+        "mech": "length_wrapper",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 2,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 2,
+        "framing": "http",
+        "mech": "prepend4",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 2,
+        "framing": "http",
+        "mech": "prepend8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 2,
+        "framing": "http",
+        "mech": "prepend12",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 2,
+        "framing": "http",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 2,
+        "framing": "http",
+        "mech": "length_wrapper",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 5,
+        "framing": "neris",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 5,
+        "framing": "neris",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 6,
+        "framing": "neris",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 6,
+        "framing": "neris",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 10,
+        "framing": "neris",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 10,
+        "framing": "neris",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 11,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 11,
+        "framing": "http",
+        "mech": "prepend4",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 11,
+        "framing": "http",
+        "mech": "prepend8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 11,
+        "framing": "http",
+        "mech": "prepend12",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 11,
+        "framing": "http",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 11,
+        "framing": "http",
+        "mech": "length_wrapper",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 13,
+        "framing": "neris",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 13,
+        "framing": "neris",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 14,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 14,
+        "framing": "http",
+        "mech": "prepend4",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 14,
+        "framing": "http",
+        "mech": "prepend8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 14,
+        "framing": "http",
+        "mech": "prepend12",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 14,
+        "framing": "http",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 14,
+        "framing": "http",
+        "mech": "length_wrapper",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 17,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 17,
+        "framing": "http",
+        "mech": "prepend4",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 17,
+        "framing": "http",
+        "mech": "prepend8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 17,
+        "framing": "http",
+        "mech": "prepend12",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 17,
+        "framing": "http",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 17,
+        "framing": "http",
+        "mech": "length_wrapper",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 18,
+        "framing": "neris",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 18,
+        "framing": "neris",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 19,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 19,
+        "framing": "http",
+        "mech": "prepend4",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 19,
+        "framing": "http",
+        "mech": "prepend8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 19,
+        "framing": "http",
+        "mech": "prepend12",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 19,
+        "framing": "http",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 19,
+        "framing": "http",
+        "mech": "length_wrapper",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 21,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 21,
+        "framing": "http",
+        "mech": "prepend4",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 21,
+        "framing": "http",
+        "mech": "prepend8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 21,
+        "framing": "http",
+        "mech": "prepend12",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 21,
+        "framing": "http",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 21,
+        "framing": "http",
+        "mech": "length_wrapper",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 22,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 22,
+        "framing": "http",
+        "mech": "prepend4",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 22,
+        "framing": "http",
+        "mech": "prepend8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 22,
+        "framing": "http",
+        "mech": "prepend12",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 22,
+        "framing": "http",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 22,
+        "framing": "http",
+        "mech": "length_wrapper",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 23,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 23,
+        "framing": "http",
+        "mech": "prepend4",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 23,
+        "framing": "http",
+        "mech": "prepend8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 23,
+        "framing": "http",
+        "mech": "prepend12",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 23,
+        "framing": "http",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 23,
+        "framing": "http",
+        "mech": "length_wrapper",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 24,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 24,
+        "framing": "http",
+        "mech": "prepend4",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 24,
+        "framing": "http",
+        "mech": "prepend8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 24,
+        "framing": "http",
+        "mech": "prepend12",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 24,
+        "framing": "http",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 24,
+        "framing": "http",
+        "mech": "length_wrapper",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 25,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 25,
+        "framing": "http",
+        "mech": "prepend4",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 25,
+        "framing": "http",
+        "mech": "prepend8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 25,
+        "framing": "http",
+        "mech": "prepend12",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 25,
+        "framing": "http",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 25,
+        "framing": "http",
+        "mech": "length_wrapper",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 26,
+        "framing": "neris",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 26,
+        "framing": "neris",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 30,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 30,
+        "framing": "http",
+        "mech": "prepend4",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 30,
+        "framing": "http",
+        "mech": "prepend8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 30,
+        "framing": "http",
+        "mech": "prepend12",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 30,
+        "framing": "http",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 30,
+        "framing": "http",
+        "mech": "length_wrapper",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 31,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 31,
+        "framing": "http",
+        "mech": "prepend4",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 31,
+        "framing": "http",
+        "mech": "prepend8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 31,
+        "framing": "http",
+        "mech": "prepend12",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 31,
+        "framing": "http",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 31,
+        "framing": "http",
+        "mech": "length_wrapper",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 33,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 33,
+        "framing": "http",
+        "mech": "prepend4",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 33,
+        "framing": "http",
+        "mech": "prepend8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 33,
+        "framing": "http",
+        "mech": "prepend12",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 33,
+        "framing": "http",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 33,
+        "framing": "http",
+        "mech": "length_wrapper",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 35,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 35,
+        "framing": "http",
+        "mech": "prepend4",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 35,
+        "framing": "http",
+        "mech": "prepend8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 35,
+        "framing": "http",
+        "mech": "prepend12",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 35,
+        "framing": "http",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 35,
+        "framing": "http",
+        "mech": "length_wrapper",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 37,
+        "framing": "neris",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 37,
+        "framing": "neris",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 38,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 38,
+        "framing": "http",
+        "mech": "prepend4",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 38,
+        "framing": "http",
+        "mech": "prepend8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 38,
+        "framing": "http",
+        "mech": "prepend12",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 38,
+        "framing": "http",
+        "mech": "overlap8",
+        "semantics_ok": false,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      }
+    ]
+  },
+  "eligible_only": {
+    "n": 222,
+    "n_agree": 199,
+    "n_disagree": 23,
+    "agreement_pct": 89.6,
+    "surrogate_false_safe": 0,
+    "disagreements": [
+      {
+        "flow_idx": 0,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 2,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 5,
+        "framing": "neris",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 6,
+        "framing": "neris",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 10,
+        "framing": "neris",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 11,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 13,
+        "framing": "neris",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 14,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 17,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 18,
+        "framing": "neris",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 19,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 21,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 22,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 23,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 24,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 25,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 26,
+        "framing": "neris",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 30,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 31,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 33,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 35,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 37,
+        "framing": "neris",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      },
+      {
+        "flow_idx": 38,
+        "framing": "http",
+        "mech": "split8",
+        "semantics_ok": true,
+        "replica_alert": true,
+        "real_alert": false,
+        "agree": false,
+        "masked_out": false
+      }
+    ]
+  },
+  "per_mechanism": {
+    "split8": {
+      "n": 40,
+      "n_agree": 17,
+      "n_disagree": 23,
+      "agreement_pct": 42.5,
+      "surrogate_false_safe": 0,
+      "disagreements": [
+        {
+          "flow_idx": 0,
+          "framing": "http",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 2,
+          "framing": "http",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 5,
+          "framing": "neris",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 6,
+          "framing": "neris",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 10,
+          "framing": "neris",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 11,
+          "framing": "http",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 13,
+          "framing": "neris",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 14,
+          "framing": "http",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 17,
+          "framing": "http",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 18,
+          "framing": "neris",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 19,
+          "framing": "http",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 21,
+          "framing": "http",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 22,
+          "framing": "http",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 23,
+          "framing": "http",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 24,
+          "framing": "http",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 25,
+          "framing": "http",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 26,
+          "framing": "neris",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 30,
+          "framing": "http",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 31,
+          "framing": "http",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 33,
+          "framing": "http",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 35,
+          "framing": "http",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 37,
+          "framing": "neris",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 38,
+          "framing": "http",
+          "mech": "split8",
+          "semantics_ok": true,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        }
+      ]
+    },
+    "split16": {
+      "n": 40,
+      "n_agree": 40,
+      "n_disagree": 0,
+      "agreement_pct": 100.0,
+      "surrogate_false_safe": 0,
+      "disagreements": []
+    },
+    "split24": {
+      "n": 40,
+      "n_agree": 40,
+      "n_disagree": 0,
+      "agreement_pct": 100.0,
+      "surrogate_false_safe": 0,
+      "disagreements": []
+    },
+    "prepend4": {
+      "n": 40,
+      "n_agree": 24,
+      "n_disagree": 16,
+      "agreement_pct": 60.0,
+      "surrogate_false_safe": 0,
+      "disagreements": [
+        {
+          "flow_idx": 0,
+          "framing": "http",
+          "mech": "prepend4",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 2,
+          "framing": "http",
+          "mech": "prepend4",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 11,
+          "framing": "http",
+          "mech": "prepend4",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 14,
+          "framing": "http",
+          "mech": "prepend4",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 17,
+          "framing": "http",
+          "mech": "prepend4",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 19,
+          "framing": "http",
+          "mech": "prepend4",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 21,
+          "framing": "http",
+          "mech": "prepend4",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 22,
+          "framing": "http",
+          "mech": "prepend4",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 23,
+          "framing": "http",
+          "mech": "prepend4",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 24,
+          "framing": "http",
+          "mech": "prepend4",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 25,
+          "framing": "http",
+          "mech": "prepend4",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 30,
+          "framing": "http",
+          "mech": "prepend4",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 31,
+          "framing": "http",
+          "mech": "prepend4",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 33,
+          "framing": "http",
+          "mech": "prepend4",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 35,
+          "framing": "http",
+          "mech": "prepend4",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 38,
+          "framing": "http",
+          "mech": "prepend4",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        }
+      ]
+    },
+    "prepend8": {
+      "n": 40,
+      "n_agree": 24,
+      "n_disagree": 16,
+      "agreement_pct": 60.0,
+      "surrogate_false_safe": 0,
+      "disagreements": [
+        {
+          "flow_idx": 0,
+          "framing": "http",
+          "mech": "prepend8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 2,
+          "framing": "http",
+          "mech": "prepend8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 11,
+          "framing": "http",
+          "mech": "prepend8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 14,
+          "framing": "http",
+          "mech": "prepend8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 17,
+          "framing": "http",
+          "mech": "prepend8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 19,
+          "framing": "http",
+          "mech": "prepend8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 21,
+          "framing": "http",
+          "mech": "prepend8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 22,
+          "framing": "http",
+          "mech": "prepend8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 23,
+          "framing": "http",
+          "mech": "prepend8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 24,
+          "framing": "http",
+          "mech": "prepend8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 25,
+          "framing": "http",
+          "mech": "prepend8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 30,
+          "framing": "http",
+          "mech": "prepend8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 31,
+          "framing": "http",
+          "mech": "prepend8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 33,
+          "framing": "http",
+          "mech": "prepend8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 35,
+          "framing": "http",
+          "mech": "prepend8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 38,
+          "framing": "http",
+          "mech": "prepend8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        }
+      ]
+    },
+    "prepend12": {
+      "n": 40,
+      "n_agree": 24,
+      "n_disagree": 16,
+      "agreement_pct": 60.0,
+      "surrogate_false_safe": 0,
+      "disagreements": [
+        {
+          "flow_idx": 0,
+          "framing": "http",
+          "mech": "prepend12",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 2,
+          "framing": "http",
+          "mech": "prepend12",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 11,
+          "framing": "http",
+          "mech": "prepend12",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 14,
+          "framing": "http",
+          "mech": "prepend12",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 17,
+          "framing": "http",
+          "mech": "prepend12",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 19,
+          "framing": "http",
+          "mech": "prepend12",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 21,
+          "framing": "http",
+          "mech": "prepend12",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 22,
+          "framing": "http",
+          "mech": "prepend12",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 23,
+          "framing": "http",
+          "mech": "prepend12",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 24,
+          "framing": "http",
+          "mech": "prepend12",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 25,
+          "framing": "http",
+          "mech": "prepend12",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 30,
+          "framing": "http",
+          "mech": "prepend12",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 31,
+          "framing": "http",
+          "mech": "prepend12",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 33,
+          "framing": "http",
+          "mech": "prepend12",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 35,
+          "framing": "http",
+          "mech": "prepend12",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 38,
+          "framing": "http",
+          "mech": "prepend12",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        }
+      ]
+    },
+    "pad16": {
+      "n": 40,
+      "n_agree": 40,
+      "n_disagree": 0,
+      "agreement_pct": 100.0,
+      "surrogate_false_safe": 0,
+      "disagreements": []
+    },
+    "reorder": {
+      "n": 40,
+      "n_agree": 40,
+      "n_disagree": 0,
+      "agreement_pct": 100.0,
+      "surrogate_false_safe": 0,
+      "disagreements": []
+    },
+    "ttl": {
+      "n": 40,
+      "n_agree": 40,
+      "n_disagree": 0,
+      "agreement_pct": 100.0,
+      "surrogate_false_safe": 0,
+      "disagreements": []
+    },
+    "corrupt8": {
+      "n": 40,
+      "n_agree": 40,
+      "n_disagree": 0,
+      "agreement_pct": 100.0,
+      "surrogate_false_safe": 0,
+      "disagreements": []
+    },
+    "overlap8": {
+      "n": 40,
+      "n_agree": 17,
+      "n_disagree": 23,
+      "agreement_pct": 42.5,
+      "surrogate_false_safe": 0,
+      "disagreements": [
+        {
+          "flow_idx": 0,
+          "framing": "http",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 2,
+          "framing": "http",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 5,
+          "framing": "neris",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 6,
+          "framing": "neris",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 10,
+          "framing": "neris",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 11,
+          "framing": "http",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 13,
+          "framing": "neris",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 14,
+          "framing": "http",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 17,
+          "framing": "http",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 18,
+          "framing": "neris",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 19,
+          "framing": "http",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 21,
+          "framing": "http",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 22,
+          "framing": "http",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 23,
+          "framing": "http",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 24,
+          "framing": "http",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 25,
+          "framing": "http",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 26,
+          "framing": "neris",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 30,
+          "framing": "http",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 31,
+          "framing": "http",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 33,
+          "framing": "http",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 35,
+          "framing": "http",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 37,
+          "framing": "neris",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 38,
+          "framing": "http",
+          "mech": "overlap8",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        }
+      ]
+    },
+    "noop": {
+      "n": 40,
+      "n_agree": 40,
+      "n_disagree": 0,
+      "agreement_pct": 100.0,
+      "surrogate_false_safe": 0,
+      "disagreements": []
+    },
+    "http_header_pad": {
+      "n": 40,
+      "n_agree": 40,
+      "n_disagree": 0,
+      "agreement_pct": 100.0,
+      "surrogate_false_safe": 0,
+      "disagreements": []
+    },
+    "length_wrapper": {
+      "n": 40,
+      "n_agree": 25,
+      "n_disagree": 15,
+      "agreement_pct": 62.5,
+      "surrogate_false_safe": 0,
+      "disagreements": [
+        {
+          "flow_idx": 0,
+          "framing": "http",
+          "mech": "length_wrapper",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 2,
+          "framing": "http",
+          "mech": "length_wrapper",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 11,
+          "framing": "http",
+          "mech": "length_wrapper",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 14,
+          "framing": "http",
+          "mech": "length_wrapper",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 17,
+          "framing": "http",
+          "mech": "length_wrapper",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 19,
+          "framing": "http",
+          "mech": "length_wrapper",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 21,
+          "framing": "http",
+          "mech": "length_wrapper",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 22,
+          "framing": "http",
+          "mech": "length_wrapper",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 23,
+          "framing": "http",
+          "mech": "length_wrapper",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 24,
+          "framing": "http",
+          "mech": "length_wrapper",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 25,
+          "framing": "http",
+          "mech": "length_wrapper",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 30,
+          "framing": "http",
+          "mech": "length_wrapper",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 31,
+          "framing": "http",
+          "mech": "length_wrapper",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 33,
+          "framing": "http",
+          "mech": "length_wrapper",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        },
+        {
+          "flow_idx": 35,
+          "framing": "http",
+          "mech": "length_wrapper",
+          "semantics_ok": false,
+          "replica_alert": true,
+          "real_alert": false,
+          "agree": false,
+          "masked_out": false
+        }
+      ]
+    }
+  },
+  "rows": [
+    {
+      "flow_idx": 0,
+      "framing": "http",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 0,
+      "framing": "http",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 0,
+      "framing": "http",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 0,
+      "framing": "http",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 0,
+      "framing": "http",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 0,
+      "framing": "http",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 0,
+      "framing": "http",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 0,
+      "framing": "http",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 0,
+      "framing": "http",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 0,
+      "framing": "http",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 0,
+      "framing": "http",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 0,
+      "framing": "http",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 0,
+      "framing": "http",
+      "mech": "http_header_pad",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 0,
+      "framing": "http",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 1,
+      "framing": "neris",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 1,
+      "framing": "neris",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 1,
+      "framing": "neris",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 1,
+      "framing": "neris",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 1,
+      "framing": "neris",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 1,
+      "framing": "neris",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 1,
+      "framing": "neris",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 1,
+      "framing": "neris",
+      "mech": "reorder",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 1,
+      "framing": "neris",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 1,
+      "framing": "neris",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 1,
+      "framing": "neris",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 1,
+      "framing": "neris",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 1,
+      "framing": "neris",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 1,
+      "framing": "neris",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 2,
+      "framing": "http",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 2,
+      "framing": "http",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 2,
+      "framing": "http",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 2,
+      "framing": "http",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 2,
+      "framing": "http",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 2,
+      "framing": "http",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 2,
+      "framing": "http",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 2,
+      "framing": "http",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 2,
+      "framing": "http",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 2,
+      "framing": "http",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 2,
+      "framing": "http",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 2,
+      "framing": "http",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 2,
+      "framing": "http",
+      "mech": "http_header_pad",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 2,
+      "framing": "http",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 4,
+      "framing": "neris",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 4,
+      "framing": "neris",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 4,
+      "framing": "neris",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 4,
+      "framing": "neris",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 4,
+      "framing": "neris",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 4,
+      "framing": "neris",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 4,
+      "framing": "neris",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 4,
+      "framing": "neris",
+      "mech": "reorder",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 4,
+      "framing": "neris",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 4,
+      "framing": "neris",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 4,
+      "framing": "neris",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 4,
+      "framing": "neris",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 4,
+      "framing": "neris",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 4,
+      "framing": "neris",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 5,
+      "framing": "neris",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 5,
+      "framing": "neris",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 5,
+      "framing": "neris",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 5,
+      "framing": "neris",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 5,
+      "framing": "neris",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 5,
+      "framing": "neris",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 5,
+      "framing": "neris",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 5,
+      "framing": "neris",
+      "mech": "reorder",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 5,
+      "framing": "neris",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 5,
+      "framing": "neris",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 5,
+      "framing": "neris",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 5,
+      "framing": "neris",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 5,
+      "framing": "neris",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 5,
+      "framing": "neris",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 6,
+      "framing": "neris",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 6,
+      "framing": "neris",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 6,
+      "framing": "neris",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 6,
+      "framing": "neris",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 6,
+      "framing": "neris",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 6,
+      "framing": "neris",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 6,
+      "framing": "neris",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 6,
+      "framing": "neris",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 6,
+      "framing": "neris",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 6,
+      "framing": "neris",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 6,
+      "framing": "neris",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 6,
+      "framing": "neris",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 6,
+      "framing": "neris",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 6,
+      "framing": "neris",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 7,
+      "framing": "neris",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 7,
+      "framing": "neris",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 7,
+      "framing": "neris",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 7,
+      "framing": "neris",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 7,
+      "framing": "neris",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 7,
+      "framing": "neris",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 7,
+      "framing": "neris",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 7,
+      "framing": "neris",
+      "mech": "reorder",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 7,
+      "framing": "neris",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 7,
+      "framing": "neris",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 7,
+      "framing": "neris",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 7,
+      "framing": "neris",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 7,
+      "framing": "neris",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 7,
+      "framing": "neris",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 8,
+      "framing": "neris",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 8,
+      "framing": "neris",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 8,
+      "framing": "neris",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 8,
+      "framing": "neris",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 8,
+      "framing": "neris",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 8,
+      "framing": "neris",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 8,
+      "framing": "neris",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 8,
+      "framing": "neris",
+      "mech": "reorder",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 8,
+      "framing": "neris",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 8,
+      "framing": "neris",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 8,
+      "framing": "neris",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 8,
+      "framing": "neris",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 8,
+      "framing": "neris",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 8,
+      "framing": "neris",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 9,
+      "framing": "neris",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 9,
+      "framing": "neris",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 9,
+      "framing": "neris",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 9,
+      "framing": "neris",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 9,
+      "framing": "neris",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 9,
+      "framing": "neris",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 9,
+      "framing": "neris",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 9,
+      "framing": "neris",
+      "mech": "reorder",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 9,
+      "framing": "neris",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 9,
+      "framing": "neris",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 9,
+      "framing": "neris",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 9,
+      "framing": "neris",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 9,
+      "framing": "neris",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 9,
+      "framing": "neris",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 10,
+      "framing": "neris",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 10,
+      "framing": "neris",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 10,
+      "framing": "neris",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 10,
+      "framing": "neris",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 10,
+      "framing": "neris",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 10,
+      "framing": "neris",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 10,
+      "framing": "neris",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 10,
+      "framing": "neris",
+      "mech": "reorder",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 10,
+      "framing": "neris",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 10,
+      "framing": "neris",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 10,
+      "framing": "neris",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 10,
+      "framing": "neris",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 10,
+      "framing": "neris",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 10,
+      "framing": "neris",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 11,
+      "framing": "http",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 11,
+      "framing": "http",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 11,
+      "framing": "http",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 11,
+      "framing": "http",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 11,
+      "framing": "http",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 11,
+      "framing": "http",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 11,
+      "framing": "http",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 11,
+      "framing": "http",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 11,
+      "framing": "http",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 11,
+      "framing": "http",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 11,
+      "framing": "http",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 11,
+      "framing": "http",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 11,
+      "framing": "http",
+      "mech": "http_header_pad",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 11,
+      "framing": "http",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 12,
+      "framing": "neris",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 12,
+      "framing": "neris",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 12,
+      "framing": "neris",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 12,
+      "framing": "neris",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 12,
+      "framing": "neris",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 12,
+      "framing": "neris",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 12,
+      "framing": "neris",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 12,
+      "framing": "neris",
+      "mech": "reorder",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 12,
+      "framing": "neris",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 12,
+      "framing": "neris",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 12,
+      "framing": "neris",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 12,
+      "framing": "neris",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 12,
+      "framing": "neris",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 12,
+      "framing": "neris",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 13,
+      "framing": "neris",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 13,
+      "framing": "neris",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 13,
+      "framing": "neris",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 13,
+      "framing": "neris",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 13,
+      "framing": "neris",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 13,
+      "framing": "neris",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 13,
+      "framing": "neris",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 13,
+      "framing": "neris",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 13,
+      "framing": "neris",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 13,
+      "framing": "neris",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 13,
+      "framing": "neris",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 13,
+      "framing": "neris",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 13,
+      "framing": "neris",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 13,
+      "framing": "neris",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 14,
+      "framing": "http",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 14,
+      "framing": "http",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 14,
+      "framing": "http",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 14,
+      "framing": "http",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 14,
+      "framing": "http",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 14,
+      "framing": "http",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 14,
+      "framing": "http",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 14,
+      "framing": "http",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 14,
+      "framing": "http",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 14,
+      "framing": "http",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 14,
+      "framing": "http",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 14,
+      "framing": "http",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 14,
+      "framing": "http",
+      "mech": "http_header_pad",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 14,
+      "framing": "http",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 15,
+      "framing": "neris",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 15,
+      "framing": "neris",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 15,
+      "framing": "neris",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 15,
+      "framing": "neris",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 15,
+      "framing": "neris",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 15,
+      "framing": "neris",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 15,
+      "framing": "neris",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 15,
+      "framing": "neris",
+      "mech": "reorder",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 15,
+      "framing": "neris",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 15,
+      "framing": "neris",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 15,
+      "framing": "neris",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 15,
+      "framing": "neris",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 15,
+      "framing": "neris",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 15,
+      "framing": "neris",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 16,
+      "framing": "neris",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 16,
+      "framing": "neris",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 16,
+      "framing": "neris",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 16,
+      "framing": "neris",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 16,
+      "framing": "neris",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 16,
+      "framing": "neris",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 16,
+      "framing": "neris",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 16,
+      "framing": "neris",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 16,
+      "framing": "neris",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 16,
+      "framing": "neris",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 16,
+      "framing": "neris",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 16,
+      "framing": "neris",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 16,
+      "framing": "neris",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 16,
+      "framing": "neris",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 17,
+      "framing": "http",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 17,
+      "framing": "http",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 17,
+      "framing": "http",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 17,
+      "framing": "http",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 17,
+      "framing": "http",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 17,
+      "framing": "http",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 17,
+      "framing": "http",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 17,
+      "framing": "http",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 17,
+      "framing": "http",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 17,
+      "framing": "http",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 17,
+      "framing": "http",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 17,
+      "framing": "http",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 17,
+      "framing": "http",
+      "mech": "http_header_pad",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 17,
+      "framing": "http",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 18,
+      "framing": "neris",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 18,
+      "framing": "neris",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 18,
+      "framing": "neris",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 18,
+      "framing": "neris",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 18,
+      "framing": "neris",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 18,
+      "framing": "neris",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 18,
+      "framing": "neris",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 18,
+      "framing": "neris",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 18,
+      "framing": "neris",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 18,
+      "framing": "neris",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 18,
+      "framing": "neris",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 18,
+      "framing": "neris",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 18,
+      "framing": "neris",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 18,
+      "framing": "neris",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 19,
+      "framing": "http",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 19,
+      "framing": "http",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 19,
+      "framing": "http",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 19,
+      "framing": "http",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 19,
+      "framing": "http",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 19,
+      "framing": "http",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 19,
+      "framing": "http",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 19,
+      "framing": "http",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 19,
+      "framing": "http",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 19,
+      "framing": "http",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 19,
+      "framing": "http",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 19,
+      "framing": "http",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 19,
+      "framing": "http",
+      "mech": "http_header_pad",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 19,
+      "framing": "http",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 20,
+      "framing": "neris",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 20,
+      "framing": "neris",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 20,
+      "framing": "neris",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 20,
+      "framing": "neris",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 20,
+      "framing": "neris",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 20,
+      "framing": "neris",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 20,
+      "framing": "neris",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 20,
+      "framing": "neris",
+      "mech": "reorder",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 20,
+      "framing": "neris",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 20,
+      "framing": "neris",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 20,
+      "framing": "neris",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 20,
+      "framing": "neris",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 20,
+      "framing": "neris",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 20,
+      "framing": "neris",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 21,
+      "framing": "http",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 21,
+      "framing": "http",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 21,
+      "framing": "http",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 21,
+      "framing": "http",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 21,
+      "framing": "http",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 21,
+      "framing": "http",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 21,
+      "framing": "http",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 21,
+      "framing": "http",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 21,
+      "framing": "http",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 21,
+      "framing": "http",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 21,
+      "framing": "http",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 21,
+      "framing": "http",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 21,
+      "framing": "http",
+      "mech": "http_header_pad",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 21,
+      "framing": "http",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 22,
+      "framing": "http",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 22,
+      "framing": "http",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 22,
+      "framing": "http",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 22,
+      "framing": "http",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 22,
+      "framing": "http",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 22,
+      "framing": "http",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 22,
+      "framing": "http",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 22,
+      "framing": "http",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 22,
+      "framing": "http",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 22,
+      "framing": "http",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 22,
+      "framing": "http",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 22,
+      "framing": "http",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 22,
+      "framing": "http",
+      "mech": "http_header_pad",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 22,
+      "framing": "http",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 23,
+      "framing": "http",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 23,
+      "framing": "http",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 23,
+      "framing": "http",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 23,
+      "framing": "http",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 23,
+      "framing": "http",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 23,
+      "framing": "http",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 23,
+      "framing": "http",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 23,
+      "framing": "http",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 23,
+      "framing": "http",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 23,
+      "framing": "http",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 23,
+      "framing": "http",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 23,
+      "framing": "http",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 23,
+      "framing": "http",
+      "mech": "http_header_pad",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 23,
+      "framing": "http",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 24,
+      "framing": "http",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 24,
+      "framing": "http",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 24,
+      "framing": "http",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 24,
+      "framing": "http",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 24,
+      "framing": "http",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 24,
+      "framing": "http",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 24,
+      "framing": "http",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 24,
+      "framing": "http",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 24,
+      "framing": "http",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 24,
+      "framing": "http",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 24,
+      "framing": "http",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 24,
+      "framing": "http",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 24,
+      "framing": "http",
+      "mech": "http_header_pad",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 24,
+      "framing": "http",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 25,
+      "framing": "http",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 25,
+      "framing": "http",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 25,
+      "framing": "http",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 25,
+      "framing": "http",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 25,
+      "framing": "http",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 25,
+      "framing": "http",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 25,
+      "framing": "http",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 25,
+      "framing": "http",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 25,
+      "framing": "http",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 25,
+      "framing": "http",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 25,
+      "framing": "http",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 25,
+      "framing": "http",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 25,
+      "framing": "http",
+      "mech": "http_header_pad",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 25,
+      "framing": "http",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 26,
+      "framing": "neris",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 26,
+      "framing": "neris",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 26,
+      "framing": "neris",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 26,
+      "framing": "neris",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 26,
+      "framing": "neris",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 26,
+      "framing": "neris",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 26,
+      "framing": "neris",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 26,
+      "framing": "neris",
+      "mech": "reorder",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 26,
+      "framing": "neris",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 26,
+      "framing": "neris",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 26,
+      "framing": "neris",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 26,
+      "framing": "neris",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 26,
+      "framing": "neris",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 26,
+      "framing": "neris",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 27,
+      "framing": "neris",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 27,
+      "framing": "neris",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 27,
+      "framing": "neris",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 27,
+      "framing": "neris",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 27,
+      "framing": "neris",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 27,
+      "framing": "neris",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 27,
+      "framing": "neris",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 27,
+      "framing": "neris",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 27,
+      "framing": "neris",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 27,
+      "framing": "neris",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 27,
+      "framing": "neris",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 27,
+      "framing": "neris",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 27,
+      "framing": "neris",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 27,
+      "framing": "neris",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 28,
+      "framing": "neris",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 28,
+      "framing": "neris",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 28,
+      "framing": "neris",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 28,
+      "framing": "neris",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 28,
+      "framing": "neris",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 28,
+      "framing": "neris",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 28,
+      "framing": "neris",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 28,
+      "framing": "neris",
+      "mech": "reorder",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 28,
+      "framing": "neris",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 28,
+      "framing": "neris",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 28,
+      "framing": "neris",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 28,
+      "framing": "neris",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 28,
+      "framing": "neris",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 28,
+      "framing": "neris",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 29,
+      "framing": "neris",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 29,
+      "framing": "neris",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 29,
+      "framing": "neris",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 29,
+      "framing": "neris",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 29,
+      "framing": "neris",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 29,
+      "framing": "neris",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 29,
+      "framing": "neris",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 29,
+      "framing": "neris",
+      "mech": "reorder",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 29,
+      "framing": "neris",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 29,
+      "framing": "neris",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 29,
+      "framing": "neris",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 29,
+      "framing": "neris",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 29,
+      "framing": "neris",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 29,
+      "framing": "neris",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 30,
+      "framing": "http",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 30,
+      "framing": "http",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 30,
+      "framing": "http",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 30,
+      "framing": "http",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 30,
+      "framing": "http",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 30,
+      "framing": "http",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 30,
+      "framing": "http",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 30,
+      "framing": "http",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 30,
+      "framing": "http",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 30,
+      "framing": "http",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 30,
+      "framing": "http",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 30,
+      "framing": "http",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 30,
+      "framing": "http",
+      "mech": "http_header_pad",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 30,
+      "framing": "http",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 31,
+      "framing": "http",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 31,
+      "framing": "http",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 31,
+      "framing": "http",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 31,
+      "framing": "http",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 31,
+      "framing": "http",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 31,
+      "framing": "http",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 31,
+      "framing": "http",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 31,
+      "framing": "http",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 31,
+      "framing": "http",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 31,
+      "framing": "http",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 31,
+      "framing": "http",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 31,
+      "framing": "http",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 31,
+      "framing": "http",
+      "mech": "http_header_pad",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 31,
+      "framing": "http",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 32,
+      "framing": "neris",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 32,
+      "framing": "neris",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 32,
+      "framing": "neris",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 32,
+      "framing": "neris",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 32,
+      "framing": "neris",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 32,
+      "framing": "neris",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 32,
+      "framing": "neris",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 32,
+      "framing": "neris",
+      "mech": "reorder",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 32,
+      "framing": "neris",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 32,
+      "framing": "neris",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 32,
+      "framing": "neris",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 32,
+      "framing": "neris",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 32,
+      "framing": "neris",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 32,
+      "framing": "neris",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 33,
+      "framing": "http",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 33,
+      "framing": "http",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 33,
+      "framing": "http",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 33,
+      "framing": "http",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 33,
+      "framing": "http",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 33,
+      "framing": "http",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 33,
+      "framing": "http",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 33,
+      "framing": "http",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 33,
+      "framing": "http",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 33,
+      "framing": "http",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 33,
+      "framing": "http",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 33,
+      "framing": "http",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 33,
+      "framing": "http",
+      "mech": "http_header_pad",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 33,
+      "framing": "http",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 34,
+      "framing": "neris",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 34,
+      "framing": "neris",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 34,
+      "framing": "neris",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 34,
+      "framing": "neris",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 34,
+      "framing": "neris",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 34,
+      "framing": "neris",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 34,
+      "framing": "neris",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 34,
+      "framing": "neris",
+      "mech": "reorder",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 34,
+      "framing": "neris",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 34,
+      "framing": "neris",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 34,
+      "framing": "neris",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 34,
+      "framing": "neris",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 34,
+      "framing": "neris",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 34,
+      "framing": "neris",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 35,
+      "framing": "http",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 35,
+      "framing": "http",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 35,
+      "framing": "http",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 35,
+      "framing": "http",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 35,
+      "framing": "http",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 35,
+      "framing": "http",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 35,
+      "framing": "http",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 35,
+      "framing": "http",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 35,
+      "framing": "http",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 35,
+      "framing": "http",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 35,
+      "framing": "http",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 35,
+      "framing": "http",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 35,
+      "framing": "http",
+      "mech": "http_header_pad",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 35,
+      "framing": "http",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 36,
+      "framing": "neris",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 36,
+      "framing": "neris",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 36,
+      "framing": "neris",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 36,
+      "framing": "neris",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 36,
+      "framing": "neris",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 36,
+      "framing": "neris",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 36,
+      "framing": "neris",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 36,
+      "framing": "neris",
+      "mech": "reorder",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 36,
+      "framing": "neris",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 36,
+      "framing": "neris",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 36,
+      "framing": "neris",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 36,
+      "framing": "neris",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 36,
+      "framing": "neris",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 36,
+      "framing": "neris",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 37,
+      "framing": "neris",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 37,
+      "framing": "neris",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 37,
+      "framing": "neris",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 37,
+      "framing": "neris",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 37,
+      "framing": "neris",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 37,
+      "framing": "neris",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 37,
+      "framing": "neris",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 37,
+      "framing": "neris",
+      "mech": "reorder",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 37,
+      "framing": "neris",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 37,
+      "framing": "neris",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 37,
+      "framing": "neris",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 37,
+      "framing": "neris",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 37,
+      "framing": "neris",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 37,
+      "framing": "neris",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 38,
+      "framing": "http",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 38,
+      "framing": "http",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 38,
+      "framing": "http",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 38,
+      "framing": "http",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 38,
+      "framing": "http",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 38,
+      "framing": "http",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 38,
+      "framing": "http",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 38,
+      "framing": "http",
+      "mech": "reorder",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 38,
+      "framing": "http",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 38,
+      "framing": "http",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 38,
+      "framing": "http",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": false,
+      "agree": false,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 38,
+      "framing": "http",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 38,
+      "framing": "http",
+      "mech": "http_header_pad",
+      "semantics_ok": false,
+      "replica_alert": false,
+      "real_alert": false,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 38,
+      "framing": "http",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 39,
+      "framing": "neris",
+      "mech": "split8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 39,
+      "framing": "neris",
+      "mech": "split16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 39,
+      "framing": "neris",
+      "mech": "split24",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 39,
+      "framing": "neris",
+      "mech": "prepend4",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 39,
+      "framing": "neris",
+      "mech": "prepend8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 39,
+      "framing": "neris",
+      "mech": "prepend12",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 39,
+      "framing": "neris",
+      "mech": "pad16",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 39,
+      "framing": "neris",
+      "mech": "reorder",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 39,
+      "framing": "neris",
+      "mech": "ttl",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 39,
+      "framing": "neris",
+      "mech": "corrupt8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 39,
+      "framing": "neris",
+      "mech": "overlap8",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 39,
+      "framing": "neris",
+      "mech": "noop",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": false
+    },
+    {
+      "flow_idx": 39,
+      "framing": "neris",
+      "mech": "http_header_pad",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 39,
+      "framing": "neris",
+      "mech": "length_wrapper",
+      "semantics_ok": false,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    }
+  ]
+}
