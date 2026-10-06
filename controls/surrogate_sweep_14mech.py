@@ -32,6 +32,10 @@ from hidden_defender_env import (  # noqa: E402
 from eval_pipeline import client_ip_of  # noqa: E402
 from snort_batch_service import SnortBatchService  # noqa: E402
 
+# Which strict bar produced `semantics_ok` in this file's rows.  Recorded so a
+# later reader cannot mistake pre-alignment output for current output.
+SEMANTICS_BAR = "c2_semantics.bytes_equal_semantics"
+
 
 def main() -> int:
     ap = argparse.ArgumentParser()
@@ -99,7 +103,8 @@ def main() -> int:
                   flush=True)
 
             out_path.write_text(json.dumps(
-                {"n_rows": len(rows), "elapsed_s": round(time.time() - t0),
+                {"semantics_bar": SEMANTICS_BAR,
+                 "n_rows": len(rows), "elapsed_s": round(time.time() - t0),
                  "rows": rows}, indent=2))
 
     def summarize(rs):
@@ -122,6 +127,7 @@ def main() -> int:
         per_mech[m] = summarize([r for r in compared if r["mech"] == m])
 
     final = {
+        "semantics_bar": SEMANTICS_BAR,
         "elapsed_s": round(time.time() - t0),
         "overall": summarize(compared),
         "eligible_only": summarize(eligible),
