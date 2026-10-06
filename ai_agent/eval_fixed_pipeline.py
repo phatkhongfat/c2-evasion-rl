@@ -52,11 +52,14 @@ def main() -> int:
     ap.add_argument("--progress", default=str(REPO / "snort_validation/reports/.eval_fixed_progress.jsonl"))
     ap.add_argument("--limit", type=int, default=0, help="score only the first N flows (smoke test)")
     ap.add_argument("--no-baseline", action="store_true", help="skip the baseline control")
+    ap.add_argument("--capture", default=None,
+                    help="restrict evaluation to one capture id")
     args = ap.parse_args()
 
     from sb3_contrib import MaskablePPO
 
-    env = HiddenDefenderEnv(split=args.split, seed=42, real_snort=False)
+    env = HiddenDefenderEnv(split=args.split, seed=42, real_snort=False,
+                            capture=args.capture)
     model = MaskablePPO.load(args.model, env=env)
     by_id = {f["flow_id"]: f for f in env._flows}
 
