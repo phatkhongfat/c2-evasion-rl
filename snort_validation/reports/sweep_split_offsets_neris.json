@@ -1,0 +1,1710 @@
+{
+  "semantics_bar": "c2_semantics.bytes_equal_semantics",
+  "split": "test",
+  "seed": 42,
+  "n_rows": 170,
+  "elapsed_s": 1906,
+  "note": "extended action-space probe: variants are NOT in ACTION_NAMES (masked_out=True by construction)",
+  "rows": [
+    {
+      "flow_idx": 1,
+      "framing": "neris",
+      "mech": "split32",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 1,
+      "framing": "neris",
+      "mech": "split40",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 1,
+      "framing": "neris",
+      "mech": "split48",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 1,
+      "framing": "neris",
+      "mech": "split56",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 1,
+      "framing": "neris",
+      "mech": "split64",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 1,
+      "framing": "neris",
+      "mech": "split72",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 1,
+      "framing": "neris",
+      "mech": "split80",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 1,
+      "framing": "neris",
+      "mech": "split96",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 1,
+      "framing": "neris",
+      "mech": "splitall8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 1,
+      "framing": "neris",
+      "mech": "splitall16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "split32",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "split40",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "split48",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "split56",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "split64",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "split72",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "split80",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "split96",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "splitall8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 3,
+      "framing": "neris",
+      "mech": "splitall16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 4,
+      "framing": "neris",
+      "mech": "split32",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 4,
+      "framing": "neris",
+      "mech": "split40",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 4,
+      "framing": "neris",
+      "mech": "split48",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 4,
+      "framing": "neris",
+      "mech": "split56",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 4,
+      "framing": "neris",
+      "mech": "split64",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 4,
+      "framing": "neris",
+      "mech": "split72",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 4,
+      "framing": "neris",
+      "mech": "split80",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 4,
+      "framing": "neris",
+      "mech": "split96",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 4,
+      "framing": "neris",
+      "mech": "splitall8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 4,
+      "framing": "neris",
+      "mech": "splitall16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 7,
+      "framing": "neris",
+      "mech": "split32",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 7,
+      "framing": "neris",
+      "mech": "split40",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 7,
+      "framing": "neris",
+      "mech": "split48",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 7,
+      "framing": "neris",
+      "mech": "split56",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 7,
+      "framing": "neris",
+      "mech": "split64",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 7,
+      "framing": "neris",
+      "mech": "split72",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 7,
+      "framing": "neris",
+      "mech": "split80",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 7,
+      "framing": "neris",
+      "mech": "split96",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 7,
+      "framing": "neris",
+      "mech": "splitall8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 7,
+      "framing": "neris",
+      "mech": "splitall16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 8,
+      "framing": "neris",
+      "mech": "split32",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 8,
+      "framing": "neris",
+      "mech": "split40",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 8,
+      "framing": "neris",
+      "mech": "split48",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 8,
+      "framing": "neris",
+      "mech": "split56",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 8,
+      "framing": "neris",
+      "mech": "split64",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 8,
+      "framing": "neris",
+      "mech": "split72",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 8,
+      "framing": "neris",
+      "mech": "split80",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 8,
+      "framing": "neris",
+      "mech": "split96",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 8,
+      "framing": "neris",
+      "mech": "splitall8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 8,
+      "framing": "neris",
+      "mech": "splitall16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 9,
+      "framing": "neris",
+      "mech": "split32",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 9,
+      "framing": "neris",
+      "mech": "split40",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 9,
+      "framing": "neris",
+      "mech": "split48",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 9,
+      "framing": "neris",
+      "mech": "split56",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 9,
+      "framing": "neris",
+      "mech": "split64",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 9,
+      "framing": "neris",
+      "mech": "split72",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 9,
+      "framing": "neris",
+      "mech": "split80",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 9,
+      "framing": "neris",
+      "mech": "split96",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 9,
+      "framing": "neris",
+      "mech": "splitall8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 9,
+      "framing": "neris",
+      "mech": "splitall16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 12,
+      "framing": "neris",
+      "mech": "split32",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 12,
+      "framing": "neris",
+      "mech": "split40",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 12,
+      "framing": "neris",
+      "mech": "split48",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 12,
+      "framing": "neris",
+      "mech": "split56",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 12,
+      "framing": "neris",
+      "mech": "split64",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 12,
+      "framing": "neris",
+      "mech": "split72",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 12,
+      "framing": "neris",
+      "mech": "split80",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 12,
+      "framing": "neris",
+      "mech": "split96",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 12,
+      "framing": "neris",
+      "mech": "splitall8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 12,
+      "framing": "neris",
+      "mech": "splitall16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 15,
+      "framing": "neris",
+      "mech": "split32",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 15,
+      "framing": "neris",
+      "mech": "split40",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 15,
+      "framing": "neris",
+      "mech": "split48",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 15,
+      "framing": "neris",
+      "mech": "split56",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 15,
+      "framing": "neris",
+      "mech": "split64",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 15,
+      "framing": "neris",
+      "mech": "split72",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 15,
+      "framing": "neris",
+      "mech": "split80",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 15,
+      "framing": "neris",
+      "mech": "split96",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 15,
+      "framing": "neris",
+      "mech": "splitall8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 15,
+      "framing": "neris",
+      "mech": "splitall16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 16,
+      "framing": "neris",
+      "mech": "split32",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 16,
+      "framing": "neris",
+      "mech": "split40",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 16,
+      "framing": "neris",
+      "mech": "split48",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 16,
+      "framing": "neris",
+      "mech": "split56",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 16,
+      "framing": "neris",
+      "mech": "split64",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 16,
+      "framing": "neris",
+      "mech": "split72",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 16,
+      "framing": "neris",
+      "mech": "split80",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 16,
+      "framing": "neris",
+      "mech": "split96",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 16,
+      "framing": "neris",
+      "mech": "splitall8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 16,
+      "framing": "neris",
+      "mech": "splitall16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 20,
+      "framing": "neris",
+      "mech": "split32",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 20,
+      "framing": "neris",
+      "mech": "split40",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 20,
+      "framing": "neris",
+      "mech": "split48",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 20,
+      "framing": "neris",
+      "mech": "split56",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 20,
+      "framing": "neris",
+      "mech": "split64",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 20,
+      "framing": "neris",
+      "mech": "split72",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 20,
+      "framing": "neris",
+      "mech": "split80",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 20,
+      "framing": "neris",
+      "mech": "split96",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 20,
+      "framing": "neris",
+      "mech": "splitall8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 20,
+      "framing": "neris",
+      "mech": "splitall16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 27,
+      "framing": "neris",
+      "mech": "split32",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 27,
+      "framing": "neris",
+      "mech": "split40",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 27,
+      "framing": "neris",
+      "mech": "split48",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 27,
+      "framing": "neris",
+      "mech": "split56",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 27,
+      "framing": "neris",
+      "mech": "split64",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 27,
+      "framing": "neris",
+      "mech": "split72",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 27,
+      "framing": "neris",
+      "mech": "split80",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 27,
+      "framing": "neris",
+      "mech": "split96",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 27,
+      "framing": "neris",
+      "mech": "splitall8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 27,
+      "framing": "neris",
+      "mech": "splitall16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 28,
+      "framing": "neris",
+      "mech": "split32",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 28,
+      "framing": "neris",
+      "mech": "split40",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 28,
+      "framing": "neris",
+      "mech": "split48",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 28,
+      "framing": "neris",
+      "mech": "split56",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 28,
+      "framing": "neris",
+      "mech": "split64",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 28,
+      "framing": "neris",
+      "mech": "split72",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 28,
+      "framing": "neris",
+      "mech": "split80",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 28,
+      "framing": "neris",
+      "mech": "split96",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 28,
+      "framing": "neris",
+      "mech": "splitall8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 28,
+      "framing": "neris",
+      "mech": "splitall16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 29,
+      "framing": "neris",
+      "mech": "split32",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 29,
+      "framing": "neris",
+      "mech": "split40",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 29,
+      "framing": "neris",
+      "mech": "split48",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 29,
+      "framing": "neris",
+      "mech": "split56",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 29,
+      "framing": "neris",
+      "mech": "split64",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 29,
+      "framing": "neris",
+      "mech": "split72",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 29,
+      "framing": "neris",
+      "mech": "split80",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 29,
+      "framing": "neris",
+      "mech": "split96",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 29,
+      "framing": "neris",
+      "mech": "splitall8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 29,
+      "framing": "neris",
+      "mech": "splitall16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 32,
+      "framing": "neris",
+      "mech": "split32",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 32,
+      "framing": "neris",
+      "mech": "split40",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 32,
+      "framing": "neris",
+      "mech": "split48",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 32,
+      "framing": "neris",
+      "mech": "split56",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 32,
+      "framing": "neris",
+      "mech": "split64",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 32,
+      "framing": "neris",
+      "mech": "split72",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 32,
+      "framing": "neris",
+      "mech": "split80",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 32,
+      "framing": "neris",
+      "mech": "split96",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 32,
+      "framing": "neris",
+      "mech": "splitall8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 32,
+      "framing": "neris",
+      "mech": "splitall16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 34,
+      "framing": "neris",
+      "mech": "split32",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 34,
+      "framing": "neris",
+      "mech": "split40",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 34,
+      "framing": "neris",
+      "mech": "split48",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 34,
+      "framing": "neris",
+      "mech": "split56",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 34,
+      "framing": "neris",
+      "mech": "split64",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 34,
+      "framing": "neris",
+      "mech": "split72",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 34,
+      "framing": "neris",
+      "mech": "split80",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 34,
+      "framing": "neris",
+      "mech": "split96",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 34,
+      "framing": "neris",
+      "mech": "splitall8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 34,
+      "framing": "neris",
+      "mech": "splitall16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 36,
+      "framing": "neris",
+      "mech": "split32",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 36,
+      "framing": "neris",
+      "mech": "split40",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 36,
+      "framing": "neris",
+      "mech": "split48",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 36,
+      "framing": "neris",
+      "mech": "split56",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 36,
+      "framing": "neris",
+      "mech": "split64",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 36,
+      "framing": "neris",
+      "mech": "split72",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 36,
+      "framing": "neris",
+      "mech": "split80",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 36,
+      "framing": "neris",
+      "mech": "split96",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 36,
+      "framing": "neris",
+      "mech": "splitall8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 36,
+      "framing": "neris",
+      "mech": "splitall16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 39,
+      "framing": "neris",
+      "mech": "split32",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 39,
+      "framing": "neris",
+      "mech": "split40",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 39,
+      "framing": "neris",
+      "mech": "split48",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 39,
+      "framing": "neris",
+      "mech": "split56",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 39,
+      "framing": "neris",
+      "mech": "split64",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 39,
+      "framing": "neris",
+      "mech": "split72",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 39,
+      "framing": "neris",
+      "mech": "split80",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 39,
+      "framing": "neris",
+      "mech": "split96",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 39,
+      "framing": "neris",
+      "mech": "splitall8",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    },
+    {
+      "flow_idx": 39,
+      "framing": "neris",
+      "mech": "splitall16",
+      "semantics_ok": true,
+      "replica_alert": true,
+      "real_alert": true,
+      "agree": true,
+      "masked_out": true
+    }
+  ]
+}
