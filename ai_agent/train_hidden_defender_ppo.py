@@ -41,9 +41,10 @@ class BatchEnv(gym.Env):
 
     metadata = {"render_modes": []}
 
-    def __init__(self, split="train", seed=SEED, real_snort=False):
+    def __init__(self, split="train", seed=SEED, real_snort=False,
+                 capture=None):
         self.inner = HiddenDefenderEnv(split=split, seed=seed,
-                                      real_snort=real_snort)
+                                      real_snort=real_snort, capture=capture)
         self.action_space = self.inner.action_space
         self.observation_space = self.inner.observation_space
         self.n = len(self.inner._flows)
@@ -127,6 +128,14 @@ def main() -> int:
     ap.add_argument("--max-epochs", type=int, default=MAX_EPOCHS)
     ap.add_argument("--seed", type=int, default=SEED)
     ap.add_argument("--out", default=None)
+    ap.add_argument("--split", default="train",
+                    choices=("train", "test", "all"),
+                    help="corpus split to train on")
+    ap.add_argument("--capture", default=None,
+                    help="restrict training flows to one capture id")
+    ap.add_argument("--model-out",
+                    default=str(REPO / "models/ppo_hidden_defender.zip"),
+                    help="destination .zip for the trained model")
     args = ap.parse_args()
 
     N_FLOWS, MAX_EPOCHS, SEED = args.n_flows, args.max_epochs, args.seed
@@ -138,7 +147,8 @@ def main() -> int:
     # pcre / byte_test / byte_extract / byte_jump. Real Snort is the actual
     # defender, and the two have already been caught disagreeing on this project,
     # so scoring must be selectable, not hardcoded to the surrogate.
-    env = BatchEnv(split="train", seed=SEED, real_snort=args.real_snort)
+    env = BatchEnv(split=args.split, seed=SEED,
+                   real_snort=args.real_snort, capture=args.capture)
     scorer = "real_snort" if args.real_snort else "replica"
     print(f"[*] training with scorer={scorer}")
     model = MaskablePPO("MlpPolicy", env, n_steps=N_FLOWS, batch_size=N_FLOWS,
@@ -162,9 +172,9 @@ def main() -> int:
             print(f"[*] reached {TARGET:.0%} at {counter.queries} queries")
             break
 
-    models_dir = REPO / "models"
-    models_dir.mkdir(exist_ok=True)
-    model.save(models_dir / "ppo_hidden_defender")
+    out_model = Path(args.model_out)
+    out_model.parent.mkdir(parents=True, exist_ok=True)
+    model.save(str(out_model).removesuffix(".zip"))
 
     result = {
         "method": "ppo",
