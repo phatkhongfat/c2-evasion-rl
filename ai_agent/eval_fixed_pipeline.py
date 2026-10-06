@@ -81,7 +81,8 @@ def main() -> int:
         base = None
         if not args.no_baseline:
             base = score_flow_real(f["packets"], cip, attempt_id=i, mech=None)
-        act = score_flow_real(f["packets"], cip, attempt_id=100 + i, mech=mech)
+        act = score_flow_real(f["packets"], cip, attempt_id=100 + i, mech=mech,
+                              ownership=args.ownership)
         row = {
             "flow_id": fid,
             "framing": f.get("framing", "?"),

@@ -345,12 +345,16 @@ def run_snort_single(pcap: Path, conf: Path, logdir: Path,
 
 def score_flow_real(packets: Sequence, client_ip: str, attempt_id: int,
                     conf: Path = SNORT_CONF, workdir: Optional[Path] = None,
-                    mech: Optional[str] = None) -> dict:
+                    mech: Optional[str] = None,
+                    ownership: str = "client") -> dict:
     """Score ONE (flow, mechanism) with real Snort, end to end.
 
     Returns a dict with the alert verdict, the per-flow Snort call count, the
     translated source, and the semantics verdict under the byte-equality bar.
-    ``mech=None`` scores the unmodified (baseline) flow.
+    ``mech=None`` scores the unmodified (baseline) flow.  ``ownership``
+    selects the threat model: mechanisms may rewrite 'client' packets only
+    (default) or 'both' endpoints (two-sided model, still under the strict
+    two-stream bar).
     """
     import tempfile
 
@@ -362,7 +366,7 @@ def score_flow_real(packets: Sequence, client_ip: str, attempt_id: int,
 
     orig = [p.copy() for p in packets]
     if mech is not None:
-        mut = mutate_client_only(orig, mech, client_ip)
+        mut = mutate_client_only(orig, mech, client_ip, ownership=ownership)
     else:
         mut = orig
     sem = bytes_equal_semantics(orig, mut, client_ip)
