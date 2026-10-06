@@ -54,12 +54,14 @@ def main() -> int:
     ap.add_argument("--no-baseline", action="store_true", help="skip the baseline control")
     ap.add_argument("--capture", default=None,
                     help="restrict evaluation to one capture id")
+    ap.add_argument("--ownership", default="client", choices=("client", "both"),
+                    help="apply mechanisms to 'client' only (default) or 'both' endpoints")
     args = ap.parse_args()
 
     from sb3_contrib import MaskablePPO
 
     env = HiddenDefenderEnv(split=args.split, seed=42, real_snort=False,
-                            capture=args.capture)
+                            capture=args.capture, ownership=args.ownership)
     model = MaskablePPO.load(args.model, env=env)
     by_id = {f["flow_id"]: f for f in env._flows}
 

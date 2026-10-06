@@ -42,6 +42,7 @@ from c2_semantics import (  # noqa: E402
     client_ip_of,
     client_ip_of_packets,
     reassembled_client_bytes,
+    server_ip_of,
 )
 
 CORPUS_PKL = REPO / "snort_validation/reports/hidden_defender_corpus.pkl"
@@ -160,59 +161,73 @@ def mech_applicable(original_payloads, mech: str) -> bool:
     return True
 
 
-def apply_mech(pkts, mech: str, client_ip=None):
-    """Apply a mechanism, touching ONLY the client's packets (Fix 2).
+def apply_mech(pkts, mech: str, client_ip=None, ownership: str = "client"):
+    """Apply a mechanism, touching the client's packets by default (Fix 2).
+
+    ownership="client" (default) = conservative model, unchanged behavior.
+    ownership="both" = allow rewriting BOTH endpoints' packets.  Under both,
+    the byte-equality bar requires BOTH recovered streams to be identical
+    (see c2_semantics.bytes_equal_semantics).  Invalid values raise ValueError.
 
     The attacker owns the client side of the session; rewriting the responder's
     bytes is outside the threat model.  The honest evaluation mutates
-    client-only, so the training env must too -- otherwise a mechanism (e.g.
-    ``reorder``) can look like it broke the command in training while the
-    evaluation's client-only view is unchanged, and the two semantics verdicts
-    disagree.
+    client-only, so the training env must too -- otherwise semantics verdicts
+    disagree.  The ``both`` mode is used only when explicitly opted into and
+    the ceiling is measured with the two-sided bar.
 
     ``client_ip`` defaults to the bot derived from the packets; callers that
     know the flow id should pass ``client_ip_of(flow_id)`` so the identity
     matches the evaluation's exactly.  Rewrites IP/UDP/TCP checksums where a
-    payload changed -- without this Snort drops the packets and every mechanism
-    would 'evade' for the wrong reason.
+    payload changed.
     """
+    if ownership not in ("client", "both"):
+        raise ValueError(f"ownership must be 'client' or 'both', got {ownership!r}")
     out = [p.copy() for p in pkts]
     if client_ip is None:
         client_ip = client_ip_of_packets(out)
+    sip = None
+    if ownership == "both":
+        sip = server_ip_of(out, client_ip)
     client_idx = [i for i, p in enumerate(out)
                   if IP in p and p[IP].src == client_ip]
     pay_idx = [i for i in client_idx
                if Raw in out[i] and len(bytes(out[i][Raw].load)) > 0]
 
+    own_idx = list(client_idx)          # every packet the model may touch
+    tgt_idx = list(pay_idx)             # payload-bearing subset of own_idx
+    if ownership == "both":
+        srv_idx = [i for i, p in enumerate(out)
+                   if IP in p and sip is not None and p[IP].src == sip]
+        srv_pay = [i for i in srv_idx
+                   if Raw in out[i] and len(bytes(out[i][Raw].load)) > 0]
+        own_idx = sorted(set(client_idx) | set(srv_idx))
+        tgt_idx = list(pay_idx) + list(srv_pay)
+
     if mech.startswith("split"):
         from fragment_ops import fragment_plan_to_packets, split_fragments
         off = int(mech[5:])
-        rebuilt, i = [], 0
-        for p in out:
-            if i in pay_idx:
+        rebuilt = []
+        for i, p in enumerate(out):
+            if i in tgt_idx:
                 payload = bytes(p[Raw].load)
                 if 0 < off < len(payload):
                     frags = split_fragments(payload, off)
                     rebuilt.extend(fragment_plan_to_packets(out, frags, i))
-                    i += 1
                     continue
             rebuilt.append(p)
-            i += 1
         return rebuilt
 
     if mech == "overlap8":
         from fragment_ops import fragment_plan_to_packets, overlap_fragments
-        rebuilt, i = [], 0
-        for p in out:
-            if i in pay_idx:
+        rebuilt = []
+        for i, p in enumerate(out):
+            if i in tgt_idx:
                 payload = bytes(p[Raw].load)
                 if 8 < len(payload):
                     frags = overlap_fragments(payload, 8)
                     rebuilt.extend(fragment_plan_to_packets(out, frags, i))
-                    i += 1
                     continue
             rebuilt.append(p)
-            i += 1
         return rebuilt
 
     if mech == "http_header_pad":
@@ -221,7 +236,7 @@ def apply_mech(pkts, mech: str, client_ip=None):
         # skips an unknown header, but prepending breaks the request line.
         from endpoint_model import is_http_request
 
-        for i in pay_idx:
+        for i in tgt_idx:
             p = out[i]
             raw = bytes(p[Raw].load)
             if not is_http_request(raw):
@@ -237,7 +252,7 @@ def apply_mech(pkts, mech: str, client_ip=None):
         # payload-bearing CLIENT packet, which is where the stream begins.
         from fragment_ops import fix_checksums
 
-        for i in pay_idx:
+        for i in tgt_idx:
             p = out[i]
             raw = bytes(p[Raw].load)
             header = b"LEN%d:" % _WRAP_OFFSET
@@ -246,19 +261,19 @@ def apply_mech(pkts, mech: str, client_ip=None):
 
     elif mech.startswith("pad"):
         n = int(mech[3:])
-        for i in pay_idx:
+        for i in tgt_idx:
             p = out[i]
             p[Raw].load = bytes(p[Raw].load) + bytes(n)
 
     elif mech.startswith("prepend"):
         n = int(mech[7:])
-        for i in pay_idx:
+        for i in tgt_idx:
             p = out[i]
             p[Raw].load = bytes(n) + bytes(p[Raw].load)
 
     elif mech.startswith("corrupt"):
         k = int(mech[7:])
-        for i in pay_idx:
+        for i in tgt_idx:
             p = out[i]
             pl = bytearray(bytes(p[Raw].load))
             for j in range(min(k, len(pl))):
@@ -266,12 +281,12 @@ def apply_mech(pkts, mech: str, client_ip=None):
             p[Raw].load = bytes(pl)
 
     elif mech == "reorder":
-        if len(client_idx) >= 3:
-            a, b = client_idx[1], client_idx[2]
+        if len(own_idx) >= 3:
+            a, b = own_idx[1], own_idx[2]
             out[a], out[b] = out[b], out[a]
 
     elif mech == "ttl":
-        for i in client_idx:
+        for i in own_idx:
             if IP in out[i]:
                 out[i][IP].ttl = 33
 
@@ -341,10 +356,14 @@ class HiddenDefenderEnv(gym.Env):
 
     def __init__(self, split: str = "train", real_snort: bool = False,
                  seed: int = 42, max_steps: int = 1,
-                 capture: str | None = None):
+                 capture: str | None = None, ownership: str = "client"):
         super().__init__()
         self.split = split
         self.capture = capture
+        if ownership not in ("client", "both"):
+            raise ValueError(
+                f"ownership must be 'client' or 'both', got {ownership!r}")
+        self.ownership = ownership
         self._flows = load_corpus(split, capture)
         self.real_snort = real_snort
         self._svc = SnortBatchService(batch_size=1) if real_snort else None
@@ -377,7 +396,7 @@ class HiddenDefenderEnv(gym.Env):
         pkts = flow["packets"]
         fid = flow.get("flow_id")
         cip = client_ip_of(fid) if fid else None
-        mut = apply_mech(pkts, mech, cip)
+        mut = apply_mech(pkts, mech, cip, ownership=self.ownership)
         sem = semantics_intact(pkts, mut, cip)
         alert = self._detected(flow, mut)
         return (not alert), sem, alert

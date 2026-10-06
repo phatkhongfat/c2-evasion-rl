@@ -90,7 +90,8 @@ def split_directions(packets: Sequence) -> Tuple[list, list]:
 # ---------------------------------------------------------------------------
 # Fix 2 + 5: mutation is client-only, on a dynamically translated source
 # ---------------------------------------------------------------------------
-def mutate_client_only(packets: Sequence, mech: str, client_ip: Optional[str] = None):
+def mutate_client_only(packets: Sequence, mech: str, client_ip: Optional[str] = None,
+                        ownership: str = "client"):
     """Apply a mechanism while touching ONLY the client's packets (Fix 2).
 
     This does NOT delegate to ``hidden_defender_env.apply_mech``: that function
@@ -98,7 +99,13 @@ def mutate_client_only(packets: Sequence, mech: str, client_ip: Optional[str] = 
     ``payload_indices``, so it mutates the responder's bytes too.  The attacker
     owns the client side only, so each mechanism is re-implemented here over the
     client packet set alone.  ``client_ip`` defaults to the flow initiator.
+
+    ownership="client" (default): conservative, server untouched.
+    ownership="both": allow mutating server's payload packets too (mirrors env)
+    to test the two-sided bar.
     """
+    if ownership not in ("client", "both"):
+        raise ValueError(f"ownership must be 'client' or 'both', got {ownership!r}")
     from scapy.all import IP, Raw, TCP, UDP
     from fragment_ops import (fragment_plan_to_packets, fix_checksums,
                               overlap_fragments, split_fragments)
@@ -115,11 +122,22 @@ def mutate_client_only(packets: Sequence, mech: str, client_ip: Optional[str] = 
     payload_idx = [i for i in client_idx
                    if Raw in out[i] and len(bytes(out[i][Raw].load)) > 0]
 
+    tgt_idx = list(payload_idx)
+    sip = None
+    if ownership == "both" and client_ip:
+        from c2_semantics import server_ip_of
+        sip = server_ip_of(out, client_ip)
+        srv_idx = [i for i, p in enumerate(out)
+                   if IP in p and sip is not None and p[IP].src == sip]
+        srv_pay = [i for i in srv_idx
+                   if Raw in out[i] and len(bytes(out[i][Raw].load)) > 0]
+        tgt_idx = sorted(set(payload_idx) | set(srv_pay))
+
     if mech.startswith("split"):
         off = int(mech[5:])
         rebuilt: list = []
         for i, p in enumerate(out):
-            if i in payload_idx and 0 < off < len(bytes(p[Raw].load)):
+            if i in tgt_idx and 0 < off < len(bytes(p[Raw].load)):
                 frags = split_fragments(bytes(p[Raw].load), off)
                 rebuilt.extend(fragment_plan_to_packets(out, frags, i))
                 continue
@@ -129,7 +147,7 @@ def mutate_client_only(packets: Sequence, mech: str, client_ip: Optional[str] = 
     if mech == "overlap8":
         rebuilt = []
         for i, p in enumerate(out):
-            if i in payload_idx and 8 < len(bytes(p[Raw].load)):
+            if i in tgt_idx and 8 < len(bytes(p[Raw].load)):
                 frags = overlap_fragments(bytes(p[Raw].load), 8)
                 rebuilt.extend(fragment_plan_to_packets(out, frags, i))
                 continue
@@ -155,30 +173,41 @@ def mutate_client_only(packets: Sequence, mech: str, client_ip: Optional[str] = 
 
     elif mech.startswith("pad"):
         n = int(mech[3:])
-        for i in payload_idx:
+        for i in tgt_idx:
             out[i][Raw].load = bytes(out[i][Raw].load) + bytes(n)
 
     elif mech.startswith("prepend"):
         n = int(mech[7:])
-        for i in payload_idx:
+        for i in tgt_idx:
             out[i][Raw].load = bytes(n) + bytes(out[i][Raw].load)
 
     elif mech.startswith("corrupt"):
         k = int(mech[7:])
-        for i in payload_idx:
+        for i in tgt_idx:
             pl = bytearray(bytes(out[i][Raw].load))
             for j in range(min(k, len(pl))):
                 pl[j] = (j * 97 + 13) % 256
             out[i][Raw].load = bytes(pl)
 
     elif mech == "reorder":
-        if len(client_idx) >= 3:
-            a, b = client_idx[1], client_idx[2]
+        own = client_idx
+        if ownership == "both" and sip:
+            srv_idx = [i for i, p in enumerate(out)
+                       if IP in p and p[IP].src == sip]
+            own = sorted(set(client_idx) | set(srv_idx))
+        if len(own) >= 3:
+            a, b = own[1], own[2]
             out[a], out[b] = out[b], out[a]
 
     elif mech == "ttl":
-        for i in client_idx:
-            out[i][IP].ttl = 33
+        own = client_idx
+        if ownership == "both" and sip:
+            srv_idx = [i for i, p in enumerate(out)
+                       if IP in p and p[IP].src == sip]
+            own = sorted(set(client_idx) | set(srv_idx))
+        for i in own:
+            if IP in out[i]:
+                out[i][IP].ttl = 33
 
     elif mech == "noop":
         pass
