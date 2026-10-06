@@ -295,10 +295,20 @@ def apply_mech(pkts, mech: str, client_ip=None):
     return out
 
 
-def load_corpus(split: str = "train"):
+def load_corpus(split: str = "train", capture: str | None = None):
+    """Load flows, optionally restricted to one capture.
+
+    ``split="all"`` pools train+test; combined with ``capture`` it yields the
+    flow set for one leave-one-capture-out direction (train on A, test on B).
+    """
     with open(CORPUS_PKL, "rb") as fh:
         data = pickle.load(fh)
-    return data[split]
+    flows = (data["train"] + data["test"]) if split == "all" else data[split]
+    if capture:
+        flows = [f for f in flows if f.get("capture") == capture]
+        if not flows:
+            raise ValueError(f"no flows for split={split!r} capture={capture!r}")
+    return flows
 
 
 # Framing/affordance block appended to every observation.  Without it the
@@ -330,10 +340,12 @@ class HiddenDefenderEnv(gym.Env):
     metadata = {"render_modes": []}
 
     def __init__(self, split: str = "train", real_snort: bool = False,
-                 seed: int = 42, max_steps: int = 1):
+                 seed: int = 42, max_steps: int = 1,
+                 capture: str | None = None):
         super().__init__()
         self.split = split
-        self._flows = load_corpus(split)
+        self.capture = capture
+        self._flows = load_corpus(split, capture)
         self.real_snort = real_snort
         self._svc = SnortBatchService(batch_size=1) if real_snort else None
         self.max_steps = max_steps
