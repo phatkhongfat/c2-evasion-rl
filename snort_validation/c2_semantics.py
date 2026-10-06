@@ -220,13 +220,42 @@ def reassembled_client_bytes(packets: Sequence, client_ip: str) -> bytes:
     return b"".join(parts)
 
 
+def server_ip_of(packets: Sequence, client_ip: str) -> Optional[str]:
+    """The responder address: the other endpoint of the session (the C2
+    server side).  Moved here from eval_pipeline so the semantics bar can
+    guard the server stream too (two-sided ownership); eval_pipeline
+    re-imports it, so external callers are unaffected."""
+    from scapy.all import IP
+
+    for p in packets:
+        if IP in p and p[IP].src != client_ip:
+            return p[IP].src
+        if IP in p and p[IP].dst != client_ip:
+            return p[IP].dst
+    return None
+
+
 def bytes_equal_semantics(original_packets: Sequence, mutated_packets: Sequence,
                           client_ip: str) -> bool:
-    """True iff the recovered CLIENT stream is byte-for-byte identical.
+    """True iff BOTH recovered streams are byte-for-byte identical.
 
-    This is the single strict bar (Fix 3).  Training's reward and the honest
-    evaluation both call it, so a mechanism the reward treats as
-    semantics-preserving is exactly one the evaluation will too.
+    This is the single strict bar (Fix 3), generalized to both directions:
+    the client stream must be identical AND the server stream must be
+    identical (when the session has a responder).  Under the default
+    ``ownership="client"`` the server packets are never mutated, so the
+    second comparison is vacuously true and model-A results are unchanged;
+    under ``ownership="both"`` it is what stops byte corruption, padding or
+    prepending on the responder side from masquerading as evasion.
+
+    Training's reward and the honest evaluation both call it, so a mechanism
+    the reward treats as semantics-preserving is exactly one the evaluation
+    will too.
     """
-    return (reassembled_client_bytes(original_packets, client_ip)
-            == reassembled_client_bytes(mutated_packets, client_ip))
+    if (reassembled_client_bytes(original_packets, client_ip)
+            != reassembled_client_bytes(mutated_packets, client_ip)):
+        return False
+    sip = server_ip_of(original_packets, client_ip)
+    if sip is None:
+        return True
+    return (reassembled_client_bytes(original_packets, sip)
+            == reassembled_client_bytes(mutated_packets, sip))

@@ -65,19 +65,8 @@ from c2_semantics import (  # noqa: E402
     bytes_equal_semantics as bytes_equal_semantics,
     client_ip_of as client_ip_of,
     reassembled_client_bytes as reassembled_client_bytes,
+    server_ip_of as server_ip_of,
 )
-
-
-def server_ip_of(packets: Sequence, client_ip: str) -> Optional[str]:
-    """The responder address: the other endpoint of the session."""
-    from scapy.all import IP
-
-    for p in packets:
-        if IP in p and p[IP].src != client_ip:
-            return p[IP].src
-        if IP in p and p[IP].dst != client_ip:
-            return p[IP].dst
-    return None
 
 
 def split_directions(packets: Sequence) -> Tuple[list, list]:
