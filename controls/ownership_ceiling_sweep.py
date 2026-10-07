@@ -24,12 +24,19 @@ from hidden_defender_env import ACTION_NAMES, HiddenDefenderEnv  # noqa: E402
 from eval_pipeline import client_ip_of, score_flow_real  # noqa: E402
 
 
-def main() -> int:
+def build_parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser()
     ap.add_argument("--split", default="test")
     ap.add_argument("--out", default=str(
         ROOT / "snort_validation" / "reports" / "ceiling_ownership_both.json"))
-    args = ap.parse_args()
+    ap.add_argument("--conf", default=None,
+                    help="snort conf path (default: ET Open full tier)")
+    return ap
+
+
+def main() -> int:
+    args = build_parser().parse_args()
+    conf_kw = {"conf": Path(args.conf)} if args.conf else {}
 
     env = HiddenDefenderEnv(split=args.split, seed=42, real_snort=False)
     flows = env._flows
@@ -37,7 +44,8 @@ def main() -> int:
     for fi, f in enumerate(flows):
         fid = f["flow_id"]
         cip = client_ip_of(fid)
-        base = score_flow_real(f["packets"], cip, attempt_id=fi, mech=None)
+        base = score_flow_real(f["packets"], cip, attempt_id=fi, mech=None,
+                               ownership="both", **conf_kw)
         # attempt_id must stay inside the Fix-5 /24 translation range
         # (MAX_ATTEMPTS=250); ids only need to be unique within one Snort
         # call's pcap, and every cell is its own subprocess, so modulo is safe.
@@ -45,7 +53,7 @@ def main() -> int:
         for mi, mech in enumerate(ACTION_NAMES):
             r = score_flow_real(f["packets"], cip,
                                 attempt_id=(fi * n_mech + mi) % 250,
-                                mech=mech, ownership="both")
+                                mech=mech, ownership="both", **conf_kw)
             rows.append({"flow_id": fid, "framing": f.get("framing", "?"),
                          "mech": mech, "baseline_alert": base["alert"],
                          "evaded": r["evaded"], "semantics_ok": r["semantics_ok"],
@@ -67,6 +75,7 @@ def main() -> int:
     n_by_framing = {fr: sum(1 for f in flows if f.get("framing") == fr)
                     for fr in per_framing}
     out = {"ownership": "both", "split": args.split, "scorer": "real_snort",
+           "conf": args.conf or "default (ET Open full)",
            "bar": "two_stream_byte_equality",
            "cells": rows,
            "best_per_framing": {fr: {"mech": m, "evaded": n,
