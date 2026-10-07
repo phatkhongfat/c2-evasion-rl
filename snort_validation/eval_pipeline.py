@@ -311,15 +311,18 @@ def translate_source(packets: Sequence, client_ip: str, attempt_id: int,
 # Fix 4 + 6: one PCAP, one Snort call, synchronized read
 # ---------------------------------------------------------------------------
 _ALERT_LINE = re.compile(r"\[\*\*\]")
+_SID_RE = re.compile(r"\[\d+:(\d+):\d+\]")   # [1:SID:rev] trong dòng alert fast
 
 
-def run_snort_single(pcap: Path, conf: Path, logdir: Path,
-                     timeout: int = 600) -> int:
-    """Run Snort on ONE pcap, wait for exit, fsync, then count alerts.
+def _run_snort(pcap: Path, conf: Path, logdir: Path,
+               timeout: int = 600) -> "tuple[int, list[int]]":
+    """Run Snort on ONE pcap, wait for exit, fsync, then return
+    (alert_count, fired_sids).
 
     Fix 6: a non-zero exit RAISES.  Silently returning 0 alerts on a crashed
     Snort would score every flow as evaded -- the single most dangerous failure
     mode in this pipeline.  Fix 4: this function is called once per flow.
+    sids -> P2 severity stratification (plan 2026-10-07).
     """
     logdir.mkdir(parents=True, exist_ok=True)
     for stale in logdir.glob("alert*"):
@@ -342,6 +345,7 @@ def run_snort_single(pcap: Path, conf: Path, logdir: Path,
         time.sleep(0.02)
         alerts = sorted(logdir.glob("alert*"))
     n = 0
+    sids: set = set()
     for af in alerts:
         try:
             fd = os.open(af, os.O_RDONLY)
@@ -352,9 +356,18 @@ def run_snort_single(pcap: Path, conf: Path, logdir: Path,
         except OSError:
             pass
         with open(af, errors="ignore") as fh:
-            n += sum(1 for line in fh
-                     if line.strip() and not line.startswith("#"))
-    return n
+            for line in fh:
+                if line.strip() and not line.startswith("#"):
+                    n += 1
+                    # fired sids -> P2 severity stratification
+                    sids.update(int(x) for x in _SID_RE.findall(line))
+    return n, sorted(sids)
+
+
+def run_snort_single(pcap: Path, conf: Path, logdir: Path,
+                     timeout: int = 600) -> int:
+    """Back-compat wrapper: chỉ trả số alert như trước (plan P2)."""
+    return _run_snort(pcap, conf, logdir, timeout)[0]
 
 
 def score_flow_real(packets: Sequence, client_ip: str, attempt_id: int,
@@ -389,7 +402,7 @@ def score_flow_real(packets: Sequence, client_ip: str, attempt_id: int,
     pcap = tmp / f"flow_{attempt_id}.pcap"
     wrpcap(str(pcap), translated)
 
-    n_alerts = run_snort_single(pcap, conf, tmp / "log")
+    n_alerts, fired_sids = _run_snort(pcap, conf, tmp / "log")
     return {
         "attempt_id": attempt_id,
         "source_ip": attempt_source_ip(attempt_id),
@@ -399,6 +412,7 @@ def score_flow_real(packets: Sequence, client_ip: str, attempt_id: int,
         "evaded": n_alerts == 0,
         "semantics_ok": sem,
         "valid_evasion": (n_alerts == 0) and sem,
+        "sids": fired_sids,          # fired sids -> P2 severity stratification
         "n_snort_calls": 1,
     }
 

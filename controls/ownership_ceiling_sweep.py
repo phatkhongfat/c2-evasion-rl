@@ -49,7 +49,9 @@ def main() -> int:
             rows.append({"flow_id": fid, "framing": f.get("framing", "?"),
                          "mech": mech, "baseline_alert": base["alert"],
                          "evaded": r["evaded"], "semantics_ok": r["semantics_ok"],
-                         "valid_evasion": r["valid_evasion"]})
+                         "valid_evasion": r["valid_evasion"],
+                         "sids": r.get("sids", []),
+                         "baseline_sids": base.get("sids", [])})
         print(f"[{fi + 1}/{len(flows)}] {fid} done @ {time.time() - t0:.0f}s",
               flush=True)
 
