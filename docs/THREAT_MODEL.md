@@ -34,6 +34,10 @@ Numbers under this model:
 - ceiling sweep (real Snort, 560 cells, `controls/ownership_ceiling_sweep.py`,
   report `snort_validation/reports/ceiling_ownership_both.json`): **100 %**
   (40/40) with `split8` — 16/16 http + **24/24 neris**, all `semantics_ok=True`.
+- retrained PPO (40 epochs, real-Snort teacher, 3 seeds, honest eval,
+  `snort_validation/reports/ppo_both_test_RS64_s{7,1337,42}.json`): **100.0 %**
+  (40/40) for **every seed**, `semantics_breaks = 0`, baseline alerted 40/40,
+  policy converged to `split8` on all flows.
 
 ## Wire-through (DRY)
 
