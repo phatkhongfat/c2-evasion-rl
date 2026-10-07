@@ -17,7 +17,7 @@ REPO = Path("/root/.hermes/c2-evasion-rl")
 sys.path.insert(0, str(REPO / "ai_agent"))
 sys.path.insert(0, str(REPO / "snort_validation"))
 
-from scapy.all import IP, Raw, TCP  # noqa: E402
+from scapy.all import Ether, IP, Raw, TCP  # noqa: E402
 
 from c2_semantics import bytes_equal_semantics  # noqa: E402
 from eval_pipeline import mutate_client_only  # noqa: E402
@@ -25,14 +25,19 @@ from hidden_defender_env import apply_mech  # noqa: E402
 
 
 def _bidirectional_flow():
-    """client 10.0.0.1 <-> server 10.0.0.2, both sides carry payloads."""
+    """client 10.0.0.1 <-> server 10.0.0.2, both sides carry payloads.
+
+    Framed in Ether because fragment_plan_to_packets now emits wire-frames of
+    the SAME link class as the input packets (P0 fix); a bare-IP fixture would
+    be non-deliverable by construction and the bar (correctly) refuses it.
+    """
     pkts = [
-        IP(src="10.0.0.1", dst="10.0.0.2") / TCP(sport=1234, dport=4444, flags="S"),
-        IP(src="10.0.0.2", dst="10.0.0.1") / TCP(sport=4444, dport=1234, flags="SA"),
-        IP(src="10.0.0.1", dst="10.0.0.2") / TCP(sport=1234, dport=4444, flags="A"),
-        IP(src="10.0.0.1", dst="10.0.0.2") / TCP(sport=1234, dport=4444, flags="PA")
+        Ether() / IP(src="10.0.0.1", dst="10.0.0.2") / TCP(sport=1234, dport=4444, flags="S"),
+        Ether() / IP(src="10.0.0.2", dst="10.0.0.1") / TCP(sport=4444, dport=1234, flags="SA"),
+        Ether() / IP(src="10.0.0.1", dst="10.0.0.2") / TCP(sport=1234, dport=4444, flags="A"),
+        Ether() / IP(src="10.0.0.1", dst="10.0.0.2") / TCP(sport=1234, dport=4444, flags="PA")
         / Raw(load=b"C" * 200),
-        IP(src="10.0.0.2", dst="10.0.0.1") / TCP(sport=4444, dport=1234, flags="PA")
+        Ether() / IP(src="10.0.0.2", dst="10.0.0.1") / TCP(sport=4444, dport=1234, flags="PA")
         / Raw(load=b"S" * 200),
     ]
     return pkts, "10.0.0.1", "10.0.0.2"
@@ -51,17 +56,24 @@ def test_bar_rejects_server_side_byte_change():
 
 def test_bar_accepts_fragmentation_of_server_stream():
     """Fragmentation preserves every byte, so fragmenting the server reply
-    must still pass the bar (vacuous pass before Phase 1, meaningful after)."""
+    must still pass the bar (vacuous pass before Phase 1, meaningful after).
+
+    Split at 24 (not 8): the TCP header is 20 bytes, so a cut at 8 would need
+    IP offset 28 — not 8-aligned — and the P0 fix REJECTS that geometry (a
+    ValueError that the caller turns into "keep the original packet").  At 24
+    the re-aligned cut is 20 (24-4): frag0 = TH(20)+20 = 40 bytes, 40 ≡ 0 (mod 8).
+    """
     from fragment_ops import fragment_plan_to_packets, split_fragments
 
     pkts, cip, sip = _bidirectional_flow()
     mut = []
     for idx, p in enumerate(pkts):
         if IP in p and p[IP].src == sip and Raw in p:
-            frags = split_fragments(bytes(p[Raw].load), 8)
+            frags = split_fragments(bytes(p[Raw].load), 24)
             mut.extend(fragment_plan_to_packets(pkts, frags, idx))
         else:
             mut.append(p)
+    assert len(mut) > len(pkts)                      # server reply really split
     assert bytes_equal_semantics(pkts, mut, cip) is True
 
 

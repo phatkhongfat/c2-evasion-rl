@@ -137,21 +137,35 @@ def mutate_client_only(packets: Sequence, mech: str, client_ip: Optional[str] = 
         off = int(mech[5:])
         rebuilt: list = []
         for i, p in enumerate(out):
-            if i in tgt_idx and 0 < off < len(bytes(p[Raw].load)):
-                frags = split_fragments(bytes(p[Raw].load), off)
-                rebuilt.extend(fragment_plan_to_packets(out, frags, i))
-                continue
-            rebuilt.append(p)
+            out_frags = None
+            if i in tgt_idx:
+                payload = bytes(p[Raw].load)
+                if 0 < off < len(payload):
+                    try:
+                        out_frags = fragment_plan_to_packets(out, split_fragments(payload, off), i)
+                    except ValueError:
+                        out_frags = None
+            if out_frags is not None:
+                rebuilt.extend(out_frags)
+            else:
+                rebuilt.append(p)
         return rebuilt
 
     if mech == "overlap8":
         rebuilt = []
         for i, p in enumerate(out):
-            if i in tgt_idx and 8 < len(bytes(p[Raw].load)):
-                frags = overlap_fragments(bytes(p[Raw].load), 8)
-                rebuilt.extend(fragment_plan_to_packets(out, frags, i))
-                continue
-            rebuilt.append(p)
+            out_frags = None
+            if i in tgt_idx:
+                payload = bytes(p[Raw].load)
+                if 8 < len(payload):
+                    try:
+                        out_frags = fragment_plan_to_packets(out, overlap_fragments(payload, 8), i)
+                    except ValueError:
+                        out_frags = None
+            if out_frags is not None:
+                rebuilt.extend(out_frags)
+            else:
+                rebuilt.append(p)
         return rebuilt
 
     if mech == "http_header_pad":

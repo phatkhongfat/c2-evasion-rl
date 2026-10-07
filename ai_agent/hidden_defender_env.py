@@ -208,26 +208,36 @@ def apply_mech(pkts, mech: str, client_ip=None, ownership: str = "client"):
         off = int(mech[5:])
         rebuilt = []
         for i, p in enumerate(out):
+            out_frags = None
             if i in tgt_idx:
                 payload = bytes(p[Raw].load)
                 if 0 < off < len(payload):
-                    frags = split_fragments(payload, off)
-                    rebuilt.extend(fragment_plan_to_packets(out, frags, i))
-                    continue
-            rebuilt.append(p)
+                    try:
+                        out_frags = fragment_plan_to_packets(out, split_fragments(payload, off), i)
+                    except ValueError:
+                        out_frags = None   # không có hình học hợp lệ: giữ packet
+            if out_frags is not None:
+                rebuilt.extend(out_frags)
+            else:
+                rebuilt.append(p)
         return rebuilt
 
     if mech == "overlap8":
         from fragment_ops import fragment_plan_to_packets, overlap_fragments
         rebuilt = []
         for i, p in enumerate(out):
+            out_frags = None
             if i in tgt_idx:
                 payload = bytes(p[Raw].load)
                 if 8 < len(payload):
-                    frags = overlap_fragments(payload, 8)
-                    rebuilt.extend(fragment_plan_to_packets(out, frags, i))
-                    continue
-            rebuilt.append(p)
+                    try:
+                        out_frags = fragment_plan_to_packets(out, overlap_fragments(payload, 8), i)
+                    except ValueError:
+                        out_frags = None
+            if out_frags is not None:
+                rebuilt.extend(out_frags)
+            else:
+                rebuilt.append(p)
         return rebuilt
 
     if mech == "http_header_pad":

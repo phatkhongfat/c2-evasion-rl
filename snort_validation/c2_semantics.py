@@ -14,6 +14,7 @@ An evasion counts only when Snort does not alert AND the command survives.
 """
 from __future__ import annotations
 
+from collections import Counter
 from dataclasses import dataclass
 from typing import List, Optional, Sequence
 
@@ -235,22 +236,102 @@ def server_ip_of(packets: Sequence, client_ip: str) -> Optional[str]:
     return None
 
 
+def wire_deliverable(original_packets, mutated_packets) -> bool:
+    """True iff `mutated_packets` có thể thực sự đi lên wire và đến endpoint
+    với CÙNG bytes:
+
+    * một link type đồng nhất, khớp capture gốc (pcap trộn record Ether với
+      record IP trần bị libpcap/Snort từ chối: "Inconsistent linktypes");
+    * cấu trúc fragment hợp lệ: offset-0 mang transport header, continuation
+      GIỮ nguyên `proto` và không mang transport header;
+    * theo từng source IP, multiset IP datagram sau reassembly (offset 8-byte,
+      byte đến SAU thắng khi trùng offset — chính sách endpoint phổ biến)
+      bằng multiset của bản gốc.
+
+    Đây là gate mà pipeline từng thiếu: bar cũ phục hồi payload bytes trong
+    bộ nhớ bằng offset bookkeeping bỏ qua gap, nên nó CẶT CỨU cả fragment
+    hỏng mà fragment_plan_to_packets từng sinh ra (không Ether, không L4,
+    proto=0) — pcap mà không endpoint nào nhận được vẫn được tính là
+    semantics-preserving evasion. Xem tests/test_wire_deliverability.py.
+    """
+    from scapy.all import IP
+
+    if not original_packets or not mutated_packets:
+        return False
+    link = type(mutated_packets[0])
+    if link is not type(original_packets[0]):
+        return False
+    if any(type(p) is not link for p in mutated_packets):
+        return False
+
+    def _is_frag(ip):
+        return int(ip.frag) != 0 or bool(int(ip.flags) & 0x1)
+
+    def _datagrams(packets):
+        """-> {src_ip: Counter(datagram_bytes)} hoặc None nếu không phục hồi nổi."""
+        acc = {}
+        i, n = 0, len(packets)
+        while i < n:
+            p = packets[i]
+            if IP not in p:
+                i += 1
+                continue
+            ip = p[IP]
+            if not _is_frag(ip):
+                acc.setdefault(ip.src, Counter())[bytes(ip.payload)] += 1
+                i += 1
+                continue
+            # một dãy fragment (cắt tại fragment offset-0 kế tiếp, cùng id/src/dst)
+            gid, gsrc, gdst = int(ip.id), ip.src, ip.dst
+            run = []
+            while i < n and IP in packets[i]:
+                q = packets[i][IP]
+                if (not _is_frag(q) or int(q.id) != gid
+                        or q.src != gsrc or q.dst != gdst):
+                    break
+                if int(q.frag) == 0 and run:
+                    break
+                run.append(packets[i])
+                i += 1
+            buf, cleared_end = bytearray(), -1
+            for r in run:
+                rip = r[IP]
+                off = int(rip.frag) * 8
+                chunk = bytes(rip.payload)     # IP payload = TH + data
+                if not chunk:
+                    return None                # fragment rỗng: không hợp lệ
+                if off > len(buf):
+                    return None                # có gap: không phục hồi nổi
+                end = off + len(chunk)
+                if end > len(buf):
+                    buf.extend(chunk[len(buf) - off:])
+                else:
+                    buf[off:end] = chunk       # trùng offset: byte sau thắng
+                if not (int(rip.flags) & 0x1):
+                    cleared_end = max(cleared_end, end)
+            if cleared_end != len(buf):
+                return None                    # dãy fragment không kết thúc trọn vẹn
+            acc.setdefault(gsrc, Counter())[bytes(buf)] += 1
+        return acc
+
+    a = _datagrams(original_packets)
+    b = _datagrams(mutated_packets)
+    if a is None or b is None:
+        return False
+    if a.keys() != b.keys():
+        return False
+    return all(a[k] == b[k] for k in a)
+
+
 def bytes_equal_semantics(original_packets: Sequence, mutated_packets: Sequence,
                           client_ip: str) -> bool:
-    """True iff BOTH recovered streams are byte-for-byte identical.
-
-    This is the single strict bar (Fix 3), generalized to both directions:
-    the client stream must be identical AND the server stream must be
-    identical (when the session has a responder).  Under the default
-    ``ownership="client"`` the server packets are never mutated, so the
-    second comparison is vacuously true and model-A results are unchanged;
-    under ``ownership="both"`` it is what stops byte corruption, padding or
-    prepending on the responder side from masquerading as evasion.
-
-    Training's reward and the honest evaluation both call it, so a mechanism
-    the reward treats as semantics-preserving is exactly one the evaluation
-    will too.
+    """True iff BOTH recovered streams are byte-for-byte identical
+    in BOTH directions **and** the mutated capture is wire-deliverable
+    (wire_deliverable). Checked BEFORE assembly so a capture no endpoint
+    could ever reassemble can never pass the bar.
     """
+    if not wire_deliverable(original_packets, mutated_packets):
+        return False
     if (reassembled_client_bytes(original_packets, client_ip)
             != reassembled_client_bytes(mutated_packets, client_ip)):
         return False

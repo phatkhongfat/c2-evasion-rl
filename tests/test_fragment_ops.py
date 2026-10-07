@@ -66,7 +66,8 @@ def test_fragment_plan_to_packets_preserves_all_bytes():
     for b in payload:
         assert b in seen
     # offsets are 8-byte units and only the final fragment clears MF
-    assert [p[IP].frag for p in out] == [0, 1, 0]
+    # IP-space offsets: UDP TH=8 counted -> decoy=0, tail=16/8=2, real=8/8=1
+    assert [p[IP].frag for p in out] == [0, 2, 1]
     assert [int(p[IP].flags) for p in out] == [1, 0, 1]
 
 
