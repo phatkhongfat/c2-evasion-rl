@@ -1,0 +1,36 @@
+{
+ "engine": "suricata",
+ "rules": "/root/.hermes/c2-evasion-rl/snort_validation/et_open_c2/suricata.rules",
+ "cells": [
+  {
+   "flow_id": "botnet-capture-20110811-neris|147.32.84.165:2077->184.82.147.251:80|tcp",
+   "mech": "none",
+   "suricata_alerts": -1,
+   "evaded": false
+  },
+  {
+   "flow_id": "botnet-capture-20110811-neris|147.32.84.165:2077->184.82.147.251:80|tcp",
+   "mech": "split8",
+   "suricata_alerts": -1,
+   "evaded": false
+  },
+  {
+   "flow_id": "botnet-capture-20110811-neris|147.32.84.165:2077->184.82.147.251:80|tcp",
+   "mech": "split16",
+   "suricata_alerts": -1,
+   "evaded": false
+  },
+  {
+   "flow_id": "botnet-capture-20110811-neris|147.32.84.165:2077->184.82.147.251:80|tcp",
+   "mech": "split24",
+   "suricata_alerts": -1,
+   "evaded": false
+  },
+  {
+   "flow_id": "botnet-capture-20110811-neris|147.32.84.165:2077->184.82.147.251:80|tcp",
+   "mech": "overlap8",
+   "suricata_alerts": -1,
+   "evaded": false
+  }
+ ]
+}
