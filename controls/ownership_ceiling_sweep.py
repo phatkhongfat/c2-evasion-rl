@@ -31,15 +31,31 @@ def build_parser() -> argparse.ArgumentParser:
         ROOT / "snort_validation" / "reports" / "ceiling_ownership_both.json"))
     ap.add_argument("--conf", default=None,
                     help="snort conf path (default: ET Open full tier)")
+    ap.add_argument("--corpus", default=None,
+                    help="corpus pickle override (default: the checked-in corpus)")
+    ap.add_argument("--mechs", default="",
+                    help="comma-separated mechanisms to sweep instead of the "
+                         "full ACTION_NAMES list (e.g. split_slow,noop). Lets "
+                         "a mechanism be measured without changing the PPO "
+                         "action space.")
     return ap
+
+
+def resolve_mechs(mechs: str):
+    """--mechs override, or the full ACTION_NAMES list when not given."""
+    if not mechs:
+        return list(ACTION_NAMES)
+    return [m.strip() for m in mechs.split(",") if m.strip()]
 
 
 def main() -> int:
     args = build_parser().parse_args()
     conf_kw = {"conf": Path(args.conf)} if args.conf else {}
 
-    env = HiddenDefenderEnv(split=args.split, seed=42, real_snort=False)
+    env = HiddenDefenderEnv(split=args.split, seed=42, real_snort=False,
+                            corpus=args.corpus)
     flows = env._flows
+    mechs = resolve_mechs(args.mechs)
     rows, t0 = [], time.time()
     for fi, f in enumerate(flows):
         fid = f["flow_id"]
@@ -49,8 +65,8 @@ def main() -> int:
         # attempt_id must stay inside the Fix-5 /24 translation range
         # (MAX_ATTEMPTS=250); ids only need to be unique within one Snort
         # call's pcap, and every cell is its own subprocess, so modulo is safe.
-        n_mech = len(ACTION_NAMES)
-        for mi, mech in enumerate(ACTION_NAMES):
+        n_mech = len(mechs)
+        for mi, mech in enumerate(mechs):
             r = score_flow_real(f["packets"], cip,
                                 attempt_id=(fi * n_mech + mi) % 250,
                                 mech=mech, ownership="both", **conf_kw)
