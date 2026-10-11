@@ -184,7 +184,13 @@ def main() -> int:
     result = {
         "method": "ppo",
         "queries": counter.queries,
-        "evaded": len(counter.solved),
+        # PER-EPOCH evaded count.  `counter.solved` is cumulative across every
+        # epoch and, with the corpus reshuffled each epoch, grows past n_flows
+        # by design (an RS64 run wrote 638 while n_flows=64).  Reporting that
+        # here made `evaded` violate `evaded <= n_flows`, so the cross-check
+        # verifier went red.  The cumulative figure lives under its own key
+        # below; the rate is per-epoch and must divide by n_flows.
+        "evaded": len(counter.epoch_solved),
         "n_flows": N_FLOWS,
         "evasion_pct": round(100.0 * len(counter.epoch_solved) / N_FLOWS, 1),
         "epochs": epochs_run,
