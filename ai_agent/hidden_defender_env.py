@@ -58,18 +58,23 @@ _JUNK_HEADERS = b"".join(
 # Mechanism B: declared byte offset of the real data inside the wrapper.
 _WRAP_OFFSET = 64
 
-# 14 mechanisms.  split8/16/24 and prepend4/8/12 measured; pad/reorder/ttl
+# 15 mechanisms.  split8/16/24 and prepend4/8/12 measured; pad/reorder/ttl
 # measured as 0/80 evaders (kept as informative negatives); corrupt8 breaks
 # semantics (kept so the -10 penalty is observable); noop is the null action.
 # http_header_pad / length_wrapper are protocol-aware (A and B): they are
 # applicable only to a flow whose framing can carry them, and
 # `mech_applicable` keeps the rest out of the denominator.
+# split_slow (index 14) is byte-safe slow fragmentation (fragments spread past
+# frag3's 60s timeout); it evades the whole DNS/UDP family the fast splits miss
+# (measured 40/40 on the v3 test split, ceiling_v3_splitslow_fixed.json) and is
+# masked out unless an owned packet has transport payload > 8 bytes.
 ACTION_NAMES = [
     "split8", "split16", "split24",
     "prepend4", "prepend8", "prepend12",
     "pad16", "reorder", "ttl",
     "corrupt8", "overlap8", "noop",
     "http_header_pad", "length_wrapper",
+    "split_slow",
 ]
 N_ACTIONS = len(ACTION_NAMES)
 
@@ -98,6 +103,11 @@ ACTION_COSTS = {
     11: 0.0,     # noop (no cost)
     12: 0.05,    # http_header_pad (cheap, natural — legitimate HTTP has custom headers)
     13: 0.25,    # length_wrapper (medium cost — needs protocol awareness)
+    # split_slow is the most expensive primitive: it holds a fragment back past
+    # frag3's 60s timeout, so the flow stays open ~75s per fragment (a real
+    # latency/disruption cost).  Priced ABOVE split8's 0.60 so the agent only
+    # pays it when the cheap fast splits do not clear the flow.
+    14: 0.65,    # split_slow
 }
 
 
@@ -108,9 +118,16 @@ PROTOCOL_MATCH_BONUS = 0.15
 # below rewards any of these (gated on a real valid evasion) instead of one
 # hard-coded action, so the policy is free to prefer whichever is cheapest on
 # a given flow while still not collapsing onto the framing-agnostic generic.
+#
+# ``dns`` and ``irc`` are the framings the rebuilt v3 corpus actually stores
+# (detect_framing over these payloads yields dns/irc), and on both the fast
+# splits fail while slow fragmentation clears the flow -- so split_slow is the
+# appropriate primitive there.  ``http``/``neris`` keep their existing sets.
 PROTOCOL_APPROPRIATE = {
     "http": ("http_header_pad", "length_wrapper", "split8", "split16", "split24"),
     "neris": ("split8", "split16", "split24", "pad16", "reorder", "ttl"),
+    "dns": ("split_slow",),
+    "irc": ("split_slow",),
 }
 
 
@@ -160,6 +177,10 @@ def mech_applicable(original_payloads, mech: str) -> bool:
         return framing == "http"
     if mech == "length_wrapper":
         return framing == "length2"
+    if mech == "split_slow":
+        # Only meaningful when some payload exceeds the 8-byte fragment unit;
+        # shorter payloads leave apply_mech a no-op, so it is inapplicable.
+        return any(len(p) > 8 for p in original_payloads)
     return True
 
 
@@ -451,10 +472,32 @@ class HiddenDefenderEnv(gym.Env):
         return (not alert), sem, alert
 
     # -- gym API ----------------------------------------------------------
+    def _owned_payloads(self, flow):
+        """Transport payloads of the packets the attacker may rewrite.
+
+        Under ownership="client" that is the client's packets; under "both" the
+        server's too.  Used by the mask so split_slow's applicability is judged
+        on exactly the packets apply_mech would fragment.
+        """
+        pkts = flow["packets"]
+        cip = client_ip_of(flow["flow_id"])
+        ips = {cip}
+        if self.ownership == "both":
+            sip = server_ip_of(pkts, cip)
+            if sip is not None:
+                ips.add(sip)
+        out = []
+        for p in pkts:
+            if IP in p and p[IP].src in ips:
+                pl = transport_payload(p)
+                if pl:
+                    out.append(pl)
+        return out
+
     def _compute_action_mask(self) -> list:
         """Direction 2: Compute which actions are applicable for current flow's protocol.
         
-        Returns a list of 14 binary values (0/1) where:
+        Returns a list of 15 binary values (0/1) where:
         - 1 = action is applicable (semantics-preserving for this protocol)
         - 0 = action is not applicable (would break semantics or be protocol-invalid)
         
@@ -462,16 +505,17 @@ class HiddenDefenderEnv(gym.Env):
         - noop (11) is always allowed
         - http_header_pad (12) only on HTTP
         - length_wrapper (13) only on HTTP (needs body to wrap)
+        - split_slow (14) only when an owned packet has transport payload > 8
         - All split/prepend/ttl/reorder/overlap actions apply to any protocol (IP layer)
         """
         if self._idx >= len(self._flows):
-            return [1] * 14  # Default: all allowed if out of bounds
+            return [1] * N_ACTIONS  # Default: all allowed if out of bounds
         
         flow = self._flows[self._idx]
         framing = flow.get("framing", "unknown")
         
         # Start: all actions allowed
-        mask = [1] * 14
+        mask = [1] * N_ACTIONS
         
         # HTTP-only actions
         if framing != "http":
@@ -484,6 +528,12 @@ class HiddenDefenderEnv(gym.Env):
             mask[3] = 0   # prepend4
             mask[4] = 0   # prepend8
             mask[5] = 0   # prepend12
+        
+        # split_slow needs an owned packet whose transport payload exceeds the
+        # 8-byte fragment unit; otherwise apply_mech is a no-op.  Mirrors the
+        # condition inside apply_mech: `0 < 8 < len(payload)`.
+        if not any(len(p) > 8 for p in self._owned_payloads(flow)):
+            mask[14] = 0  # split_slow
         
         return mask
 

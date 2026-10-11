@@ -33,6 +33,7 @@ from scapy.all import IP, Raw  # noqa: E402
 
 from hidden_defender_env import (  # noqa: E402
     ACTION_NAMES,
+    N_ACTIONS,
     apply_mech,
     load_corpus,
     payloads_of,
@@ -273,6 +274,14 @@ def test_policy_mechanism_diversity_is_measured():
         pytest.skip(
             f"shipped model observation_space {obs_shape} predates OBS_DIM="
             f"{OBS_DIM}; retrain (Phase 4) to re-enable this measurement")
+    # P3: split_slow made the action space 15.  A checkpoint trained on the old
+    # 14-action space cannot be loaded into the 15-action env, so guard on the
+    # action space the same way as on OBS_DIM and skip the stale artefact.
+    act_n = params["action_space"]["n"]
+    if int(act_n) != N_ACTIONS:
+        pytest.skip(
+            f"shipped model action_space Discrete({act_n}) predates N_ACTIONS="
+            f"{N_ACTIONS} (split_slow added); retrain to re-enable")
 
     model = MaskablePPO.load(str(model_path), env=env)
     obs, _ = env.reset(seed=42)

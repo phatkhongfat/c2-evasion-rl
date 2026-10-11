@@ -47,14 +47,16 @@ def test_obs_carries_no_rule_information():
         assert all(isinstance(v, float) for v in obs)
 
 
-def test_action_space_is_discrete_fourteen():
+def test_action_space_is_discrete_fifteen():
     env = HiddenDefenderEnv(split="train")
-    assert env.action_space.n == N_ACTIONS == 14
+    assert env.action_space.n == N_ACTIONS == 15
     assert env.observation_space.shape == (OBS_DIM,)
     assert ACTION_NAMES[:3] == ["split8", "split16", "split24"]
     assert "prepend4" in ACTION_NAMES and "noop" in ACTION_NAMES
     # Protocol-aware mechanisms A and B.
     assert {"http_header_pad", "length_wrapper"} <= set(ACTION_NAMES)
+    # P3: slow fragmentation joined the action space as the 15th action.
+    assert ACTION_NAMES[14] == "split_slow"
 
 
 def test_step_returns_wellformed_gym_tuple():

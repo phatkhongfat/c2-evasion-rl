@@ -86,10 +86,12 @@ def test_mutate_client_only_handles_split_slow():
     assert bytes_equal_semantics(orig, mut, CIP) is True
 
 
-def test_split_slow_is_not_in_the_ppo_action_space_yet():
-    """split_slow is deliberately NOT in ACTION_NAMES: adding it would change
-    N_ACTIONS 14->15 and invalidate the trained PPO checkpoint. Registration
-    waits until the ceiling sweep proves it evades. The sweep reaches it via
-    --mechs, not the action space."""
-    from hidden_defender_env import ACTION_NAMES
-    assert "split_slow" not in ACTION_NAMES
+def test_split_slow_is_now_the_fifteenth_action():
+    """split_slow was deliberately OUT of ACTION_NAMES until the v3fixed
+    ceiling sweep proved it evades (40/40). It is now registered as the 15th
+    action (index 14), changing N_ACTIONS 14->15; the pre-existing PPO
+    checkpoints are therefore superseded and must be retrained (P3)."""
+    from hidden_defender_env import ACTION_NAMES, N_ACTIONS
+    assert "split_slow" in ACTION_NAMES
+    assert N_ACTIONS == 15
+    assert ACTION_NAMES.index("split_slow") == 14

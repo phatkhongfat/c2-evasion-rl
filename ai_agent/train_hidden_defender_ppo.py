@@ -42,10 +42,10 @@ class BatchEnv(gym.Env):
     metadata = {"render_modes": []}
 
     def __init__(self, split="train", seed=SEED, real_snort=False,
-                 capture=None, ownership="client"):
+                 capture=None, ownership="client", corpus=None):
         self.inner = HiddenDefenderEnv(split=split, seed=seed,
                                       real_snort=real_snort, capture=capture,
-                                      ownership=ownership)
+                                      ownership=ownership, corpus=corpus)
         self.action_space = self.inner.action_space
         self.observation_space = self.inner.observation_space
         self.n = len(self.inner._flows)
@@ -140,6 +140,8 @@ def main() -> int:
     ap.add_argument("--ownership", default="client",
                     choices=("client", "both"),
                     help="apply mechanisms to 'client' packets only (default) or 'both' endpoints (two-sided ceiling)")
+    ap.add_argument("--corpus", default=None,
+                    help="corpus pickle override (default: the checked-in v1 corpus)")
     args = ap.parse_args()
 
     N_FLOWS, MAX_EPOCHS, SEED = args.n_flows, args.max_epochs, args.seed
@@ -153,7 +155,7 @@ def main() -> int:
     # so scoring must be selectable, not hardcoded to the surrogate.
     env = BatchEnv(split=args.split, seed=SEED,
                    real_snort=args.real_snort, capture=args.capture,
-                   ownership=args.ownership)
+                   ownership=args.ownership, corpus=args.corpus)
     scorer = "real_snort" if args.real_snort else "replica"
     print(f"[*] training with scorer={scorer}")
     model = MaskablePPO("MlpPolicy", env, n_steps=N_FLOWS, batch_size=N_FLOWS,

@@ -22,3 +22,10 @@ def test_split_is_configurable():
 
 def test_capture_is_configurable():
     assert '"--capture"' in _MAIN
+
+
+def test_corpus_is_configurable():
+    """P3: the train CLI must accept a corpus override so the v3fixed corpus
+    can be trained on without editing CORPUS_PKL; default None = v1 path."""
+    assert '"--corpus"' in _MAIN
+    assert "corpus=args.corpus" in _MAIN

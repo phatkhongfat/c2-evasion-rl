@@ -56,12 +56,15 @@ def main() -> int:
                     help="restrict evaluation to one capture id")
     ap.add_argument("--ownership", default="client", choices=("client", "both"),
                     help="apply mechanisms to 'client' only (default) or 'both' endpoints")
+    ap.add_argument("--corpus", default=None,
+                    help="corpus pickle override (default: the checked-in v1 corpus)")
     args = ap.parse_args()
 
     from sb3_contrib import MaskablePPO
 
     env = HiddenDefenderEnv(split=args.split, seed=42, real_snort=False,
-                            capture=args.capture, ownership=args.ownership)
+                            capture=args.capture, ownership=args.ownership,
+                            corpus=args.corpus)
     model = MaskablePPO.load(args.model, env=env)
     by_id = {f["flow_id"]: f for f in env._flows}
 
