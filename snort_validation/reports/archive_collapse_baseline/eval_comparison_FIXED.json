@@ -1,0 +1,63 @@
+{
+  "source_files": {
+    "prefix": "snort_validation/reports/ppo_masked_test.json",
+    "postfix": "snort_validation/reports/ppo_masked_test_FIXED.json",
+    "overfit": "snort_validation/reports/overfit_check_FIXED.json"
+  },
+  "prefix": {
+    "scorer": "real_snort",
+    "n_flows": 40,
+    "valid_evasion": 40,
+    "valid_evasion_pct": 100.0,
+    "mechanism_diversity": 2,
+    "actions_chosen": {
+      "split24": 16,
+      "split8": 24
+    }
+  },
+  "postfix": {
+    "scorer": "real_snort",
+    "pipeline": "fixed_6_fixes",
+    "n_flows": 40,
+    "valid_evasion": 23,
+    "valid_evasion_pct": 57.5,
+    "baseline_alerted": 40,
+    "baseline_alert_pct": 100.0,
+    "semantics_breaks": 0,
+    "mechanism_diversity": 2,
+    "actions_chosen": {
+      "split24": 16,
+      "split8": 24
+    },
+    "per_framing": {
+      "http": {
+        "n": 16,
+        "valid_evasion": 16,
+        "valid_evasion_pct": 100.0
+      },
+      "neris": {
+        "n": 24,
+        "valid_evasion": 7,
+        "valid_evasion_pct": 29.2
+      }
+    }
+  },
+  "delta": {
+    "valid_evasion_pct_pp": -42.5,
+    "mechanism_diversity_change": 0,
+    "learned_more_than_two_actions": false
+  },
+  "overfit_check": {
+    "split": "train",
+    "sample_size": 20,
+    "valid_evasion_pct": 40.0,
+    "test_valid_evasion_pct": 57.5,
+    "generalisation_gap_pp": -17.5
+  },
+  "answers": {
+    "does_rl_still_evade_under_byte_equality": true,
+    "evaded_flows": 23,
+    "did_it_learn_more_than_two_actions": false,
+    "distinct_actions_used": 2
+  }
+}
