@@ -1,0 +1,67 @@
+{
+  "head": "ffa8138797401d6e20b180e5aa791f7e0b0ee882",
+  "status": " M ai_agent/hidden_defender_env.py\n M controls/ownership_ceiling_sweep.py\n D logs/training_directional_10feat.json\n D logs/training_enhanced.json\n D logs/training_packet_level.json\n D logs/training_packet_level_1m.json\n M snort_validation/c2_semantics.py\n M snort_validation/eval_pipeline.py\n M snort_validation/fragment_ops.py\n M snort_validation/reports/ppo_hidden_defender.json\n?? .hermes/plans/2026-10-04_172908-report-readiness-cleanup-and-writing-guide.md\n?? .hermes/plans/2026-10-04_230100-fix-evaluation-pipeline-6-critical-errors.md\n?? .hermes/plans/2026-10-05_153858-fix-policy-collapse-two-actions.md\n?? .hermes/plans/2026-10-06_125737-retrain-eval-and-resolve-neris-ceiling.md\n?? .hermes/plans/2026-10-07_062500-raise-ceiling-two-sided-ownership.md\n?? .hermes/plans/2026-10-07_164401-corrected-evasion-pipeline.md\n?? .hermes/plans/2026-10-10_144754-resolve-naive-equals-expert.md\n?? \"H, l3[2:4])[0]} rest_after_ip={len(l3)-ihl}')\\n    else:\\n        print(f'pkt{n} incl={incl} {kind} NOT-IPv4 first16={pkt[:16].hex()}')\\n    off += 16 + incl; n += 1\\n\"\n?? archive/tests/test_snort_verdict_integrity.py\n?? controls/build_corpus_v3.py\n?? controls/merge_corpora.py\n?? controls/ruleset_probe.py\n?? docs/README_SIC.md\n?? docs/audit/\n?? docs/thesis_vi.pdf\n?? docs/thesis_vi.tex\n?? snort_validation/et_open_c2/naive.rules\n?? snort_validation/et_open_c2/snort_et_c2_httpinspect.conf\n?? snort_validation/reports/.eval_both_s1337_progress.jsonl\n?? snort_validation/reports/.eval_both_s42_progress.jsonl\n?? snort_validation/reports/.eval_both_s7_progress.jsonl\n?? snort_validation/reports/.eval_both_v2_s1337_progress.jsonl\n?? snort_validation/reports/.eval_both_v2_s42_progress.jsonl\n?? snort_validation/reports/.eval_both_v2_s7_progress.jsonl\n?? snort_validation/reports/.eval_fixed_progress.jsonl\n?? snort_validation/reports/.eval_realsnort_progress.jsonl\n?? snort_validation/reports/.eval_rs64_s1337_progress.jsonl\n?? snort_validation/reports/.eval_rs64_s42_progress.jsonl\n?? snort_validation/reports/.eval_rs64_s7_progress.jsonl\n?? snort_validation/reports/archive_collapse_baseline/\n?? snort_validation/reports/baseline_sids_test.json\n?? snort_validation/reports/ceiling_v3_expert.json\n?? snort_validation/reports/ceiling_v3_naive.json\n?? snort_validation/reports/ceiling_v3_splitslow.json\n?? snort_validation/reports/ceiling_v3_splitslow_fixed.json\n?? snort_validation/reports/oracle_split8_test.json\n?? snort_validation/reports/ppo_collapse_fix_train.json\n?? snort_validation/reports/ppo_masked_test_FIXED2.json\n?? snort_validation/reports/ppo_masked_test_RS64_s1337.json\n?? snort_validation/reports/ppo_masked_test_RS64_s42.json\n?? snort_validation/reports/ppo_masked_test_RS64_s7.json\n?? snort_validation/reports/ruleset_probe.json\n?? snort_validation/rulesets/\n?? tests/test_build_corpus_v3.py\n?? tests/test_dissected_payload.py\n?? tests/test_merge_corpora.py\n?? tests/test_ruleset_probe.py\n?? tests/test_split_slow.py\n?? tests/test_sweep_corpus_flag.py\n?? tests/test_sweep_mechs_flag.py\n",
+  "pip_shebang": "#!/root/.hermes/c2-evasion-rl/.venv/bin/python3.12",
+  "entries": [
+    {
+      "path": "ai_agent/hidden_defender_env.py",
+      "sha256": "e83ee8fe9feee637b8e9f0164f12196fd0ce0eede1a017c4262aacf59a27b3d3",
+      "bytes": 23194,
+      "role": "source"
+    },
+    {
+      "path": "ai_agent/train_hidden_defender_ppo.py",
+      "sha256": "51b8064c2d24825b0a62b3ba184f976ee78f176bd42ded26c23c3327d61c0c4b",
+      "bytes": 8472,
+      "role": "source"
+    },
+    {
+      "path": "snort_validation/eval_pipeline.py",
+      "sha256": "5f783022527b10f145878467e7ebb0cdf1437b8bc322f18cac52ee9f066aa298",
+      "bytes": 17793,
+      "role": "source"
+    },
+    {
+      "path": "snort_validation/c2_semantics.py",
+      "sha256": "ca487184ac3575011e5ef6c55a051159fde388fa42e3d5f749e61312d70db661",
+      "bytes": 16415,
+      "role": "source"
+    },
+    {
+      "path": "snort_validation/fragment_ops.py",
+      "sha256": "4ae57db5abd86f6215924b5babfa4b5458be22c75b32ee47dc208ffa62dcdc15",
+      "bytes": 12526,
+      "role": "source"
+    },
+    {
+      "path": "controls/ownership_ceiling_sweep.py",
+      "sha256": "25acef24d4f67dfcf9b575655c7a9e2a82ccd90ee0a15f91ef8eeaff3167ea74",
+      "bytes": 4781,
+      "role": "source"
+    },
+    {
+      "path": "snort_validation/reports/ceiling_v3_splitslow_fixed.json",
+      "sha256": "bffa5dd13b10ec3319efa388ceb51df139cad97188b3565b71db40fc5fbcb9e4",
+      "bytes": 23288,
+      "role": "report"
+    },
+    {
+      "path": "snort_validation/reports/ppo_hidden_defender.json",
+      "sha256": "2e0f17a4aa79275f13891f3cbdb863402e5a3370e96a586b4f9bc20eafee6fce",
+      "bytes": 209,
+      "role": "report"
+    },
+    {
+      "path": "snort_validation/reports/hidden_defender_corpus.json",
+      "sha256": "c9480abfdc53b410f4dd7d39e6e6698ea8d3983db0f862265b792ab75f8a20f3",
+      "bytes": 97627,
+      "role": "report"
+    },
+    {
+      "path": "environment.yml",
+      "sha256": "ca329666727b7e9e6041a40e9b0559b69f7df65078a520f5d85fe9b4efc51627",
+      "bytes": 4334,
+      "role": "configuration"
+    }
+  ]
+}
