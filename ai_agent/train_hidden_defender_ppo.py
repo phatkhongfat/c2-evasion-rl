@@ -42,7 +42,8 @@ class BatchEnv(gym.Env):
     metadata = {"render_modes": []}
 
     def __init__(self, split="train", seed=SEED, real_snort=False,
-                 capture=None, ownership="client", corpus=None):
+                 capture=None, ownership="client", corpus=None,
+                 diversity_coef: float = 0.0):
         self.inner = HiddenDefenderEnv(split=split, seed=seed,
                                       real_snort=real_snort, capture=capture,
                                       ownership=ownership, corpus=corpus)
@@ -50,14 +51,32 @@ class BatchEnv(gym.Env):
         self.observation_space = self.inner.observation_space
         self.n = len(self.inner._flows)
         self._i = 0
+        # P4 frequency-penalty shaping state (per-episode = per-epoch).
+        self.diversity_coef = diversity_coef
+        self._valid_counts: dict = {}
+        self._valid_total = 0
 
     def reset(self, *, seed=None, options=None):
         self._i = 0
+        self._valid_counts = {}
+        self._valid_total = 0
         obs, _ = self.inner.reset()
         return obs, {}
 
     def step(self, action):
         obs, reward, terminated, _trunc, info = self.inner.step(action)
+        # Frequency-penalty shaping (P4): penalise REPEATED use of the same
+        # winning mechanism within the episode so reward ties (e.g. split16 vs
+        # split_slow both net 9.50 on dns) break toward under-used actions.
+        # Gated on a REAL valid evasion: alerted / semantics-broken steps keep
+        # their exact reward, so shaping can never fake an evasion.  lam=0.0
+        # (default) leaves every reward bit-identical to P3.
+        if self.diversity_coef > 0.0 and info.get("evaded") and info.get("semantics_ok"):
+            reward -= frequency_penalty(self._valid_counts, self._valid_total,
+                                        info["action"], self.diversity_coef)
+            self._valid_counts[info["action"]] = \
+                self._valid_counts.get(info["action"], 0) + 1
+            self._valid_total += 1
         self._i += 1
         # End the batch episode after the final flow only; PPO needs a single
         # long trajectory, not a reset every decision.
@@ -74,6 +93,20 @@ class BatchEnv(gym.Env):
         of the next flow is not known until we get there.
         """
         return self.inner.action_masks()
+
+
+def frequency_penalty(counts: dict, total: int, mech: str, lam: float) -> float:
+    """Count-based exploration penalty (Bellemare et al. 2016, bandit analog).
+
+    Returns lam * usage_share(mech), where usage_share is the fraction of this
+    episode's VALID EVASIONS that already used `mech`.  The first use of an
+    action is free (count=0).  Applied ONLY to valid-evasion steps by
+    BatchEnv.step, so it can never manufacture an evasion; lam must stay
+    << REWARD_EVADE (10.0) -- the pass bar caps it at 0.6.
+    """
+    if lam <= 0.0 or total <= 0:
+        return 0.0
+    return lam * (counts.get(mech, 0) / total)
 
 
 class QueryCounter(BaseCallback):
@@ -142,6 +175,9 @@ def main() -> int:
                     help="apply mechanisms to 'client' packets only (default) or 'both' endpoints (two-sided ceiling)")
     ap.add_argument("--corpus", default=None,
                     help="corpus pickle override (default: the checked-in v1 corpus)")
+    ap.add_argument("--diversity-coef", type=float, default=0.0,
+                    help="frequency-penalty coefficient lambda (0.0 = off, "
+                         "bit-identical to P3; recommended probe values 0.3/0.6)")
     args = ap.parse_args()
 
     N_FLOWS, MAX_EPOCHS, SEED = args.n_flows, args.max_epochs, args.seed
@@ -155,7 +191,8 @@ def main() -> int:
     # so scoring must be selectable, not hardcoded to the surrogate.
     env = BatchEnv(split=args.split, seed=SEED,
                    real_snort=args.real_snort, capture=args.capture,
-                   ownership=args.ownership, corpus=args.corpus)
+                   ownership=args.ownership, corpus=args.corpus,
+                   diversity_coef=args.diversity_coef)
     scorer = "real_snort" if args.real_snort else "replica"
     print(f"[*] training with scorer={scorer}")
     model = MaskablePPO("MlpPolicy", env, n_steps=N_FLOWS, batch_size=N_FLOWS,
@@ -185,6 +222,7 @@ def main() -> int:
 
     result = {
         "method": "ppo",
+        "diversity_coef": args.diversity_coef,
         "queries": counter.queries,
         # PER-EPOCH evaded count.  `counter.solved` is cumulative across every
         # epoch and, with the corpus reshuffled each epoch, grows past n_flows
