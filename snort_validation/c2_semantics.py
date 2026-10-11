@@ -27,6 +27,7 @@ class Fragment:
 
     offset: int
     data: bytes
+    delay: float = 0.0   # seconds after the previous fragment (split_slow)
 
 
 def assemble(frags: Sequence[Fragment], policy: str = "first") -> bytes:
@@ -171,6 +172,68 @@ def client_ip_of_packets(packets: Sequence) -> Optional[str]:
     return srcs[0] if srcs else None
 
 
+def transport_payload(pkt) -> bytes:
+    """Payload bytes of a TCP/UDP packet, whatever scapy dissected it into.
+
+    scapy auto-dissects UDP/53 into a DNS layer, so `Raw in pkt` is False on
+    DNS traffic even though the packet carries bytes.  Every mechanism and the
+    byte-equality bar used to filter on `Raw in pkt`, which silently dropped
+    all 33 DNS flows of the corpus from consideration entirely -- they were
+    reported as "not evaded" when the mechanism had never run on them at all.
+    Read the transport payload directly so scapy's dissection cannot decide
+    whether a packet is mutable or visible.
+    """
+    from scapy.all import TCP, UDP, Raw, Padding
+    if Raw in pkt:
+        # Pre-existing convention: read the Raw layer only.  TCP corpus
+        # packets carry Raw followed by Padding, and callers depend on
+        # padding being invisible here.
+        return bytes(pkt[Raw].load)
+    for cls in (TCP, UDP):
+        if cls in pkt:
+            pl = pkt[cls].payload
+            if Padding in pl or isinstance(pl, Padding):
+                return b""          # filler only, nothing to rewrite
+            return bytes(pl)
+    return b""
+
+
+def has_payload(pkt) -> bool:
+    """True when the packet carries transport payload worth rewriting."""
+    return len(transport_payload(pkt)) > 0
+
+
+def as_raw(pkt):
+    """Collapse the transport payload into a single Raw layer, in place.
+
+    In-place mutators (`corrupt`, `pad`, `http_header_pad`, `length_wrapper`)
+    assign to `pkt[Raw].load`, which raises IndexError when scapy dissected
+    the payload into a higher layer such as DNS.  Now that has_payload() lets
+    those packets through, they must be flattened first or the mutator raises.
+
+    The wire bytes are unchanged: an already-parsed layer re-serialises to
+    the same octets it was parsed from, so the byte-equality bar still holds.
+    The bar would catch it either way -- a lossy collapse makes a mechanism
+    score invalid, never a false evasion.
+
+    No-op when the packet already carries a Raw layer.  That guard matters:
+    corpus TCP packets carry Raw followed by Padding, and collapsing those
+    would fold the padding into Raw.load and silently change what the
+    mutators read and write.
+    """
+    from scapy.all import TCP, UDP, Raw
+    if Raw in pkt:
+        return pkt
+    for cls in (TCP, UDP):
+        if cls in pkt:
+            pl = bytes(pkt[cls].payload)
+            del pkt[cls].payload
+            if pl:
+                pkt[cls].add_payload(Raw(load=pl))
+            return pkt
+    return pkt
+
+
 def reassembled_client_bytes(packets: Sequence, client_ip: str) -> bytes:
     """The client command stream a handler recovers: client payloads joined.
 
@@ -187,8 +250,7 @@ def reassembled_client_bytes(packets: Sequence, client_ip: str) -> bytes:
         return int(p[IP].frag) != 0 or bool(int(p[IP].flags) & 0x1)
 
     stream = [p for p in packets
-              if IP in p and Raw in p and p[IP].src == client_ip
-              and len(bytes(p[Raw].load)) > 0]
+              if IP in p and has_payload(p) and p[IP].src == client_ip]
 
     parts: List[bytes] = []
     j = 0
@@ -205,7 +267,7 @@ def reassembled_client_bytes(packets: Sequence, client_ip: str) -> bytes:
             while j < len(stream) and _is_frag(stream[j]) \
                     and int(stream[j][IP].id) == gid:
                 off = int(stream[j][IP].frag) * 8
-                data = bytes(stream[j][Raw].load)
+                data = transport_payload(stream[j])
                 if off == 0 and cur:
                     cur.sort(key=lambda t: t[0])
                     parts.append(b"".join(d for _o, d in cur))
@@ -216,7 +278,7 @@ def reassembled_client_bytes(packets: Sequence, client_ip: str) -> bytes:
                 cur.sort(key=lambda t: t[0])
                 parts.append(b"".join(d for _o, d in cur))
         else:
-            parts.append(bytes(p[Raw].load))
+            parts.append(transport_payload(p))
             j += 1
     return b"".join(parts)
 

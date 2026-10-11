@@ -38,12 +38,14 @@ from snort_batch_service import SnortBatchService  # noqa: E402
 # import is safe: eval_pipeline imports hidden_defender_env only INSIDE
 # functions (deferred), and c2_semantics imports neither, so there is no cycle.
 from c2_semantics import (  # noqa: E402
+    as_raw,
     bytes_equal_semantics,
     client_ip_of,
     client_ip_of_packets,
     reassembled_client_bytes,
     server_ip_of,
 )
+from fragment_ops import has_payload, transport_payload  # noqa: E402
 
 CORPUS_PKL = REPO / "snort_validation/reports/hidden_defender_corpus.pkl"
 
@@ -191,7 +193,7 @@ def apply_mech(pkts, mech: str, client_ip=None, ownership: str = "client"):
     client_idx = [i for i, p in enumerate(out)
                   if IP in p and p[IP].src == client_ip]
     pay_idx = [i for i in client_idx
-               if Raw in out[i] and len(bytes(out[i][Raw].load)) > 0]
+               if has_payload(out[i])]
 
     own_idx = list(client_idx)          # every packet the model may touch
     tgt_idx = list(pay_idx)             # payload-bearing subset of own_idx
@@ -199,9 +201,41 @@ def apply_mech(pkts, mech: str, client_ip=None, ownership: str = "client"):
         srv_idx = [i for i, p in enumerate(out)
                    if IP in p and sip is not None and p[IP].src == sip]
         srv_pay = [i for i in srv_idx
-                   if Raw in out[i] and len(bytes(out[i][Raw].load)) > 0]
+                   if has_payload(out[i])]
         own_idx = sorted(set(client_idx) | set(srv_idx))
         tgt_idx = list(pay_idx) + list(srv_pay)
+
+    if mech == "split_slow":
+        # Ordinary byte-safe fragmentation, but the tail is held back past
+        # frag3's default 60s timeout so the head fragment expires before
+        # reassembly completes.  Bytes and offsets are untouched, so the
+        # byte-equality bar passes by construction.  Intercepted BEFORE the
+        # generic `startswith("split")` branch below, which would otherwise
+        # try int("slow").
+        from fragment_ops import fragment_plan_to_packets, make_slow_fragments
+        rebuilt = []
+        for i, p in enumerate(out):
+            out_frags = None
+            if i in tgt_idx:
+                payload = transport_payload(p)
+                if 0 < 8 < len(payload):
+                    try:
+                        out_frags = fragment_plan_to_packets(
+                            out, make_slow_fragments(payload, 8), i)
+                    except ValueError:
+                        out_frags = None
+            if out_frags is not None:
+                # Apply the per-fragment delay as a real timestamp gap so
+                # frag3's timeout window actually sees the separation.
+                base = float(getattr(p, "time", 0.0) or 0.0)
+                t = base
+                for f in out_frags:
+                    f.time = t
+                    t += 75.0
+                rebuilt.extend(out_frags)
+            else:
+                rebuilt.append(p)
+        return rebuilt
 
     if mech.startswith("split"):
         from fragment_ops import fragment_plan_to_packets, split_fragments
@@ -210,7 +244,7 @@ def apply_mech(pkts, mech: str, client_ip=None, ownership: str = "client"):
         for i, p in enumerate(out):
             out_frags = None
             if i in tgt_idx:
-                payload = bytes(p[Raw].load)
+                payload = transport_payload(p)
                 if 0 < off < len(payload):
                     try:
                         out_frags = fragment_plan_to_packets(out, split_fragments(payload, off), i)
@@ -228,7 +262,7 @@ def apply_mech(pkts, mech: str, client_ip=None, ownership: str = "client"):
         for i, p in enumerate(out):
             out_frags = None
             if i in tgt_idx:
-                payload = bytes(p[Raw].load)
+                payload = transport_payload(p)
                 if 8 < len(payload):
                     try:
                         out_frags = fragment_plan_to_packets(out, overlap_fragments(payload, 8), i)
@@ -247,7 +281,7 @@ def apply_mech(pkts, mech: str, client_ip=None, ownership: str = "client"):
         from endpoint_model import is_http_request
 
         for i in tgt_idx:
-            p = out[i]
+            p = as_raw(out[i])
             raw = bytes(p[Raw].load)
             if not is_http_request(raw):
                 continue
@@ -263,7 +297,7 @@ def apply_mech(pkts, mech: str, client_ip=None, ownership: str = "client"):
         from fragment_ops import fix_checksums
 
         for i in tgt_idx:
-            p = out[i]
+            p = as_raw(out[i])
             raw = bytes(p[Raw].load)
             header = b"LEN%d:" % _WRAP_OFFSET
             out[i] = fix_checksums(p, header + bytes(_WRAP_OFFSET) + raw)
@@ -272,19 +306,19 @@ def apply_mech(pkts, mech: str, client_ip=None, ownership: str = "client"):
     elif mech.startswith("pad"):
         n = int(mech[3:])
         for i in tgt_idx:
-            p = out[i]
+            p = as_raw(out[i])
             p[Raw].load = bytes(p[Raw].load) + bytes(n)
 
     elif mech.startswith("prepend"):
         n = int(mech[7:])
         for i in tgt_idx:
-            p = out[i]
+            p = as_raw(out[i])
             p[Raw].load = bytes(n) + bytes(p[Raw].load)
 
     elif mech.startswith("corrupt"):
         k = int(mech[7:])
         for i in tgt_idx:
-            p = out[i]
+            p = as_raw(out[i])
             pl = bytearray(bytes(p[Raw].load))
             for j in range(min(k, len(pl))):
                 pl[j] = (j * 97 + 13) % 256
@@ -320,13 +354,17 @@ def apply_mech(pkts, mech: str, client_ip=None, ownership: str = "client"):
     return out
 
 
-def load_corpus(split: str = "train", capture: str | None = None):
+def load_corpus(split: str = "train", capture: str | None = None,
+                 corpus: str | None = None):
     """Load flows, optionally restricted to one capture.
 
     ``split="all"`` pools train+test; combined with ``capture`` it yields the
     flow set for one leave-one-capture-out direction (train on A, test on B).
+    ``corpus`` overrides the pickle path so a rebuilt corpus can be measured
+    without editing CORPUS_PKL.
     """
-    with open(CORPUS_PKL, "rb") as fh:
+    path = Path(corpus) if corpus else CORPUS_PKL
+    with open(path, "rb") as fh:
         data = pickle.load(fh)
     flows = (data["train"] + data["test"]) if split == "all" else data[split]
     if capture:
@@ -366,7 +404,8 @@ class HiddenDefenderEnv(gym.Env):
 
     def __init__(self, split: str = "train", real_snort: bool = False,
                  seed: int = 42, max_steps: int = 1,
-                 capture: str | None = None, ownership: str = "client"):
+                 capture: str | None = None, ownership: str = "client",
+                 corpus: str | None = None):
         super().__init__()
         self.split = split
         self.capture = capture
@@ -374,7 +413,7 @@ class HiddenDefenderEnv(gym.Env):
             raise ValueError(
                 f"ownership must be 'client' or 'both', got {ownership!r}")
         self.ownership = ownership
-        self._flows = load_corpus(split, capture)
+        self._flows = load_corpus(split, capture, corpus)
         self.real_snort = real_snort
         self._svc = SnortBatchService(batch_size=1) if real_snort else None
         self.max_steps = max_steps

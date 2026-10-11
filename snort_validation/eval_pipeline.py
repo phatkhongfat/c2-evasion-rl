@@ -65,6 +65,7 @@ from c2_semantics import (  # noqa: E402
     bytes_equal_semantics as bytes_equal_semantics,
     client_ip_of as client_ip_of,
     reassembled_client_bytes as reassembled_client_bytes,
+    as_raw as as_raw,
     server_ip_of as server_ip_of,
 )
 
@@ -107,8 +108,10 @@ def mutate_client_only(packets: Sequence, mech: str, client_ip: Optional[str] = 
     if ownership not in ("client", "both"):
         raise ValueError(f"ownership must be 'client' or 'both', got {ownership!r}")
     from scapy.all import IP, Raw, TCP, UDP
-    from fragment_ops import (fragment_plan_to_packets, fix_checksums,
-                              overlap_fragments, split_fragments)
+    from fragment_ops import (fragment_plan_to_packets, fix_checksums,  # noqa: E501
+                              has_payload, make_slow_fragments,
+                              overlap_fragments, split_fragments,
+                              transport_payload)
     from endpoint_model import is_http_request
     from hidden_defender_env import _JUNK_HEADERS, _WRAP_OFFSET
 
@@ -120,7 +123,7 @@ def mutate_client_only(packets: Sequence, mech: str, client_ip: Optional[str] = 
     client_idx = [i for i, p in enumerate(out)
                   if IP in p and p[IP].src == client_ip]
     payload_idx = [i for i in client_idx
-                   if Raw in out[i] and len(bytes(out[i][Raw].load)) > 0]
+                   if has_payload(out[i])]
 
     tgt_idx = list(payload_idx)
     sip = None
@@ -130,8 +133,37 @@ def mutate_client_only(packets: Sequence, mech: str, client_ip: Optional[str] = 
         srv_idx = [i for i, p in enumerate(out)
                    if IP in p and sip is not None and p[IP].src == sip]
         srv_pay = [i for i in srv_idx
-                   if Raw in out[i] and len(bytes(out[i][Raw].load)) > 0]
+                   if has_payload(out[i])]
         tgt_idx = sorted(set(payload_idx) | set(srv_pay))
+
+    if mech == "split_slow":
+        # Byte-safe fragmentation with the tail held back past frag3's default
+        # 60s timeout. Bytes and offsets are untouched, so the two-stream
+        # byte-equality bar passes by construction. Intercepted BEFORE the
+        # generic startswith("split") branch below, which would try
+        # int("slow").
+        rebuilt: list = []
+        for i, p in enumerate(out):
+            out_frags = None
+            if i in tgt_idx:
+                payload = transport_payload(p)
+                if 0 < 8 < len(payload):
+                    try:
+                        out_frags = fragment_plan_to_packets(
+                            out, make_slow_fragments(payload, 8), i)
+                    except ValueError:
+                        out_frags = None
+            if out_frags is not None:
+                # Turn the per-fragment delay into a real timestamp gap so
+                # frag3's timeout window actually sees the separation.
+                t = float(getattr(p, "time", 0.0) or 0.0)
+                for f in out_frags:
+                    f.time = t
+                    t += 75.0
+                rebuilt.extend(out_frags)
+            else:
+                rebuilt.append(p)
+        return rebuilt
 
     if mech.startswith("split"):
         off = int(mech[5:])
@@ -139,7 +171,7 @@ def mutate_client_only(packets: Sequence, mech: str, client_ip: Optional[str] = 
         for i, p in enumerate(out):
             out_frags = None
             if i in tgt_idx:
-                payload = bytes(p[Raw].load)
+                payload = transport_payload(p)
                 if 0 < off < len(payload):
                     try:
                         out_frags = fragment_plan_to_packets(out, split_fragments(payload, off), i)
@@ -156,7 +188,7 @@ def mutate_client_only(packets: Sequence, mech: str, client_ip: Optional[str] = 
         for i, p in enumerate(out):
             out_frags = None
             if i in tgt_idx:
-                payload = bytes(p[Raw].load)
+                payload = transport_payload(p)
                 if 8 < len(payload):
                     try:
                         out_frags = fragment_plan_to_packets(out, overlap_fragments(payload, 8), i)
@@ -170,6 +202,7 @@ def mutate_client_only(packets: Sequence, mech: str, client_ip: Optional[str] = 
 
     if mech == "http_header_pad":
         for i in payload_idx:
+            out[i] = as_raw(out[i])
             raw = bytes(out[i][Raw].load)
             if not is_http_request(raw):
                 continue
@@ -180,6 +213,7 @@ def mutate_client_only(packets: Sequence, mech: str, client_ip: Optional[str] = 
 
     elif mech == "length_wrapper":
         for i in payload_idx:
+            out[i] = as_raw(out[i])
             out[i] = fix_checksums(
                 out[i], b"LEN%d:" % _WRAP_OFFSET + bytes(_WRAP_OFFSET)
                 + bytes(out[i][Raw].load))
@@ -188,16 +222,19 @@ def mutate_client_only(packets: Sequence, mech: str, client_ip: Optional[str] = 
     elif mech.startswith("pad"):
         n = int(mech[3:])
         for i in tgt_idx:
+            out[i] = as_raw(out[i])
             out[i][Raw].load = bytes(out[i][Raw].load) + bytes(n)
 
     elif mech.startswith("prepend"):
         n = int(mech[7:])
         for i in tgt_idx:
+            out[i] = as_raw(out[i])
             out[i][Raw].load = bytes(n) + bytes(out[i][Raw].load)
 
     elif mech.startswith("corrupt"):
         k = int(mech[7:])
         for i in tgt_idx:
+            out[i] = as_raw(out[i])
             pl = bytearray(bytes(out[i][Raw].load))
             for j in range(min(k, len(pl))):
                 pl[j] = (j * 97 + 13) % 256

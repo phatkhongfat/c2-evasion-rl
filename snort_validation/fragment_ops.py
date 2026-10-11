@@ -22,6 +22,10 @@ from typing import List, Sequence
 from c2_semantics import Fragment
 
 FRAG_UNIT = 8
+# transport_payload / has_payload live in c2_semantics (lower layer) and are
+# re-exported here: fragment_ops already imports FROM c2_semantics, so
+# defining them here would be a circular import.
+from c2_semantics import has_payload, transport_payload  # noqa: E402,F401
 
 
 def _check_split(split_at: int) -> None:
@@ -41,6 +45,30 @@ def split_fragments(payload: bytes, split_at: int = 8) -> List[Fragment]:
             f"split_at {split_at} >= payload length {len(payload)}; nothing to split")
     return [Fragment(offset=0, data=payload[:split_at]),
             Fragment(offset=split_at, data=payload[split_at:])]
+
+
+def make_slow_fragments(payload: bytes, split_at: int = 8,
+                        delay: float = 75.0) -> List[Fragment]:
+    """Two non-overlapping fragments spread MORE than frag3's default 60s
+    timeout apart.
+
+    Rationale: frag3 drops a fragment that has not been completed within its
+    ``timeout`` (default 60s), so a head fragment separated from its tail by
+    more than that never reaches reassembly and the rule never fires.  Unlike
+    `overlap_fragments`, this changes NO bytes and NO offsets: the stream still
+    reassembles to `payload` under every policy, so it passes the byte-equality
+    bar by construction.
+
+    `delay` is the inter-arrival gap in seconds and must be strictly positive.
+    """
+    if delay <= 0:
+        raise ValueError(f"delay must be > 0 seconds, got {delay}")
+    _check_split(split_at)
+    if split_at >= len(payload):
+        raise ValueError(
+            f"split_at {split_at} >= payload length {len(payload)}; nothing to split")
+    return [Fragment(offset=0, data=payload[:split_at], delay=0.0),
+            Fragment(offset=split_at, data=payload[split_at:], delay=delay)]
 
 
 def overlap_fragments(payload: bytes, split_at: int = 8,
@@ -105,7 +133,7 @@ def fragment_plan_to_packets(packets: Sequence, frags: Sequence[Fragment],
     pkt = packets[target_idx]
     if IP not in pkt:
         raise ValueError("target packet has no IP layer to fragment")
-    if Raw not in pkt:
+    if not has_payload(pkt):
         raise ValueError("target packet has no payload to fragment")
     ip = pkt[IP]
 
@@ -186,6 +214,7 @@ def fragment_plan_to_packets(packets: Sequence, frags: Sequence[Fragment],
     terminator = max(i for i in range(n) if ip_off[i] == max_off)
 
     out = []
+    total_data = sum(len(d) for d in data_orig)
     for i in range(n):
         fip = IP(src=ip.src, dst=ip.dst, id=ip.id, ttl=ip.ttl, proto=proto,
                  frag=ip_off[i] // 8,
@@ -193,6 +222,15 @@ def fragment_plan_to_packets(packets: Sequence, frags: Sequence[Fragment],
         seg = outer.copy() / fip if outer is not None else fip
         if ip_off[i] == 0 and th_layer is not None:
             seg = seg / th_layer.copy()
+            if UDP in seg:
+                # The offset-0 fragment carries the transport header, so its
+                # UDP length/checksum must describe the WHOLE reassembled
+                # datagram -- not this fragment's slice. scapy only writes
+                # `len` when it is None, so setting it explicitly survives
+                # post_build; without this a programmatically built packet
+                # (len unset) is stamped with 8+len(this fragment) and the
+                # reassembled datagram no longer matches the original bytes.
+                seg[UDP].len = th_len + total_data
         seg = seg / Raw(load=data_orig[i])
         out.append(seg)
     return out
