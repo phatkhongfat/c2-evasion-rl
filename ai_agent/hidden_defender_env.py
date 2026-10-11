@@ -65,9 +65,9 @@ _WRAP_OFFSET = 64
 # applicable only to a flow whose framing can carry them, and
 # `mech_applicable` keeps the rest out of the denominator.
 # split_slow (index 14) is byte-safe slow fragmentation (fragments spread past
-# frag3's 60s timeout); it evades the whole DNS/UDP family the fast splits miss
-# (measured 40/40 on the v3 test split, ceiling_v3_splitslow_fixed.json) and is
-# masked out unless an owned packet has transport payload > 8 bytes.
+# frag3's 60s timeout); it was measured 40/40 on the v3 test split
+# (ceiling_v3_splitslow_fixed.json) and is masked out unless an owned packet
+# has transport payload > 8 bytes.
 ACTION_NAMES = [
     "split8", "split16", "split24",
     "prepend4", "prepend8", "prepend12",
@@ -119,10 +119,11 @@ PROTOCOL_MATCH_BONUS = 0.15
 # hard-coded action, so the policy is free to prefer whichever is cheapest on
 # a given flow while still not collapsing onto the framing-agnostic generic.
 #
-# ``dns`` and ``irc`` are the framings the rebuilt v3 corpus actually stores
-# (detect_framing over these payloads yields dns/irc), and on both the fast
-# splits fail while slow fragmentation clears the flow -- so split_slow is the
-# appropriate primitive there.  ``http``/``neris`` keep their existing sets.
+# ``dns`` and ``irc`` are framings the rebuilt v3 corpus stores; split_slow was
+# measured to clear 40/40 v3 test flows, so it is an appropriate primitive
+# there.  (Note: the retrained policies converged on split8/split16 instead --
+# the fast splits also clear all 40 -- so this is an offered option, not a
+# claim that the fast splits fail.)  ``http``/``neris`` keep their sets.
 PROTOCOL_APPROPRIATE = {
     "http": ("http_header_pad", "length_wrapper", "split8", "split16", "split24"),
     "neris": ("split8", "split16", "split24", "pad16", "reorder", "ttl"),

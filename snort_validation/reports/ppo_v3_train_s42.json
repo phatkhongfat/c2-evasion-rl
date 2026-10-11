@@ -1,0 +1,11 @@
+{
+  "method": "ppo",
+  "queries": 352,
+  "evaded": 21,
+  "n_flows": 22,
+  "evasion_pct": 95.5,
+  "epochs": 16,
+  "semantics_breaks": 75,
+  "distinct_flows_solved_cumulative": 22,
+  "scorer": "real_snort"
+}
