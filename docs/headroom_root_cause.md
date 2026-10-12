@@ -393,6 +393,99 @@ baseline rỗng và (2) đọc `sys.argv[1]`/`argv[2]` trần, nên `rl_headroom
 SWEEP.json --corpus X` ném `FileNotFoundError: '--corpus'` *sau khi* đã in
 summary — một lần chạy im lặng chạy thiếu. Cả hai được sửa cùng một commit.
 
+### P12.1 Bar thứ hai: `endpoint_command_preserved`
+
+Vấn đề gốc của P12: `bytes_equal_semantics` là **byte-equality**, nên nó giết
+chết đúng những mutation protocol-hợp-lệ mà một handler thật vẫn đọc được.
+`http_header_pad` đã chèn 152 byte header HTTP hợp lệ, đã làm Snort im, và
+endpoint vẫn ra đúng lệnh C2 — chỉ chết vì bar so byte thô.
+
+Bar thứ hai hỏi câu hỏi trực giao: **handler có còn hiểu kênh không?** Nó dùng
+đúng tài sản có sẵn (`endpoint_model.py`: `detect_framing` + `parse_command`).
+Cả hai verdict luôn báo cạnh nhau — byte bar **không** bị thay, nên report cũ
+vẫn so sánh được (c2_semantics.py:127 — huấn luyện và đánh giá dùng MỘT quy tắc).
+
+**Phải fail closed.** `detect_framing` fallback `"http"` và `_parse_http` trả
+`None` với một stream binary, nên cách viết hiển nhiên sẽ so `None == None`
+rồi **báo PASS rỗng**. Đo trực tiếp trên `b"\xde\xad\xbe\xef\x01\x02\x03\x04"`:
+bản ngây thơ trả `True`, hàm thật trả `False`. Ba đường fail-closed (IPv6,
+không đọc được ORIGINAL, không đọc được mutation) đều có test.
+
+**Bar thứ hai không dùng `wire_deliverable`.** Đó là gate của byte bar
+(`_datagrams` so multiset datagram đã reassemble theo byte), nên nó trả `False`
+cho **đúng hai** mutation hợp lệ mà bar thứ hai sinh ra để chứng nhận:
+
+| mech | `wire_deliverable` | byte bar | endpoint bar |
+|---|---|---|---|
+| `http_header_pad` | **False** | False | **True** |
+| `http_header_case` | **False** | False | **True** |
+| `prepend8` | False | False | False |
+| `split8` | True | True | True |
+
+Spec của plan P12 bắt gate này — tức là tự hủy deliverable. Sửa trước khi
+backfill bất kỳ report nào.
+
+### P12.2 Bảng dual-bar — 15 cơ chế, 40 flow, `ownership=both`
+
+`snort_validation/reports/ceiling_v4_both_test_dualbar.json` (600 cell, backfill
+từ report đã trả tiền; các field Snort **byte-identical**, kiểm 0/600 diff).
+
+| cơ chế | evaded | sem_ok | endpoint_ok | valid(byte) | valid(endpoint) |
+|---|---:|---:|---:|---:|---:|
+| `split8` | 40 | 40 | 40 | **40** | **40** |
+| `split_slow` | 40 | 40 | 40 | **40** | **40** |
+| `split16` | 16 | 40 | 40 | 16 | 16 |
+| `split24` | 16 | 40 | 40 | 16 | 16 |
+| `http_header_pad` | 16 | 24 | 38 | 0 | **14** |
+| `overlap8` | 24 | 16 | 16 | 0 | 0 |
+| `corrupt8` | 24 | 0 | 0 | 0 | 0 |
+| `length_wrapper` | 15 | 0 | 0 | 0 | 0 |
+| `prepend4/8/12` | 40 | 0 | 0 | 0 | 0 |
+| `pad16` | 0 | 0 | 14 | 0 | 0 |
+| `reorder` | 0 | 37 | 39 | 0 | 0 |
+| `ttl` | 0 | 40 | 40 | 0 | 0 |
+| `noop` *(đối chứng)* | 0 | 40 | 40 | 0 | 0 |
+
+Bar thứ hai **tách được hai nhóm thật**:
+
+- **Hợp lệ** (`http_header_pad` 0 → 14): mutation đổi byte trên dây nhưng
+  handler vẫn đọc đúng lệnh.
+- **Vô nghĩa** (`corrupt8`, `length_wrapper`, `prepend*` vẫn 0): né Snort bằng
+  cách phá luôn kênh — không phải tấn công, chỉ là hỏng.
+- `pad16` vẫn 0 vì không né được gì (`alert=True`) dù `endpoint_ok = 14`.
+
+**Kết quả chính — `headroom = 0` dưới CẢ HAI bar:**
+`best_single = split8 (40)`, `oracle = 40`. Mở bar thứ hai **không** tạo ra
+headroom, đúng như dự đoán D3 trong `docs/action_space_policy.md`.
+
+Trên conf chỉ-C2 (`ceiling_v4_nop2p_frags_dualbar.json`, 200 cell, 24 flow
+baseline rỗng bị loại): cả 4 cơ chế phân mảnh `valid(endpoint) = 16/16`,
+`oracle = 16`, `headroom = 0`.
+
+### P12.3 Giới hạn thật: 2 flow HTTP pipelined, và một ràng buộc về corpus
+
+Dự đoán D1/D2 là 16; đo ra **14**. Không chỉnh ngưỡng để khớp — tìm nguyên nhân:
+
+Hai flow `endpoint_ok=False` là `147.32.84.165:3531->184.82.147.251:80` và
+`:3039->184.82.148.43:80`. Cả hai có `b"HTTP/1."` **xuất hiện 2 lần ngay trong
+bản gốc** — chúng mang **hai HTTP request nối tiếp** trên một TCP stream.
+`http_header_pad` chèn sau *mọi* request line (X-Pad count = 8 = 4 header × 2
+request), nên request thứ hai cũng bị nhiễu. `parse_command` lấy "mọi thứ sau
+khối header đầu tiên" làm lệnh, nên hai bên lệch nhau → bar từ chối đúng.
+
+Đây là **giới hạn thật của cơ chế**, không phải lỗi backfill (byte-identity đã
+kiểm: 55 cặp (flow, mech) × 15 cơ chế, 0 mismatch). Nhưng nó cũng phơi ra một
+hạn chế của chính bar: `parse_command` với framing HTTP là **bộ trích phần đuôi
+thô**, không hiểu request thứ hai. Nên bar có thể **từ chối oát** (false reject)
+trên flow pipelined. Phải nói rõ khi viết: nó đo "blob lệnh được parse không
+đổi", không phải "mọi request đều được server phục vụ nguyên vẹn".
+
+**Ràng buộc về corpus (sửa nhầm lẫn cũ):** toàn bộ sweep `ceiling_v4_*` chạy trên
+`snort_validation/reports/hidden_defender_corpus.pkl` (test split, 40 flow của
+corpus 1193 flow) — **không** phải `hidden_defender_corpus_v3fixed.pkl` (62 flow).
+Hai corpus đều có test split 40 flow nhưng **không chung flow nào** (overlap
+0/40). Các flow `neris` trong sweep không nằm trong v3fixed.
+
 ## Ghi chú phương pháp
 
 - Phân tích này chỉ đọc `et_open_c2.rules`, `snort_et_c2.conf` và các report JSON đã
