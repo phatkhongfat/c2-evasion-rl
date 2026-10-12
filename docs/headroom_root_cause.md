@@ -63,7 +63,7 @@ fragmentation unit**. Quy tắc với content dài `L` sẽ:
 Nên nếu corpus chứa flow alert dưới rule có `16 ≤ L < 24`, thì `split8` phá được
 nhưng `split24` không — và ngược lại ở flow khác. Đó chính là per-flow selection.
 
-Ruleset hiện có **rất nhiều** rule thuộc vùng đó — không phải giới hạn của nguồn:
+Số rule trong vùng đó **rất nhiều** — không phải giới hạn của ruleset:
 
 | bucket (L = content dài nhất) | số rule |
 |---|---|
@@ -75,8 +75,50 @@ Ruleset hiện có **rất nhiều** rule thuộc vùng đó — không phải g
 
 (21374 alert rules; 14 rule không có `content` nào — chỉ pcre/byte_test.)
 
-Corpus v3fixed chỉ rơi trúng bucket `L < 8` và `8 ≤ L < 16`. Đây là lựa chọn khi
-build corpus, không phải hạn chế của ET Open.
+**Nhưng bucket đó rỗng với dữ liệu capture.** Xem mục kế tiếp.
+
+## Feasibility — công thức trên **không khả thi** với bộ capture hiện có (đã kiểm tra)
+
+Đo toàn bộ 16 capture trong `/tmp/cov`. Chỉ **6 SID duy nhất** từng fire:
+
+| SID | alert line | capture | L | pcre |
+|---|---|---|---|---|
+| 2016413 | 939 | win13 | 6 | no |
+| 2019486 | 738 | rbot, rbot-dos | 8 | yes |
+| 2014169 | 290 | neris | 7 | no |
+| 2019471 | 16 | rbot, rbot-dos | 8 | yes |
+| 2012533 | 10 | neris, fast-flux | 11 | yes |
+| 2014635 | 6 | fast-flux | 3 | no |
+
+Không SID nào có `L ≥ 16`. **Bucket `16 ≤ L < 24` và `L ≥ 32` — nơi fragmentation
+phân kỳ — không có một flow nào trong dữ liệu này.** Đây là hạn chế của *capture*,
+không phải của ruleset: ET Open có 9897 rule ở các bucket đó, nhưng không traffic nào
+trong CTU-13 kích hoạt chúng.
+
+**Sửa một suy luận sai.** `L < 8` **không** có nghĩa fragmentation không phá được flow
+đó — chỉ là pattern *có thể* sống sót nếu khớp ranh giới đơn vị. Các rule `L < 8`
+(2016413, 2014169, 2014635) đều mang điều kiện `offset`/`depth`/`distance`/`within`,
+nên pattern vẫn bị cắt khi trải qua ranh giới đơn vị — và đo thực nghiệm xác nhận:
+`split8` vẫn né thành công **33/33 dns** và **6/6 http**. Phát biểu đúng là:
+
+> Fragmentation đã ở **trần** trên toàn corpus (100% ở cả 5 SID có mặt), và không
+> cơ chế nào phá được nhiều hơn thế. Tương đương giữa split8/16/24/split_slow là
+> hệ quả của việc **cả nhóm đã chạm trần**, không phải vì chúng giống nhau về cấu trúc.
+
+`L` cho ta **điều kiện cần** để phá (L > U ⟹ chắc chắn bị cắt), không phải điều kiện
+đủ — `offset`/`within` mới quyết định phần còn lại, và phần đó chỉ giải được bằng
+sweep thật, không suy ra được từ ruleset.
+
+**Cơ chế phân kỳ duy nhất trong toàn bộ capture: SID 2017287** (IRCBot PRIVMSG —
+2 content dài 8, không pcre). Ở đây L = 8 *bằng* đúng đơn vị nhỏ nhất, nên pattern sống
+sót *nếu* align: `split8` phá gần như chắc chắn, `split24` phá ít hơn nhiều. Nhưng
+**2017287 không xuất hiện trong bất kỳ capture nào**, và corpus v3fixed chỉ có 1 IRC flow.
+
+**Hệ quả cho "per-flow selection".** Kể cả khi headroom > 0, kết quả sẽ là chọn
+fragmentation với kích thước khác nhau theo flow — selection *trong một họ cơ chế*,
+chưa phải chọn *giữa các họ*. Muốn luận điểm mạnh hơn, corpus phải có flow thuộc họ
+khác (byte-preserving không phải fragmentation). Điều kiện này chưa được đăng ký
+trước và không nên thêm giữa chừng.
 
 ## Hai lỗi integrity phát hiện khi audit (ảnh hưởng trích dẫn, không đổi verdict)
 
@@ -104,24 +146,30 @@ nhưng nó **không dùng được để train** nếu ai đó định dùng l�
 ## Hệ quả cho bài
 
 Được claim, và nay có **cơ chế giải thích** thay vì chỉ có số:
-> Trên corpus v3fixed, mọi SID family đều kích hoạt bằng pattern không vượt quá 11 byte
-> với điều kiện depth/offset/within, nên toàn bộ nhóm fragmentation (split8/16/24,
-> split_slow) là các hành động tương đương về hiệu quả trên corpus này. Oracle trùng
-> với lớp tương đương ấy, nên headroom bằng 0 là thuộc tính của corpus.
+> Trên corpus v3fixed, fragmentation đạt 100% ở mọi SID family có mặt, nên `oracle`
+> trùng `best_single` và headroom bằng 0. Đây là thuộc tính của **corpus**: 5 SID
+> family duy nhất mà CTU-13 sinh ra đều kích hoạt bằng pattern ngắn (≤ 11 byte) với
+> điều kiện depth/offset/within, nên không có ngưỡng phân biệt nào giữa các kích thước
+> phân mảnh.
 
 Không được claim: "RL chọn mechanism thông minh hơn heuristic", hay bất kỳ phát biểu
-nào ngụ ý có per-flow selection.
+nào ngụ ý có per-flow selection. Cũng không được claim rằng fragmentation "vô dụng"
+với mọi rule — nó **tối ưu** cho các rule có pcre hoặc L ≥ 8, và **thua** cho rule có
+L < 8 mà điều kiện offset/within vô hại.
 
-## Hướng tiếp theo, theo thứ tự rẻ trước đắt
+## Hướng tiếp theo — câu 1 đã được trả lời, và câu trả lời là "không"
 
-1. **Chọn lại corpus theo geometry, không theo SID identity.** `build_corpus_v3.py`
-   đã có hạ tầng lọc theo SID; cần thêm bước chọn flow theo *độ dài content dài nhất
-   của rule alert nó*, mục tiêu có flow trong bucket `16 ≤ L < 24`. Đây là thay đổi
-   nhỏ nhất có khả năng tạo headroom.
-2. **Chỉ chạy gate H1 (đo headroom bằng sweep) sau khi chọn được corpus mới.** Không
-   train trước — bài học P4/P6 đã phải trả giá 2 lần cho việc train khi headroom = 0.
-3. Nếu (1) không tìm được flow phù hợp trong capture hiện có, **dừng và trình bày
-   negative result có kiểm soát** thay vì mở rộng scope.
+1. ~~Chọn lại corpus theo geometry, mục tiêu bucket `16 ≤ L < 24`.~~
+   **Đã kiểm tra 2026-10-12: bất khả thi.** Không capture nào sinh SID có `L ≥ 16`
+   (bảng ở mục Feasibility). Đây là hạn chế dữ liệu, không phải việc chờ thêm nỗ lực.
+2. **Đã đạt** — không train trước khi đo headroom (bài học P4/P6).
+3. ~~Nếu (1) không tìm được flow phù hợp, dừng và trình bày negative result có kiểm
+   soát.~~ **Điều kiện này đã kích hoạt.** Đây là kết luận của bài hiện tại.
+
+Nếu muốn mở lại hướng headroom > 0, cần **data acquisition mới** — một capture có
+traffic kích hoạt rule C2 có `L ≥ 16`, hoặc một family không phải fragmentation.
+Đó là thu thập dữ liệu, không phải thí nghiệm để chạy trên dữ liệu hiện có. Khi có,
+chạy lại gate H1 trước, theo đúng kỷ luật đã đăng ký.
 
 ## Ghi chú phương pháp
 

@@ -1,10 +1,17 @@
 """Root-cause tests: why headroom = oracle on corpus v3fixed.
 
 The claim being locked in:
-  fragmentation mechanisms (split8/16/24, split_slow) are EQUIVALENT in effect
-  on corpus v3fixed, because every alerting SID family is triggered by a
-  contiguous content pattern short enough (<= 11 bytes) that ANY fragmentation
-  unit >= 8 bytes destroys it.
+  fragmentation reaches 100% on every SID family corpus v3fixed contains, so
+  `oracle == best_single` and headroom is 0. Rule geometry explains WHY: all
+  five families are triggered by contiguous content patterns of at most 11
+  bytes, and the smallest fragmentation unit available is 8 bytes.
+
+What geometry does NOT claim: that a short pattern (L < 8) is safe. Whether a
+short pattern survives depends on its offset/distance/within constraints, not
+on L alone. L is a NECESSARY condition for breakage (L > unit => certainly
+cut), never a sufficient one. The boundary cases are settled by measurement
+only -- `CAPTURE_SIDS_BELOW_UNIT` exists so a later corpus that needs real
+sweeps to settle them is explicit rather than assumed.
 
 These tests read the real eval ruleset. They do not touch Snort, do not train,
 and do not modify any report.
@@ -31,6 +38,18 @@ from rule_geometry import (  # noqa: E402
 
 RULESET = ROOT / "snort_validation/et_open_c2/et_open_c2.rules"
 CONF = ROOT / "snort_validation/et_open_c2/snort_et_c2.conf"
+CAPTURE_DIR = Path("/tmp/cov")
+
+# Every SID the 16 CTU captures ever produced, with its longest content length.
+# Recorded from a scan of /tmp/cov/*/alert on 2026-10-12.
+CAPTURE_SIDS_BELOW_UNIT = {
+    "2016413": 6,   # win13            - dns reply sinkhole
+    "2019486": 8,   # rbot, rbot-dos   - pcre over full line
+    "2014169": 7,   # neris            - dns .su TLD
+    "2019471": 8,   # rbot, rbot-dos   - pcre over full line
+    "2012533": 11,  # neris, fast-flux - virut http checkin
+    "2014635": 3,   # fast-flux        - kazy TLS client hello
+}
 
 
 @pytest.mark.skipif(not RULESET.exists(), reason="eval ruleset not present")
@@ -115,3 +134,58 @@ def test_geometry_report_shape_is_stable():
         assert g["sid"] == sid
         assert g["n_content"] == len(g["content_lengths"])
         assert g["longest"] == max(g["content_lengths"])
+
+
+def _capture_sids_from_alert_logs(capture_dir: Path) -> set[str]:
+    """Every SID that appears in any capture's Snort alert log.
+
+    Parsed from the alert text (`[1:<sid>:`) rather than from a report, because
+    the captures' pcaps are not retained -- only their alert output is. This is
+    therefore the strongest evidence available about what the corpus COULD
+    contain, short of re-running Snort over the raw traffic.
+    """
+    sids: set[str] = set()
+    for alert in capture_dir.glob("*/alert"):
+        for match in re.finditer(r"\[1:(\d+):", alert.read_text(errors="ignore")):
+            sids.add(match.group(1))
+    return sids
+
+
+@pytest.mark.skipif(
+    not CAPTURE_DIR.is_dir(), reason="capture alert logs not on this machine"
+)
+@pytest.mark.skipif(not RULESET.exists(), reason="eval ruleset not present")
+def test_no_capture_produced_a_long_pattern_rule():
+    """The 'harvest flows with 16 <= L < 24' recipe is INFEASIBLE right now.
+
+    Discriminating between fragmentation units needs an alerting SID whose
+    pattern is longer than the smallest unit but shorter than a larger one. No
+    capture in the pool ever produced such a SID, so headroom > 0 cannot be
+    reached by re-selecting from this data -- it needs new traffic.
+    """
+    reachable = [
+        sid
+        for sid in _capture_sids_from_alert_logs(CAPTURE_DIR)
+        if 16 <= longest_content(RULESET, sid) < 24
+    ]
+    assert reachable == [], (
+        "a capture now produces a 16<=L<24 rule: the headroom recipe is "
+        "reachable again, re-run gate H1 instead of trusting the negative result"
+    )
+
+
+@pytest.mark.skipif(
+    not CAPTURE_DIR.is_dir(), reason="capture alert logs not on this machine"
+)
+@pytest.mark.skipif(not RULESET.exists(), reason="eval ruleset not present")
+def test_recorded_capture_sids_still_match_the_ruleset():
+    """The recorded coverage table must not drift from the real alert logs."""
+    observed = _capture_sids_from_alert_logs(CAPTURE_DIR)
+    assert observed == set(CAPTURE_SIDS_BELOW_UNIT), (
+        "capture SID set changed; re-measure before citing the coverage table"
+    )
+    for sid, recorded_len in CAPTURE_SIDS_BELOW_UNIT.items():
+        assert longest_content(RULESET, sid) == recorded_len, (
+            f"SID {sid} geometry changed: recorded {recorded_len}, "
+            f"ruleset now {longest_content(RULESET, sid)}"
+        )
