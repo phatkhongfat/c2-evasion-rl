@@ -58,22 +58,24 @@ def content_lengths(rule_line: str) -> list[int]:
     """
     out = []
     for raw in _CONTENT_RE.findall(rule_line or ""):
-        if raw.startswith("|"):
-            total = 0
-            for segment in raw.split("|"):
-                if segment == "":
-                    continue
-                # a segment of pure hex digits is byte-encoded; anything else
-                # is literal ASCII
+        total = 0
+        # Splitting on "|" puts every pipe-delimited segment at an ODD index and
+        # every literal run at an EVEN index. Only the odd ones are byte-encoded:
+        # in `d1|3a|ad2|3a|id20|3a|` the `3a`s are hex bytes while the bare `d1`,
+        # `ad2` and `id20` are literal ASCII that merely happen to be hex-shaped.
+        for index, segment in enumerate(raw.split("|")):
+            if segment == "":
+                continue
+            if index % 2 == 1:
                 stripped = _HEX_RE.sub("", segment).replace(" ", "")
                 total += (
                     len(stripped) // 2
                     if stripped and len(stripped) % 2 == 0
                     else len(segment.encode())
                 )
-            out.append(total)
-        else:
-            out.append(len(raw.encode()))
+            else:
+                total += len(segment.encode())
+        out.append(total)
     return out
 
 

@@ -38,7 +38,7 @@ from rule_geometry import (  # noqa: E402
 
 RULESET = ROOT / "snort_validation/et_open_c2/et_open_c2.rules"
 CONF = ROOT / "snort_validation/et_open_c2/snort_et_c2.conf"
-CAPTURE_DIR = Path("/tmp/cov")
+CAPTURE_DIRS = (Path("/tmp/cov"), Path("/tmp/cov2"))
 
 # Every SID the 16 CTU captures ever produced, with its longest content length.
 # Recorded from a scan of /tmp/cov/*/alert on 2026-10-12.
@@ -125,6 +125,51 @@ def test_conf_declares_no_stream_reassembly():
         "conf unexpectedly enables stream reassembly; root-cause note is stale"
 
 
+def test_bare_hex_lookalikes_are_literal_ascii():
+    """A pipe-less token that merely LOOKS like hex is still ASCII.
+
+    `content:"d1|3a|ad2|3a|id20|3a|"` is the literal text `d1:ad2:id20:` --
+    2+1+3+1+4+1 = 12 bytes. Only segments actually wrapped in `|...|` are
+    byte-encoded. Reading the bare `d1` as one hex byte reports 11 and makes
+    rules look shorter (and thus more breakable) than they are.
+    """
+    rule = (
+        'alert udp any any -> any any (msg:"DHT ping"; '
+        'content:"d1|3a|ad2|3a|id20|3a|"; depth:12; sid:2008581;)'
+    )
+    assert content_lengths(rule) == [12], content_lengths(rule)
+
+
+def test_mixed_bar_literal_and_hex_still_totals_correctly():
+    """The classic mixed case must keep working after the pipe rule."""
+    rule = 'alert tcp any any -> any any (msg:"x"; content:"|02|su|00|"; sid:1;)'
+    assert content_lengths(rule) == [4], content_lengths(rule)
+
+    # literal on BOTH sides of a hex run: "id20|3a|" -> 4 + 1
+    rule = 'alert udp any any -> any any (msg:"x"; content:"id20|3a|q19|3a|"; sid:1;)'
+    assert content_lengths(rule) == [9], content_lengths(rule)
+
+
+@pytest.mark.skipif(not RULESET.exists(), reason="eval ruleset not present")
+def test_dht_rule_geometry_matches_its_declared_depth():
+    """Regression guard on a real rule: ET DHT ping, `depth:12`, content 12B.
+
+    The parser reported 21 for this rule until the pipe-delimiter rule was
+    fixed. Assert against the rule's own `depth:` where one is declared, so the
+    two cannot silently drift apart again.
+    """
+    rule_line = parse_alert_rule(RULESET, "2008581")
+    assert rule_line, "SID 2008581 absent from the eval ruleset"
+    lengths = content_lengths(rule_line)
+    declared_depth = re.search(r"depth:(\d+)", rule_line)
+    if declared_depth:
+        assert max(lengths) <= int(declared_depth.group(1)), (
+            f"content {max(lengths)}B exceeds declared depth "
+            f"{declared_depth.group(1)}B -- parser is miscounting"
+        )
+    assert max(lengths) == 12, lengths
+
+
 @pytest.mark.skipif(not RULESET.exists(), reason="eval ruleset not present")
 def test_geometry_report_shape_is_stable():
     """Guard the helper contract so future corpus rebuilds can diff it."""
@@ -136,51 +181,104 @@ def test_geometry_report_shape_is_stable():
         assert g["longest"] == max(g["content_lengths"])
 
 
-def _capture_sids_from_alert_logs(capture_dir: Path) -> set[str]:
-    """Every SID that appears in any capture's Snort alert log.
-
-    Parsed from the alert text (`[1:<sid>:`) rather than from a report, because
-    the captures' pcaps are not retained -- only their alert output is. This is
-    therefore the strongest evidence available about what the corpus COULD
-    contain, short of re-running Snort over the raw traffic.
-    """
+def _capture_sids_from_alert_logs(capture_dirs: tuple[Path, ...]) -> set[str]:
+    """Every SID that appears in any scanned capture's Snort alert log."""
     sids: set[str] = set()
-    for alert in capture_dir.glob("*/alert"):
-        for match in re.finditer(r"\[1:(\d+):", alert.read_text(errors="ignore")):
-            sids.add(match.group(1))
+    for capture_dir in capture_dirs:
+        for alert in capture_dir.glob("*/alert"):
+            for match in re.finditer(r"\[1:(\d+):", alert.read_text(errors="ignore")):
+                sids.add(match.group(1))
     return sids
 
 
-@pytest.mark.skipif(
-    not CAPTURE_DIR.is_dir(), reason="capture alert logs not on this machine"
-)
-@pytest.mark.skipif(not RULESET.exists(), reason="eval ruleset not present")
-def test_no_capture_produced_a_long_pattern_rule():
-    """The 'harvest flows with 16 <= L < 24' recipe is INFEASIBLE right now.
+def _classtype(ruleset: Path, sid: str) -> str:
+    rule_line = parse_alert_rule(ruleset, sid)
+    found = re.search(r"classtype:([^;]+);", rule_line)
+    return found.group(1).strip() if found else ""
 
-    Discriminating between fragmentation units needs an alerting SID whose
-    pattern is longer than the smallest unit but shorter than a larger one. No
-    capture in the pool ever produced such a SID, so headroom > 0 cannot be
-    reached by re-selecting from this data -- it needs new traffic.
+
+def _discriminating_sids(ruleset: Path, sids) -> list[str]:
+    """SIDs where the smallest and largest fragmentation units must differ.
+
+    The band is `unit <= L < largest_unit`, not `16 <= L < 24`: the lower edge
+    is the SMALLEST available unit (8 bytes, `split8`), so a pattern of 12 bytes
+    is already cut by `split8` and already fits inside `split24`.
     """
-    reachable = [
+    return sorted(
         sid
-        for sid in _capture_sids_from_alert_logs(CAPTURE_DIR)
-        if 16 <= longest_content(RULESET, sid) < 24
-    ]
-    assert reachable == [], (
-        "a capture now produces a 16<=L<24 rule: the headroom recipe is "
-        "reachable again, re-run gate H1 instead of trusting the negative result"
+        for sid in sids
+        if MIN_FRAGMENTATION_UNIT <= longest_content(ruleset, sid) < 24
     )
 
 
+@pytest.mark.skipif(not any(d.is_dir() for d in CAPTURE_DIRS), reason="no alert logs")
+@pytest.mark.skipif(not RULESET.exists(), reason="eval ruleset not present")
+def test_discriminating_band_c2_sids_are_all_broken_by_pcre_not_by_length():
+    """Why no fragmentation unit can win on these: the matcher is a `pcre`.
+
+    A pattern with `unit <= L < 24` LOOKS discriminating -- `split8` should cut
+    it while `split24` might not. It is not, because these rules are decided by
+    a `pcre` over a contiguous run, which every fragmentation unit cuts:
+
+      2012533  pcre /c\\x3d[0-9A-F]{100}/i   100 hex chars, one run
+      2019486  pcre /^[^\r\\n]*?.../         anchored to the line start
+      2019471  pcre /^[^\r\\n]*?.../         anchored to the line start
+
+    Content length never becomes the binding constraint, so changing the unit
+    changes nothing. The sweep agrees: split8/16/24 all score 40/40.
+    """
+    observed = _capture_sids_from_alert_logs(CAPTURE_DIRS)
+    discriminating = [
+        sid
+        for sid in _discriminating_sids(RULESET, observed)
+        if _classtype(RULESET, sid) != "policy-violation"
+    ]
+    assert sorted(discriminating) == ["2012533", "2019471", "2019486"], discriminating
+
+    for sid in discriminating:
+        rule_line = parse_alert_rule(RULESET, sid)
+        assert "pcre:" in rule_line, (
+            f"SID {sid} sits in the discriminating band but has no pcre; if its "
+            f"matcher changed, re-run the split sweep -- length may now bind"
+        )
+
+
+@pytest.mark.skipif(not any(d.is_dir() for d in CAPTURE_DIRS), reason="no alert logs")
+@pytest.mark.skipif(not RULESET.exists(), reason="eval ruleset not present")
+def test_the_one_length_discriminating_rule_is_not_malware():
+    """The only genuinely length-discriminating rule found is BitTorrent DHT.
+
+    `2008581` carries `content:"d1:ad2:id20:"` with `depth:12` and no pcre, so
+    `split8` cuts it and `split24` need not. It is `policy-violation` -- P2P file
+    sharing, not command and control. Feeding it into a C2-evasion corpus would
+    mislabel the threat model, so it stays out even though it is the one rule
+    that would have made headroom reachable.
+    """
+    observed = _capture_sids_from_alert_logs(CAPTURE_DIRS)
+    discriminating = _discriminating_sids(RULESET, observed)
+
+    without_pcre = [
+        sid
+        for sid in discriminating
+        if "pcre:" not in parse_alert_rule(RULESET, sid)
+    ]
+    assert without_pcre == ["2008581", "2008583", "2008585"], without_pcre
+    for sid in without_pcre:
+        assert _classtype(RULESET, sid) == "policy-violation"
+        assert "BitTorrent" in parse_alert_rule(RULESET, sid)
+
+
 @pytest.mark.skipif(
-    not CAPTURE_DIR.is_dir(), reason="capture alert logs not on this machine"
+    not CAPTURE_DIRS[0].is_dir(), reason="capture alert logs not on this machine"
 )
 @pytest.mark.skipif(not RULESET.exists(), reason="eval ruleset not present")
 def test_recorded_capture_sids_still_match_the_ruleset():
-    """The recorded coverage table must not drift from the real alert logs."""
-    observed = _capture_sids_from_alert_logs(CAPTURE_DIR)
+    """The recorded coverage table must not drift from the real alert logs.
+
+    Scoped to `/tmp/cov` only: that table was recorded before the two extra
+    captures were scanned, so it describes that set and not the newer one.
+    """
+    observed = _capture_sids_from_alert_logs((CAPTURE_DIRS[0],))
     assert observed == set(CAPTURE_SIDS_BELOW_UNIT), (
         "capture SID set changed; re-measure before citing the coverage table"
     )

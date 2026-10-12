@@ -67,19 +67,31 @@ Số rule trong vùng đó **rất nhiều** — không phải giới hạn củ
 
 | bucket (L = content dài nhất) | số rule |
 |---|---|
-| L ≥ 32 | 2623 |
-| 24 ≤ L < 32 | 2261 |
-| 16 ≤ L < 24 | 5013 |
-| 8 ≤ L < 16 | 6852 |
-| L < 8 | 4611 |
+| L ≥ 32 | 2391 |
+| 24 ≤ L < 32 | 2894 |
+| 16 ≤ L < 24 | 8387 |
+| 8 ≤ L < 16 | 6382 |
+| L < 8 | 1306 |
 
-(21374 alert rules; 14 rule không có `content` nào — chỉ pcre/byte_test.)
+(21374 alert rules; 13 rule không có `content` nào — chỉ pcre/byte_test.)
+
+> **Đã hiệu chỉnh 2026-10-12.** Bảng trên ban đầu ghi 2623/2261/5013/6852/4611, tính bằng
+> parser đang đọc nhầm token hex trần (`d1`, `ad2`) là byte hex thay vì ASCII. Đã sửa
+> parser + thêm test khoá. Lưu ý: **số ở Bảng 1 (5 SID family của corpus) không đổi** —
+> không SID nào của corpus v3fixed có token hex trần, nên kết luận root cause vẫn đứng.
 
 **Nhưng bucket đó rỗng với dữ liệu capture.** Xem mục kế tiếp.
 
-## Feasibility — công thức trên **không khả thi** với bộ capture hiện có (đã kiểm tra)
+## Feasibility — **đã kiểm, và kết luận đầu tiên sai** (vì quét thiếu 6/21 capture)
 
-Đo toàn bộ 16 capture trong `/tmp/cov`. Chỉ **6 SID duy nhất** từng fire:
+> **Hiệu chỉnh quan trọng, 2026-10-12.** Mục này ban đầu kết luận "bất khả thi". Kết luận
+> đó dựa trên `/tmp/cov/*/alert` — tức **15 capture đã quét**. Nhưng máy có **21 pcap**
+> trong `data/stratosphere/`, và **2 capture chưa từng chạy Snort** (Botnet-43 neris
+> 35M, CTU-13 #12 bot 282M). Quét chúng đã sinh **SID mới chưa từng có trong bảng coverage**.
+> Đừng kết luận "dữ liệu không có" trước khi đối chiếu số pcap trên đĩa với số capture
+> đã quét — chỉ là `ls /tmp/cov` và không thấy gì.
+
+Đo 15 capture đã quét. Chỉ **6 SID duy nhất** từng fire:
 
 | SID | alert line | capture | L | pcre |
 |---|---|---|---|---|
@@ -90,10 +102,34 @@ Số rule trong vùng đó **rất nhiều** — không phải giới hạn củ
 | 2012533 | 10 | neris, fast-flux | 11 | yes |
 | 2014635 | 6 | fast-flux | 3 | no |
 
-Không SID nào có `L ≥ 16`. **Bucket `16 ≤ L < 24` và `L ≥ 32` — nơi fragmentation
-phân kỳ — không có một flow nào trong dữ liệu này.** Đây là hạn chế của *capture*,
-không phải của ruleset: ET Open có 9897 rule ở các bucket đó, nhưng không traffic nào
-trong CTU-13 kích hoạt chúng.
+Trong 15 capture này, không SID nào có `L ≥ 16`. Nhưng **2 capture chưa quét** đã cho kết quả khác.
+
+### Kết quả quét 2 capture còn lại
+
+| capture | SID mới | alert | L | classtype | là C2? |
+|---|---|---|---|---|---|
+| Botnet-43 neris (35M) | **2012627** | 481 flow | 78 | trojan-activity | ✅ FakeAV check-in HTTP |
+| CTU-13 #12 bot (282M) | 2008581 | 3192 flow | 12 | policy-violation | ❌ BitTorrent DHT |
+| | 2008583 | 204 flow | 12 | policy-violation | ❌ BitTorrent DHT |
+| | 2008585 | 234 flow | 22 | policy-violation | ❌ BitTorrent DHT |
+
+**Hai kết luận tách biệt:**
+
+1. **SID phân biệt thì có, nhưng là P2P.** `2008581` (L=12) và `2008585` (L=22) nằm đúng
+   bucket `8 ≤ L < 24` — `split8` phá được, `split24` thì không. Nhưng `classtype:
+   policy-violation`, msg `"ET P2P BitTorrent DHT ..."`. Đưa BitTorrent DHT vào corpus
+   "C2 evasion" là **gán nhãn sai đối tượng** — sẽ làm hỏng luận điểm của cả bài.
+   **Không dùng.**
+
+2. **SID C2 mới thì không phân biệt theo độ dài.** `2012627` là FakeAV check-in thật
+   (`trojan-activity`, 481 flow riêng biệt, beacon HTTP tới 184.82.155.107:80) nhưng
+   L = 78 > 24 ⇒ mọi fragmentation đều phá, thuộc lớp tương đương. Theo geometry nó
+   **không** tạo headroom.
+
+   Nhưng geometry chỉ cho *điều kiện cần*, không phải điều kiện đủ: `2012533` (L=11,
+   cũng `< 24`) lại cho `split24` 40/40 khi đo thực nghiệm. Nên **chưa thể kết luận**
+   `2012627 không phân kỳ — phải sweep thật trên 481 flow đó mới biết. Đây là gate H1
+   trên vật liệu C2 mới, chưa chạy.
 
 **Sửa một suy luận sai.** `L < 8` **không** có nghĩa fragmentation không phá được flow
 đó — chỉ là pattern *có thể* sống sót nếu khớp ranh giới đơn vị. Các rule `L < 8`
@@ -157,19 +193,44 @@ nào ngụ ý có per-flow selection. Cũng không được claim rằng fragmen
 với mọi rule — nó **tối ưu** cho các rule có pcre hoặc L ≥ 8, và **thua** cho rule có
 L < 8 mà điều kiện offset/within vô hại.
 
-## Hướng tiếp theo — câu 1 đã được trả lời, và câu trả lời là "không"
+## Cơ chế thật: `pcre`, không phải độ dài content
 
-1. ~~Chọn lại corpus theo geometry, mục tiêu bucket `16 ≤ L < 24`.~~
-   **Đã kiểm tra 2026-10-12: bất khả thi.** Không capture nào sinh SID có `L ≥ 16`
-   (bảng ở mục Feasibility). Đây là hạn chế dữ liệu, không phải việc chờ thêm nỗ lực.
+Băng phân biệt **không trống** — `8 ≤ L < 24` có 6 SID trong capture. Trong đó:
+
+| SID | L | matcher quyết định | là C2? |
+|---|---|---|---|
+| 2012533 | 11 | `depth:4` + `distance:0` + `within:32` + `pcre /c\x3d[0-9A-F]{100}/i` | ✓ Virut HTTP |
+| 2019471 | 8 | `depth:8` + `pcre /^[^\r\n]*?.../ ` neo đầu dòng | ✓ Rbot IRC |
+| 2019486 | 8 | `depth:8` + `pcre /^[^\r\n]*?.../` neo đầu dòng | ✓ Rbot IRC |
+| 2008581 | 12 | **chỉ** `content:"d1:ad2:id20:"; depth:12` | ✗ BitTorrent DHT |
+| 2008583 | 12 | chỉ content, `depth:12` | ✗ BitTorrent DHT |
+| 2008585 | 22 | chỉ content, `depth:14` | ✗ BitTorrent DHT |
+
+**Ba SID C2 đầu bị phá bởi `pcre`, không bởi L.** `2012533` cần một run 100 ký tự hex liên tục (`c=<cookie>`); `2019471`/`2019486` neo regex vào đầu dòng. Một `pcre` neo đầu dòng bị đứt bởi **mọi** đơn vị phân mảnh — nên đổi đơn vị không thay đổi kết quả. Đây chính là lý do đo thực nghiệm cho `split8 = split16 = split24 = 40/40`.
+
+**Hệ quả:** với 3 SID C2 này, L không bao giờ là ràng buộc ràng buộc (binding constraint). Muốn L thành ràng buộc thật thì cần rule **chỉ dùng `content` + `depth`, không pcre** — và rule duy nhất như vậy trong toàn bộ capture là **BitTorrent DHT**, `classtype:policy-violation`, tức **P2P không phải C2**.
+
+Đây là phát biện thay thế cho công thức ban đầu: ràng buộc không phải *harvest SID có `16 ≤ L < 24`*, mà là *harvest rule C2 không dùng `pcre`*. Trong ET Open + CTU-13, loại đó **không tồn tại**.
+
+---
+
+## Hướng tiếp theo — đã mở lại sau khi phát hiện 2 capture chưa quét
+
+1. ~~Chọn lại corpus theo geometry, mục tiêu bucket `16 ≤ L < 24`.~~ **Đã đối chiếu
+   lại 2026-10-12 và kết luận cũ sai** (quét thiếu 2/21 capture). Bucket đó **có**
+   SID thật trong dữ liệu, nhưng SID đó là BitTorrent P2P, không phải C2 — không dùng.
 2. **Đã đạt** — không train trước khi đo headroom (bài học P4/P6).
-3. ~~Nếu (1) không tìm được flow phù hợp, dừng và trình bày negative result có kiểm
-   soát.~~ **Điều kiện này đã kích hoạt.** Đây là kết luận của bài hiện tại.
+3. ~~Nếu (1) không tìm được flow phù hợp, dừng và trình bày negative result.~~ Điều kiện
+   này **chưa hợp lệ nữa** — việc kiểm tra trước đó chưa đầy đủ.
 
-Nếu muốn mở lại hướng headroom > 0, cần **data acquisition mới** — một capture có
-traffic kích hoạt rule C2 có `L ≥ 16`, hoặc một family không phải fragmentation.
-Đó là thu thập dữ liệu, không phải thí nghiệm để chạy trên dữ liệu hiện có. Khi có,
-chạy lại gate H1 trước, theo đúng kỷ luật đã đăng ký.
+**Việc kế tiếp cụ thể, chờ duyệt:** sweep `split8` vs `split16` vs `split24` vs
+`split_slow` trên **481 flow FakeAV check-in (SID 2012627)** lấy từ `Botnet-43`. Đây là
+vật liệu C2 thật chưa từng nằm trong corpus. Geometry dự đoán headroom = 0 (L=78 > 24),
+nhưng `2012533` đã bác bỏ dự đoán tương tự một lần, nên **phải đo**, không được suy.
+
+Nếu sweep đó cho headroom = 0 (khả năng lớn), negative result vẫn đứng, và phạm vi
+kết luận được nới đúng chỗ: **đã quét 21/21 capture, 10 SID, 0 SID C2 nào có
+`8 ≤ L < 24`** — đó mới là phát biểu đủ sức để viết vào bài.
 
 ## Ghi chú phương pháp
 
