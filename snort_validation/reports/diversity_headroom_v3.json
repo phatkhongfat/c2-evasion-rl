@@ -1,0 +1,56 @@
+[
+  {
+    "report": "ceiling_v3_expert.json",
+    "ownership": "both",
+    "conf": "default (ET Open full)",
+    "n_flows": 40,
+    "disagreement_flows": 7,
+    "mechs_counted": [
+      "corrupt8",
+      "http_header_pad",
+      "length_wrapper",
+      "overlap8",
+      "pad16",
+      "prepend12",
+      "prepend4",
+      "prepend8",
+      "reorder",
+      "split16",
+      "split24",
+      "split8",
+      "ttl"
+    ]
+  },
+  {
+    "report": "ceiling_v3_naive.json",
+    "ownership": "both",
+    "conf": "snort_validation/et_open_c2/snort_et_c2_naive.conf",
+    "n_flows": 40,
+    "disagreement_flows": 7,
+    "mechs_counted": [
+      "corrupt8",
+      "http_header_pad",
+      "length_wrapper",
+      "overlap8",
+      "pad16",
+      "prepend12",
+      "prepend4",
+      "prepend8",
+      "reorder",
+      "split16",
+      "split24",
+      "split8",
+      "ttl"
+    ]
+  },
+  {
+    "report": "ceiling_v3_splitslow_fixed.json",
+    "ownership": "both",
+    "conf": "default (ET Open full)",
+    "n_flows": 40,
+    "disagreement_flows": 0,
+    "mechs_counted": [
+      "split_slow"
+    ]
+  }
+]
