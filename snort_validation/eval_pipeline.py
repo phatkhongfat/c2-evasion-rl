@@ -54,6 +54,21 @@ MAX_ATTEMPTS = 250
 _MAX_WAIT_S = 5.0
 
 
+# http_header_case helper (mirrors hidden_defender_env): the field-name token
+# of a header line (RFC 7230 s3.2 token grammar), matched at line start only.
+_HEADER_NAME_RE = re.compile(rb"^([!#$%&'*+.^_`|~0-9A-Za-z-]+):")
+
+
+def _lower_field_names(head: bytes) -> bytes:
+    """Lower-case the field NAME of every header line; leave values alone."""
+    lines = head.split(b"\r\n")
+    out = [lines[0]]
+    for line in lines[1:]:
+        m = _HEADER_NAME_RE.match(line)
+        out.append(line if m is None else m.group(1).lower() + b":" + line[m.end():])
+    return b"\r\n".join(out)
+
+
 # ---------------------------------------------------------------------------
 # Fix 1 helpers: direction / client identification
 # ---------------------------------------------------------------------------
@@ -210,6 +225,24 @@ def mutate_client_only(packets: Sequence, mech: str, client_ip: Optional[str] = 
             if not sep:
                 continue
             out[i][Raw].load = head + b"\r\n" + _JUNK_HEADERS + body
+
+    elif mech == "http_header_case":
+        # RFC 7230 s3.2: field names are case-insensitive, so folding the NAME
+        # changes the wire but not the meaning of the request.  Breaks Snort
+        # rule SID 2012627 (FakeAV C2 check-in), which matches `Accept|3a 20|`
+        # case-SENSITIVELY as part of a 4-content distance:0 adjacency chain.
+        # This is a property of the ET Open ruleset signature, not a general
+        # technique.  Nothing legal goes after the request line on a non-HTTP
+        # framing, so guard on is_http_request like the pad mech.
+        for i in payload_idx:
+            out[i] = as_raw(out[i])
+            raw = bytes(out[i][Raw].load)
+            if not is_http_request(raw):
+                continue
+            head, sep, body = raw.partition(b"\r\n\r\n")
+            if not sep:
+                continue
+            out[i][Raw].load = _lower_field_names(head) + b"\r\n\r\n" + body
 
     elif mech == "length_wrapper":
         for i in payload_idx:

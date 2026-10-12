@@ -19,6 +19,7 @@ the space for the agent to have any chance on that family).
 from __future__ import annotations
 
 import pickle
+import re
 import sys
 from pathlib import Path
 
@@ -57,6 +58,20 @@ _JUNK_HEADERS = b"".join(
 
 # Mechanism B: declared byte offset of the real data inside the wrapper.
 _WRAP_OFFSET = 64
+
+# http_header_case: the field-name token of a header line (RFC 7230 s3.2
+# token grammar).  Matched at the start of each header line only.
+_HEADER_NAME_RE = re.compile(rb"^([!#$%&'*+.^_`|~0-9A-Za-z-]+):")
+
+
+def _lower_field_names(head: bytes) -> bytes:
+    """Lower-case the field NAME of every header line; leave values alone."""
+    lines = head.split(b"\r\n")
+    out = [lines[0]]
+    for line in lines[1:]:
+        m = _HEADER_NAME_RE.match(line)
+        out.append(line if m is None else m.group(1).lower() + b":" + line[m.end():])
+    return b"\r\n".join(out)
 
 # 15 mechanisms.  split8/16/24 and prepend4/8/12 measured; pad/reorder/ttl
 # measured as 0/80 evaders (kept as informative negatives); corrupt8 breaks
@@ -174,7 +189,7 @@ def mech_applicable(original_payloads, mech: str) -> bool:
     from endpoint_model import detect_framing
 
     framing = detect_framing(b"".join(original_payloads))
-    if mech == "http_header_pad":
+    if mech in ("http_header_pad", "http_header_case"):
         return framing == "http"
     if mech == "length_wrapper":
         return framing == "length2"
@@ -311,6 +326,28 @@ def apply_mech(pkts, mech: str, client_ip=None, ownership: str = "client"):
             if not sep:
                 continue
             p[Raw].load = head + b"\r\n" + _JUNK_HEADERS + body
+
+    elif mech == "http_header_case":
+        # RFC 7230 s3.2: HTTP field NAMES are case-insensitive, so folding the
+        # name changes the wire but not the request's meaning.  Breaks Snort
+        # rule SID 2012627 (FakeAV C2 check-in), which matches `Accept|3a 20|`
+        # case-SENSITIVELY as part of a 4-content distance:0 adjacency chain.
+        # This is a property of the ET Open ruleset signature, not a general
+        # technique: folding the name moves those bytes out of the match while
+        # leaving the request line and body untouched.  Nothing legal goes
+        # after the request line on a non-HTTP framing, so guard on
+        # is_http_request like the pad mech.
+        from endpoint_model import is_http_request
+
+        for i in tgt_idx:
+            p = as_raw(out[i])
+            raw = bytes(p[Raw].load)
+            if not is_http_request(raw):
+                continue
+            head, sep, body = raw.partition(b"\r\n\r\n")
+            if not sep:
+                continue
+            p[Raw].load = _lower_field_names(head) + b"\r\n\r\n" + body
 
     elif mech == "length_wrapper":
         # Mechanism B.  A wrapper header declares where the real data starts,
