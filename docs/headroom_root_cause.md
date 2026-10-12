@@ -486,6 +486,112 @@ corpus 1193 flow) — **không** phải `hidden_defender_corpus_v3fixed.pkl` (62
 Hai corpus đều có test split 40 flow nhưng **không chung flow nào** (overlap
 0/40). Các flow `neris` trong sweep không nằm trong v3fixed.
 
+### P12.4 T11 — `http_header_case` thắng thật trên conf chỉ-C2
+
+Sweep `ceiling_v5_case_nop2p.json` (40 flow, `ownership=both`, conf nop2p,
+812 s). Kết quả **ngược dự đoán D1** và phải đọc đúng cách:
+
+| | giá trị |
+|---|---|
+| flow có detection ở baseline | 16 (toàn bộ SID **2012627**) |
+| `evaded` sau `http_header_case` | **16/16** |
+| SID còn lại sau mutation | **rỗng** (`sids: []` trên cả 16 cell) |
+| `semantics_ok` (byte bar) | 0/16 |
+| `endpoint_ok` (bar thứ hai) | **14/16** |
+
+**Cảnh báo đọc báo cáo:** khối `best_per_framing` trong JSON báo
+`http_header_case: evaded 0`. Con số đó là **`evaded AND semantics_ok`**, không
+phải `evaded`. Đọc nhầm sẽ kết luận ngược hoàn toàn. Nguồn sự thật là `cells`.
+
+**Non-vacuity — bắt buộc đo, không tin báo cáo.** Đếm packet thực sự bị đổi:
+
+| | giá trị |
+|---|---|
+| flow mang payload HTTP thật | **16/16** |
+| flow mà mutation thay đổi ≥1 packet | **16/16** |
+
+(14 flow đổi 1 packet; 2 flow pipelined đổi 2 packet.) Nên "16/16" là né thật,
+không phải no-op ăn may.
+
+### P12.5 Sai lầm tôi tự mắc xích trong lúc kiểm chứng
+
+Đáng ghi lại, vì nó gần như làm hủy kết luận: ba probe liên tiếp của tôi báo
+`http_header_case` **không đổi byte gì**, suýt kết luận 16/16 là vacuous. Cả ba
+sai vì cùng một lý do — tôi gọi `reassembled_client_bytes(f["packets"], cip)`
+rồi so kết quả, nhưng lần đó lấy mẫu **4 flow đầu** trong 16, và 4 flow đó
+(cổng 2077/1460/2630/1820) đều không mang payload HTTP.
+
+Điều làm probe sai là hiện tượng quen thuộc: **chọn mẫu đầu tiên trong danh sách
+đã được sắp xếp theo đặc tính khác** (ở đây: số packet), rồi kết luận cho cả
+tập. Sửa bằng cách đo trên **toàn bộ** 16 flow, không lấy mẫu — và khi kết quả
+trái chiều với báo cáo của worker thì **kiểm tra lại công cụ đo trước**, đừng
+tin ngay báo cáo cũng không tin ngay kết luận của mình.
+
+Bài học cho phần viết: mọi tuyên bố "N/N flow có payload" phải kèm câu lệnh
+đếm được tái chạy, và mọi phép đo non-vacuity phải chạy trên **toàn bộ** tập.
+
+### P12.6 Rủi ro còn treo: ruleset chỉ-C2 đã loại chính rule bắt header evasion
+
+`nop2p` giữ **chỉ** rule C2. Nhưng ET Open có sẵn rule chuyên bắt header
+evasion (`1-38381`, `1-38601`, `1-39320`) — những rule đó **không** nằm trong
+nop2p. Nên "16/16 không còn SID nào" là kết luận **có điều kiện**: đúng với
+ruleset chỉ-C2, chưa nói được gì về ruleset ET Open đầy đủ.
+
+Đây là lý do policy T9 bắt buộc liệt kê SID còn lại sau mutation thay vì chỉ
+ghi `alert = False`. Đo lại trên `snort_et_c2.conf` (đầy đủ) là bắt buộc trước
+khi claim gì về `http_header_case`; xem P12.7.
+
+### P12.7 Đo trên ruleset đầy đủ — claim đứng vững, nhưng có điều kiện
+
+Sweep `ceiling_v6_case_fullrules.json` (120 cell = 40 flow × 3 cơ chế,
+`ownership=both`, `snort_et_c2.conf`, 1661 s). Conf này nạp
+`et_open_c2.rules` — **21374 rule alert**, chứ không phải bản C2-only.
+
+| cơ chế | baseline alert | evaded | SID sống sót sau mutation |
+|---|---:|---:|---|
+| `noop` *(đối chứng)* | 40/40 | **0/40** | — |
+| `split8` | 40/40 | **40/40** | **không** |
+| `http_header_case` | 40/40 | **16/40** | **không** |
+
+SID bật ở baseline: `2012627` ×16 (16 flow C2) + `2008581` ×24, `2008583` ×19,
+`2008585` ×4 (24 flow bot — DHT, ngoài threat model).
+
+**Đối chiếu P12.6:** lo ngại về rule bắt header evasion **không thành hiện thực
+trên extract này** — sau `http_header_case` không còn SID nào, kể cả trên 21374
+rule. Nhưng phải nói đúng mức: SID trong extract chạy từ `2000015` đến `2102587`,
+và các SID chuyên bắt header evasion từng thấy trong tài liệu ET Open
+(`1-38381`, `1-38601`, `1-39320`) **không có mặt** trong extract. Nên kết luận
+đúng là *"trên extract 21374 rule này"*, **không** phải *"ET Open không bắt
+được"*. Không được nói rộng hơn dữ liệu.
+
+**Headroom trên ruleset đầy đủ:**
+
+| bar | best_single | oracle | headroom | unique_winner_sets |
+|---|---|---:|---:|---:|
+| `valid_evasion` | `split8` (40) | 40 | **0** | 1 |
+| `valid_evasion_endpoint` | `split8` (40) | 40 | **0** | **2** |
+
+`unique_winner_sets = 2` dưới bar endpoint là điểm mới: `split8` và
+`http_header_case` **hòa** trên 16 flow C2. Vẫn `headroom = 0` vì cả hai đều
+thắng trên *cùng* tập flow — oracle chỉ bằng `best_single`, không có flow nào
+mà cơ chế này thắng mà cơ chế kia không thắng.
+
+### P12.8 Kết luận P12
+
+Ba điều đã đo được, đủ để đóng giai đoạn:
+
+1. **Bar thứ hai là thật và cần thiết.** Nó không tạo headroom, nhưng nó phân
+   loại cơ chế theo *cơ chế*, không theo cách né: `http_header_pad`/`http_header_case`
+   hợp lệ (14/16), còn `corrupt8`/`length_wrapper`/`prepend*` phá kênh (0/16).
+   Byte bar gộp tất cả thành một nhóm 0.
+2. **Hai họ cơ chế độc lập, cùng thắng trên mọi flow C2.** Phân mãnh (đứt
+   chuỗi `content`) và biến đổi chữ hoa/thường trong tên header (phá đối chiếu
+   `nocase` có chủ đích). Không cùng cơ chế, không cùng đường tấn công, cùng
+   kết quả. Đây là bằng chứng mạnh nhất cho `headroom = 0` là **cấu trúc**, không
+   phải đặc tính của một cơ chế.
+3. **`headroom = 0` giữ vững dưới cả hai bar, trên cả ba ruleset** (chỉ-C2 16
+   flow, C2-only 40 flow, đầy đủ 21374 rule). Không có hướng nào còn sống.
+
 ## Ghi chú phương pháp
 
 - Phân tích này chỉ đọc `et_open_c2.rules`, `snort_et_c2.conf` và các report JSON đã
