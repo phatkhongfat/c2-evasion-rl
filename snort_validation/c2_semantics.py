@@ -385,6 +385,24 @@ def wire_deliverable(original_packets, mutated_packets) -> bool:
     return all(a[k] == b[k] for k in a)
 
 
+def _has_unreadable_ip_family(packets: Sequence) -> bool:
+    """True when a capture carries an IP family this bar cannot compare.
+
+    The recovery and datagram paths both key on scapy's ``IP`` layer, which is
+    IPv4-only.  An IPv6 capture is therefore invisible to them: it recovers
+    ``b""`` on BOTH sides and compares equal no matter what its payloads are.
+    A mechanism that cannot be SHOWN byte-preserving must not be COUNTED as
+    byte-preserving, so such a capture is unverifiable and the bar must reject
+    it.  Deliberately narrow: only IPv6 (the other IP family scapy models) is
+    flagged -- a non-IP frame such as ARP carries no payload the bar was ever
+    meant to compare and stays ignored, so the guard does not blanket-reject
+    every packet without an ``IP`` layer.
+    """
+    from scapy.all import IPv6
+
+    return any(IPv6 in p for p in packets)
+
+
 def bytes_equal_semantics(original_packets: Sequence, mutated_packets: Sequence,
                           client_ip: str) -> bool:
     """True iff BOTH recovered streams are byte-for-byte identical
@@ -392,6 +410,12 @@ def bytes_equal_semantics(original_packets: Sequence, mutated_packets: Sequence,
     (wire_deliverable). Checked BEFORE assembly so a capture no endpoint
     could ever reassemble can never pass the bar.
     """
+    # Fail closed on a capture the bar cannot compare.  Checked first, on the
+    # ORIGINAL as well as the mutation, so a mutation cannot smuggle an
+    # unreadable IP family past the bar by leaving the original IPv4.
+    if _has_unreadable_ip_family(original_packets) \
+            or _has_unreadable_ip_family(mutated_packets):
+        return False
     if not wire_deliverable(original_packets, mutated_packets):
         return False
     if (reassembled_client_bytes(original_packets, client_ip)
