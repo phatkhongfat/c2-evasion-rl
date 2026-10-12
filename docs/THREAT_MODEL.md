@@ -20,6 +20,34 @@ Numbers under this model:
   BitTorrent DHT, sid 2008581/2008583/2008585, `HOME_NET=any`) — the alert
   fires before the client can do anything, and the server side is off-limits.
 
+### P2P rules are out of threat model (P11, measured)
+
+The rule harvest keeps every ET Open rule that ever fired, which swept in **102
+`classtype:policy-violation` rules** (BitTorrent DHT). They are not C2 and must
+never be counted as detection of the thing being measured.
+
+Measured on the 40-flow test split under `ownership=both`:
+
+- **16 flows** (all `http`) alert on `sid 2012627` — *ET TROJAN FakeAV
+  Check-in purporting to be MSIE with invalid terse HTTP headers* —
+  `classtype:trojan-activity`. These are the only flows with a genuine C2
+  baseline.
+- **24 flows** (all `neris`) alert **only** on `2008581`/`2008583`/`2008585`.
+  Removing the 102 P2P rules and re-running `noop` (`snort -T` passes on the
+  21,317-rule ruleset) leaves 16/16 http still alerting on `2012627` and makes
+  24/24 neris go **silent** — those flows have no C2 detection at all.
+
+Consequence: a flow counts toward an evasion measurement only if its baseline
+SID is C2. Headline numbers are reported on the 16 http flows; reporting
+across all 40 conflates "fragmentation defeats C2 detection" (16/16) with
+"fragmentation defeats a BitTorrent signature" (0/24).
+
+P2P-free conf: `snort_validation/et_open_c2/snort_et_c2_nop2p.conf`; regenerate
+its ruleset with `controls/build_c2_only_ruleset.py` (verified byte-identical to
+the on-disk file). Report for the `noop` control: `ceiling_v4_nop2p_noop.json`.
+The fragmentation sweep on this conf (`ceiling_v4_nop2p_frags.json`) is still
+running and must land before its numbers are cited.
+
 ## Model `both` (two-sided ownership)
 
 The attacker owns **both endpoints** (bot + C2 server), matching the reality

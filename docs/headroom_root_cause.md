@@ -1,6 +1,7 @@
 # Root cause: vì sao oracle = fragmentation (và oracle ≠ split8)
 
-Ngày: 2026-10-12. Phân tích read-only trên artifact sẵn có; không train, không sweep mới.
+Ngày: 2026-10-12. Bắt đầu là phân tích read-only trên artifact sẵn có (P7–P9); từ
+**P11 trở đi đã chạy sweep Snort thật** — xem `ceiling_v4_*.json`.
 
 ## TL;DR
 
@@ -9,6 +10,13 @@ Cả 5 SID family trong corpus v3fixed đều có pattern kích hoạt **≤ 11 
 hội của nhiều content, nên **mọi fragmentation unit ≥ 8 byte đều phá vỡ chúng một
 cách giống hệt nhau**. Hành động fragmentation tạo ra một lớp tương đương, không phải
 một lựa chọn duy nhất — vì vậy oracle co về một điểm và không gì có thể vượt.
+
+**P11 bổ sung hai điều, một trong đó đảo chiều cách hiểu ở trên.** (a) `headroom = 0`
+không phải artifact của cấu hình đo: bật `stream5_tcp: policy last` **hay**
+`frag3_engine: policy last` đều không đổi một số nào, vì frag3 Snort 2.9 chỉ chọn
+fragment để đối chiếu chứ không dựng lại rồi detect. (b) Trên tập flow hợp lệ — 16
+flow có baseline C2 thật (`2012627`), đã loại 102 luật BitTorrent DHT — mọi biến thể
+fragmentation đều 16/16, nên `headroom = 0` là kết quả **sạch**. Chi tiết ở P11.
 
 ## Bằng chứng 1 — geometry của 5 SID family (đọc từ `et_open_c2.rules`, đúng ruleset eval)
 
@@ -232,12 +240,86 @@ Nếu sweep đó cho headroom = 0 (khả năng lớn), negative result vẫn đ�
 kết luận được nới đúng chỗ: **đã quét 21/21 capture, 10 SID, 0 SID C2 nào có
 `8 ≤ L < 24`** — đó mới là phát biểu đủ sức để viết vào bài.
 
+## P11 — fragmentation không phải lỗi cấu hình, và 24/40 flow nằm ngoài threat model
+
+### P11.1 Ba cấu hình reassembly cho kết quả giống hệt
+
+Trước P11, giả thuyết đang bị đặt là "conf ship không reassembly nên `split8 =
+split16 = split24` là artifact của cấu hình đo". Đo thật trên 40 flow test,
+`ownership = both`, mỗi conf đổi **đúng một** directive:
+
+| conf | split8 | split16 | split24 | split_slow |
+|---|---:|---:|---:|---:|
+| gốc (`stream5 first` + `frag3 first`) | 40 | 16 | 16 | — |
+| `stream5_tcp: policy last` | 40 | 16 | 16 | 40 |
+| `frag3_engine: policy last` | 40 | 16 | 16 | 40 |
+
+Không một ô nào đổi. Report: `ceiling_v4_both_reassemble.json`,
+`ceiling_v4_both_frag3last.json`.
+
+**Nguyên nhân.** frag3 của Snort 2.9.20 chỉ *chọn fragment nào để đối chiếu rule*
+(`first` hoặc `last`); nó **không** có chế độ "dựng lại rồi detect". `snort -T` xác
+nhận: `policy reassemble`, `policy first_only`, `policy metis` đều
+`Bad policy name` → **fatal=2**; chỉ `first` và `last` hợp lệ.
+
+Hệ quả trực tiếp, và đây là điểm đảo chiều của P10: vì frag3 chỉ soi một fragment,
+nên chữ ký trải trên nhiều fragment không bao giờ được khớp, **bất kể conf**. IP
+fragmentation né được ET Open C2 vì giới hạn *cấu trúc* của frag3, không phải vì
+thiếu cấu hình. Số liệu `split8 = 40/40` vốn bị nghi ngờ là artifact hoá ra là
+điểm yếu thật, và nó độc lập cấu hình.
+
+### P11.2 24/40 flow chỉ alert được nhờ BitTorrent DHT
+
+Ruleset 21.419 rule được thu hoạch bằng cách "giữ mọi rule từng bắn", nên nuốt
+luôn **102 rule `classtype:policy-violation`** (SID `2008581`/`2008583`/`2008585`,
+BitTorrent DHT) — không thuộc threat model C2. Bằng chứng trên 40 flow test:
+
+| nhóm | n | framing | SID baseline |
+|---|---:|---|---|
+| C2 thật | 16 | http (16) | `2012627` — ET TROJAN FakeAV Check-in |
+| chỉ P2P | 24 | neris (24) | `2008581`×24, `2008583`×19, `2008585`×4 |
+
+Phép thử quyết định: lọc bỏ 102 rule `policy-violation` (còn 21.317 rule, `snort -T`
+pass) rồi chạy lại `noop` → **16/16 flow http vẫn alert** (`2012627`), **24/24 flow
+neris mất sạch alert**. Tức 24 flow đó vốn chỉ "được phát hiện" nhờ luật P2P, không
+có baseline C2 nào, và phải loại khỏi mọi phép đo evasion.
+Report: `ceiling_v4_nop2p_noop.json`.
+
+### P11.3 Số đúng trên tập hợp lệ
+
+Trên **16 flow có baseline C2 thật** (không P2P):
+
+| cơ chế | valid evasion |
+|---|---:|
+| `noop` | 0/16 |
+| `split8` | 16/16 |
+| `split16` | 16/16 |
+| `split24` | 16/16 |
+| `split_slow` | 16/16 |
+
+`oracle = 16`, `best_single = 16` → **`headroom = 0`**. Lần này `headroom = 0` là số
+**sạch**: đo trên flow có C2 thật, trên conf đã loại P2P, và đã chứng minh
+độc lập với cấu hình reassembly. `split16 = split24 = 16` trùng đúng tập 16 flow
+C2, tức fragmentation thắng ở C2 và **không** thắng ở P2P — hai kết luận khác nhau
+bị trộn lẫn trước đây.
+
+### P11.4 Sai sót của chính phân tích này
+
+Khi đọc report lần đầu, tôi kết luận "0/40 flow có SID C2". Sai: `baseline_sids`
+là **int**, so với chuỗi `"2012627"` nên phép `in` luôn cho `False`. Số đúng là
+16/40. Bảng P11.2 là sau khi sửa. Ghi lại vì đây là dạng lỗi âm thầm — phép so
+sánh kiểu dữ liệu lệch không báo lỗi, chỉ ra số sai.
+
 ## Ghi chú phương pháp
 
 - Phân tích này chỉ đọc `et_open_c2.rules`, `snort_et_c2.conf` và các report JSON đã
   có. Không thay đổi ruleset, không thêm action, không sửa số trong report.
-- Conf eval (`snort_et_c2.conf`) **không có** directive `reassemble` nào; chỉ
+- ~~Conf eval (`snort_et_c2.conf`) **không có** directive `reassemble` nào; chỉ
   `stream5_tcp: policy first, use_static_footprint_sizes`. Đây là điều kiện để
-  fragmentation có tác dụng và nên được nêu rõ khi mô tả setup.
+  fragmentation có tác dụng và nên được nêu rõ khi mô tả setup.~~
+  **ĐÃ BỊ BÁC BỎ (xem P11 bên dưới).** Hóa ra đây *không* phải lý do
+  fragmentation có tác dụng: thêm `stream5_tcp: policy last` **và**
+  `frag3_engine: policy last` đều không đổi một số nào. Nguyên nhân sâu hơn nằm ở
+  frag3, không ở stream5.
 - Trường `sid` trong `div_probe.json` là list; phải kiểm `baseline_sids` trên corpus
   thay vì `alert_sids` (pickle v3fixed dùng `baseline_sids`, rỗng với pool probe).
