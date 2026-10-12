@@ -1,0 +1,47 @@
+{
+ "sweep": "ceiling_v3_client_test.json",
+ "ownership": "client",
+ "n_flows": 40,
+ "per_mech_valid": {
+  "split8": 15,
+  "split16": 15,
+  "split_slow": 15,
+  "split24": 11,
+  "prepend4": 0,
+  "prepend8": 0,
+  "prepend12": 0,
+  "pad16": 0,
+  "reorder": 0,
+  "ttl": 0,
+  "corrupt8": 0,
+  "overlap8": 0,
+  "noop": 0,
+  "http_header_pad": 0,
+  "length_wrapper": 0
+ },
+ "best_single": {
+  "mech": "split8",
+  "valid": 15
+ },
+ "oracle": 15,
+ "headroom": 0,
+ "flows_only_split8": [],
+ "flows_only_split_slow": [],
+ "unique_winner_sets": 2
+}
+{
+ "group_sizes": [
+  11,
+  4
+ ],
+ "obs_feature_mean_gap": [
+  0.636,
+  0.006,
+  0.151,
+  0.449,
+  0.3,
+  0.135,
+  0.445,
+  0.069
+ ]
+}

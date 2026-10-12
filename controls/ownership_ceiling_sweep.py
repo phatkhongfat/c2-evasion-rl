@@ -38,6 +38,9 @@ def build_parser() -> argparse.ArgumentParser:
                          "full ACTION_NAMES list (e.g. split_slow,noop). Lets "
                          "a mechanism be measured without changing the PPO "
                          "action space.")
+    ap.add_argument("--ownership", default="both", choices=("client", "both"),
+                    help="packet-ownership model for mechanisms (default both, "
+                         "backward compatible with existing reports)")
     return ap
 
 
@@ -61,7 +64,7 @@ def main() -> int:
         fid = f["flow_id"]
         cip = client_ip_of(fid)
         base = score_flow_real(f["packets"], cip, attempt_id=fi, mech=None,
-                               ownership="both", **conf_kw)
+                               ownership=args.ownership, **conf_kw)
         # attempt_id must stay inside the Fix-5 /24 translation range
         # (MAX_ATTEMPTS=250); ids only need to be unique within one Snort
         # call's pcap, and every cell is its own subprocess, so modulo is safe.
@@ -69,7 +72,7 @@ def main() -> int:
         for mi, mech in enumerate(mechs):
             r = score_flow_real(f["packets"], cip,
                                 attempt_id=(fi * n_mech + mi) % 250,
-                                mech=mech, ownership="both", **conf_kw)
+                                mech=mech, ownership=args.ownership, **conf_kw)
             rows.append({"flow_id": fid, "framing": f.get("framing", "?"),
                          "mech": mech, "baseline_alert": base["alert"],
                          "evaded": r["evaded"], "semantics_ok": r["semantics_ok"],
@@ -90,7 +93,7 @@ def main() -> int:
     ceiling = sum(n for _m, n in per_framing.values())
     n_by_framing = {fr: sum(1 for f in flows if f.get("framing") == fr)
                     for fr in per_framing}
-    out = {"ownership": "both", "split": args.split, "scorer": "real_snort",
+    out = {"ownership": args.ownership, "split": args.split, "scorer": "real_snort",
            "conf": args.conf or "default (ET Open full)",
            "bar": "two_stream_byte_equality",
            "cells": rows,
