@@ -88,3 +88,23 @@ cho 33 dns flows, fast split cho 7 http/irc → diversity=2 tự nhiên (~75 ph�
 Phase 4 optional của plan `2026-10-11_182054`). Tăng λ > 0.6 vi phạm pass bar
 đã đăng ký và có rủi ro manufacture-evasion; ε-greedy hay QD/MAP-Elites đổi
 deliverable, không thuộc phạm vi P4.
+
+## Addendum (2026-10-12): naive-tier sweep trên v3fixed = INVALID, nguyên nhân gốc
+
+Chạy `ownership_ceiling_sweep.py --conf snort_et_c2_naive.conf` trên v3fixed
+(600 cells, real Snort): **baseline_alert = 0/40** → mọi "evasion" vô nghĩa
+(noop cũng "thắng" 40/40). Report bị quarantine, không commit số.
+
+Chẩn đoán: 40 flow của v3fixed được build (build_corpus_v3.py --verify) để
+alert bằng các SID NGOÀI tập naive {2008581, 2008583, 2008585, 2012627} —
+phân bố baseline_sids đo từ corpus: 2016413 ×29, 2014169 ×24, 2012533 ×5,
+2014635 ×3, 2017287 ×1. Ruleset naive 4 SID **không thể bắn trên corpus
+này theo cấu trúc** — không phải lỗi harness.
+
+Hệ quả: `ceiling_v3_naive.json` (bản cũ) có cùng bệnh — noop evaded 40/40,
+baseline_sids rỗng trên cả 560 cells → con số "http_header_pad 37/40" trên
+naive tier KHÔNG được trích dẫn ở bất kỳ đâu. Naive-tier ladder trên v3fixed
+chỉ đo được bằng ET archive thật (ruleset_probe: et286 = chính 4 SID naive,
+community không load được) — tức naive-vs-expert comparison trên corpus này
+là bất khả thi bằng conf tự dựng; muốn có tier yếu thật phải dựng conf từ
+et_open_c2.rules với filter SID khác NAIVE, không phải naive.rules.
