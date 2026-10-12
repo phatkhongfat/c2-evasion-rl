@@ -310,6 +310,45 @@ là **int**, so với chuỗi `"2012627"` nên phép `in` luôn cho `False`. S�
 16/40. Bảng P11.2 là sau khi sửa. Ghi lại vì đây là dạng lỗi âm thầm — phép so
 sánh kiểu dữ liệu lệch không báo lỗi, chỉ ra số sai.
 
+### P11.5 Bảng trần đầy đủ — 15 cơ chế, 40 flow, `ceiling_v4_both_test.json`
+
+Đây là bảng ceiling chuẩn của dự án: 40 flow × 15 cơ chế = 600 cell, không thiếu ô nào,
+`ownership=both`, `split=test`, `snort -T` exit 0, 6996 s.
+
+| cơ chế | baseline | evaded | `sem_ok` | **VALID** |
+|---|---:|---:|---:|---:|
+| `split8` | 40 | 40 | 40 | **40** |
+| `split_slow` | 40 | 40 | 40 | **40** |
+| `split16` | 40 | 16 | 40 | 16 |
+| `split24` | 40 | 16 | 40 | 16 |
+| `corrupt8` | 40 | 24 | **0** | 0 |
+| `http_header_pad` | 40 | 16 | 24 | 0 |
+| `length_wrapper` | 40 | 15 | **0** | 0 |
+| `overlap8` | 40 | 24 | 16 | 0 |
+| `noop` *(đối chứng)* | 40 | **0** | 40 | **0** |
+| `pad16` | 40 | 0 | **0** | 0 |
+| `prepend4` / `prepend8` / `prepend12` | 40 | 40 | **0** | 0 |
+| `reorder` | 40 | 0 | 37 | 0 |
+| `ttl` | 40 | 0 | 40 | 0 |
+
+Cột `VALID` là `evaded AND semantics_ok` — chỉ nó mới đếm được là né IDS thật.
+
+**Đọc bảng:**
+
+- `noop` chặn 40/40 flow, `evaded = 0` → **harness lành tính**: cơ chế không bị áp thì IDS
+  bắn. Nếu `noop` có `evaded > 0` thì mọi dòng khác trong bảng là vô nghĩa.
+- **6 cơ chế có `evaded > 0` nhưng `sem_ok = 0`** (`corrupt8`, `length_wrapper`, `prepend*`,
+  `pad16` và một phần `overlap8`): chúng "né" được IDS **bằng cách phá hủy kênh C2**.
+  `prepend4/8/12` né 40/40 — con số đẹp nhất bảng và hoàn toàn vacuous. Cột `sem_ok` loại
+  chúng ra; đây là lý do cột này phải có mặt.
+- Chỉ **4** cơ chế tạo ra né hợp lệ, và chỉ **2** đạt 40/40: `split8` và `split_slow`.
+- `controls/rl_headroom.py` trên file này: `best_single = split8 (40)`, `oracle = 40`,
+  **`headroom = 0`**, `unique_winner_sets = 2`.
+
+**Giới hạn đã biết của bảng này:** nó chạy trên conf gốc còn BitTorrent, nên `split16`/`split24`
+= 16 là **tập 16 flow C2 thật** (xem P11.2) và 24 flow kia không phải C2. Bảng trần trên
+conf đã lọc P2P (`ceiling_v4_nop2p_frags.json`) là bảng được trích dẫn cho claim C2.
+
 ## Ghi chú phương pháp
 
 - Phân tích này chỉ đọc `et_open_c2.rules`, `snort_et_c2.conf` và các report JSON đã
