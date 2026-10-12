@@ -426,3 +426,57 @@ def bytes_equal_semantics(original_packets: Sequence, mutated_packets: Sequence,
         return True
     return (reassembled_client_bytes(original_packets, sip)
             == reassembled_client_bytes(mutated_packets, sip))
+
+
+def endpoint_command_preserved(original_packets: Sequence,
+                               mutated_packets: Sequence,
+                               client_ip: str) -> bool:
+    """True iff a real C2 handler recovers the SAME command from both streams.
+
+    The SECOND declared bar, applied identically to every mechanism.  Where
+    ``bytes_equal_semantics`` asks "is the wire identical", this asks "does the
+    endpoint still understand the channel" -- the question a protocol-legal
+    mutation (an unknown HTTP header, a case-folded field name) has to answer.
+    A server ignores an unknown header, so prepending one changes the wire bytes
+    without changing the command; the byte bar rejects that, this one certifies
+    it.  Both verdicts are reported side by side; this is ADDITIONAL, never a
+    replacement, so old reports stay comparable (c2_semantics.py:127 -- training
+    and evaluation share ONE rule).
+
+    Fails CLOSED, and deliberately does NOT reuse ``wire_deliverable``.  That
+    helper is the BYTE bar's gate: ``_datagrams`` compares the reassembled
+    datagram multiset for byte-equality, so gating here would reject exactly the
+    protocol-legal mutations this bar exists to certify (an inserted ``X-Pad``
+    header yields a different datagram).  ``bytes_equal_semantics`` still applies
+    it; the endpoint bar answers the orthogonal question.
+
+    Three fail-closed paths, each load-bearing:
+
+    * an IP family the recovery cannot read (IPv6) is unverifiable -> reject,
+      mirroring ``bytes_equal_semantics`` and commit ed6fb8d;
+    * ``detect_framing`` falls back to ``"http"`` for an unlabelled flow and
+      ``_parse_http`` then returns ``None`` on a stream it cannot read, so a
+      naive implementation compares ``None == None`` and reports a vacuous PASS.
+      A bar that cannot READ the original cannot CERTIFY the mutation, so
+      ``None`` on the ORIGINAL is a rejection;
+    * a mutation the handler can no longer parse (``None``) can never equal a
+      real command -> reject.
+    """
+    from endpoint_model import detect_framing, parse_command
+
+    if _has_unreadable_ip_family(original_packets) \
+            or _has_unreadable_ip_family(mutated_packets):
+        return False
+
+    orig = reassembled_client_bytes(original_packets, client_ip)
+    mut = reassembled_client_bytes(mutated_packets, client_ip)
+
+    framing = detect_framing(orig)
+    command = parse_command(orig, framing)
+    if command is None:
+        return False          # unreadable original -> cannot certify
+
+    mutated_command = parse_command(mut, framing)
+    if mutated_command is None:
+        return False          # handler reads nothing from the mutation
+    return mutated_command == command
