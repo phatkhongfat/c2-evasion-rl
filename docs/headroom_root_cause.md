@@ -349,6 +349,50 @@ Cột `VALID` là `evaded AND semantics_ok` — chỉ nó mới đếm được 
 = 16 là **tập 16 flow C2 thật** (xem P11.2) và 24 flow kia không phải C2. Bảng trần trên
 conf đã lọc P2P (`ceiling_v4_nop2p_frags.json`) là bảng được trích dẫn cho claim C2.
 
+### P11.6 Quét trên ruleset chỉ-C2 — `headroom = 0` sạch, và mẫu số đúng là 16
+
+`snort_validation/reports/ceiling_v4_nop2p_frags.json` — 200 cell (40 flow × 5 cơ chế),
+`conf = snort_et_c2_nop2p.conf`, `bar = two_stream_byte_equality`,
+`scorer = real_snort`, `ownership = both`, `wall_s = 2460.4` (41′).
+
+| cơ chế | `baseline_alert` | `evaded` | `sem_ok` | `valid_evasion` | http | neris |
+|---|---:|---:|---:|---:|---|---|
+| `noop` *(đối chứng)* | **16** | 24 | 40 | 24 | **0/16** | **24/24** |
+| `split8` | 16 | 40 | 40 | 40 | 16/16 | 24/24 |
+| `split16` | 16 | 40 | 40 | 40 | 16/16 | 24/24 |
+| `split24` | 16 | 40 | 40 | 40 | 16/16 | 24/24 |
+| `split_slow` | 16 | 40 | 40 | 40 | 16/16 | 24/24 |
+
+`best_per_framing` lưu trong report: `{"http": {"mech": "split8", "evaded": 16,
+"flows": 16}, "neris": {"mech": "noop", "evaded": 24, "flows": 24}}`.
+
+**Ba kết luận đo được:**
+
+1. **`baseline_sids` chỉ chứa duy nhất SID `2012627`.** Dưới ruleset chỉ-C2,
+   không rule nào khác trong ET Open bắt được bất kỳ flow nào của corpus. Toàn
+   bộ 24 alert còn lại trước đây đến từ BitTorrent DHT — khớp P11.2.
+2. **24 flow `neris` có baseline rỗng**, nên `noop` "né" 24/24 mà không thay
+   đổi gì. Chúng nằm ngoài threat model hai lần: chỉ từng alert nhờ rule mà
+   P11 đã loại, và giờ không còn gì để né. `rl_headroom.py` không lọc trường
+   hợp này, nên `oracle = 40` và `best_single = 40` đều bị thổi phồng 24.
+3. **Mẫu số đúng là 16 flow HTTP có detection.** Trên đó `noop = 0/16` và cả bốn
+   cơ chế phân mảnh đều `16/16`. Phát biểu được đưa vào thesis:
+
+   > Trên một ruleset chỉ chứa rule C2, Snort 2.9.20 phát hiện 16/40 flow —
+   > toàn bộ là họ FakeAV C2 check-in (SID 2012627) — và **mọi** cơ chế phân
+   > mảnh đều vô hiệu hóa cả 16. `headroom = 0`.
+
+**Bất thường `split16`/`split24` đã được giải thích.** Chúng đo `16/16` dưới
+`ceiling_v4_both_test.json` (ruleset đầy đủ) và `40/40` ở đây (ruleset chỉ-C2).
+Chênh lệch 24 flow là do 102 rule P2P tương tác với phân mảnh, **không** phải
+khác corpus. Ở cả hai report, con số "40" luôn là `16 thật + 24 rỗng ở mức noop`.
+Không còn gì phải đối chiếu.
+
+**Lỗi script bị lộ ra:** `controls/rl_headroom.py` (1) không có bộ lọc
+baseline rỗng và (2) đọc `sys.argv[1]`/`argv[2]` trần, nên `rl_headroom.py
+SWEEP.json --corpus X` ném `FileNotFoundError: '--corpus'` *sau khi* đã in
+summary — một lần chạy im lặng chạy thiếu. Cả hai được sửa cùng một commit.
+
 ## Ghi chú phương pháp
 
 - Phân tích này chỉ đọc `et_open_c2.rules`, `snort_et_c2.conf` và các report JSON đã
