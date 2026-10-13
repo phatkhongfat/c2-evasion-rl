@@ -619,3 +619,41 @@ def endpoint_query_preserved(original_packets: Sequence,
                 if mm.get(k) != vals:
                     return False
     return True
+
+
+def semantics_ok_reward(original_packets: Sequence, mutated_packets: Sequence,
+                        client_ip: Optional[str] = None) -> bool:
+    """D8 (docs/action_space_policy_p15.md): the training-reward semantics gate.
+
+    The UNION of the frozen headline bars -- byte equality (v1) OR D7 OR D5:
+
+        semantics_ok_reward = bytes_equal_semantics
+                              or endpoint_commands_preserved   (D7)
+                              or endpoint_query_preserved      (D5)
+
+    Rationale: the reward must not be STRICTER than the definition of a valid
+    evasion the evaluation reports, or the policy can never represent a
+    mechanism already measured to win.  A mechanism that changes the wire on
+    purpose (http_header_case, query_param_prepend) is a byte-bar break by
+    design, so a byte-only gate drove the reward to -10 on exactly the
+    mechanisms the honest evaluation counts as valid.
+
+    Uniform across mechanisms -- no per-mechanism special-casing.  D7/D5 are
+    HTTP-only and fail-closed, so non-HTTP (neris/dns) flows fall back to the
+    byte bar exactly as before; the relaxation cannot leak.  This never
+    replaces the byte bar: callers that need the strict verdict still call
+    ``bytes_equal_semantics`` directly (the env exposes it as
+    ``info["semantics_bytes"]``).
+
+    ``client_ip`` is the bot IP; when omitted it is derived from the packets
+    exactly as the other bars' callers do.  The three bar functions take it as
+    a positional argument, so it is always forwarded explicitly.
+    """
+    if client_ip is None:
+        client_ip = client_ip_of_packets(original_packets)
+    if bytes_equal_semantics(original_packets, mutated_packets, client_ip):
+        return True
+    return (
+        endpoint_commands_preserved(original_packets, mutated_packets, client_ip)
+        or endpoint_query_preserved(original_packets, mutated_packets, client_ip)
+    )

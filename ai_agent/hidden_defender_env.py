@@ -45,6 +45,7 @@ from c2_semantics import (  # noqa: E402
     client_ip_of_packets,
     ensure_chain,
     reassembled_client_bytes,
+    semantics_ok_reward,
     server_ip_of,
 )
 from fragment_ops import has_payload, transport_payload  # noqa: E402
@@ -546,19 +547,21 @@ class HiddenDefenderEnv(gym.Env):
         return bool(flow["replica"].verdict(pkts))
 
     def score(self, flow, mech: str):
-        """Return (evaded, semantics_ok, alert) for one (flow, mechanism).
+        """Return (evaded, semantics_ok, alert, semantics_bytes) for one (flow, mechanism).
 
-        Uses the SAME client-only mutation and the SAME strict byte-equality
-        bar as the honest evaluation (Fix 2 + Fix 3), so the reward cannot
-        optimise for a mechanism the evaluation scores as a semantics break.
+        Uses the SAME client-only mutation as the honest evaluation (Fix 2).
+        ``semantics_ok`` is the D8 reward gate (byte OR D7 OR D5, frozen in
+        docs/action_space_policy_p15.md); ``semantics_bytes`` is the strict
+        byte-equality verdict, kept so the honest number is never lost.
         """
         pkts = flow["packets"]
         fid = flow.get("flow_id")
         cip = client_ip_of(fid) if fid else None
         mut = apply_mech(pkts, mech, cip, ownership=self.ownership)
-        sem = semantics_intact(pkts, mut, cip)
+        sem_bytes = semantics_intact(pkts, mut, cip)
+        sem = semantics_ok_reward(pkts, mut, cip)   # D8
         alert = self._detected(flow, mut)
-        return (not alert), sem, alert
+        return (not alert), sem, alert, sem_bytes
 
     # -- gym API ----------------------------------------------------------
     def _owned_payloads(self, flow):
@@ -670,7 +673,7 @@ class HiddenDefenderEnv(gym.Env):
     def step(self, action: int):
         flow = self._flows[self._idx]
         mech = ACTION_NAMES[int(action)]
-        evaded, sem, alert = self.score(flow, mech)
+        evaded, sem, alert, sem_bytes = self.score(flow, mech)
 
         # Base reward from evasion success/failure
         if evaded and sem:
@@ -703,6 +706,7 @@ class HiddenDefenderEnv(gym.Env):
             "alert": alert,
             "evaded": evaded,
             "semantics_ok": sem,
+            "semantics_bytes": sem_bytes,
             "action": mech,
             "flow_id": flow["flow_id"],
             "action_cost": action_cost,
