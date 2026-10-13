@@ -14,7 +14,9 @@
 | T2.2 mở rộng traffic 2→15 capture | ✅ xong, `222f89a` | **8 capture có alert**, 40 SID phân biệt |
 | T2.3 corpus mở rộng | ✅ 216 flow / 8 capture | `corpus_p13_extended.pkl` |
 | T3.1 đo S1 theo **priority của rule** | ✅ xong, `76a7088` | S1 **thật = 3 flow**, không phải 380 |
-| T3.2 S2 / composite trên ruleset mới | 🔄 sweep `noop` đang chạy | |
+| T3.2 S2 / composite trên ruleset mới | ✅ xong, `00e8b3d` + `cf5a1a1` | **0/120 flow** có 2 rule malware độc lập (13 flow SSH-scan noise, 1 flow DNS TLD) |
+| T4.1 case-mech trên corpus mở rộng | ✅ xong, `262009f` | `http_header_case` **0/5** — không transfer (flow mới bị rule URL-content bắt, không phải header-case) |
+| T4.2 **cost-axis Pareto oracle** | ✅ xong, `3dc3f28` + `81108e2` | **HEADROOM DƯƠNG ĐẦU TIÊN** — xem mục dưới |
 
 **Kết luận Phase 0 (chưa đổi ruleset, chưa đổi traffic):** `headroom = 0` dưới cả
 hai bar, và **giờ đã biết vì sao** — không chỉ vì `best_single` = 100%, mà vì
@@ -142,6 +144,56 @@ flow nào.
 
 → **Mở rộng ruleset 2,5× và traffic 4× vẫn không tạo ra tổ hợp SID độc lập.**
 Cấu trúc "mỗi flow một rule" không phải hạn chế của corpus cũ.
+
+### Phát hiện DƯƠNG đầu tiên: headroom trên trục CHI PHÍ (commit `81108e2`)
+
+Evasion headroom = 0, nhưng **wire cost là trục thứ hai hợp pháp mà attacker
+quan tâm** (băng thông, số packet — cơ chế fragmentation đắt hơn đổi case
+header vốn zero-cost). `controls/pareto_cost_oracle.py` đo: *per-flow policy
+chọn cơ chế VALID rẻ nhất* vs *cơ chế cố định tốt nhất*, cùng mức evasion.
+
+**v6 (corpus cũ, 40 flow, endpoint bar):**
+
+| | evaded | +bytes | +pkts | mechs dùng |
+|---|---:|---:|---:|---|
+| fixed tốt nhất (`split8`) | 40/40 | +10.744 | +316 | 1 |
+| **per-flow oracle** | **40/40** | **+9.792** | **+288** | **2** (`http_header_case`×14 zero-cost + `split8`×26) |
+
+→ **STRICTLY Pareto-dominates**: không fixed mech nào đạt cùng evasion với
+cost ≤ oracle. Đây là claim "RL adds something" **trung thực và đo được**:
+per-flow selection tối thiểu chi phí tại cùng mức né, dùng **2 cơ chế khác
+nhau** (đúng điều kiện ≥2 distinct actions cho claim "per-flow selection",
+không phải "policy hằng số").
+
+**v8 (corpus mở rộng, 5 flow HTTP, cả 2 bar):** oracle = `split8` fixed
+(5/5, +1.224B/+36pkts) — **không có cost headroom**. Lý do: `http_header_case`
+0/5 (T4.1), nên chỉ còn 1 cơ chế valid → không có gì để chọn rẻ hơn.
+
+**Kết luận khoa học:** cost-axis headroom **có điều kiện theo corpus** — nó
+tồn tại đúng khi có ≥2 cơ chế valid với cost khác nhau phủ các flow khác
+nhau. Đây không phải artifact: nó là hệ quả trực tiếp của việc ruleset cũ
+có rule case-sensitive (`2012627` FakeAV) mà ruleset mới trên flow mới thì
+không (bắt bằng URL-content `2012533` thay vào đó).
+
+### Đề xuất Phase 5 — RL trên trục chi phí (thay vì composite evasion)
+
+Composite action space (Phase 4 theo MTO) giờ **không cần train**: 0 flow cần
+phối hợp, nên nó sẽ chỉ tái xác nhận headroom=0 với chi phí ~12 ngày máy.
+Thay vào đó:
+
+1. **Reward có số hạng cost**: `r = valid_evasion − λ·wire_cost` (λ nhỏ, frozen
+   trước). Policy học per-flow selection giữa các cơ chế valid.
+2. **Baseline so sánh**: fixed mech tốt nhất (đã đo) + random policy + greedy
+   cost-oracle (upper bound không học). Claim: RL tiến gần cost-oracle.
+3. **Đo trên cả 2 corpus**: v6 (có cost headroom → RL phải thắng fixed) và
+   v8 (không có → RL phải hội tụ về fixed, kiểm chứng không overfit).
+4. **Không đổi bar, không đổi action space, không hạ ngưỡng** — chỉ thêm trục
+   cost vào reward. Evasion metric giữ nguyên làm ràng buộc (constraint),
+   cost là mục tiêu tối ưu.
+
+Đây là hướng "thêm RL vào" **có tác dụng thật**: nó biến negative result
+(evasion headroom=0) thành positive result (cost headroom>0, RL khai thác
+được), mà vẫn trung thực với dữ liệu.
 
 ## Đo mới 2026-10-13 (thay đổi kế hoạch T0.3 và mẫu số)
 
