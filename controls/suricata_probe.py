@@ -44,6 +44,16 @@ def main() -> int:
     ap.add_argument("--mechs", default="noop",
                     help="comma list; 'noop' = unmutated (control)")
     ap.add_argument("--split", default="test")
+    ap.add_argument("--corpus", default="",
+                    help="override the corpus pickle (needed for the extended "
+                         "corpus, where the 4 Virut flows live)")
+    ap.add_argument("--flow-ids", default="",
+                    help="path to a frozen sample JSON with fakeav_flows/virut_flows "
+                         "(reports/p16b_http_d4_sample.json); restricts the probe to "
+                         "exactly those flows, so the denominator cannot drift")
+    ap.add_argument("--group", default="",
+                    help="with --flow-ids: only 'fakeav' or 'virut' (they live in "
+                         "different corpora, so they cannot be swept in one run)")
     ap.add_argument("--out", default="")
     ap.add_argument("--workdir", default="")
     a = ap.parse_args()
@@ -55,9 +65,30 @@ def main() -> int:
     work.mkdir(parents=True, exist_ok=True)
     mechs = [m for m in a.mechs.split(",") if m]
 
-    env = HiddenDefenderEnv(split=a.split, seed=42, real_snort=False)
+    # Frozen sample first: if the caller asks for it and the corpus cannot supply
+    # it, FAIL rather than silently measuring a different denominator.
+    want_ids = None
+    if a.flow_ids:
+        s = json.loads(Path(a.flow_ids).read_text())
+        key = {"fakeav": "fakeav_flows", "virut": "virut_flows"}.get(a.group)
+        if key is None:
+            raise SystemExit(f"--group must be fakeav|virut, got {a.group!r}")
+        want_ids = list(s[key])
+
+    env = HiddenDefenderEnv(split=a.split, seed=42, real_snort=False,
+                            corpus=a.corpus or None)
     env.reset(seed=42)
-    flows = env._flows[: a.flows]
+    flows = list(env._flows)
+    if want_ids is not None:
+        by_id = {f["flow_id"]: f for f in flows}
+        missing = [i for i in want_ids if i not in by_id]
+        if missing:
+            raise SystemExit(
+                f"{len(missing)}/{len(want_ids)} frozen flow_ids absent from "
+                f"corpus={a.corpus or 'default'} split={a.split}; refusing to "
+                f"measure a different denominator. e.g. {missing[0][:80]}")
+        flows = [by_id[i] for i in want_ids]
+    flows = flows[: a.flows]
     print(f"[*] {len(flows)} flows x {len(mechs)} mech(s), engine=suricata")
 
     cells, t_all = [], time.time()
