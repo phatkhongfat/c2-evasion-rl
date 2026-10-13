@@ -120,3 +120,35 @@ def test_mask_http_flow_without_query_blocks_only_qpp():
     mask = env.action_masks()
     assert mask[15] == 1, "http_header_case needs no query string"
     assert mask[16] == 0, "query_param_prepend needs a '?' in an owned payload"
+
+
+# -- T1.5: byte-identity env<->eval + A4 split regression -------------------
+
+def test_env_apply_mech_byte_identical_to_eval_pipeline():
+    """Fix 3: the env mirror and the eval pipeline must produce identical bytes
+    for both newly promoted mechanisms (the reward and the honest evaluation
+    must be scoring the same mutation)."""
+    from eval_pipeline import mutate_client_only, client_ip_of
+    pkts = _pkts()
+    fid = f"cap|{CIP}:1024->8.8.8.8:80|tcp"
+    for mech in ("http_header_case", "query_param_prepend"):
+        a = hde.apply_mech(pkts, mech, client_ip_of(fid))
+        b = mutate_client_only(pkts, mech, client_ip_of(fid))
+        ba = b"".join(bytes(p[Raw].load) for p in a if Raw in p)
+        bb = b"".join(bytes(p[Raw].load) for p in b if Raw in p)
+        assert ba == bb, mech
+
+
+def test_split_paths_untouched_a4():
+    """A4: promoting the new mechanisms must not change split8's behaviour.
+
+    split8 still fragments, and the reassembled client stream is byte-invariant
+    -- the property A4 protects (new mechanisms only append to ACTION_NAMES and
+    never touch a split branch).
+    """
+    from c2_semantics import reassembled_client_bytes
+    pkts = _pkts()
+    m = hde.apply_mech(pkts, "split8", CIP)
+    assert len(m) > len(pkts)          # split8 still fragments
+    assert (reassembled_client_bytes(pkts, CIP)
+            == reassembled_client_bytes(m, CIP)), "split8 broke the byte stream"
