@@ -1,0 +1,15 @@
+botnet-capture-20110816-donbot 
+botnet-capture-20110816-sogou 
+botnet-capture-20110816-qvod 
+botnet-capture-20110815-fast-flux       6 [1:2014635:       2 [1:2012533: 
+botnet-capture-20110812-rbot     706 [1:2019486:       8 [1:2019471: 
+botnet-capture-20110815-rbot-dos      32 [1:2019486:       8 [1:2019471: 
+botnet-capture-20110810-neris     290 [1:2014169:       8 [1:2012533: 
+capture-win13     939 [1:2016413: 
+2014-03-12_capture-win15 
+2014-04-07_capture-win11 
+2014-04-07_capture-win6 
+capture-win19 
+2013-11-06_capture-win8 
+2013-08-20_captureWin5 
+2013-10-18_capture-win15 
