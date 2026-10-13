@@ -70,9 +70,10 @@ def main() -> int:
     want_ids = None
     if a.flow_ids:
         s = json.loads(Path(a.flow_ids).read_text())
-        key = {"fakeav": "fakeav_flows", "virut": "virut_flows"}.get(a.group)
+        key = {"fakeav": "fakeav_flows", "virut": "virut_flows",
+               "neris": "neris_flows"}.get(a.group)
         if key is None:
-            raise SystemExit(f"--group must be fakeav|virut, got {a.group!r}")
+            raise SystemExit(f"--group must be fakeav|virut|neris, got {a.group!r}")
         want_ids = list(s[key])
 
     env = HiddenDefenderEnv(split=a.split, seed=42, real_snort=False,

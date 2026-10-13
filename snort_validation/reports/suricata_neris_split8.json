@@ -1,0 +1,340 @@
+{
+ "engine": "suricata 7.0.3",
+ "split": "test",
+ "flows": 24,
+ "mechs": [
+  "split8"
+ ],
+ "wall_seconds": 615.3,
+ "mean_s_per_cell": 25.64,
+ "by_mech": {
+  "split8": {
+   "n": 24,
+   "alerted": 24,
+   "evaded": 0,
+   "seconds": 614.8900000000001,
+   "sids": [
+    2008581,
+    2008583,
+    2008585
+   ],
+   "mean_s_per_flow": 25.62
+  }
+ },
+ "cells": [
+  {
+   "flow_id": "botnet-capture-20110819-bot|87.0.4.47:24320->147.32.84.165:32234|udp",
+   "framing": "neris",
+   "mech": "split8",
+   "alerts": 3,
+   "sids": [
+    2008581,
+    2008583
+   ],
+   "evaded": false,
+   "seconds": 25.73,
+   "pkts": 13
+  },
+  {
+   "flow_id": "botnet-capture-20110819-bot|31.28.239.85:50948->147.32.84.165:32234|udp",
+   "framing": "neris",
+   "mech": "split8",
+   "alerts": 2,
+   "sids": [
+    2008581,
+    2008583
+   ],
+   "evaded": false,
+   "seconds": 25.67,
+   "pkts": 6
+  },
+  {
+   "flow_id": "botnet-capture-20110819-bot|178.178.32.179:40345->147.32.84.191:29676|udp",
+   "framing": "neris",
+   "mech": "split8",
+   "alerts": 4,
+   "sids": [
+    2008581,
+    2008585
+   ],
+   "evaded": false,
+   "seconds": 26.91,
+   "pkts": 16
+  },
+  {
+   "flow_id": "botnet-capture-20110819-bot|147.32.84.165:32234->46.0.71.91:17112|udp",
+   "framing": "neris",
+   "mech": "split8",
+   "alerts": 6,
+   "sids": [
+    2008581,
+    2008583
+   ],
+   "evaded": false,
+   "seconds": 26.68,
+   "pkts": 20
+  },
+  {
+   "flow_id": "botnet-capture-20110819-bot|147.32.84.165:32234->123.195.171.63:16001|udp",
+   "framing": "neris",
+   "mech": "split8",
+   "alerts": 2,
+   "sids": [
+    2008581,
+    2008583
+   ],
+   "evaded": false,
+   "seconds": 26.7,
+   "pkts": 10
+  },
+  {
+   "flow_id": "botnet-capture-20110819-bot|93.116.10.237:44526->147.32.84.192:31037|udp",
+   "framing": "neris",
+   "mech": "split8",
+   "alerts": 3,
+   "sids": [
+    2008581,
+    2008583
+   ],
+   "evaded": false,
+   "seconds": 26.19,
+   "pkts": 10
+  },
+  {
+   "flow_id": "botnet-capture-20110819-bot|130.208.183.47:36380->147.32.84.165:32234|udp",
+   "framing": "neris",
+   "mech": "split8",
+   "alerts": 10,
+   "sids": [
+    2008581,
+    2008583
+   ],
+   "evaded": false,
+   "seconds": 25.32,
+   "pkts": 59
+  },
+  {
+   "flow_id": "botnet-capture-20110819-bot|89.75.125.168:17075->147.32.84.192:31037|udp",
+   "framing": "neris",
+   "mech": "split8",
+   "alerts": 3,
+   "sids": [
+    2008581,
+    2008585
+   ],
+   "evaded": false,
+   "seconds": 25.48,
+   "pkts": 15
+  },
+  {
+   "flow_id": "botnet-capture-20110819-bot|147.32.84.165:32234->79.167.0.55:17773|udp",
+   "framing": "neris",
+   "mech": "split8",
+   "alerts": 3,
+   "sids": [
+    2008581,
+    2008583
+   ],
+   "evaded": false,
+   "seconds": 25.11,
+   "pkts": 13
+  },
+  {
+   "flow_id": "botnet-capture-20110819-bot|89.169.146.232:20275->147.32.84.165:32234|udp",
+   "framing": "neris",
+   "mech": "split8",
+   "alerts": 4,
+   "sids": [
+    2008581,
+    2008583
+   ],
+   "evaded": false,
+   "seconds": 25.82,
+   "pkts": 10
+  },
+  {
+   "flow_id": "botnet-capture-20110819-bot|147.32.84.165:32234->117.198.83.101:15919|udp",
+   "framing": "neris",
+   "mech": "split8",
+   "alerts": 2,
+   "sids": [
+    2008581,
+    2008583
+   ],
+   "evaded": false,
+   "seconds": 25.48,
+   "pkts": 10
+  },
+  {
+   "flow_id": "botnet-capture-20110819-bot|95.161.9.43:44946->147.32.84.191:29676|udp",
+   "framing": "neris",
+   "mech": "split8",
+   "alerts": 3,
+   "sids": [
+    2008581,
+    2008583
+   ],
+   "evaded": false,
+   "seconds": 25.75,
+   "pkts": 10
+  },
+  {
+   "flow_id": "botnet-capture-20110819-bot|115.138.197.2:51162->147.32.84.165:32234|udp",
+   "framing": "neris",
+   "mech": "split8",
+   "alerts": 4,
+   "sids": [
+    2008581
+   ],
+   "evaded": false,
+   "seconds": 25.6,
+   "pkts": 35
+  },
+  {
+   "flow_id": "botnet-capture-20110819-bot|147.32.84.191:29676->216.110.98.73:51413|udp",
+   "framing": "neris",
+   "mech": "split8",
+   "alerts": 2,
+   "sids": [
+    2008581,
+    2008583
+   ],
+   "evaded": false,
+   "seconds": 24.97,
+   "pkts": 9
+  },
+  {
+   "flow_id": "botnet-capture-20110819-bot|85.105.140.222:10396->147.32.84.191:29676|udp",
+   "framing": "neris",
+   "mech": "split8",
+   "alerts": 4,
+   "sids": [
+    2008581,
+    2008583
+   ],
+   "evaded": false,
+   "seconds": 26.1,
+   "pkts": 10
+  },
+  {
+   "flow_id": "botnet-capture-20110819-bot|147.32.84.191:29676->120.6.154.200:9669|udp",
+   "framing": "neris",
+   "mech": "split8",
+   "alerts": 2,
+   "sids": [
+    2008581,
+    2008583
+   ],
+   "evaded": false,
+   "seconds": 25.77,
+   "pkts": 19
+  },
+  {
+   "flow_id": "botnet-capture-20110819-bot|94.213.173.117:23599->147.32.84.191:29676|udp",
+   "framing": "neris",
+   "mech": "split8",
+   "alerts": 2,
+   "sids": [
+    2008581,
+    2008583
+   ],
+   "evaded": false,
+   "seconds": 25.93,
+   "pkts": 6
+  },
+  {
+   "flow_id": "botnet-capture-20110819-bot|93.103.159.190:53025->147.32.84.191:29676|udp",
+   "framing": "neris",
+   "mech": "split8",
+   "alerts": 4,
+   "sids": [
+    2008581,
+    2008585
+   ],
+   "evaded": false,
+   "seconds": 24.85,
+   "pkts": 20
+  },
+  {
+   "flow_id": "botnet-capture-20110819-bot|196.215.21.212:17326->147.32.84.192:31037|udp",
+   "framing": "neris",
+   "mech": "split8",
+   "alerts": 12,
+   "sids": [
+    2008581,
+    2008583
+   ],
+   "evaded": false,
+   "seconds": 25.11,
+   "pkts": 35
+  },
+  {
+   "flow_id": "botnet-capture-20110819-bot|38.107.163.247:6882->147.32.84.192:31037|udp",
+   "framing": "neris",
+   "mech": "split8",
+   "alerts": 4,
+   "sids": [
+    2008581,
+    2008583
+   ],
+   "evaded": false,
+   "seconds": 25.26,
+   "pkts": 62
+  },
+  {
+   "flow_id": "botnet-capture-20110819-bot|112.210.156.223:12831->147.32.84.191:29676|udp",
+   "framing": "neris",
+   "mech": "split8",
+   "alerts": 3,
+   "sids": [
+    2008581,
+    2008583
+   ],
+   "evaded": false,
+   "seconds": 25.35,
+   "pkts": 17
+  },
+  {
+   "flow_id": "botnet-capture-20110819-bot|86.58.46.218:62731->147.32.84.191:29676|udp",
+   "framing": "neris",
+   "mech": "split8",
+   "alerts": 4,
+   "sids": [
+    2008581,
+    2008585
+   ],
+   "evaded": false,
+   "seconds": 25.83,
+   "pkts": 20
+  },
+  {
+   "flow_id": "botnet-capture-20110819-bot|147.32.84.192:31037->123.131.126.227:9252|udp",
+   "framing": "neris",
+   "mech": "split8",
+   "alerts": 5,
+   "sids": [
+    2008581,
+    2008583
+   ],
+   "evaded": false,
+   "seconds": 24.3,
+   "pkts": 30
+  },
+  {
+   "flow_id": "botnet-capture-20110819-bot|94.45.190.75:52057->147.32.84.165:32234|udp",
+   "framing": "neris",
+   "mech": "split8",
+   "alerts": 7,
+   "sids": [
+    2008581,
+    2008583
+   ],
+   "evaded": false,
+   "seconds": 24.98,
+   "pkts": 20
+  }
+ ],
+ "rules": "snort_validation/et_open_c2/suricata.rules",
+ "rejected_rules": 86,
+ "note": "ownership=client for non-noop mechs; translate_source keeps the 5-tuple unique. Fail-closed: engine errors raise."
+}
