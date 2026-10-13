@@ -11,8 +11,10 @@
 | T1.1 tải ET Open 3.0.0 | ✅ 52.454 rule, `snort -T` pass | superset của ruleset cũ |
 | T1.2 freeze danh sách | ✅ `rulesets/p13/MANIFEST.md`, `88a6d43` | trước mọi phép đo headroom |
 | T2.1 cứu `/tmp/cov` | ✅ 5 capture có alert thật → `snort_validation/alert_cov/` | không còn phụ thuộc `/tmp` |
-| T2.2 mở rộng traffic 2→15 capture | 🔄 đang chạy | harvest 52k rule nền |
-| T3.1 đo S1/S2 trên ruleset mới | ⏳ chờ T2.2 | |
+| T2.2 mở rộng traffic 2→15 capture | ✅ xong, `222f89a` | **8 capture có alert**, 40 SID phân biệt |
+| T2.3 corpus mở rộng | ✅ 216 flow / 8 capture | `corpus_p13_extended.pkl` |
+| T3.1 đo S1 theo **priority của rule** | ✅ xong, `76a7088` | S1 **thật = 3 flow**, không phải 380 |
+| T3.2 S2 / composite trên ruleset mới | 🔄 sweep `noop` đang chạy | |
 
 **Kết luận Phase 0 (chưa đổi ruleset, chưa đổi traffic):** `headroom = 0` dưới cả
 hai bar, và **giờ đã biết vì sao** — không chỉ vì `best_single` = 100%, mà vì
@@ -68,6 +70,51 @@ SID đang bắn trên traffic chưa dùng (đọc từ `/tmp/cov`, không tốn 
 | 8 capture còn lại | 0 | *(không SID nào bận dưới ruleset C2-only)* |
 
 ---
+
+## Kết quả Phase 1–3 — S1 pass trên giấy, fail trong threat model
+
+### Đo trên ruleset 52.454 rule + 15 capture (harvest `222f89a`)
+
+| capture | alerts | SID | SID trong threat model |
+|---|---:|---:|---:|
+| 20110812-rbot | 38.150 | 19 | 19 |
+| 20110810-neris | 527 | 13 | 13 |
+| 20110811-neris | 519 | 13 | 13 (có `2012627`) |
+| 20110816-qvod | 632 | 11 | 11 |
+| 20110816-donbot | 124 | 6 | 6 |
+| 20110815-fast-flux | 11 | 4 | 4 |
+| 20110816-sogou | 5 | 2 | 2 |
+| capture-win13 | 939 | 1 | 1 |
+| 7 capture còn lại | 0 | 0 | 0 |
+
+Đây là bước nhảy thật so với ruleset C2 cũ: trước đó **mọi** capture có alert
+đều chỉ có đúng **một** SID trong threat model. Giờ 7/8 capture có ≥2 SID.
+
+### Nhưng S1 đó là scan noise
+
+Đo S1 theo 5-tuple trên file alert:
+
+| ngưỡng priority | 5-tuple có alert | ≥2 SID | SID set phổ biến nhất |
+|---:|---:|---:|---|
+| ≤ 3 | 24.161 | **380** | x347 `2001219`+`2003068` (SSH scan) |
+| ≤ 2 | 22.127 | **367** | x347 `2001219`+`2003068` (SSH scan) |
+| **≤ 1** | **928** | **3** | x3 `2019471`+`2019486` (IRC bot) |
+
+Rule phổ biến nhất theo số alert là `2003068` **ET SCAN Potential SSH Scan
+OUTBOUND** với 21.039 hit. Rule scan cùng bắt trên 5-tuple với traffic C2
+thật, nên đếm chúng là SID phân biệt làm thổi phồng gate.
+
+**Priority là metadata của rule, không liên quan gì tới việc flow có bị né hay
+không** → phân tầng theo priority không phải hạ bar theo kết quả. Priority 1
+đúng là bậc "high likelihood of a security problem" của ET, và nó chứa đúng
+các rule malware (`2012627` FakeAV C2 check-in, `2019471`/`2019486` IRC bot).
+
+### Kết luận
+
+Với **52.454 rule** (2,5×) và **8 capture** (4×), chỉ **3 flow** thật có ≥2 SID
+— và cả 3 đều là **cùng một cặp** `(2019471, 2019486)` trên IRC port 6667, đúng
+dạng thoái lui đã ghi ở phần trên. Không có tổ hợp SID nào *độc lập* mà các
+cơ chế hiện có bắt buộc phải xử lý bằng hai nhánh khác nhau.
 
 ## Đo mới 2026-10-13 (thay đổi kế hoạch T0.3 và mẫu số)
 
