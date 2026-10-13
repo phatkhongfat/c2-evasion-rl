@@ -49,6 +49,21 @@ cùng tập flow, cùng bar, cùng engine.
 Tổng thời gian engine cho **toàn bộ** Phase 2 ≤ **45 phút**. Vượt → giảm mẫu (ghi
 rõ đã giảm phần nào), **không** chạy qua đêm không giám sát.
 
+**Đo thực tế 2026-10-13 (G1a, 40 flow noop): 24,85 s/cell**, chi phối bởi rule load
+21288 rule chứ không phải kích thước pcap. Suy ra:
+
+| phương án | cell | phút | verdict |
+|---|---:|---:|---|
+| 20 flow × 6 mech (noop, split8, split16, split24, http_header_case, query_param_prepend) | 120 | **49,7** | **VƯỢT G1c** |
+| 20 flow × **5** mech (bỏ `split16`) | 100 | **41,4** | OK |
+
+**Quyết định (ghi TRƯỚC khi chạy):** bỏ `split16`, giữ `split8` + `split24`.
+Lý do: cả ba là cùng một họ (IP fragmentation tại các điểm cắt khác nhau), nên
+G1b(i) "split chết hay không" chỉ cần hai điểm của họ đó — `split8` là điểm mạnh
+nhất (cắt nhỏ nhất, khó reassemble nhất) và `split24` là điểm yếu nhất. Nếu cả hai
+đều chết thì `split16` chết; nếu `split8` sống thì kết luận G1b(i) đã đỏ sẵn.
+Việc giảm mẫu **không** đụng mẫu số flow (vẫn đủ 20/20 HTTP-D4 đóng băng).
+
 ### Rủi ro đã biết trước khi đo (ghi trước để không hậu nghiệm biện minh)
 
 Vị trí chèn an toàn về ngữ nghĩa trên HTTP là **header block sau request line** →
