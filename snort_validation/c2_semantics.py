@@ -165,11 +165,40 @@ def client_ip_of_packets(packets: Sequence) -> Optional[str]:
     """
     from scapy.all import IP
 
-    srcs = [p[IP].src for p in packets if IP in p]
+    srcs = [p[IP].src for p in map(ensure_chain, packets) if IP in p]
     for ip in srcs:
         if ip.startswith(HOME_NET_PREFIX):
             return ip
     return srcs[0] if srcs else None
+
+
+def _ensure_chain(pkt):
+    """The same packet with a genuinely populated scapy layer chain.
+
+    scapy restores a pickled packet lazily: when `scapy.all` was never
+    imported in this process the chain comes back empty, every membership test
+    (`IP in pkt`, `Raw in pkt`) answers False, and the packet looks like bare
+    link-layer framing with no payload at all.  A whole flow then scores as
+    EMPTY -- no mechanism runs, every endpoint bar returns False, and nothing
+    raises.  Re-dissecting from the wire bytes costs one parse and is only paid
+    on that anomalous path.
+    """
+    from scapy.all import IP
+    if IP in pkt:
+        return pkt
+    raw = bytes(pkt)
+    for off in (0, 14):          # bare IP, or Ethernet + IP
+        if len(raw) > off and raw[off] >> 4 == 4:
+            try:
+                return pkt.__class__(raw)
+            except Exception:
+                return pkt
+    return pkt
+
+
+# Public alias: callers that pre-filter a packet list (mechanisms, ip lookups)
+# hit the same lazy-unpickle trap and must normalise before testing membership.
+ensure_chain = _ensure_chain
 
 
 def transport_payload(pkt) -> bytes:
@@ -184,6 +213,7 @@ def transport_payload(pkt) -> bytes:
     whether a packet is mutable or visible.
     """
     from scapy.all import TCP, UDP, Raw, Padding
+    pkt = _ensure_chain(pkt)
     if Raw in pkt:
         # Pre-existing convention: read the Raw layer only.  TCP corpus
         # packets carry Raw followed by Padding, and callers depend on
@@ -249,7 +279,8 @@ def reassembled_client_bytes(packets: Sequence, client_ip: str) -> bytes:
     def _is_frag(p) -> bool:
         return int(p[IP].frag) != 0 or bool(int(p[IP].flags) & 0x1)
 
-    stream = [p for p in packets
+    stream = [_ensure_chain(p) for p in packets]
+    stream = [p for p in stream
               if IP in p and has_payload(p) and p[IP].src == client_ip]
 
     parts: List[bytes] = []
@@ -290,7 +321,7 @@ def server_ip_of(packets: Sequence, client_ip: str) -> Optional[str]:
     re-imports it, so external callers are unaffected."""
     from scapy.all import IP
 
-    for p in packets:
+    for p in map(ensure_chain, packets):
         if IP in p and p[IP].src != client_ip:
             return p[IP].src
         if IP in p and p[IP].dst != client_ip:
@@ -517,3 +548,74 @@ def endpoint_commands_preserved(original_packets: Sequence,
     if mutated_commands is None:
         return False          # handler reads nothing from the mutation
     return mutated_commands == commands
+
+
+def _query_map(pairs) -> dict:
+    m: dict = {}
+    for k, v in pairs:
+        m.setdefault(k, []).append(v)
+    return m
+
+
+def endpoint_query_preserved(original_packets: Sequence,
+                             mutated_packets: Sequence,
+                             client_ip: str) -> bool:
+    """True iff a handler acting on PARSED QUERIES recovers the same commands.
+
+    The D5 bar (citation-gated, ledger [6] RFC 3986 / [7] PHP parse_str):
+    for a bodyless HTTP request the handler acts on the key->value pairs of
+    its query [6 s3.4, 7], parsed before percent-decoding [6 s2.4].  A
+    mutation is preserved iff, per request and in the same order:
+
+    * a request with a body keeps that body byte-identical (the relaxation
+      applies ONLY to queries -- the same precedent as the unknown X-Junk
+      header: a handler reads what it reads, everything else must be intact);
+    * a bodyless request keeps its path;
+    * a bodyless query request keeps, for EVERY key the ORIGINAL carried, the
+      identical list of decoded values (duplicate-key order significant).
+      Extra keys added by the mutation are ignored -- a handler reads the
+      keys it knows; an unknown parameter is inert, exactly like an unknown
+      header.
+
+    Non-HTTP framings delegate to endpoint_commands_preserved.  Fail-closed
+    paths are identical to the other endpoint bars: unreadable IP family,
+    unreadable original, unreadable mutation, or a request-count mismatch.
+    """
+    from endpoint_model import detect_framing, parse_commands_q, parse_commands
+
+    if _has_unreadable_ip_family(original_packets) \
+            or _has_unreadable_ip_family(mutated_packets):
+        return False
+
+    orig = reassembled_client_bytes(original_packets, client_ip)
+    mut = reassembled_client_bytes(mutated_packets, client_ip)
+
+    framing = detect_framing(orig)
+    if framing != "http":
+        return endpoint_commands_preserved(original_packets, mutated_packets,
+                                           client_ip)
+
+    co = parse_commands_q(orig, framing)
+    if co is None:
+        return False          # unreadable original -> cannot certify
+    cm = parse_commands_q(mut, framing)
+    if cm is None or len(cm) != len(co):
+        return False          # handler reads less/differently -> reject
+
+    for eo, em in zip(co, cm):
+        ko, vo = eo[0], eo[1:]
+        km, vm = em[0], em[1:]
+        if ko != km:
+            return False
+        if ko in ("body", "path", "raw"):
+            if vo != vm:
+                return False
+        else:                 # ko == "query": (path, pairs)
+            if vo[0] != vm[0]:
+                return False
+            om = _query_map(vo[1])
+            mm = _query_map(vm[1])
+            for k, vals in om.items():
+                if mm.get(k) != vals:
+                    return False
+    return True

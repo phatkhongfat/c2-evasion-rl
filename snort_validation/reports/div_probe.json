@@ -1,0 +1,1258 @@
+{
+ "ownership": "both",
+ "split": "test",
+ "scorer": "real_snort",
+ "conf": "default (ET Open full)",
+ "bar": "two_stream_byte_equality",
+ "cells": [
+  {
+   "flow_id": "capture-win13|10.0.2.113:50837->8.8.8.8:53|udp",
+   "framing": "http",
+   "mech": "split8",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2016413
+   ]
+  },
+  {
+   "flow_id": "capture-win13|10.0.2.113:50837->8.8.8.8:53|udp",
+   "framing": "http",
+   "mech": "split16",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2016413
+   ]
+  },
+  {
+   "flow_id": "capture-win13|10.0.2.113:50837->8.8.8.8:53|udp",
+   "framing": "http",
+   "mech": "split24",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2016413
+   ]
+  },
+  {
+   "flow_id": "capture-win13|10.0.2.113:50837->8.8.8.8:53|udp",
+   "framing": "http",
+   "mech": "split_slow",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2016413
+   ]
+  },
+  {
+   "flow_id": "capture-win13|10.0.2.113:50837->8.8.8.8:53|udp",
+   "framing": "http",
+   "mech": "prepend8",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": false,
+   "valid_evasion": false,
+   "sids": [],
+   "baseline_sids": [
+    2016413
+   ]
+  },
+  {
+   "flow_id": "capture-win13|10.0.2.113:50837->8.8.8.8:53|udp",
+   "framing": "http",
+   "mech": "pad16",
+   "baseline_alert": true,
+   "evaded": false,
+   "semantics_ok": false,
+   "valid_evasion": false,
+   "sids": [
+    2016413
+   ],
+   "baseline_sids": [
+    2016413
+   ]
+  },
+  {
+   "flow_id": "capture-win13|10.0.2.113:50837->8.8.8.8:53|udp",
+   "framing": "http",
+   "mech": "http_header_pad",
+   "baseline_alert": true,
+   "evaded": false,
+   "semantics_ok": true,
+   "valid_evasion": false,
+   "sids": [
+    2016413
+   ],
+   "baseline_sids": [
+    2016413
+   ]
+  },
+  {
+   "flow_id": "capture-win13|10.0.2.113:50837->8.8.8.8:53|udp",
+   "framing": "http",
+   "mech": "ttl",
+   "baseline_alert": true,
+   "evaded": false,
+   "semantics_ok": true,
+   "valid_evasion": false,
+   "sids": [
+    2016413
+   ],
+   "baseline_sids": [
+    2016413
+   ]
+  },
+  {
+   "flow_id": "capture-win13|10.0.2.113:62195->8.8.8.8:53|udp",
+   "framing": "http",
+   "mech": "split8",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2016413
+   ]
+  },
+  {
+   "flow_id": "capture-win13|10.0.2.113:62195->8.8.8.8:53|udp",
+   "framing": "http",
+   "mech": "split16",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2016413
+   ]
+  },
+  {
+   "flow_id": "capture-win13|10.0.2.113:62195->8.8.8.8:53|udp",
+   "framing": "http",
+   "mech": "split24",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2016413
+   ]
+  },
+  {
+   "flow_id": "capture-win13|10.0.2.113:62195->8.8.8.8:53|udp",
+   "framing": "http",
+   "mech": "split_slow",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2016413
+   ]
+  },
+  {
+   "flow_id": "capture-win13|10.0.2.113:62195->8.8.8.8:53|udp",
+   "framing": "http",
+   "mech": "prepend8",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": false,
+   "valid_evasion": false,
+   "sids": [],
+   "baseline_sids": [
+    2016413
+   ]
+  },
+  {
+   "flow_id": "capture-win13|10.0.2.113:62195->8.8.8.8:53|udp",
+   "framing": "http",
+   "mech": "pad16",
+   "baseline_alert": true,
+   "evaded": false,
+   "semantics_ok": false,
+   "valid_evasion": false,
+   "sids": [
+    2016413
+   ],
+   "baseline_sids": [
+    2016413
+   ]
+  },
+  {
+   "flow_id": "capture-win13|10.0.2.113:62195->8.8.8.8:53|udp",
+   "framing": "http",
+   "mech": "http_header_pad",
+   "baseline_alert": true,
+   "evaded": false,
+   "semantics_ok": true,
+   "valid_evasion": false,
+   "sids": [
+    2016413
+   ],
+   "baseline_sids": [
+    2016413
+   ]
+  },
+  {
+   "flow_id": "capture-win13|10.0.2.113:62195->8.8.8.8:53|udp",
+   "framing": "http",
+   "mech": "ttl",
+   "baseline_alert": true,
+   "evaded": false,
+   "semantics_ok": true,
+   "valid_evasion": false,
+   "sids": [
+    2016413
+   ],
+   "baseline_sids": [
+    2016413
+   ]
+  },
+  {
+   "flow_id": "capture-win13|10.0.2.113:51080->8.8.8.8:53|udp",
+   "framing": "http",
+   "mech": "split8",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2016413
+   ]
+  },
+  {
+   "flow_id": "capture-win13|10.0.2.113:51080->8.8.8.8:53|udp",
+   "framing": "http",
+   "mech": "split16",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2016413
+   ]
+  },
+  {
+   "flow_id": "capture-win13|10.0.2.113:51080->8.8.8.8:53|udp",
+   "framing": "http",
+   "mech": "split24",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2016413
+   ]
+  },
+  {
+   "flow_id": "capture-win13|10.0.2.113:51080->8.8.8.8:53|udp",
+   "framing": "http",
+   "mech": "split_slow",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2016413
+   ]
+  },
+  {
+   "flow_id": "capture-win13|10.0.2.113:51080->8.8.8.8:53|udp",
+   "framing": "http",
+   "mech": "prepend8",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": false,
+   "valid_evasion": false,
+   "sids": [],
+   "baseline_sids": [
+    2016413
+   ]
+  },
+  {
+   "flow_id": "capture-win13|10.0.2.113:51080->8.8.8.8:53|udp",
+   "framing": "http",
+   "mech": "pad16",
+   "baseline_alert": true,
+   "evaded": false,
+   "semantics_ok": false,
+   "valid_evasion": false,
+   "sids": [
+    2016413
+   ],
+   "baseline_sids": [
+    2016413
+   ]
+  },
+  {
+   "flow_id": "capture-win13|10.0.2.113:51080->8.8.8.8:53|udp",
+   "framing": "http",
+   "mech": "http_header_pad",
+   "baseline_alert": true,
+   "evaded": false,
+   "semantics_ok": true,
+   "valid_evasion": false,
+   "sids": [
+    2016413
+   ],
+   "baseline_sids": [
+    2016413
+   ]
+  },
+  {
+   "flow_id": "capture-win13|10.0.2.113:51080->8.8.8.8:53|udp",
+   "framing": "http",
+   "mech": "ttl",
+   "baseline_alert": true,
+   "evaded": false,
+   "semantics_ok": true,
+   "valid_evasion": false,
+   "sids": [
+    2016413
+   ],
+   "baseline_sids": [
+    2016413
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110810-neris|147.32.84.165:2079->193.232.128.6:53|udp",
+   "framing": "http",
+   "mech": "split8",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110810-neris|147.32.84.165:2079->193.232.128.6:53|udp",
+   "framing": "http",
+   "mech": "split16",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110810-neris|147.32.84.165:2079->193.232.128.6:53|udp",
+   "framing": "http",
+   "mech": "split24",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110810-neris|147.32.84.165:2079->193.232.128.6:53|udp",
+   "framing": "http",
+   "mech": "split_slow",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110810-neris|147.32.84.165:2079->193.232.128.6:53|udp",
+   "framing": "http",
+   "mech": "prepend8",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": false,
+   "valid_evasion": false,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110810-neris|147.32.84.165:2079->193.232.128.6:53|udp",
+   "framing": "http",
+   "mech": "pad16",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": false,
+   "valid_evasion": false,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110810-neris|147.32.84.165:2079->193.232.128.6:53|udp",
+   "framing": "http",
+   "mech": "http_header_pad",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110810-neris|147.32.84.165:2079->193.232.128.6:53|udp",
+   "framing": "http",
+   "mech": "ttl",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110810-neris|147.32.84.165:2079->178.162.163.70:53|udp",
+   "framing": "http",
+   "mech": "split8",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2014169
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110810-neris|147.32.84.165:2079->178.162.163.70:53|udp",
+   "framing": "http",
+   "mech": "split16",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2014169
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110810-neris|147.32.84.165:2079->178.162.163.70:53|udp",
+   "framing": "http",
+   "mech": "split24",
+   "baseline_alert": true,
+   "evaded": false,
+   "semantics_ok": true,
+   "valid_evasion": false,
+   "sids": [
+    2014169
+   ],
+   "baseline_sids": [
+    2014169
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110810-neris|147.32.84.165:2079->178.162.163.70:53|udp",
+   "framing": "http",
+   "mech": "split_slow",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2014169
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110810-neris|147.32.84.165:2079->178.162.163.70:53|udp",
+   "framing": "http",
+   "mech": "prepend8",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": false,
+   "valid_evasion": false,
+   "sids": [],
+   "baseline_sids": [
+    2014169
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110810-neris|147.32.84.165:2079->178.162.163.70:53|udp",
+   "framing": "http",
+   "mech": "pad16",
+   "baseline_alert": true,
+   "evaded": false,
+   "semantics_ok": false,
+   "valid_evasion": false,
+   "sids": [
+    2014169
+   ],
+   "baseline_sids": [
+    2014169
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110810-neris|147.32.84.165:2079->178.162.163.70:53|udp",
+   "framing": "http",
+   "mech": "http_header_pad",
+   "baseline_alert": true,
+   "evaded": false,
+   "semantics_ok": true,
+   "valid_evasion": false,
+   "sids": [
+    2014169
+   ],
+   "baseline_sids": [
+    2014169
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110810-neris|147.32.84.165:2079->178.162.163.70:53|udp",
+   "framing": "http",
+   "mech": "ttl",
+   "baseline_alert": true,
+   "evaded": false,
+   "semantics_ok": true,
+   "valid_evasion": false,
+   "sids": [
+    2014169
+   ],
+   "baseline_sids": [
+    2014169
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110810-neris|147.32.84.165:2079->202.12.27.33:53|udp",
+   "framing": "http",
+   "mech": "split8",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110810-neris|147.32.84.165:2079->202.12.27.33:53|udp",
+   "framing": "http",
+   "mech": "split16",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110810-neris|147.32.84.165:2079->202.12.27.33:53|udp",
+   "framing": "http",
+   "mech": "split24",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110810-neris|147.32.84.165:2079->202.12.27.33:53|udp",
+   "framing": "http",
+   "mech": "split_slow",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110810-neris|147.32.84.165:2079->202.12.27.33:53|udp",
+   "framing": "http",
+   "mech": "prepend8",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": false,
+   "valid_evasion": false,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110810-neris|147.32.84.165:2079->202.12.27.33:53|udp",
+   "framing": "http",
+   "mech": "pad16",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": false,
+   "valid_evasion": false,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110810-neris|147.32.84.165:2079->202.12.27.33:53|udp",
+   "framing": "http",
+   "mech": "http_header_pad",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110810-neris|147.32.84.165:2079->202.12.27.33:53|udp",
+   "framing": "http",
+   "mech": "ttl",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110815-fast-flux|147.32.84.165:1418->74.3.164.224:443|tcp",
+   "framing": "http",
+   "mech": "split8",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2014635
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110815-fast-flux|147.32.84.165:1418->74.3.164.224:443|tcp",
+   "framing": "http",
+   "mech": "split16",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2014635
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110815-fast-flux|147.32.84.165:1418->74.3.164.224:443|tcp",
+   "framing": "http",
+   "mech": "split24",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2014635
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110815-fast-flux|147.32.84.165:1418->74.3.164.224:443|tcp",
+   "framing": "http",
+   "mech": "split_slow",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2014635
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110815-fast-flux|147.32.84.165:1418->74.3.164.224:443|tcp",
+   "framing": "http",
+   "mech": "prepend8",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": false,
+   "valid_evasion": false,
+   "sids": [],
+   "baseline_sids": [
+    2014635
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110815-fast-flux|147.32.84.165:1418->74.3.164.224:443|tcp",
+   "framing": "http",
+   "mech": "pad16",
+   "baseline_alert": true,
+   "evaded": false,
+   "semantics_ok": false,
+   "valid_evasion": false,
+   "sids": [
+    2014635
+   ],
+   "baseline_sids": [
+    2014635
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110815-fast-flux|147.32.84.165:1418->74.3.164.224:443|tcp",
+   "framing": "http",
+   "mech": "http_header_pad",
+   "baseline_alert": true,
+   "evaded": false,
+   "semantics_ok": true,
+   "valid_evasion": false,
+   "sids": [
+    2014635
+   ],
+   "baseline_sids": [
+    2014635
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110815-fast-flux|147.32.84.165:1418->74.3.164.224:443|tcp",
+   "framing": "http",
+   "mech": "ttl",
+   "baseline_alert": true,
+   "evaded": false,
+   "semantics_ok": true,
+   "valid_evasion": false,
+   "sids": [
+    2014635
+   ],
+   "baseline_sids": [
+    2014635
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110815-fast-flux|147.32.84.165:1308->74.3.164.223:443|tcp",
+   "framing": "http",
+   "mech": "split8",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2014635
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110815-fast-flux|147.32.84.165:1308->74.3.164.223:443|tcp",
+   "framing": "http",
+   "mech": "split16",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2014635
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110815-fast-flux|147.32.84.165:1308->74.3.164.223:443|tcp",
+   "framing": "http",
+   "mech": "split24",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2014635
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110815-fast-flux|147.32.84.165:1308->74.3.164.223:443|tcp",
+   "framing": "http",
+   "mech": "split_slow",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2014635
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110815-fast-flux|147.32.84.165:1308->74.3.164.223:443|tcp",
+   "framing": "http",
+   "mech": "prepend8",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": false,
+   "valid_evasion": false,
+   "sids": [],
+   "baseline_sids": [
+    2014635
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110815-fast-flux|147.32.84.165:1308->74.3.164.223:443|tcp",
+   "framing": "http",
+   "mech": "pad16",
+   "baseline_alert": true,
+   "evaded": false,
+   "semantics_ok": false,
+   "valid_evasion": false,
+   "sids": [
+    2014635
+   ],
+   "baseline_sids": [
+    2014635
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110815-fast-flux|147.32.84.165:1308->74.3.164.223:443|tcp",
+   "framing": "http",
+   "mech": "http_header_pad",
+   "baseline_alert": true,
+   "evaded": false,
+   "semantics_ok": true,
+   "valid_evasion": false,
+   "sids": [
+    2014635
+   ],
+   "baseline_sids": [
+    2014635
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110815-fast-flux|147.32.84.165:1308->74.3.164.223:443|tcp",
+   "framing": "http",
+   "mech": "ttl",
+   "baseline_alert": true,
+   "evaded": false,
+   "semantics_ok": true,
+   "valid_evasion": false,
+   "sids": [
+    2014635
+   ],
+   "baseline_sids": [
+    2014635
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110815-fast-flux|147.32.84.165:1283->74.3.164.222:443|tcp",
+   "framing": "http",
+   "mech": "split8",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2014635
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110815-fast-flux|147.32.84.165:1283->74.3.164.222:443|tcp",
+   "framing": "http",
+   "mech": "split16",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2014635
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110815-fast-flux|147.32.84.165:1283->74.3.164.222:443|tcp",
+   "framing": "http",
+   "mech": "split24",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2014635
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110815-fast-flux|147.32.84.165:1283->74.3.164.222:443|tcp",
+   "framing": "http",
+   "mech": "split_slow",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2014635
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110815-fast-flux|147.32.84.165:1283->74.3.164.222:443|tcp",
+   "framing": "http",
+   "mech": "prepend8",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": false,
+   "valid_evasion": false,
+   "sids": [],
+   "baseline_sids": [
+    2014635
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110815-fast-flux|147.32.84.165:1283->74.3.164.222:443|tcp",
+   "framing": "http",
+   "mech": "pad16",
+   "baseline_alert": true,
+   "evaded": false,
+   "semantics_ok": false,
+   "valid_evasion": false,
+   "sids": [
+    2014635
+   ],
+   "baseline_sids": [
+    2014635
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110815-fast-flux|147.32.84.165:1283->74.3.164.222:443|tcp",
+   "framing": "http",
+   "mech": "http_header_pad",
+   "baseline_alert": true,
+   "evaded": false,
+   "semantics_ok": true,
+   "valid_evasion": false,
+   "sids": [
+    2014635
+   ],
+   "baseline_sids": [
+    2014635
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110815-fast-flux|147.32.84.165:1283->74.3.164.222:443|tcp",
+   "framing": "http",
+   "mech": "ttl",
+   "baseline_alert": true,
+   "evaded": false,
+   "semantics_ok": true,
+   "valid_evasion": false,
+   "sids": [
+    2014635
+   ],
+   "baseline_sids": [
+    2014635
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110812-rbot|78.40.125.4:6667->147.32.84.165:1181|tcp",
+   "framing": "irc",
+   "mech": "split8",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2017287
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110812-rbot|78.40.125.4:6667->147.32.84.165:1181|tcp",
+   "framing": "irc",
+   "mech": "split16",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2017287
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110812-rbot|78.40.125.4:6667->147.32.84.165:1181|tcp",
+   "framing": "irc",
+   "mech": "split24",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2017287
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110812-rbot|78.40.125.4:6667->147.32.84.165:1181|tcp",
+   "framing": "irc",
+   "mech": "split_slow",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": [
+    2017287
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110812-rbot|78.40.125.4:6667->147.32.84.165:1181|tcp",
+   "framing": "irc",
+   "mech": "prepend8",
+   "baseline_alert": true,
+   "evaded": true,
+   "semantics_ok": false,
+   "valid_evasion": false,
+   "sids": [],
+   "baseline_sids": [
+    2017287
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110812-rbot|78.40.125.4:6667->147.32.84.165:1181|tcp",
+   "framing": "irc",
+   "mech": "pad16",
+   "baseline_alert": true,
+   "evaded": false,
+   "semantics_ok": false,
+   "valid_evasion": false,
+   "sids": [
+    2017287
+   ],
+   "baseline_sids": [
+    2017287
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110812-rbot|78.40.125.4:6667->147.32.84.165:1181|tcp",
+   "framing": "irc",
+   "mech": "http_header_pad",
+   "baseline_alert": true,
+   "evaded": false,
+   "semantics_ok": true,
+   "valid_evasion": false,
+   "sids": [
+    2017287
+   ],
+   "baseline_sids": [
+    2017287
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110812-rbot|78.40.125.4:6667->147.32.84.165:1181|tcp",
+   "framing": "irc",
+   "mech": "ttl",
+   "baseline_alert": true,
+   "evaded": false,
+   "semantics_ok": true,
+   "valid_evasion": false,
+   "sids": [
+    2017287
+   ],
+   "baseline_sids": [
+    2017287
+   ]
+  },
+  {
+   "flow_id": "botnet-capture-20110812-rbot|147.32.84.165:1027->38.229.70.20:6667|tcp",
+   "framing": "irc",
+   "mech": "split8",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110812-rbot|147.32.84.165:1027->38.229.70.20:6667|tcp",
+   "framing": "irc",
+   "mech": "split16",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110812-rbot|147.32.84.165:1027->38.229.70.20:6667|tcp",
+   "framing": "irc",
+   "mech": "split24",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110812-rbot|147.32.84.165:1027->38.229.70.20:6667|tcp",
+   "framing": "irc",
+   "mech": "split_slow",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110812-rbot|147.32.84.165:1027->38.229.70.20:6667|tcp",
+   "framing": "irc",
+   "mech": "prepend8",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": false,
+   "valid_evasion": false,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110812-rbot|147.32.84.165:1027->38.229.70.20:6667|tcp",
+   "framing": "irc",
+   "mech": "pad16",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": false,
+   "valid_evasion": false,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110812-rbot|147.32.84.165:1027->38.229.70.20:6667|tcp",
+   "framing": "irc",
+   "mech": "http_header_pad",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": false,
+   "valid_evasion": false,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110812-rbot|147.32.84.165:1027->38.229.70.20:6667|tcp",
+   "framing": "irc",
+   "mech": "ttl",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110812-rbot|147.32.84.165:1037->130.239.18.172:6667|tcp",
+   "framing": "irc",
+   "mech": "split8",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110812-rbot|147.32.84.165:1037->130.239.18.172:6667|tcp",
+   "framing": "irc",
+   "mech": "split16",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110812-rbot|147.32.84.165:1037->130.239.18.172:6667|tcp",
+   "framing": "irc",
+   "mech": "split24",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110812-rbot|147.32.84.165:1037->130.239.18.172:6667|tcp",
+   "framing": "irc",
+   "mech": "split_slow",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110812-rbot|147.32.84.165:1037->130.239.18.172:6667|tcp",
+   "framing": "irc",
+   "mech": "prepend8",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": false,
+   "valid_evasion": false,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110812-rbot|147.32.84.165:1037->130.239.18.172:6667|tcp",
+   "framing": "irc",
+   "mech": "pad16",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": false,
+   "valid_evasion": false,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110812-rbot|147.32.84.165:1037->130.239.18.172:6667|tcp",
+   "framing": "irc",
+   "mech": "http_header_pad",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": false,
+   "valid_evasion": false,
+   "sids": [],
+   "baseline_sids": []
+  },
+  {
+   "flow_id": "botnet-capture-20110812-rbot|147.32.84.165:1037->130.239.18.172:6667|tcp",
+   "framing": "irc",
+   "mech": "ttl",
+   "baseline_alert": false,
+   "evaded": true,
+   "semantics_ok": true,
+   "valid_evasion": true,
+   "sids": [],
+   "baseline_sids": []
+  }
+ ],
+ "best_per_framing": {
+  "http": {
+   "mech": "split8",
+   "evaded": 9,
+   "flows": 9
+  },
+  "irc": {
+   "mech": "split8",
+   "evaded": 3,
+   "flows": 3
+  }
+ },
+ "ceiling_valid_evasion": 12,
+ "n_flows": 12,
+ "wall_s": 1177.6
+}

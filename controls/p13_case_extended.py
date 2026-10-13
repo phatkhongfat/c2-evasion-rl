@@ -25,15 +25,19 @@ sys.path.insert(0, str(ROOT / "snort_validation"))
 from hidden_defender_env import HiddenDefenderEnv  # noqa: E402
 from eval_pipeline import client_ip_of, score_flow_real  # noqa: E402
 from endpoint_model import is_http_request  # noqa: E402
-from scapy.all import IP, Raw  # noqa: E402
+from c2_semantics import ensure_chain  # noqa: E402
+from fragment_ops import transport_payload  # noqa: E402
+from scapy.all import IP  # noqa: E402
 
 MECHS = ["noop", "http_header_case", "split8"]
 
 
 def has_http_request(flow, cip: str) -> bool:
     for p in flow["packets"]:
-        if IP in p and Raw in p and p[IP].src == cip:
-            if is_http_request(bytes(p[Raw].load)):
+        p = ensure_chain(p)
+        if IP in p and p[IP].src == cip:
+            pl = transport_payload(p)
+            if pl and is_http_request(pl):
                 return True
     return False
 
@@ -47,7 +51,10 @@ def main() -> int:
     ap.add_argument("--ownership", default="both")
     ap.add_argument("--out", default=str(
         ROOT / "snort_validation/reports/p13_v8_case_extended.json"))
+    ap.add_argument("--mechs", default=",".join(MECHS),
+                    help="comma-separated mechanisms to score")
     args = ap.parse_args()
+    mechs = [m.strip() for m in args.mechs.split(",") if m.strip()]
 
     env = HiddenDefenderEnv(split="test", seed=42, real_snort=False,
                             corpus=args.corpus)
@@ -61,9 +68,9 @@ def main() -> int:
         cip = client_ip_of(fid)
         base = score_flow_real(f["packets"], cip, attempt_id=fi, mech=None,
                                ownership=args.ownership, conf=Path(args.conf))
-        for mi, mech in enumerate(MECHS):
+        for mi, mech in enumerate(mechs):
             r = score_flow_real(f["packets"], cip,
-                                attempt_id=(fi * len(MECHS) + mi) % 250,
+                                attempt_id=(fi * len(mechs) + mi) % 250,
                                 mech=mech, ownership=args.ownership,
                                 conf=Path(args.conf))
             rows.append({"flow_id": fid, "framing": f.get("framing", "?"),
@@ -71,10 +78,13 @@ def main() -> int:
                          "evaded": r["evaded"], "semantics_ok": r["semantics_ok"],
                          "valid_evasion": r["valid_evasion"],
                          "valid_evasion_endpoint": r.get("valid_evasion_endpoint"),
+                         "valid_evasion_endpoint_q": r.get("valid_evasion_endpoint_q"),
+                         "valid_evasion_query": r.get("valid_evasion_query"),
                          "sids": r.get("sids", []),
                          "baseline_sids": base.get("sids", [])})
             print(f"[{fi+1}/{len(flows)}] {fid} mech={mech} "
                   f"valid={r['valid_evasion']} valid_ep={r.get('valid_evasion_endpoint')} "
+                  f"valid_q={r.get('valid_evasion_query')} "
                   f"@ {time.time()-t0:.0f}s", flush=True)
 
     out = {"ownership": args.ownership, "split": "test", "scorer": "real_snort",

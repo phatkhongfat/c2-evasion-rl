@@ -81,6 +81,8 @@ from c2_semantics import (  # noqa: E402
     client_ip_of as client_ip_of,
     endpoint_command_preserved as endpoint_command_preserved,
     endpoint_commands_preserved as endpoint_commands_preserved,
+    endpoint_query_preserved as endpoint_query_preserved,
+    ensure_chain as ensure_chain,
     reassembled_client_bytes as reassembled_client_bytes,
     as_raw as as_raw,
     server_ip_of as server_ip_of,
@@ -132,7 +134,9 @@ def mutate_client_only(packets: Sequence, mech: str, client_ip: Optional[str] = 
     from endpoint_model import is_http_request
     from hidden_defender_env import _JUNK_HEADERS, _WRAP_OFFSET
 
-    out = [p.copy() for p in packets]
+    # ensure_chain: a lazily unpickled packet reports `IP in p` as False, which
+    # would empty client_idx and make the mechanism a silent no-op.
+    out = [ensure_chain(p).copy() for p in packets]
     if client_ip is None:
         ip_pkts = [p for p in out if IP in p]
         client_ip = ip_pkts[0][IP].src if ip_pkts else None
@@ -500,6 +504,7 @@ def score_flow_real(packets: Sequence, client_ip: str, attempt_id: int,
     sem = bytes_equal_semantics(orig, mut, client_ip)
     endpoint_ok = endpoint_command_preserved(orig, mut, client_ip)
     endpoint_q_ok = endpoint_commands_preserved(orig, mut, client_ip)
+    query_ok = endpoint_query_preserved(orig, mut, client_ip)
 
     translated = translate_source(mut, client_ip, attempt_id)
     pcap = tmp / f"flow_{attempt_id}.pcap"
@@ -519,6 +524,8 @@ def score_flow_real(packets: Sequence, client_ip: str, attempt_id: int,
         "valid_evasion_endpoint": (n_alerts == 0) and endpoint_ok,
         "endpoint_q_ok": endpoint_q_ok,
         "valid_evasion_endpoint_q": (n_alerts == 0) and endpoint_q_ok,
+        "query_ok": query_ok,
+        "valid_evasion_query": (n_alerts == 0) and query_ok,
         "sids": fired_sids,          # fired sids -> P2 severity stratification
         "n_snort_calls": 1,
     }

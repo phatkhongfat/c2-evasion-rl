@@ -29,6 +29,34 @@ def test_parse_commands_splits_pipelined_requests():
     assert cmds == [b"data=1", b"data=2"]
 
 
+GET1 = (b"GET /list.php?c=AAAA&v=2 HTTP/1.0\r\nHost: h\r\n"
+        b"User-Agent: Mozilla/4.0\r\n\r\n")
+GET2 = (b"GET /list.php?c=BBBB&v=2 HTTP/1.0\r\nHost: h\r\n"
+        b"User-Agent: Mozilla/4.0\r\n\r\n")
+
+
+def test_parse_commands_two_bodyless_gets_are_two_requests():
+    # RFC 7230 s3.3.3: a request with no Content-Length has a zero-length body,
+    # so what follows the header block is the NEXT request, not this one's body.
+    assert parse_commands(GET1 + GET2, "http") == [b"/list.php?c=AAAA&v=2",
+                                                   b"/list.php?c=BBBB&v=2"]
+
+
+def test_parse_commands_cl_less_post_still_owns_rest():
+    # Methods that CAN carry a body keep the v1 semantics without CL: the
+    # request owns the rest of the stream (fail-safe toward v1, not v2).
+    post = b"POST /a HTTP/1.1\r\nHost: h\r\n\r\npayload-bytes"
+    assert parse_commands(post, "http") == [b"payload-bytes"]
+
+
+def test_parse_commands_get_then_truncated_get_fails_closed():
+    assert parse_commands(GET1 + b"GET /list.p", "http") is None
+
+
+def test_parse_commands_single_bodyless_get_unchanged():
+    assert parse_commands(GET1, "http") == [b"/list.php?c=AAAA&v=2"]
+
+
 def test_parse_commands_v1_sees_both_requests_in_one_body():
     # document the v1 defect this bar fixes: one "command" containing req 2
     c = parse_command(PIPELINED, "http")

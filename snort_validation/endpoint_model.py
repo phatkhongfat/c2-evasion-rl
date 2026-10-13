@@ -95,6 +95,12 @@ def parse_command(raw: bytes, framing: str) -> bytes | None:
 
 _CL_LINE = re.compile(rb"^content-length:\s*(\d+)\s*$", re.I)
 
+# RFC 7231 s4.3 / RFC 7230 s3.3.3: a request with one of these methods has no
+# body unless a framing header says otherwise, so bytes after the header block
+# cannot belong to it -- they are the next request on the connection.
+_BODYLESS_METHODS = frozenset((b"GET", b"HEAD", b"DELETE", b"OPTIONS",
+                               b"TRACE"))
+
 
 def _http_request_command(req: bytes) -> bytes | None:
     """Command of ONE complete HTTP request (request line + headers + body)."""
@@ -128,6 +134,13 @@ def _split_http_requests(raw: bytes) -> list[bytes] | None:
             if m:
                 cl = int(m.group(1))
         if cl is None:
+            # RFC 7230 s3.3.3: with no framing header a bodyless method ends
+            # at its header block; only a body-bearing method owns the rest.
+            req_line = head.split(b"\r\n", 1)[0].split(b" ")
+            if req_line and req_line[0].upper() in _BODYLESS_METHODS:
+                reqs.append(raw[pos:body_start])   # zero-length body
+                pos = body_start
+                continue
             reqs.append(raw[pos:])     # rest of stream belongs to this request
             pos = len(raw)
             break
@@ -156,6 +169,62 @@ def parse_commands(raw: bytes, framing: str) -> list[bytes] | None:
             return None
         cmds.append(c)
     return cmds or None
+
+
+def query_pairs(uri: bytes) -> list[tuple[bytes, bytes]] | None:
+    """Parsed query of a request-URI as decoded (key, value) pairs.
+
+    D5, citation-gated (ledger [6] RFC 3986, [7] PHP parse_str): the query
+    starts at the FIRST '?' [6 s3.4]; components are parsed and separated
+    BEFORE percent-decoding, so encoded octets decode to the same data
+    [6 s2.4]; a standard handler extracts key-value pairs [7].  None when the
+    URI has no query or it cannot be parsed.
+    """
+    if b"?" not in uri:
+        return None
+    from urllib.parse import parse_qsl
+    q = uri.split(b"?", 1)[1]
+    try:
+        pairs = parse_qsl(q.decode("latin-1"), keep_blank_values=True)
+    except (UnicodeDecodeError, ValueError):
+        return None
+    return [(k.encode("latin-1"), v.encode("latin-1")) for k, v in pairs]
+
+
+def parse_commands_q(raw: bytes, framing: str) -> list[tuple] | None:
+    """Per-request STRUCTURED commands for the D5 query bar.
+
+    Each entry is ("body", bytes) for a request with a body (compared byte-
+    strictly -- the bar only relaxes the RAW-URI comparison for queries),
+    ("query", pairs) for a bodyless request whose URI carries a query, or
+    ("path", uri) for a bodyless request without one.  Non-HTTP framings
+    return [("raw", cmd)] from parse_command.  None = unreadable, fail closed.
+    """
+    if framing != "http":
+        c = parse_command(raw, framing)
+        return [("raw", c)] if c is not None else None
+    reqs = _split_http_requests(raw)
+    if reqs is None:
+        return None
+    out = []
+    for r in reqs:
+        head, sep, body = r.partition(_HTTP_SEP)
+        if not sep:
+            return None
+        parts = head.split(b"\r\n")[0].split(b" ")
+        if len(parts) < 3 or not parts[0].isalpha():
+            return None
+        stripped = body.rstrip(b"\x00")
+        if stripped:
+            out.append(("body", stripped))
+            continue
+        uri = parts[1]
+        pairs = query_pairs(uri)
+        if pairs is not None:
+            out.append(("query", uri.split(b"?", 1)[0], pairs))
+        else:
+            out.append(("path", uri))
+    return out or None
 
 
 def is_http_request(raw: bytes) -> bool:

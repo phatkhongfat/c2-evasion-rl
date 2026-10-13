@@ -37,10 +37,12 @@ from eval_pipeline import client_ip_of, mutate_client_only  # noqa: E402
 from c2_semantics import (  # noqa: E402
     endpoint_command_preserved,
     endpoint_commands_preserved,
+    endpoint_query_preserved,
 )
 
 BAR_ENDPOINT = "endpoint_command_preserved (c2_semantics.py)"
 BAR_ENDPOINT_Q = "endpoint_commands_preserved (c2_semantics.py, D7: per-request, Content-Length aware)"
+BAR_QUERY = "endpoint_query_preserved (c2_semantics.py, D5: parsed-query equivalence, citation-gated)"
 
 
 def backfill(report: dict, env, split: str = "test") -> dict:
@@ -64,15 +66,19 @@ def backfill(report: dict, env, split: str = "test") -> dict:
                                      ownership=ownership)
         ep = endpoint_command_preserved(f["packets"], mut, cip)
         epq = endpoint_commands_preserved(f["packets"], mut, cip)
+        qy = endpoint_query_preserved(f["packets"], mut, cip)
         n = dict(c)
         n["endpoint_ok"] = ep
         n["valid_evasion_endpoint"] = bool(c["evaded"]) and ep
         n["endpoint_q_ok"] = epq
         n["valid_evasion_endpoint_q"] = bool(c["evaded"]) and epq
+        n["query_ok"] = qy
+        n["valid_evasion_query"] = bool(c["evaded"]) and qy
         cells.append(n)
     out["cells"] = cells
     out["bar_endpoint"] = BAR_ENDPOINT
     out["bar_endpoint_q"] = BAR_ENDPOINT_Q
+    out["bar_query"] = BAR_QUERY
     return out
 
 

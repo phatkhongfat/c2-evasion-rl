@@ -1,0 +1,905 @@
+% thesis_vi.tex — Luận văn tiếng Việt (bản SIC CRISP-DM)
+% C2 Evasion RL: học tăng cường mức gói tin để né phát hiện C2.
+% Biên dịch độc lập từ thư mục docs/:
+%   pdflatex thesis_vi && bibtex thesis_vi && pdflatex thesis_vi && pdflatex thesis_vi
+% (hoặc: make -C thesis ... nếu dùng Makefile sẵn có)
+\documentclass[12pt,a4paper]{report}
+
+% ---------------------------------------------------------------------------
+% Preamble nội tuyến (rút gọn từ docs/thesis/preamble.tex để file tự chứa)
+% ---------------------------------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc}   % bảng mã T5 (vntex) — bắt buộc cho tiếng Việt
+\usepackage{lmodern}
+% Tiếng Việt phải là ngôn ngữ CHÍNH (đặt cuối) để kích hoạt T5;
+% nếu không, lệnh \ohorn ... vẫn gắn OT1 và build sẽ lỗi.
+\usepackage[english,vietnamese]{babel}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage[margin=1in]{geometry}
+\usepackage{natbib}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\usepackage{microtype}
+
+\DeclareUnicodeCharacter{2713}{\ensuremath{\checkmark}}
+\DeclareUnicodeCharacter{2717}{\ensuremath{\times}}
+
+\newcommand{\eg}{\emph{e.g.}}
+\newcommand{\ie}{\emph{i.e.}}
+\newcommand{\etal}{\emph{et al.}}
+\newcommand{\PPO}{\texttt{PPO}}
+\newcommand{\IDS}{\texttt{IDS}}
+\newcommand{\XGB}{\texttt{XGBoost}}
+\newcommand{\RL}{\textit{RL}}
+\newcommand{\MDP}{\textit{MDP}}
+\newcommand{\CTU}{\textit{CTU-13}}
+\newcommand{\Snort}{\textit{Snort}}
+
+\lstset{
+  basicstyle=\ttfamily\small, breaklines=true, columns=fullflexible,
+  frame=single, numbers=left, numberstyle=\tiny, keywordstyle=\color{blue},
+  commentstyle=\color{gray}, stringstyle=\color{red},
+  backgroundcolor=\color{lightgray!10}, language=Python
+}
+
+\hypersetup{
+  colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue,
+  pdftitle={C2 Evasion RL: Học tăng cường mức gói tin cho né tránh phát hiện C2},
+  pdfauthor={Le Hoang Phat}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\thepage}
+\lhead{C2 Evasion RL}
+\renewcommand{\headrulewidth}{0.4pt}
+\setlength{\headheight}{15pt}
+
+\selectlanguage{vietnamese}
+
+\title{\textbf{C2 Evasion RL}\\[4pt]
+Học tăng cường mức gói tin để né phát hiện lưu lượng C2 botnet\\
+trên Snort 2.9.20 với bộ luật ET Open}
+\author{Lê Hoàng Phát}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+% ===========================================================================
+\begin{abstract}
+\noindent
+Luận văn này nghiên cứu câu hỏi: \emph{một agent học tăng cường (RL) có thể tự động
+biến đổi các gói tin beacon C2 thật để né một IDS chữ ký thật, trong khi luồng C2
+vẫn còn hoạt động được không?} Chúng tôi xây dựng môi trường \texttt{HiddenDefenderEnv}
+với 14 cơ chế biến đổi gói tin, dùng \texttt{MaskablePPO} để chọn cơ chế, và chấm điểm
+mọi hành động bằng chính nhị phân \textbf{Snort 2.9.20} (bộ luật ET Open C2, 21\,374
+luật) chứ không dùng mô hình xấp xỉ khi đo kết quả chính.
+
+Kết quả chính được đo bằng Snort thật: trên tập test held-out 40 luồng, agent đạt
+\textbf{40/40 né hợp lệ (100\%)} — không báo động, và ngữ nghĩa C2 vẫn nguyên vẹn —
+trong khi \textbf{control âm tính} (luồng gốc chưa biến đổi) bị Snort báo động
+\textbf{40/40 (tỷ lệ né 0\%)}. Đây là bằng chứng rằng né tránh là thật, không phải
+lỗi đo lường.
+
+Tuy nhiên, luận văn cũng báo cáo trung thực hai phát hiện \emph{phủ định} quan trọng:
+(1) với defender tĩnh này, bài toán tìm kiếm gần như suy biến — mỗi framing chỉ có một
+hành động tối ưu gần như cố định (\texttt{split8} cho luồng nhị phân, \texttt{split24}
+cho luồng HTTP), nên RL \textbf{không vượt} được các baseline đơn giản; và (2) khi
+kiểm tra chéo capture (cross-capture), tỷ lệ né trung bình chỉ \textbf{38{,}89\%}
+(độ lệch chuẩn 43{,}74\%), và trên cả ba capture agent \textbf{hoà} với control
+``corrupt-everything'' — nghĩa là nó không học được gì mà hành động tầm thường
+``làm hỏng mọi gói'' không làm được. Một capture (win13) đạt 0\% vì các luồng của nó
+gần như không có payload để biến đổi — đây là giới hạn của \emph{không gian hành động},
+không phải kết luận về họ botnet.
+
+Luận văn đóng gói kèm một quy trình đo lường nghiêm ngặt (một cặp (flow, cơ chế) cho
+mỗi pcap, control âm tính bắt buộc, trần oracle, bộ verifier 81 kiểm tra tự động) và
+ghi lại sáu lỗi phương pháp đã từng tạo ra kết quả sai trông rất hợp lý. Đóng góp của
+công trình là sự trung thực của phép đo và việc chỉ ra rằng, dưới một defender tĩnh
+đơn luật, RL chưa tạo thêm giá trị so với tìm kiếm tham lam.
+\end{abstract}
+
+\tableofcontents
+\listoftables
+\listoffigures
+
+% ===========================================================================
+\chapter{Giới thiệu \& Động lực}
+\label{ch:intro}
+
+\section{Bối cảnh}
+
+Botnet là mạng lưới các máy bị nhiễm (bot) nhận lệnh từ một máy chủ điều khiển
+(command-and-control, C2). Kênh C2 là điểm sống còn: cắt được nó là vô hiệu hoá cả
+botnet. Vì vậy các hệ thống phát hiện xâm nhập (IDS) như \Snort{} \citep{snort_project}
+với bộ luật chữ ký mở như Emerging Threats (ET) Open \citep{emerging_threats} tập
+trung vào việc khớp các mẫu byte đặc trưng trong lưu lượng C2.
+
+Đây là một trò chơi ``mèo vờn chuột'': phía tấn công liên tục tìm cách che giấu kênh
+C2 (mã hoá, phân mảnh, chèn nhiễu), phía phòng thủ cập nhật luật để bắt lại. Việc tạo
+ra các biến đổi né tránh một cách thủ công tốn nhiều công sức và đòi hỏi hiểu biết sâu
+về giao thức. Câu hỏi đặt ra: \emph{có thể tự động hoá quá trình này bằng học tăng
+cường không?}
+
+\section{Phát biểu bài toán}
+
+Cho một tập luồng C2 đã được gán nhãn (lấy từ các capture malware thật), mục tiêu là
+huấn luyện một \emph{agent} sao cho, với mỗi luồng, nó chọn một phép biến đổi gói tin
+để:
+
+\begin{enumerate}[label=(\arabic*)]
+  \item Snort \textbf{không} còn báo động trên luồng đó (\emph{né tránh}), và
+  \item kênh C2 vẫn còn hoạt động được — lệnh C2 vẫn tới được endpoint
+        (\emph{giữ ngữ nghĩa}).
+\end{enumerate}
+
+Hai điều kiện này phải cùng đúng; một phép biến đổi xoá luôn kênh C2 thì không được
+tính là né tránh. Ngoài ra agent phải \emph{tối thiểu hoá chi phí} biến đổi, vì sửa
+nhiều gói làm tăng nguy cơ bị phát hiện bằng kênh phụ và làm hỏng độ tin cậy của C2.
+
+\section{Động lực hai chiều}
+
+\begin{itemize}
+  \item \textbf{Phía phòng thủ:} hiểu được cách một kẻ tấn công \emph{thực sự} có thể
+        tạo lưu lượng trốn tránh giúp xây dựng luật phát hiện bền vững hơn.
+  \item \textbf{Phía học thuật:} khoảng cách giữa ``chấm điểm bằng mô hình xấp xỉ''
+        và ``chấm điểm bằng IDS thật'' là một hạn chế cơ bản của transfer learning
+        trong bối cảnh đối kháng; đo lường nó một cách trung thực có giá trị riêng.
+\end{itemize}
+
+\section{Đóng góp}
+
+\begin{enumerate}[label=\textbf{C\arabic*.}]
+  \item \textbf{Đường ống đầu-cuối trên IDS thật.} Một vòng lặp huấn luyện RL trong đó
+        mọi hành động được chấm bởi nhị phân Snort 2.9.20 thật (chế độ \texttt{--real-snort}),
+        tích hợp với pcap thật từ Stratosphere IPS \citep{stratosphere_ctu13}.
+  \item \textbf{Kết quả chính có kiểm chứng.} 40/40 luồng held-out né hợp lệ dưới Snort
+        thật, đối chiếu control âm tính 40/40 bị báo động.
+  \item \textbf{Kết quả phủ định được báo cáo thẳng thắn.} RL không vượt baseline tham
+        lam, và kiểm tra chéo capture cho thấy policy \emph{hoà} với control
+        ``corrupt-everything'' trên cả ba capture — nên con số né chéo capture
+        \textbf{không} phải thành tựu của RL.
+  \item \textbf{Kỷ luật đo lường.} Quy trình một cặp (flow, cơ chế) cho mỗi pcap,
+        control âm tính bắt buộc, trần oracle, và bộ verifier tự động 81 kiểm tra
+        (\texttt{controls/verify\_report\_claims.py}) đảm bảo mọi con số trong báo cáo
+        đều truy được về file JSON gốc.
+  \item \textbf{Bài học về lỗi phương pháp.} Sáu lỗi (trích xuất luồng một chiều, viết
+        lại gói tin ngây thơ, kiểm tra ngữ nghĩa lỏng, chấm điểm theo lô, luật bị
+        throttle, cửa sổ đọc alert quá ngắn) từng tạo ra kết quả sai trông rất hợp lý,
+        và cách chúng bị phát hiện.
+\end{enumerate}
+
+\section{Phạm vi}
+
+Kết quả được xác thực trên \textbf{bộ luật tĩnh ET Open}, trên \textbf{cùng một họ
+malware} (một nhị phân, nhiều ngày). Luận văn \emph{không} tuyên bố tổng quát hoá
+sang mọi họ botnet, cũng không tuyên bố chống lại IDS thích ứng. Những giới hạn này
+được nêu rõ ở Chương~\ref{ch:discussion}.
+
+% ===========================================================================
+\chapter{Nghiên cứu liên quan}
+\label{ch:related}
+
+\section{Ví dụ đối kháng trong học máy}
+
+Học máy đối kháng nghiên cứu cách tạo đầu vào khiến mô hình phân loại sai trong khi
+vẫn giữ tính hợp lệ. \citet{biggio2013evasion} đặt nền móng cho \emph{tấn công né
+tránh} (evasion attack); \citet{goodfellow2014explaining} và
+\citet{carlini2016towards} phát triển các phương pháp gradient để tối ưu nhiễu đối
+kháng. \citet{papernot2016limits} mở rộng sang miền rời rạc (văn bản, tệp nhị phân).
+Điểm chung: né tránh là một \emph{bài toán tối ưu có ràng buộc}, và trong không gian
+rời rạc (như gói tin) thì tìm kiếm trở nên khó hơn nhiều so với tối ưu liên tục.
+
+Trong miền malware, \citet{pierazzi2019intriguing} và \citet{demetrio2020intriguing}
+nhấn mạnh khái niệm \emph{problem-space} (không gian bài toán): một biến đổi phải vừa
+qua được bộ phân loại, vừa giữ được chức năng thực thi của mẫu. Đây chính xác là ràng
+buộc ``giữ ngữ nghĩa C2'' mà chúng tôi áp dụng.
+
+\section{Phát hiện C2 và IDS chữ ký}
+
+\Snort{} \citep{snort_project} là IDS dựa trên chữ ký phổ biến, khớp các mẫu byte và
+điều kiện header. Bộ luật ET Open \citep{emerging_threats} cung cấp hàng chục nghìn
+luật công khai, trong đó các luật C2 thường neo vào \texttt{content}, \texttt{depth}
+hoặc \texttt{offset} trong payload. Vì luật là tĩnh, một biến đổi làm dịch chuyển hoặc
+phân mảnh các byte mục tiêu có thể khiến luật không còn khớp — đây là cơ sở kỹ thuật
+cho các cơ chế phân mảnh mà chúng tôi dùng. \citet{silva2017ids} khảo sát né tránh IDS
+bằng thao tác mạng dưới góc nhìn học máy.
+
+\section{Học tăng cường và né tránh}
+
+\MDP{} là khung hình thức chuẩn cho quyết định tuần tự \citep{puterman1994markov};
+\PPO{} \citep{schulman2017proximal} là thuật toán policy-gradient ổn định, ít phân kỳ
+off-policy, phù hợp với tập dữ liệu nhỏ. Thư viện Stable-Baselines3
+\citep{stable_baselines3} và Gymnasium \citep{gymnasium} cung cấp hiện thực thực tế;
+phiên bản \texttt{MaskablePPO} cho phép \emph{action masking} — chặn trước các hành
+động không hợp lệ theo giao thức, giải quyết vấn đề khám phá trong không gian hành
+động lớn.
+
+\section{Khoảng trống mà luận văn hướng tới}
+
+Phần lớn công trình trước dùng \emph{mô hình xấp xỉ} của IDS để chấm điểm, hoặc chạy
+offline, hoặc không tính chi phí biến đổi. Chúng tôi lấp khoảng trống bằng cách:
+(i) chấm bằng \emph{IDS thật} cho kết quả chính; (ii) luôn kèm \emph{control âm tính}
+để chứng minh né tránh là thật; và (iii) báo cáo cả \emph{kết quả phủ định} khi RL
+không tạo thêm giá trị — điều mà nhiều báo cáo né tránh không nêu.
+
+% ===========================================================================
+\chapter{Thiết kế hệ thống \& Mô hình mối đe dọa}
+\label{ch:design}
+
+\section{Mô hình mối đe dọa}
+
+\subsection{Kẻ tấn công (red team)}
+Kẻ tấn công là người vận hành botnet, nắm được nội dung gói tin C2 dạng plaintext
+(PDU lệnh C2). Nó biết \emph{protocol framing} của luồng mình (HTTP hay chuỗi bản ghi
+nhị phân) nhưng \textbf{không} biết nội dung bộ luật của defender. Nó chỉ được sửa
+\textbf{payload} (dữ liệu TCP/UDP), không được sửa metadata (IP, cổng).
+
+\subsection{Defender (blue team)}
+Defender là \Snort{} 2.9.20 với bộ luật ET Open C2 (21\,374 luật), chạy tĩnh, không
+phản ứng thích ứng. Mọi phán quyết (alert / không alert) được đọc trực tiếp từ nhị
+phân Snort.
+
+\subsection{Ràng buộc}
+\begin{itemize}
+  \item \textbf{Ngân sách hành động:} mỗi luồng chọn \emph{một} cơ chế biến đổi từ 14
+        cơ chế; một số cơ chế chỉ áp dụng được cho một framing nhất định.
+  \item \textbf{Giữ ngữ nghĩa:} phép biến đổi phải để lệnh C2 tới endpoint nguyên vẹn
+        (định nghĩa ở mục~\ref{sec:semantics}).
+  \item \textbf{Mục tiêu:} tối đa số luồng né được, tối thiểu chi phí biến đổi.
+\end{itemize}
+
+\section{Môi trường \texttt{HiddenDefenderEnv}}
+
+Môi trường được hiện thực trong \texttt{ai\_agent/hidden\_defender\_env.py}. Một
+\emph{episode} = một luồng = một quyết định.
+
+\subsection{Quan sát (observation)}
+Agent chỉ thấy 8 đặc trưng thống kê (black-box), \textbf{không} thấy bộ luật:
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Chỉ số & Đặc trưng \\
+\midrule
+0 & \texttt{is\_udp} (luồng UDP hay không) \\
+1 & \texttt{n\_pkts\_norm} (số gói, chuẩn hoá) \\
+2 & \texttt{tot\_bytes\_norm} (tổng byte, chuẩn hoá) \\
+3 & \texttt{n\_payload\_pkts\_norm} (số gói có payload) \\
+4 & \texttt{payload\_mean\_norm} (trung bình kích thước payload) \\
+5 & \texttt{payload\_std\_norm} (độ lệch chuẩn payload) \\
+6 & \texttt{payload\_max\_norm} (payload lớn nhất) \\
+7 & \texttt{payload\_min\_norm} (payload nhỏ nhất) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Không gian hành động}
+14 cơ chế (\texttt{ACTION\_NAMES}), chỉ giữ lại những cơ chế đã được \emph{đo} là
+hoặc né được hợp lệ, hoặc là đối chứng âm hữu ích:
+
+\begin{center}
+\begin{tabular}{llr}
+\toprule
+Chỉ số & Cơ chế & Chi phí (\texttt{ACTION\_COSTS}) \\
+\midrule
+0 & \texttt{split8}  & 0{,}60 \\
+1 & \texttt{split16} & 0{,}50 \\
+2 & \texttt{split24} & 0{,}40 \\
+3 & \texttt{prepend4}  & 0{,}20 \\
+4 & \texttt{prepend8}  & 0{,}20 \\
+5 & \texttt{prepend12} & 0{,}20 \\
+6 & \texttt{pad16}   & 0{,}10 \\
+7 & \texttt{reorder} & 0{,}35 \\
+8 & \texttt{ttl}     & 0{,}10 \\
+9 & \texttt{corrupt8} & 0{,}40 \\
+10 & \texttt{overlap8} & 0{,}35 \\
+11 & \texttt{noop}     & 0{,}00 \\
+12 & \texttt{http\_header\_pad} & 0{,}05 \\
+13 & \texttt{length\_wrapper}   & 0{,}25 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\texttt{split8/16/24}, \texttt{prepend4/8/12} là các cơ chế phân mảnh/chèn đã được đo;
+\texttt{pad16}, \texttt{reorder}, \texttt{ttl} được đo là 0/80 né (giữ làm đối chứng
+âm có thông tin); \texttt{corrupt8} cố ý phá ngữ nghĩa (để hình phạt $-10$ quan sát
+được); \texttt{noop} là hành động rỗng; \texttt{http\_header\_pad} và
+\texttt{length\_wrapper} là hai cơ chế \emph{nhận biết giao thức} (gọi là A và B).
+
+\subsection{Action masking (lọc hành động khả thi)}
+Hàm \texttt{mech\_applicable()} chặn các cơ chế mà framing của luồng không thể mang:
+\texttt{http\_header\_pad} chỉ áp dụng cho framing \texttt{http};
+\texttt{length\_wrapper} chỉ cho framing \texttt{length2}. Các cơ chế không áp dụng
+được \textbf{bị loại khỏi mẫu số}, để mọi tỷ lệ phần trăm đều tính trên các cơ chế
+\emph{có thể} tác động lên luồng đó. Điểm quan trọng: mask là một \emph{bộ lọc tính
+khả thi}, không phải một phép biến đổi — \texttt{MaskablePPO} đặt logit của hành động
+bị mask về $-\infty$ trước softmax, nên hành động không khả thi không bao giờ được
+lấy mẫu.
+
+\subsection{Phần thưởng (reward)}
+\begin{center}
+\begin{tabular}{lr}
+\toprule
+Tình huống & Phần thưởng \\
+\midrule
+Né được \textbf{và} ngữ nghĩa còn nguyên & $+10$ (\texttt{REWARD\_EVADE}) \\
+Né được \textbf{nhưng} phá ngữ nghĩa & $-10$ (\texttt{REWARD\_BREAK\_SEMANTICS}) \\
+Vẫn bị báo động & $-1$ (\texttt{REWARD\_ALERTED}) \\
+\bottomrule
+\end{tabular}
+\end{center}
+Cộng thêm một phần thưởng nhỏ \texttt{PROTOCOL\_MATCH\_BONUS} $= 0{,}15$ \emph{chỉ khi}
+một biến đổi đã né hợp lệ bằng \texttt{http\_header\_pad} trên luồng HTTP (nên nó
+không thể ``chế ra'' né tránh hay che một cơ chế đang thất bại), và trừ
+\texttt{ACTION\_COSTS} theo cơ chế. Phần thưởng
+dương quan sát được trong kết quả chính là $9{,}6$ (với \texttt{split24}) và $9{,}4$
+(với \texttt{split8}) — đúng bằng $10$ trừ chi phí tương ứng ($0{,}4$ và $0{,}6$).
+
+\subsection{Định nghĩa ``giữ ngữ nghĩa''}
+\label{sec:semantics}
+Hàm \texttt{semantics\_intact()} yêu cầu lệnh C2 phải tới endpoint nguyên vẹn. Vì
+không mô hình hoá được ngữ pháp của mọi giao thức, chúng tôi dùng mức chặt:
+\begin{itemize}
+  \item Nếu số gói thay đổi (phân mảnh), so sánh \emph{luồng byte được ghép lại}:
+        lệnh parse được từ luồng gốc phải bằng lệnh parse được từ luồng biến đổi.
+  \item Nếu số gói giữ nguyên, với \emph{mọi} gói mà payload gốc sinh ra một lệnh,
+        lệnh đó phải bằng nhau trước và sau.
+\end{itemize}
+Đây là mức ``byte-equality'' chặt. Một mức lỏng hơn (chỉ kiểm tra chuỗi con) từng
+khiến mọi cơ chế đều được tính là né (xem lỗi số~3, Chương~\ref{ch:discussion}).
+
+% ===========================================================================
+\chapter{Phương pháp}
+\label{ch:method}
+
+\section{Dữ liệu và phân chia tập}
+
+\subsection{Nguồn dữ liệu}
+Corpus lấy từ các capture malware thật của Stratosphere IPS
+\citep{stratosphere_ctu13}. Hai capture được dùng cho tập huấn luyện và test:
+\begin{itemize}
+  \item \texttt{botnet-capture-20110811-neris} (Stratosphere MCFP)
+  \item \texttt{botnet-capture-20110819-bot} (CTU-13)
+\end{itemize}
+Cả hai capture đều \emph{có mặt trong cả train và test}, để một phương pháp không thể
+``thắng'' bằng cách nhận diện ``đây là capture nào''.
+
+\subsection{Quy tắc chọn và phân chia}
+Chỉ giữ lại các luồng mà Snort thật \emph{thật sự} phát hiện (để có cái mà né).
+Phân chia cố định bởi \texttt{corpus\_config.py}:
+\begin{center}
+\begin{tabular}{lr}
+\toprule
+Tham số & Giá trị \\
+\midrule
+\texttt{n\_train} & 1\,153 \\
+\texttt{n\_test}  & 40 \\
+\texttt{SEED}     & 42 \\
+\texttt{OBS\_DIM} & 8 \\
+\bottomrule
+\end{tabular}
+\end{center}
+Hàm \texttt{split\_flows()} dùng \texttt{random.Random(42)} để shuffle rồi lấy 40 luồng
+đầu làm test — phân chia \emph{xác định} (deterministic) để tái lập được. Test cố ý
+giữ ở 40 luồng để mọi eval/control trước đó vẫn so sánh được.
+
+\section{Huấn luyện}
+
+\subsection{Thuật toán}
+Dùng \texttt{MaskablePPO} \citep{schulman2017proximal,stable_baselines3} với policy
+\texttt{MlpPolicy}. Vì mỗi luồng là một quyết định độc lập nhưng PPO cần trajectory,
+một wrapper mỏng (\texttt{BatchEnv}) gộp $n$ luồng liên tiếp thành \emph{một} episode
+dài, để rollout là $n$ bước quyết định thật thay vì $n$ episode độ dài 1.
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Siêu tham số & Giá trị \\
+\midrule
+\texttt{n\_steps}   & $= n\_flows$ (mặc định 64) \\
+\texttt{batch\_size}& $= n\_flows$ \\
+\texttt{n\_epochs}  & 10 \\
+\texttt{learning\_rate} & $3\times10^{-4}$ \\
+\texttt{ent\_coef}  & 0{,}0151 \\
+\texttt{gamma}      & 0{,}0 (mỗi luồng độc lập) \\
+\texttt{seed}       & 42 \\
+Ngưỡng dừng (\texttt{TARGET}) & 0{,}90 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\texttt{gamma}=0 vì mỗi bước là một quyết định độc lập, không có phần thưởng tương lai.
+
+\subsection{Hai bộ chấm điểm}
+Đây là điểm \emph{quan trọng} về tính trung thực:
+\begin{itemize}
+  \item \textbf{Surrogate nhanh} (\texttt{RealRulesReplica}): parse bộ luật ET Open thật
+        và tái hiện các sid thật sự kích hoạt; dùng để \emph{huấn luyện} cho nhanh
+        ($\sim$0{,}33\,ms/luồng). Nó \textbf{bỏ sót 20{,}6\%} luật thật (các luật dùng
+        \texttt{pcre}, \texttt{byte\_test}, \texttt{byte\_extract}, \texttt{byte\_jump}).
+  \item \textbf{Snort thật} (\texttt{--real-snort}): chấm mọi hành động bằng nhị phân
+        thật ($\sim$1{,}3\,s/luồng); dùng cho \emph{kết quả chính}.
+\end{itemize}
+Việc tách hai bộ chấm là có chủ đích: con số $99{,}2\%$ khi huấn luyện bằng surrogate
+\emph{không phải} cùng đại lượng với con số $90{,}6\%$ khi huấn luyện bằng Snort thật.
+
+\section{Quy trình đo lường}
+
+\subsection{Một cặp (flow, cơ chế) cho mỗi pcap}
+Gộp 32 cặp vào một pcap từng khiến Snort phát 4 alert trong khi chấm riêng lẻ tìm được
+12 phát hiện — lưu lượng trộn lẫn làm giảm alert trên toàn capture. Vì vậy ma trận
+cơ chế chạy với \texttt{batch\_size}=1: 224 lần gọi Snort, $\sim$80\,s.
+
+\subsection{Control âm tính (bắt buộc)}
+Mỗi lần đo đều kèm một control: các luồng \emph{chưa} biến đổi phải bị Snort báo động.
+Nếu control ngừng báo động, mọi con số khác bị bỏ. Control này là thứ đã bắt được hai
+lỗi tệ nhất của dự án.
+
+\subsection{Trần oracle và các baseline}
+Để con số ``PPO đạt 100\%'' có ý nghĩa, cần một trần:
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Phương pháp & Bản chất & Vai trò \\
+\midrule
+\texttt{random\_sweep}   & thứ tự cơ chế ngẫu nhiên, thử tới khi hợp lệ & sàn \\
+\texttt{greedy}          & dùng lại cơ chế hiệu quả trên luồng gần nhất & heuristic mạnh \\
+\texttt{supervised\_tree}& cây quyết định trên nhãn oracle & \textbf{trần} \\
+\texttt{ppo}/\texttt{maskable\_ppo} & policy đã huấn luyện & đối tượng cần đánh giá \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Verifier tự động}
+\texttt{controls/verify\_report\_claims.py} tái suy diễn mọi con số trong báo cáo từ
+file JSON gốc và \emph{thất bại} nếu có sai lệch. Verifier kiểm tra các \emph{bất biến}
+(\eg{} \texttt{queries == epochs * n\_flows}) chứ không ghim hằng số, vì dừng sớm làm
+hằng số thay đổi mỗi lần chạy. Bộ test (\texttt{tests/}) gồm 69 test đều pass.
+
+% ===========================================================================
+\chapter{Kết quả \& Đánh giá}
+\label{ch:results}
+
+Mọi con số trong chương này được đọc từ file JSON trong
+\texttt{snort\_validation/reports/}. Không có con số nào được ước lượng.
+
+\section{Kết quả chính (Snort thật)}
+
+Từ \texttt{ppo\_masked\_test.json} — \texttt{eval\_masked\_ppo\_test.py --real-snort},
+trên 40 luồng held-out:
+
+\begin{center}
+\begin{tabular}{lr}
+\toprule
+Chỉ số & Giá trị \\
+\midrule
+method & \texttt{maskable\_ppo} \\
+scorer & \texttt{real\_snort} \\
+split & test \\
+$n\_flows$ & 40 \\
+\textbf{alerted} & \textbf{0} \\
+\textbf{valid\_evasion} & \textbf{40 / 40 (100{,}0\%)} \\
+\texttt{masked\_actions\_used} & 0 \\
+Control âm tính (\texttt{control\_noop\_real\_snort.json}) & \textbf{40 / 40 bị báo động} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Policy chỉ dùng đúng hai cơ chế:
+\begin{center}
+\begin{tabular}{lr}
+\toprule
+Cơ chế & Số luồng \\
+\midrule
+\texttt{split8}  & 24 (toàn bộ luồng UDP/neris) \\
+\texttt{split24} & 16 (toàn bộ luồng HTTP/TCP) \\
+\bottomrule
+\end{tabular}
+\end{center}
+Mọi luồng đều có \texttt{semantics\_ok = true}; phần thưởng là 9{,}4 (split8) và 9{,}6
+(split24). Việc phân bố framing/action là hoàn hảo (24 neris$\to$split8, 16 http$\to$split24),
+đúng như kỳ vọng về masking nhận biết giao thức.
+
+\subsection{Control âm tính}
+\texttt{control\_noop\_real\_snort.json}: 40 luồng \emph{không} biến đổi, tất cả
+\texttt{alert = true}, \texttt{evaded = false}. Tỷ lệ né của control là \textbf{0\%}.
+Đây là bằng chứng định lượng rằng 40/40 của agent là thật, không phải do Snort không
+chạy.
+
+\section{Số liệu huấn luyện}
+
+\begin{center}
+\begin{tabular}{llrrrrl}
+\toprule
+Lần chạy & Bộ chấm & flows & né được & queries & epochs & file \\
+\midrule
+Surrogate & \texttt{RealRulesReplica} & 128 & 127 (99{,}2\%) & 896 & 7  & \texttt{ppo\_hidden\_defender.json} \\
+Snort thật & nhị phân thật & 64 & 58 (90{,}6\%) & 640 & 10 & \texttt{ppo\_realsnort\_train.json} \\
+\bottomrule
+\end{tabular}
+\end{center}
+\textbf{Cả hai lần đều dừng ở ngưỡng $\ge 90\%$, không phải ở hội tụ.} Không lần nào
+là trần thật.
+
+\section{Ma trận cơ chế (Snort thật, 8 luồng HTTP)}
+
+Từ \texttt{hidden\_defender\_matrix\_test.json} — 8 luồng HTTP, 112 ô, chấm một cặp
+mỗi pcap:
+
+\begin{center}
+\begin{tabular}{lrr}
+\toprule
+Cơ chế & Né được & Né được \textbf{và} ngữ nghĩa nguyên \\
+\midrule
+\texttt{split8}          & 8/8 & \textbf{8/8} \\
+\texttt{split16}         & 8/8 & \textbf{8/8} \\
+\texttt{split24}         & 8/8 & \textbf{8/8} \\
+\texttt{http\_header\_pad} & 8/8 & \textbf{8/8} \\
+\texttt{prepend4}        & 8/8 & 0/8 \\
+\texttt{prepend8}        & 8/8 & 0/8 \\
+\texttt{prepend12}       & 8/8 & 0/8 \\
+\texttt{overlap8}        & 8/8 & 0/8 \\
+\texttt{length\_wrapper} & 8/8 & 0/8 \\
+\texttt{corrupt8}        & 1/8 & 0/8 \\
+các cơ chế còn lại      & 0/8 & 0/8 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Đây là bảng quan trọng nhất vì cột phải là nơi công việc trung thực thể hiện:
+\textbf{sáu cơ chế đạt 8/8 né nhưng 0/8 né hợp lệ}. Chúng không đánh bại IDS — chúng
+phá kênh C2, và một hàm thưởng ngây thơ sẽ cho chúng điểm tuyệt đối.
+\texttt{length\_wrapper} còn là code chết: 0/8 hợp lệ \emph{và} 0/16 áp dụng được trên
+luồng neris.
+
+\section{RL có thật sự cần thiết không? (phát hiện làm phức tạp câu chuyện)}
+
+Từ \texttt{hidden\_defender\_real\_snort\_test.json} — 8 luồng HTTP, Snort thật:
+
+\begin{center}
+\begin{tabular}{lrr}
+\toprule
+Phương pháp & Queries & Né được \\
+\midrule
+\texttt{random\_sweep}    & 25 & 8/8 \\
+\texttt{greedy}           & 13 & 8/8 \\
+\texttt{supervised\_tree} & 8  & 8/8 \\
+\textbf{ppo}              & 8  & 8/8 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Trên tập huấn luyện 64 luồng, so sánh còn rõ hơn: \texttt{greedy} né 58/64 với
+\textbf{149} queries, trong khi PPO cũng né 58/64 nhưng tốn \textbf{704} queries —
+gấp \textbf{4{,}7 lần}. Và trên tập HTTP, bốn cơ chế \texttt{split8}/\texttt{split16}/
+\texttt{split24}/\texttt{http\_header\_pad} đều giải được 8/8, nên hành động tối ưu
+gần như \emph{hằng số theo framing}, không phải theo luồng.
+
+\textbf{Cách đặt vấn đề trung thực cho báo cáo:} đây \emph{không phải} ``RL đánh bại
+các baseline''. Mà là: ``môi trường là thật, phép đo là vững, và dưới \emph{defender
+này} bài toán tìm kiếm quá dễ để RL tạo thêm giá trị — hành động thắng gần như cố
+định.'' Đây là một \emph{kết quả phủ định về cách đóng khung bài toán}, không phải về
+agent, và nó bảo vệ được.
+
+\section{Scale-up (Snort thật, neris-20110811, 8 vòng)}
+
+Từ \texttt{final\_scale\_up\_summary.json}:
+
+\begin{center}
+\begin{tabular}{rrrr}
+\toprule
+Số luồng & Né được & Tỷ lệ né & mean corrupt \\
+\midrule
+24  & 24  & 100{,}0\% & 0{,}00 \\
+100 & 94  & 94{,}0\%  & 8{,}69 \\
+300 & 287 & 95{,}7\%  & 7{,}71 \\
+323 & 69  & \textbf{21{,}4\%}  & 0{,}00 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Kết quả \textbf{không đơn điệu}: từ 24 lên 300 luồng vẫn cao, rồi sụp ở 323 luồng.
+Chúng tôi nêu thẳng hiện tượng này thay vì làm mượt nó (xem Chương~\ref{ch:discussion}).
+
+\section{Kiểm tra chéo capture (cross-capture)}
+
+Từ \texttt{cross\_capture\_summary.json} (cost $=0{,}6$), sinh lại từ các báo cáo
+per-capture:
+
+\begin{center}
+\begin{tabular}{lrrrr}
+\toprule
+Capture & Baseline bị bắt & Policy né & Corrupt-all né & Kết luận \\
+\midrule
+botnet-capture-20110810-neris & 23/24 & 4  & 4  & hoà \\
+botnet-capture-20110811-neris & 24/24 & 24 & 24 & hoà \\
+capture-win13                 & 24/24 & 0  & 0  & hoà \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Trung bình 38{,}89\%, độ lệch chuẩn 43{,}74\%}, min 0\%, max 100\%.
+\texttt{vs\_control\_counts = \{tie: 3\}}.
+
+Cột ``Corrupt-all né'' là điểm mấu chốt: trên cả ba capture, policy né đúng bằng số
+luồng mà hành động ``làm hỏng mọi gói có thể'' cũng né được, với cùng mức biến đổi
+trung bình. \textbf{Policy hoà control 3/3} — nó không học được gì mà hành động tầm
+thường ``corrupt-everything'' chưa đạt được. Vì vậy con số 100\% trên capture 0811 là
+\emph{tính chất của control đủ mạnh}, không phải bằng chứng cho RL agent.
+\texttt{capture-win13} ở 0\% là tín hiệu trung thực rằng policy không tổng quát hoá
+qua capture.
+
+\section{Kiểm định surrogate so với Snort thật}
+
+Từ \texttt{surrogate\_sweep\_14mech.json} — 14 cơ chế $\times$ 16 luồng, 224 lần gọi
+Snort thật, 2\,359\,s:
+
+\begin{center}
+\begin{tabular}{lr}
+\toprule
+Chỉ số & Giá trị \\
+\midrule
+Đồng thuận tổng thể & 161/224 (71{,}9\%) \\
+Đồng thuận trên ô áp dụng được & 103/116 (88{,}8\%) \\
+\textbf{surrogate false-safe} (báo né khi Snort báo động) & \textbf{0} \\
+\bottomrule
+\end{tabular}
+\end{center}
+\texttt{surrogate\_vs\_real\_snort.json}: 8/8 đồng thuận, 0 false-safe. Con số ``0
+false-safe'' là con số quan trọng nhất: một false-safe nghĩa là surrogate nói dối
+agent rằng nó đã né — đúng chế độ thất bại có thể vô hiệu hoá mọi thí nghiệm chấm bằng
+surrogate. Nó \emph{không} xảy ra ở đây.
+
+\section{Sweep chi phí corrupt}
+Từ \texttt{sweep\_corrupt\_cost.json}: né 100\% từ cost 0{,}2 đến 2{,}0, rồi 0\% ở
+cost 4{,}0; mean corrupt bị ghim ở 2{,}88 qua mọi mức cost. Tham số cost không định
+hình policy mà chỉ bật/tắt nó.
+
+% ===========================================================================
+\chapter{Thảo luận}
+\label{ch:discussion}
+
+\section{Vì sao \texttt{MaskablePPO} hợp ở đây}
+
+\begin{itemize}
+  \item \textbf{Action masking giải quyết khám phá.} Với framing, cơ chế khả thi bị
+        lọc trước, nên agent chỉ cân nhắc các biến đổi hợp lệ theo giao thức.
+  \item \textbf{\PPO{} ổn định trên corpus nhỏ.} \PPO{} tránh phân kỳ off-policy, phù
+        hợp khi dữ liệu ít (1\,153 luồng).
+  \item \textbf{Quan sát black-box 8 chiều.} Agent không thấy bộ luật, chỉ thấy thống
+        kê luồng — đúng như một kẻ tấn công thật.
+\end{itemize}
+
+\section{Chi phí và ý nghĩa}
+
+Mỗi biến đổi có chi phí (\texttt{ACTION\_COSTS}): phân mảnh tốn băng thông/CPU, chèn
+header HTTP rẻ và tự nhiên. Trong phiên bản bandit đã nghỉ hưu, chi phí được hình thức
+hoá qua \texttt{break\_even\_cost} $\approx 3{,}2$ gói: với $N$ gói có thể sửa trong
+một luồng, ``làm hỏng mọi gói'' chỉ hoà vốn khi chi phí vượt \texttt{EVASION\_BONUS}/$N$.
+Với môi trường hiện tại, chi phí là các hằng số cố định theo cơ chế; điều đáng chú ý
+là sweep chi phí \emph{không} định hình policy (mean corrupt ghim ở 2{,}88) — đây là
+một dấu hiệu overfit cần nêu thẳng.
+
+\section{Vì sao các con số nên được tin: những lỗi đã bắt được}
+
+Mỗi lỗi sau từng tạo ra kết quả sai trông rất hợp lý, và bị bắt bởi control hoặc
+kiểm tra chéo — không phải bởi đọc code:
+
+\begin{center}
+\begin{tabular}{cll}
+\toprule
+\# & Lỗi & Cách phát hiện \\
+\midrule
+1 & Trích xuất luồng một chiều (mất gói ngược) & baseline phát hiện 0/24 (bất khả) \\
+2 & Viết lại gói tin ngây thơ (sửa cả phản hồi server) & vẫn 0/24 sau khi sửa lỗi 1 \\
+3 & \texttt{semantics\_intact} chấp nhận chứa chuỗi con & mọi cơ chế đạt 100\% \\
+4 & Chấm điểm theo lô làm triệt alert & pcap 32 cặp cho 4 alert, chấm riêng 12 \\
+5 & Luật ET throttle \texttt{by\_src} & địa chỉ query tái dùng alert một lần rồi im \\
+6 & Cửa sổ đọc alert ngắn hơn nhịp flush của Snort & \texttt{--resident} báo baseline 0/24 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Lỗi số~3 là lỗi cần trình bày cẩn thận nhất.} Nó là khác biệt giữa ``agent né
+được IDS'' và ``agent né được IDS \emph{trong khi vẫn giữ malware hoạt động}''. Kết quả
+100\% trước đó đã bị thu hồi vì nó. Mức hiện tại là byte-equality.
+
+\section{Hạn chế}
+
+\begin{itemize}
+  \item \textbf{Chỉ một seed, một cặp capture.} Kết quả chính là một seed trên tập test
+        40 luồng, tất cả từ hai capture cùng họ. Chưa có trần hội tụ đa-seed.
+  \item \textbf{Defender tĩnh, đơn luật.} Chỉ bộ luật ET Open tĩnh; chưa thử IDS thích
+        ứng hay phát hiện bất thường.
+  \item \textbf{Surrogate bỏ sót 20{,}6\% luật.} Trên corpus này không ảnh hưởng (chỉ 3
+        sid kích hoạt mỗi capture) nhưng sẽ ảnh hưởng trên lưu lượng khác. Đồng thuận
+        \texttt{split8} chỉ 5/16 (31{,}2\%) — surrogate tệ nhất đúng nơi policy hoạt động.
+  \item \textbf{Không tổng quát hoá chéo capture.} win13 ở 0\%. Đây là ngõ cụt của
+        \emph{không gian hành động}: các luồng win13 gần như không có payload (0/97 gói
+        có \texttt{Raw}), nên không byte nào sửa được; Snort vẫn alert 24/24 vì luật
+        establishment/dsize không cần payload. Kết luận đúng là phụ thuộc \emph{trường
+        luật}, không phải phụ thuộc họ botnet.
+  \item \textbf{Scale không đơn điệu.} Sụp ở 323 luồng chưa được giải thích; cần chẩn
+        đoán hoặc nói thẳng ``chúng tôi chưa biết''.
+  \item \textbf{Cả hai cơ chế thắng đều là phân mảnh} (\texttt{split8}, \texttt{split24})
+        — policy chọn cách né rẻ nhất còn giữ ngữ nghĩa, không phải một kho cơ chế đa
+        dạng.
+\end{itemize}
+
+\section{Các bất nhất cần giải quyết}
+
+Tài liệu \texttt{docs/REPORT\_WRITING\_GUIDE.md} và
+\texttt{docs/SIC\_AI\_FRAMEWORK\_VALIDATION.md} còn mang một số con số \emph{đã lỗi
+thời}: ví dụ mean evasion 73{,}3\%, control 71/71, train 1\,113 luồng, không gian hành
+động ``65\,536'', phần thưởng $+100/-2/-50$. Các con số này \textbf{không} khớp với
+file JSON gốc. Luận văn này dùng \emph{file JSON gốc} làm nguồn chân lý (xem Phụ lục~E).
+Một số tài liệu khác (\texttt{all\_models\_comparison.json},
+\texttt{mechanism\_matrix.json}) thuộc thế hệ hệ thống cũ và không so sánh được với kết
+quả hiện tại.
+
+\section{Hướng phát triển}
+
+\begin{itemize}
+  \item \textbf{Defender dị thể/thích ứng:} cấp cho mỗi luồng một luật C2 với
+        \texttt{depth}/\texttt{offset} khác nhau, để offset phân mảnh thắng thay đổi
+        thật sự theo luồng — khi đó RL mới có việc để làm.
+  \item \textbf{Đa seed và kiểm tra chéo họ botnet thật} (không chỉ cùng nhị phân).
+  \item \textbf{Retrain surrogate theo kiểu DAgger} (gán nhãn chính biến đổi của agent
+        mới bằng Snort thật rồi huấn luyện lại) để đóng khoảng cách surrogate--thực tế.
+  \item \textbf{Mở rộng không gian hành động} sang metadata/TTL/phân mảnh để không bị
+        ngõ cụt trên các luồng không payload như win13.
+\end{itemize}
+
+% ===========================================================================
+\chapter{Kết luận}
+\label{ch:conclusion}
+
+Luận văn cho thấy một agent \texttt{MaskablePPO} có thể biến đổi gói tin C2 thật để né
+\Snort{} 2.9.20 (ET Open) một cách đáng tin cậy: \textbf{40/40 luồng held-out né hợp lệ
+dưới Snort thật}, trong khi control âm tính bị báo động 40/40. Mọi hành động đều được
+chấm bằng nhị phân thật, và một verifier tự động 81 kiểm tra bảo đảm không con số nào
+trôi dạt khỏi nguồn.
+
+Nhưng luận văn cũng kết luận trung thực rằng, \emph{dưới defender tĩnh này}, RL chưa
+tạo thêm giá trị: bài toán tìm kiếm gần như suy biến (một hành động gần như cố định
+mỗi framing), nên PPO không vượt greedy; và trên kiểm tra chéo capture (trung bình
+38{,}89\%, std 43{,}74\%), policy \emph{hoà} control ``corrupt-everything'' trên cả ba
+capture — con số né chéo capture không phải thành tựu của RL. Một capture đạt 0\% vì lý
+do không gian hành động, không phải vì họ botnet.
+
+Giá trị của công trình nằm ở \emph{sự trung thực của phép đo}: control âm tính, trần
+oracle, một cặp mỗi pcap, verifier tự động, và việc báo cáo thẳng cả kết quả phủ định.
+Con đường phía trước rõ ràng: làm defender dị thể/thích ứng để bài toán thật sự cần
+đến RL, rồi kiểm tra đa seed và chéo họ botnet.
+
+% ===========================================================================
+\chapter{Phụ lục}
+\label{ch:appendix}
+
+\section{A. Thống kê corpus}
+\begin{center}
+\begin{tabular}{lr}
+\toprule
+Chỉ số & Giá trị \\
+\midrule
+Tổng luồng train & 1\,153 \\
+Tổng luồng test  & 40 \\
+\texttt{obs\_dim} & 8 \\
+Capture train & \texttt{20110811-neris}, \texttt{20110819-bot} \\
+Capture test  & \texttt{20110811-neris}, \texttt{20110819-bot} \\
+Framing trong tập test & 24 \texttt{neris} (UDP) + 16 \texttt{http} (TCP) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{B. Chi tiết hiện thực}
+\textbf{Snort:} 2.9.20, bộ luật ET Open C2 (21\,374 luật), lệnh
+\texttt{snort -c <conf> -r <pcap> -l <dir> -q -A fast}; phán quyết đọc từ file fast-alert.
+Chấm một cặp (flow, cơ chế) mỗi pcap. \textbf{Thời gian:} eval chính \texttt{--real-snort}
+$\sim$172\,s, control $\sim$166\,s, ma trận cơ chế $\sim$11{,}2\,s/ô (112 ô
+$\approx$20 phút). \textbf{Hyperparameters:} xem Chương~\ref{ch:method}.
+\textbf{Verifier:} 81/81 kiểm tra pass. \textbf{Test:} 69 test pass.
+
+\section{C. Bảng kết quả per-flow (40 luồng test)}
+Bảng~\ref{tab:perflow} liệt kê toàn bộ 40 luồng held-out: framing, cơ chế được chọn,
+alert, ngữ nghĩa, phần thưởng. Tất cả đều \texttt{alert=false}, \texttt{evaded=true},
+\texttt{semantics\_ok=true}.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Kết quả per-flow trên tập test held-out (Snort thật).}
+\label{tab:perflow}
+\begin{tabular}{rlllrr}
+\toprule
+\# & Capture & Framing & Action & Reward & Sem. \\
+\midrule
+0  & 20110811-neris & http  & split24 & 9{,}6 & \checkmark \\
+1  & 20110819-bot  & neris & split8  & 9{,}4 & \checkmark \\
+2  & 20110811-neris & http  & split24 & 9{,}6 & \checkmark \\
+3  & 20110819-bot  & neris & split8  & 9{,}4 & \checkmark \\
+4  & 20110819-bot  & neris & split8  & 9{,}4 & \checkmark \\
+5  & 20110819-bot  & neris & split8  & 9{,}4 & \checkmark \\
+6  & 20110819-bot  & neris & split8  & 9{,}4 & \checkmark \\
+7  & 20110819-bot  & neris & split8  & 9{,}4 & \checkmark \\
+8  & 20110819-bot  & neris & split8  & 9{,}4 & \checkmark \\
+9  & 20110819-bot  & neris & split8  & 9{,}4 & \checkmark \\
+10 & 20110819-bot  & neris & split8  & 9{,}4 & \checkmark \\
+11 & 20110811-neris & http  & split24 & 9{,}6 & \checkmark \\
+12 & 20110819-bot  & neris & split8  & 9{,}4 & \checkmark \\
+13 & 20110819-bot  & neris & split8  & 9{,}4 & \checkmark \\
+14 & 20110811-neris & http  & split24 & 9{,}6 & \checkmark \\
+15 & 20110819-bot  & neris & split8  & 9{,}4 & \checkmark \\
+16 & 20110819-bot  & neris & split8  & 9{,}4 & \checkmark \\
+17 & 20110811-neris & http  & split24 & 9{,}6 & \checkmark \\
+18 & 20110819-bot  & neris & split8  & 9{,}4 & \checkmark \\
+19 & 20110811-neris & http  & split24 & 9{,}6 & \checkmark \\
+20 & 20110819-bot  & neris & split8  & 9{,}4 & \checkmark \\
+21 & 20110811-neris & http  & split24 & 9{,}6 & \checkmark \\
+22 & 20110811-neris & http  & split24 & 9{,}6 & \checkmark \\
+23 & 20110811-neris & http  & split24 & 9{,}6 & \checkmark \\
+24 & 20110811-neris & http  & split24 & 9{,}6 & \checkmark \\
+25 & 20110811-neris & http  & split24 & 9{,}6 & \checkmark \\
+26 & 20110819-bot  & neris & split8  & 9{,}4 & \checkmark \\
+27 & 20110819-bot  & neris & split8  & 9{,}4 & \checkmark \\
+28 & 20110819-bot  & neris & split8  & 9{,}4 & \checkmark \\
+29 & 20110819-bot  & neris & split8  & 9{,}4 & \checkmark \\
+30 & 20110811-neris & http  & split24 & 9{,}6 & \checkmark \\
+31 & 20110811-neris & http  & split24 & 9{,}6 & \checkmark \\
+32 & 20110819-bot  & neris & split8  & 9{,}4 & \checkmark \\
+33 & 20110811-neris & http  & split24 & 9{,}6 & \checkmark \\
+34 & 20110819-bot  & neris & split8  & 9{,}4 & \checkmark \\
+35 & 20110811-neris & http  & split24 & 9{,}6 & \checkmark \\
+36 & 20110819-bot  & neris & split8  & 9{,}4 & \checkmark \\
+37 & 20110819-bot  & neris & split8  & 9{,}4 & \checkmark \\
+38 & 20110811-neris & http  & split24 & 9{,}6 & \checkmark \\
+39 & 20110819-bot  & neris & split8  & 9{,}4 & \checkmark \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{D. Control âm tính và kiểm tra ngữ nghĩa}
+Control \texttt{control\_noop\_real\_snort.json}: 40 luồng, tất cả bị báo động
+(\texttt{alerted=40}, \texttt{n=40}), tỷ lệ né 0\%. Mức ngữ nghĩa dùng trong môi trường
+là byte-equality / so khớp lệnh sau khi ghép luồng (mục~\ref{sec:semantics}). Chỉ khi
+\texttt{evaded AND semantics\_ok} thì một luồng mới được tính là né hợp lệ
+(\texttt{QueryCounter.valid()}).
+
+\section{E. Ghi chú chỉnh sửa các con số lỗi thời}
+Một số tài liệu nội bộ từng mang con số \emph{đã bị vượt qua}. Bảng dưới đối chiếu
+con số trong tài liệu với con số trong file JSON gốc (nguồn chân lý):
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Chỉ số & Giá trị cũ (tài liệu) & Giá trị đúng (JSON gốc) \\
+\midrule
+Mean evasion chéo capture & 73{,}3\% / 62{,}5\% & \textbf{38{,}89\%} \\
+Std chéo capture          & 10{,}8\% / 44{,}49\% & \textbf{43{,}74\%} \\
+Control                   & 71/71 bị bắt & \textbf{40/40 bị bắt} \\
+Tập test né được          & 29/40 & \textbf{40/40} \\
+Luồng train               & 1\,113 & \textbf{1\,153} \\
+Không gian hành động      & 65\,536 & \textbf{14 cơ chế} \\
+Phần thưởng               & $+100/-2/-50$ & \textbf{$+10/-10/-1$} \\
+\bottomrule
+\end{tabular}
+\end{center}
+Nguyên nhân gốc của dữ liệu tổng hợp lỗi thời: script tổng hợp cũ lọc input theo chuỗi
+tên file \texttt{"summary"} và bỏ sót khi cập nhật, để lại một file cũ. Hiện tại script
+chọn input theo \emph{schema} và verifier khẳng định file tổng hợp khớp với mọi báo cáo
+per-capture, nên một file tổng hợp lỗi thời sẽ làm verifier \emph{thất bại} thay vì
+được công bố.
+
+% ===========================================================================
+\bibliographystyle{plainnat}
+\bibliography{thesis/references}
+
+\end{document}

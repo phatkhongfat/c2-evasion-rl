@@ -43,6 +43,7 @@ from c2_semantics import (  # noqa: E402
     bytes_equal_semantics,
     client_ip_of,
     client_ip_of_packets,
+    ensure_chain,
     reassembled_client_bytes,
     server_ip_of,
 )
@@ -221,7 +222,10 @@ def apply_mech(pkts, mech: str, client_ip=None, ownership: str = "client"):
     """
     if ownership not in ("client", "both"):
         raise ValueError(f"ownership must be 'client' or 'both', got {ownership!r}")
-    out = [p.copy() for p in pkts]
+    # ensure_chain: a lazily unpickled packet answers `IP in p` with False,
+    # which would empty client_idx and turn the mechanism into a silent no-op
+    # (it would "not evade" for a reason unrelated to evasion).
+    out = [ensure_chain(p).copy() for p in pkts]
     if client_ip is None:
         client_ip = client_ip_of_packets(out)
     sip = None
