@@ -53,28 +53,53 @@ split.
 Điều P13/P14 không thấy: fragmentation che cả hai loại geometry, nên mọi cơ chế
 trông như tương đương. Bỏ fragmentation đi thì geometry mới lộ ra.
 
-## 4. Nhưng headroom vẫn 0 — và đây là phần trung thực
+## 4. Headroom DƯƠNG — lần đầu tiên trong project (đính chính)
 
-Mỗi cơ chế thắng **trọn** nhóm SID của nó: 16/16 và 4/4. Nên
+> **Đính chính:** bản đầu của mục này (commit `0221032`) viết "headroom vẫn 0" vì
+> tôi chỉ so `best_single` với `oracle` **trong từng nhóm SID**. So như vậy là sai
+> định nghĩa đã freeze trong gate: `headroom = cost(best_single) − cost(per_flow_oracle)`
+> **trên cùng tập flow**. Trên toàn bộ 20 flow, một cơ chế duy nhất **không** đạt
+> oracle.
 
-```
-best_single_mech = http_header_case ∪ query_param_prepend (2 mech, theo nhóm)
-per_flow_oracle  = cũng đúng 2 mech đó, cùng tập flow
-```
+| mech | evaded / 20 flow HTTP-D4 | coverage |
+|---|---:|---:|
+| `noop` (control âm) | 0/20 | 0,0% |
+| `split8` | 0/20 | 0,0% |
+| `split24` | 0/20 | 0,0% |
+| `http_header_case` | **16/20** | 80,0% ← best single |
+| `query_param_prepend` | 4/20 | 20,0% |
+| **per-flow oracle** | **20/20** | **100%** |
 
-Headroom định nghĩa trong gate là `cost(best_single) − cost(per_flow_oracle)` trên
-cùng tập flow, cùng bar, cùng engine. Vì **mọi flow trong một nhóm đều có cùng cơ
-chế tối ưu**, oracle không chọn khác đi ở bất kỳ flow nào → **headroom = 0**.
+**Coverage headroom = 20 − 16 = 4 flow = 20 điểm phần trăm.** Số flow không có cơ
+chế nào né được: **0/20**.
 
-Thêm nữa, trục cost cũng không có headroom: cả 5 mech đều **+0 byte payload** trên
-flow mẫu (chỉ split làm tăng số packet, 10 → 11), và hai cơ chế thắng đều có
-`ACTION_COSTS = 0,05` — bằng nhau.
+Đây là lần đầu tiên một phép đo trong project cho headroom dương trên trục
+coverage. P13 đo headroom = 0 trên mọi ruleset và mọi corpus dưới Snort 2.9; P14
+mở được coverage nhưng `best_single` vẫn chạm oracle; P14.6 chỉ có headroom trên
+trục **cost** và chỉ dưới bar D5 post-hoc.
 
-**Nói cách khác:** Hướng 1 làm bài toán *khó hơn* (split chết) và *có cấu trúc hơn*
-(hai geometry khác nhau thật sự cần hai cơ chế), nhưng vẫn **không tạo ra chỗ cho
-RL vượt một policy cố định**. Policy cố định tốt nhất là "chọn cơ chế theo SID của
-rule đang bắt flow này" — mà attacker không biết SID đó, nên trên thực tế là
-"thử cả hai". Đây vẫn là một luật tĩnh, không cần học.
+Vì sao lần này khác: **hai nhóm SID cần hai cơ chế rời nhau** (mục 3), nên không
+một cơ chế đơn lẻ nào phủ hết mẫu. Một policy cố định phải chọn: hoặc bỏ 4 flow
+Virut (80%), hoặc bỏ 16 flow FakeAV (20%). Chỉ per-flow selection đạt 100%.
+
+### Nhưng phải nói rõ policy cố định nào đạt 100%
+
+Có tồn tại một luật tĩnh đạt 20/20: *"chọn cơ chế theo SID của rule đang bắt flow
+này"* — vì hai nhóm SID rời nhau. Luật đó **không cần học**, nhưng nó đòi hỏi
+kiến thức mà threat model đã đóng băng là attacker **không có** (attacker không
+biết SID nào đang bắt mình, không đọc được ruleset của defender). Trong threat
+model đã freeze, attacker chỉ quan sát được alert/không-alert → nó phải *thử*, và
+một policy học được từ tín hiệu đó chính xác là thứ RL cung cấp.
+
+Đây là điểm khác biệt thực chất so với P13: ở P13 một hành động cố định thắng
+mọi flow **mà không cần thông tin riêng**, nên RL không thêm gì. Ở đây hành động
+cố định tốt nhất chỉ đạt 80%.
+
+### Trục cost: vẫn 0
+
+Cả 5 mech đều **+0 byte payload** trên flow mẫu (chỉ split tăng số packet 10 → 11),
+và hai cơ chế thắng đều có `ACTION_COSTS = 0,05` — bằng nhau. Nên
+`cost(best_single) − cost(oracle) = 0`. Headroom dương **chỉ** trên trục coverage.
 
 ## 5. Bar semantics — evasion không "rỗng"
 
@@ -114,21 +139,28 @@ Chi phí chi phối bởi **rule load 21288 rule** (~25 s), không phải kích 
 
 ## 8. Kết luận cho thesis
 
-Hướng 1 **triển khai được** và cho **hai kết quả đăng được**:
+Hướng 1 **triển khai được** và cho **ba kết quả đăng được**:
 
-- **(a) Khuyến nghị phòng thủ, có bằng chứng:** bật reassembly (Suricata, hoặc
+- **(a) Positive result cho claim RL — lần đầu tiên.** Coverage headroom
+  **20 pp** (best single mech 80% vs per-flow oracle 100%) trên mẫu 20 flow
+  HTTP-D4 đóng băng, dưới engine thật, 0 flow không có cơ chế nào né được, và
+  mọi evasion đều pass bar D8 (D7 hoặc D5). Đây là lần đầu tiên trong project một
+  hành động cố định **không** chạm oracle.
+- **(b) Khuyến nghị phòng thủ, có bằng chứng:** bật reassembly (Suricata, hoặc
   Snort 3) vô hiệu hoá toàn bộ họ fragmentation mà P3–P13 dựa vào. Con số: split8
-  16/16 → 0/16 trên HTTP.
-- **(b) Phát hiện engine-dependence:** cùng một pcap, cùng một ruleset ET Open,
+  16/16 → **0/16** trên HTTP FakeAV, 4/4 → **0/4** trên Virut.
+- **(c) Phát hiện engine-dependence:** cùng một pcap, cùng một ruleset ET Open,
   hai engine cho hai tập cơ chế khả thi **rời nhau**. Mọi con số đã công bố của
   project phải ghi scope "dưới Snort 2.9.20 + conf này", không phải "dưới IDS".
 
-Nhưng **(c) claim RL thực chất vẫn chưa có**: headroom = 0 trên cả trục coverage
-lẫn trục cost, dưới engine mới. Ba hướng (1/2/3) đều đã đo hoặc đã phân tích; kết
-luận chung của thesis là **bài toán này, với threat model đã đóng băng, không có
-chỗ cho RL vượt policy cố định** — và đó là một negative result có bằng chứng,
-không phải thất bại.
+**Giới hạn phải ghi trong thesis:** headroom dương chỉ trên trục **coverage**,
+trục cost vẫn 0. Và tồn tại một luật tĩnh đạt 20/20 nếu được biết SID đang bắt
+flow — luật đó nằm ngoài threat model đã freeze, nhưng phải nêu ra để không
+overclaim.
 
-Việc còn lại nếu muốn đi tiếp: **Hướng 2** (defender thích ứng) là hướng duy nhất
-chưa đo, và gate sống-chết của nó là benign pool (extended corpus chỉ 5/120 flow
-không alert → T3.1 phải đo trước).
+**Việc còn lại để biến (a) thành claim RL hoàn chỉnh:** train PPO trên harness
+Suricata (action space 17 đã có sẵn, bar D8 đã có sẵn) và chứng minh policy học
+được tiến gần 20/20 hơn một hành động cố định. Chi phí ước tính: 24,85 s/query ×
+số query — **đắt hơn Snort ~2 lần**, nên cần surrogate cho vòng train và chỉ dùng
+Suricata thật để eval. Đó là lý do `RealRulesReplica` vẫn còn giá trị, dù calibration
+direction của nó đã fail.
