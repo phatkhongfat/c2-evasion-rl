@@ -125,6 +125,27 @@ pass D5 (query parser chuẩn vẫn đọc đúng `c/v/t`), fail D7 vì nó đ�
 Chi phí chi phối bởi **rule load 21288 rule** (~25 s), không phải kích thước pcap.
 Đã bỏ `split16` TRƯỚC khi chạy (ghi trong gate doc) vì 6 mech sẽ là 49,7 phút.
 
+### Confound đã loại trừ: daemon Suricata của hệ thống
+
+`apt-get install suricata` tự bật một daemon live-capture
+(`/usr/bin/suricata -D --af-packet`, config `/etc/suricata/suricata.yaml`, rule
+`/var/lib/suricata/rules`) — **không phải** của project này, và nó chạy suốt lúc đo
+G1a/G1b (bật 22:19, đã ghi 57 MB `eve.json`). Đã dừng nó (`systemctl stop suricata`)
+và **đo lại 5 cell noop** trên đúng mẫu FakeAV:
+
+| điều kiện | s/cell | 100 cell |
+|---|---:|---:|
+| có daemon live-capture | 24,85 | 41,4 phút |
+| **không** daemon | **25,66** | 42,8 phút |
+
+Chênh 3,3% và **theo hướng ngược lại** (không daemon còn chậm hơn) → daemon không
+làm nhiễu phép đo. Alert tái tạo **5/5, cùng SID 2012627**, khớp G1b. Bằng chứng:
+`snort_validation/reports/suricata_g1c_recheck_no_daemon.json`.
+
+Daemon vẫn `enabled` (sẽ bật lại khi reboot) — đó là quyết định của chủ máy, không
+thuộc phạm vi project. Hai engine dùng config và ruleset tách biệt nên kết quả
+đếm alert không thể bị nó ảnh hưởng; chỉ có thời gian là đáng nghi, và đã đo lại.
+
 ## 7. Hai lỗi của chính tôi trong lúc đo (ghi lại để không lặp)
 
 1. **Fixture "known-alerting" đầu tiên sai.** Tôi chọn pcap CTU-Malware-Capture-Botnet-9

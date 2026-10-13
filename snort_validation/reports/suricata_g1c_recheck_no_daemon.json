@@ -1,0 +1,87 @@
+{
+ "engine": "suricata 7.0.3",
+ "split": "test",
+ "flows": 5,
+ "mechs": [
+  "noop"
+ ],
+ "wall_seconds": 128.3,
+ "mean_s_per_cell": 25.66,
+ "by_mech": {
+  "noop": {
+   "n": 5,
+   "alerted": 5,
+   "evaded": 0,
+   "seconds": 128.28,
+   "sids": [
+    2012627
+   ],
+   "mean_s_per_flow": 25.66
+  }
+ },
+ "cells": [
+  {
+   "flow_id": "botnet-capture-20110811-neris|147.32.84.165:2077->184.82.147.251:80|tcp",
+   "framing": "http",
+   "mech": "noop",
+   "alerts": 1,
+   "sids": [
+    2012627
+   ],
+   "evaded": false,
+   "seconds": 25.35,
+   "pkts": 10
+  },
+  {
+   "flow_id": "botnet-capture-20110811-neris|147.32.84.165:1460->184.82.148.43:80|tcp",
+   "framing": "http",
+   "mech": "noop",
+   "alerts": 1,
+   "sids": [
+    2012627
+   ],
+   "evaded": false,
+   "seconds": 25.57,
+   "pkts": 10
+  },
+  {
+   "flow_id": "botnet-capture-20110811-neris|147.32.84.165:2630->184.82.148.43:80|tcp",
+   "framing": "http",
+   "mech": "noop",
+   "alerts": 1,
+   "sids": [
+    2012627
+   ],
+   "evaded": false,
+   "seconds": 25.07,
+   "pkts": 10
+  },
+  {
+   "flow_id": "botnet-capture-20110811-neris|147.32.84.165:1820->184.82.148.43:80|tcp",
+   "framing": "http",
+   "mech": "noop",
+   "alerts": 1,
+   "sids": [
+    2012627
+   ],
+   "evaded": false,
+   "seconds": 26.53,
+   "pkts": 10
+  },
+  {
+   "flow_id": "botnet-capture-20110811-neris|147.32.84.165:4702->184.82.147.251:80|tcp",
+   "framing": "http",
+   "mech": "noop",
+   "alerts": 1,
+   "sids": [
+    2012627
+   ],
+   "evaded": false,
+   "seconds": 25.76,
+   "pkts": 10
+  }
+ ],
+ "rules": "snort_validation/et_open_c2/suricata.rules",
+ "rejected_rules": 86,
+ "note": "ownership=client for non-noop mechs; translate_source keeps the 5-tuple unique. Fail-closed: engine errors raise."
+}
