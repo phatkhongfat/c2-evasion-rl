@@ -77,7 +77,13 @@ def main() -> None:
                     help="dualbar sweep report JSON with per-cell validity")
     ap.add_argument("--corpus", default=None,
                     help="corpus pickle matching the report (default: checked-in)")
+    ap.add_argument("--exclude", default="",
+                    help="comma-separated mechs to drop from BOTH the fixed "
+                         "baseline and the oracle (same-constraint comparison, "
+                         "e.g. split8,split16,split24,split_slow for a "
+                         "fragmentation-blocked regime)")
     args = ap.parse_args()
+    excluded = {m.strip() for m in args.exclude.split(",") if m.strip()}
     rep = json.loads(Path(args.report).read_text())
     print(f"report: {args.report}  conf: {rep.get('conf')}")
     cells = rep["cells"]
@@ -97,9 +103,11 @@ def main() -> None:
 
     # mechs = those actually measured in the report (http_header_case is not in
     # ACTION_NAMES -- it is a 16th mechanism added for the P12 case-sensitivity
-    # probe), so restrict the oracle to measured mechanisms only.
-    mechs = sorted({c["mech"] for c in cells})
-    print(f"measured mechs: {mechs}")
+    # probe), minus any excluded by --exclude (same-constraint comparison:
+    # both the fixed baseline and the oracle lose them).
+    mechs = sorted({c["mech"] for c in cells} - excluded)
+    print(f"measured mechs: {mechs}"
+          + (f"  (excluded: {sorted(excluded)})" if excluded else ""))
 
     # cost[flow_id][mech] = (added_bytes, added_pkts); also 'orig'
     cost: dict[str, dict[str, tuple[int, int]]] = {}
