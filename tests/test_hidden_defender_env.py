@@ -47,9 +47,9 @@ def test_obs_carries_no_rule_information():
         assert all(isinstance(v, float) for v in obs)
 
 
-def test_action_space_is_discrete_fifteen():
+def test_action_space_is_discrete_seventeen():
     env = HiddenDefenderEnv(split="train")
-    assert env.action_space.n == N_ACTIONS == 15
+    assert env.action_space.n == N_ACTIONS == 17
     assert env.observation_space.shape == (OBS_DIM,)
     assert ACTION_NAMES[:3] == ["split8", "split16", "split24"]
     assert "prepend4" in ACTION_NAMES and "noop" in ACTION_NAMES
@@ -57,6 +57,9 @@ def test_action_space_is_discrete_fifteen():
     assert {"http_header_pad", "length_wrapper"} <= set(ACTION_NAMES)
     # P3: slow fragmentation joined the action space as the 15th action.
     assert ACTION_NAMES[14] == "split_slow"
+    # P15 (D9, docs/action_space_policy_p15.md): post-P14 non-split mechanisms.
+    assert ACTION_NAMES[15] == "http_header_case"
+    assert ACTION_NAMES[16] == "query_param_prepend"
 
 
 def test_step_returns_wellformed_gym_tuple():

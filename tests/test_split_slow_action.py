@@ -8,7 +8,9 @@ sweep then proved it evades the whole DNS/UDP family the fast splits miss
 promoted to a real action.  These tests pin the four things that promotion
 touches:
 
-  (i)   ACTION_NAMES / N_ACTIONS            -> 15, split_slow at index 14
+  (i)   ACTION_NAMES / N_ACTIONS            -> split_slow stays at index 14
+       (count was 15 at P3; P15 appended http_header_case/query_param_prepend
+       per docs/action_space_policy_p15.md D9 -> 17)
   (ii)  ACTION_COSTS[14]                    -> 0.65 (slower / more disruptive
                                                 than split8's 0.60)
   (iii) the action mask                     -> allowed only when an owned
@@ -44,16 +46,17 @@ SPLIT_SLOW = "split_slow"
 
 # -- (i) registration -------------------------------------------------------
 
-def test_split_slow_is_registered_as_the_fifteenth_action():
+def test_split_slow_is_registered_at_index_fourteen():
     assert SPLIT_SLOW in ACTION_NAMES
-    assert N_ACTIONS == 15
-    assert len(ACTION_NAMES) == 15
+    # P15 (D9): action space grew 15 -> 17; split_slow's index is unchanged.
+    assert N_ACTIONS == 17
+    assert len(ACTION_NAMES) == 17
     assert ACTION_NAMES.index(SPLIT_SLOW) == 14
 
 
-def test_action_space_reports_fifteen_actions():
+def test_action_space_reports_seventeen_actions():
     env = HiddenDefenderEnv(split="test")
-    assert env.action_space.n == 15
+    assert env.action_space.n == 17
 
 
 # -- (ii) cost --------------------------------------------------------------
@@ -64,7 +67,9 @@ def test_split_slow_cost_is_above_split8():
     assert 14 in ACTION_COSTS
     assert ACTION_COSTS[14] == 0.65
     assert ACTION_COSTS[14] > ACTION_COSTS[0]        # split8
-    assert len(ACTION_COSTS) == 15
+    # P15 (D10): costs added for idx 15 (http_header_case) and 16
+    # (query_param_prepend).
+    assert len(ACTION_COSTS) == 17
 
 
 # -- (iii) mask -------------------------------------------------------------
@@ -84,8 +89,10 @@ def test_mask_allows_split_slow_on_a_udp_flow_with_payload_over_eight():
     env._flows = [_udp_flow("cap|10.0.0.1:1234->10.0.0.2:53|udp", b"x" * 20)]
     env._idx = 0
     mask = env.action_masks()
-    assert len(mask) == 15
+    assert len(mask) == 17
     assert mask[14] == 1, "split_slow must be allowed when an owned payload > 8"
+    # P15: new HTTP-only actions are masked out on a dns flow.
+    assert mask[15] == 0 and mask[16] == 0
 
 
 def test_mask_blocks_split_slow_when_no_owned_payload_exceeds_eight():

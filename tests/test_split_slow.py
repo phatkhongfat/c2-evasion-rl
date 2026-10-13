@@ -86,12 +86,13 @@ def test_mutate_client_only_handles_split_slow():
     assert bytes_equal_semantics(orig, mut, CIP) is True
 
 
-def test_split_slow_is_now_the_fifteenth_action():
+def test_split_slow_stays_at_index_fourteen():
     """split_slow was deliberately OUT of ACTION_NAMES until the v3fixed
-    ceiling sweep proved it evades (40/40). It is now registered as the 15th
-    action (index 14), changing N_ACTIONS 14->15; the pre-existing PPO
-    checkpoints are therefore superseded and must be retrained (P3)."""
+    ceiling sweep proved it evades (40/40). P3 registered it at index 14
+    (N_ACTIONS 14->15); P15 later appended http_header_case and
+    query_param_prepend (15->17) WITHOUT moving split_slow. PPO checkpoints
+    from before each growth are superseded and must be retrained."""
     from hidden_defender_env import ACTION_NAMES, N_ACTIONS
     assert "split_slow" in ACTION_NAMES
-    assert N_ACTIONS == 15
+    assert N_ACTIONS == 17
     assert ACTION_NAMES.index("split_slow") == 14
