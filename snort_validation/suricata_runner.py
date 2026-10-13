@@ -89,3 +89,18 @@ def alert_records(pcap: Path, rules: Path, yaml: Path, logdir: Path) -> List[dic
     """Full eve.json alert records (sid + src/dst + flow id) for attribution."""
     run_suricata(pcap, rules, yaml, logdir)
     return _eve_alerts(logdir)
+
+
+def alert_profile(pcap: Path, rules: Path, yaml: Path,
+                  logdir: Path) -> tuple[int, List[int]]:
+    """(fast.log count, unique sids) from ONE engine run.
+
+    Cost matters here: a per-flow sweep pays the ~25 s rule load per flow, so
+    counting and attributing in two separate runs would double the measurement
+    and make the G1c budget check meaningless.
+    """
+    run_suricata(pcap, rules, yaml, logdir)
+    n = _fast_log_alerts(logdir)
+    sids = {int(r["alert"]["signature_id"]) for r in _eve_alerts(logdir)
+            if "signature_id" in r.get("alert", {})}
+    return n, sorted(sids)
