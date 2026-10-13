@@ -1,27 +1,29 @@
 #!/usr/bin/env python3
-"""Prototype: cost-aware Pareto headroom on the measured 600-cell report.
+"""Cost-aware Pareto headroom on a measured dualbar sweep report.
 
-Evasion headroom is 0 (best fixed mech already covers every flow).  Question:
-is there headroom on a SECOND axis the attacker legitimately cares about --
-wire cost (added bytes/packets from the mutation)?  A per-flow policy that
-picks the cheapest *valid* mechanism could strictly dominate every fixed
-mechanism at equal evasion.  Costs are computed by applying the mutations
-in-memory (no Snort); validity comes from ceiling_v4_both_test_dualbar.json.
+Evasion headroom is 0 (a single fixed mech covers every flow).  Second axis:
+wire cost (added bytes/packets from the mutation) -- something a real attacker
+cares about.  A per-flow policy that picks the cheapest *valid* mechanism can
+strictly dominate every fixed mechanism at equal evasion.  Costs are computed
+by applying the mutations in-memory (no Snort); validity comes from the report.
+
+Usage: .venv/bin/python controls/pareto_cost_oracle.py [--report <dualbar.json>]
 """
 from __future__ import annotations
 
+import argparse
 import json
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "ai_agent"))
 sys.path.insert(0, str(ROOT / "snort_validation"))
 
-from hidden_defender_env import ACTION_NAMES, HiddenDefenderEnv  # noqa: E402
+from hidden_defender_env import HiddenDefenderEnv  # noqa: E402
 from eval_pipeline import client_ip_of, mutate_client_only  # noqa: E402
 
-REPORT = ROOT / "snort_validation" / "reports" / "ceiling_v6_case_fullrules_dualbar.json"
+DEFAULT_REPORT = ROOT / "snort_validation" / "reports" / "ceiling_v6_case_fullrules_dualbar.json"
 
 
 def wire_cost(packets) -> tuple[int, int]:
@@ -70,7 +72,14 @@ def pareto_for_bar(ids, cost, mechs, valid, label):
 
 
 def main() -> None:
-    rep = json.loads(REPORT.read_text())
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--report", default=str(DEFAULT_REPORT),
+                    help="dualbar sweep report JSON with per-cell validity")
+    ap.add_argument("--corpus", default=None,
+                    help="corpus pickle matching the report (default: checked-in)")
+    args = ap.parse_args()
+    rep = json.loads(Path(args.report).read_text())
+    print(f"report: {args.report}  conf: {rep.get('conf')}")
     cells = rep["cells"]
     # validity maps keyed by (flow_id, mech)
     valid_ep = {(c["flow_id"], c["mech"]): c["valid_evasion_endpoint"] for c in cells}
@@ -81,7 +90,8 @@ def main() -> None:
     flows_alert = {f for f, a in baseline_alert.items() if a}
     print(f"flows in report: {len(baseline_alert)}  with baseline alert: {len(flows_alert)}")
 
-    env = HiddenDefenderEnv(split="test", seed=42, real_snort=False, corpus=None)
+    env = HiddenDefenderEnv(split="test", seed=42, real_snort=False,
+                            corpus=args.corpus)
     flows = env._flows
     print(f"env test flows: {len(flows)}")
 
