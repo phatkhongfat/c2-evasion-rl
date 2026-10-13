@@ -158,7 +158,58 @@ thuộc phạm vi project. Hai engine dùng config và ruleset tách biệt nên
    với G1a. Runner thật dùng `"[**]" in line` và đúng. Không số nào trong repo
    bị ảnh hưởng, nhưng nếu tôi tin script tạm thì đã kết luận harness hỏng.
 
-## 8. Kết luận cho thesis
+## 8. Câu hỏi "sao không dùng 24 flow neris của corpus cũ?" (user, 2026-10-14)
+
+**Đính chính trước:** commit `6d856c9` viết "headroom would go to ZERO" nếu nạp
+neris — **SAI**. Tôi tính lại từ JSON đã commit:
+
+| mẫu số | best_single | per-flow oracle | headroom |
+|---|---:|---:|---:|
+| 20 flow HTTP-D4 (đã freeze) | `http_header_case` 16/20 = 80,0% | 20/20 = 100% | **4 flow = 20,0 pp** |
+| 44 flow nếu nạp thêm neris | `http_header_case` 16/44 = 36,4% | 20/44 = 45,5% | 4 flow = **9,1 pp** |
+
+Số flow tuyệt đối vẫn là 4 — neris **không thêm** flow nào có cơ chế thắng, nên nó
+chỉ **pha loãng** tỷ lệ phần trăm. Không về 0, nhưng giảm còn chưa tới một nửa.
+
+### Hai lý do, và chỉ lý do thứ hai mới quyết định
+
+**(1) Threat model.** SID bắt 24 flow đó là `2008581/2008583/2008585` =
+*"ET P2P BitTorrent DHT ping request / nodes reply / announce_peers request"*,
+`classtype:policy-violation`. Đó là BitTorrent, không phải C2. Bạn đã đóng băng loại
+chúng khỏi corpus C2 từ P11/P12 (`docs/p14_denominator.md:11-12`). Nạp lại chúng để
+một con số trông khác đi = đổi threat model đã freeze, điều mà gate P16 cấm.
+
+**(2) Vật lý — đã đo.** Hai cơ chế tạo ra headroom là **HTTP-only**:
+`PROTOCOL_APPROPRIATE['neris'] = (split8, split16, split24, pad16, reorder, ttl)`.
+`http_header_case` và `query_param_prepend` **không áp dụng được** cho một flow UDP
+DHT. Nên neris không thể đóng góp heterogeneity — nó chỉ có thể đóng góp họ split.
+Và họ split thì đã chết:
+
+| phép đo | kết quả |
+|---|---|
+| `split8` trên 24 neris, **Suricata 7** (đo mới, 615 s) | **0/24** evaded, 24/24 vẫn alert |
+| `split8` trên cùng 24 flow, **Snort 2.9** client-only (`oracle_split8_test.json`) | 7/24 |
+| `reorder`, `ttl` trên 40 flow, Snort 2.9 (`ceiling_v3_reorder_ttl_fixed.json`) | **0/40** |
+| bar D8 trên 6 neris flow | split8/16/24 + ttl **byte-identical 6/6**; reorder 2/6; pad16 **0/6** |
+
+Trên UDP, tập cơ chế giữ ngữ nghĩa **chính là** họ split cộng `ttl` — và cả hai đều
+không né được. Vì vậy neris không phải "24 flow bị bỏ phí"; chúng là 24 flow mà
+**trong action space đã freeze không có cơ chế nào dùng được** dưới engine có
+reassemble/defrag.
+
+### Nhánh tôi CHƯA đo (ghi rõ để không ai đọc 9,1 pp thành kết luận cuối)
+
+`split16`, `split24`, `pad16` trên neris dưới Suricata: **chưa đo** (48 cell ≈
+21 phút). Nếu một trong chúng né được, neris sẽ thêm flow có cơ chế thắng và
+headroom có thể **tăng** chứ không giảm. Ngược lại `split_slow` — cơ chế đã đạt
+40/40 dưới Snort 2.9 (`ceiling_v3_splitslow_fixed.json`) — **không nằm trong**
+`PROTOCOL_APPROPRIATE['neris']`, nên nó là trần cơ chế chứ không phải hành động
+policy được phép dùng; không được tính vào headroom.
+
+Kết luận hiện tại vẫn giữ: **mẫu số 20 flow HTTP-D4 là mẫu đúng cho claim của
+Hướng 1**, và n = 4 ở nhóm Virut là giới hạn thật phải nêu trong thesis.
+
+## 9. Kết luận cho thesis
 
 Hướng 1 **triển khai được** và cho **ba kết quả đăng được**:
 
