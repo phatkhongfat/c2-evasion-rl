@@ -112,7 +112,7 @@ def main() -> int:
     for m, d in by_mech.items():
         print(f"  {m:22s} alerted {d['alerted']}/{d['n']} "
               f"evaded {d['evaded']}/{d['n']} mean={d['mean_s_per_flow']}s")
-    print(f"[+] {out_path.relative_to(ROOT)}")
+    print(f"[+] {out_path}")
     return 0
 
 
