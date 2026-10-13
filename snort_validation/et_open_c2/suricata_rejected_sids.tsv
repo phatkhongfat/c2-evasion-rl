@@ -1,0 +1,90 @@
+# sids that Suricata refused to load, with the verbatim -T error.
+# suricata: This is Suricata version 7.0.3 RELEASE
+# config: snort_validation/suricata.yaml
+# rules: snort_validation/et_open_c2/suricata.rules
+sid:2036593	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2071922	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2071923	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2071924	detect: Complete IP space negated. Rule address range is NIL. Probably have a !any or an address range that supplies a NULL address range
+sid:2011802	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2026734	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2026735	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2038627	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2038628	detect-distance: previous keyword has a fast_pattern:only; set. Can't have relative keywords around a fast_pattern only content
+sid:2038701	detect-parse: "http_header" keyword seen with a sticky buffer still set.  Reset sticky buffer with pkt_data before using the modifier.
+sid:2047921	detect-parse: Signature combines packet specific matches (like dsize, flags, ttl) with stream / state matching by matching on app layer proto (like using http_* keywords).
+sid:2007668	detect-parse: "http_header" keyword seen with a sticky buffer still set.  Reset sticky buffer with pkt_data before using the modifier.
+sid:2009897	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2019537	detect-parse: Signature combines packet specific matches (like dsize, flags, ttl) with stream / state matching by matching on app layer proto (like using http_* keywords).
+sid:2023183	detect-parse: rule 2024274 mixes keywords with conflicting directions
+sid:2024274	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2024311	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2024312	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2024313	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2024314	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2024315	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2024316	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2024317	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2024318	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2024319	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2024455	detect-fast-pattern: fast_pattern: only; cannot be used with negated content or with any of the relative modifiers like distance, within, offset, depth
+sid:2024637	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2024849	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2026738	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2027107	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2027108	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2027276	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2027277	detect-parse: unknown rule keyword 'stream_reassemble'.
+sid:2027395	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2027398	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2027479	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2027480	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2028913	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2030550	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2031620	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2032786	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2034738	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2035119	detect-distance: previous keyword has a fast_pattern:only; set. Can't have relative keywords around a fast_pattern only content
+sid:2035397	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2036648	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2038523	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2038610	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2039746	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2039776	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2039777	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2044432	detect-parse: "http_header" keyword seen with a sticky buffer still set.  Reset sticky buffer with pkt_data before using the modifier.
+sid:2044909	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2045003	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2047625	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2048130	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2048229	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2048230	detect-parse: Signature combines packet specific matches (like dsize, flags, ttl) with stream / state matching by matching on app layer proto (like using http_* keywords).
+sid:2050009	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2058300	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2059096	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2059097	detect-parse: rule 2059667 mixes keywords with conflicting directions
+sid:2059667	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2060957	detect-parse: Signature combines packet specific matches (like dsize, flags, ttl) with stream / state matching by matching on app layer proto (like using http_* keywords).
+sid:2061777	detect-parse: Signature combines packet specific matches (like dsize, flags, ttl) with stream / state matching by matching on app layer proto (like using http_* keywords).
+sid:2061789	byte: Extra characters following numeric value
+sid:2062593	detect-parse: rule 2062599 mixes keywords with conflicting directions
+sid:2062599	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2062713	detect-parse: rule 2063947 mixes keywords with conflicting directions
+sid:2063947	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2064207	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2065099	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2065100	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2065101	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2065102	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2066308	detect-content: can't use multiple nocase modifiers with the same content
+sid:2066345	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2067151	detect-depth: can't use a relative keyword like within/distance with a absolute relative keyword like depth/offset for the same content.
+sid:2067880	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2071122	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2071331	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2071332	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2071333	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2071334	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2071882	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2071883	detect-pcre: pcre with /R (relative) needs preceding match in the same buffer
+sid:2066034	suricata: Loading signatures failed.
