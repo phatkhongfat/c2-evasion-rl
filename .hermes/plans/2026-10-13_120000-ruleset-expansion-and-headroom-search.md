@@ -116,6 +116,33 @@ Với **52.454 rule** (2,5×) và **8 capture** (4×), chỉ **3 flow** thật c
 dạng thoái lui đã ghi ở phần trên. Không có tổ hợp SID nào *độc lập* mà các
 cơ chế hiện có bắt buộc phải xử lý bằng hai nhánh khác nhau.
 
+### Sweep baseline `noop` trên corpus mở rộng (8.759s, commit `00e8b3d`)
+
+120 test flow, conf 52k. Hai phát hiện, **cả hai đều phủ định**:
+
+**1. `ceiling_valid_evasion = 5` là artifact, không phải kết quả.** Đúng bằng số
+flow không có alert nào ở baseline (5/120). Vì `evaded := (n_alerts == 0)` trong
+`eval_pipeline.py:484` không phân biệt *"né được alert"* với *"vốn không có alert
+để né"*, flow không bị rule nào bắt được tính là evasion hợp lệ. Mọi con số
+"evaded" phải đọc kèm `baseline_alert=True`.
+
+**2. Không có flow nào có hai rule malware độc lập.**
+
+| loại | số flow | SID | priority |
+|---|---:|---|---|
+| SSH scan (in+out) | 13 | `2001219` + `2003068` | 2 |
+| DNS TLD (.su + .biz) | 1 | `2014169` + `2027863` | 2 |
+| **2 rule malware (pri 1)** | **0** | — | — |
+
+Cặp SSH scan là threshold detector **không có `content` match nào**; cặp DNS chỉ
+là hai rule cùng đọc query name ở hai TLD. 7 SID priority 1 trong harvest
+(`2012533` Virut, `2012627` FakeAV, `2014635` Kazy, `2016413` sinkhole,
+`2018959` PE download, `2019471`/`2019486` IRC) **không cặp đôi** trên bất kỳ
+flow nào.
+
+→ **Mở rộng ruleset 2,5× và traffic 4× vẫn không tạo ra tổ hợp SID độc lập.**
+Cấu trúc "mỗi flow một rule" không phải hạn chế của corpus cũ.
+
 ## Đo mới 2026-10-13 (thay đổi kế hoạch T0.3 và mẫu số)
 
 Đo trực tiếp trên `ceiling_v4_both_test_dualbar.json` — **600 cell = 15 cơ chế ×
