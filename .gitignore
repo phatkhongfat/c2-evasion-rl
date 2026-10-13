@@ -147,3 +147,4 @@ logs/*.log
 logs/*1790*.log
 rulesets/p13/rules/
 rulesets/p13/*.tar.gz
+snort_validation/alert_cov/

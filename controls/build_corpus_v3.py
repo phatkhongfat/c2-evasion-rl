@@ -22,15 +22,45 @@ NAIVE = {2008581, 2008583, 2008585, 2012627}
 ALERT_RE = re.compile(r"\[1:(\d+):\d+\].*\{(TCP|UDP)\} (\d+\.\d+\.\d+\.\d+):(\d+) -> (\d+\.\d+\.\d+\.\d+):(\d+)")
 
 # (dataset, capture name, pcap path relative to ROOT, alert dir name)
+#
+# P13: extended from 4 to all 15 locally-available MCFP captures. The list is
+# frozen here BEFORE any headroom measurement so that the candidate traffic
+# cannot be cherry-picked after seeing which capture yields multi-SID flows.
+# Captures whose harvest produced zero in-threat-model alerts are kept anyway
+# (donbot, sogou, qvod, capture-win19, and the four 2013/2014 win* captures):
+# a zero row is a result that has to be reported, not a candidate to drop.
+_MCFP = "data/stratosphere/mcfp"
 SOURCES = [
     ("stratosphere", "botnet-capture-20110815-fast-flux",
-     "data/stratosphere/mcfp/CTU-Malware-Capture-Botnet-46/botnet-capture-20110815-fast-flux.pcap"),
+     f"{_MCFP}/CTU-Malware-Capture-Botnet-46/botnet-capture-20110815-fast-flux.pcap"),
     ("stratosphere", "botnet-capture-20110812-rbot",
-     "data/stratosphere/mcfp/CTU-Malware-Capture-Botnet-44/botnet-capture-20110812-rbot.pcap"),
+     f"{_MCFP}/CTU-Malware-Capture-Botnet-44/botnet-capture-20110812-rbot.pcap"),
     ("stratosphere", "botnet-capture-20110810-neris",
-     "data/stratosphere/mcfp/CTU-Malware-Capture-Botnet-42/botnet-capture-20110810-neris.pcap"),
+     f"{_MCFP}/CTU-Malware-Capture-Botnet-42/botnet-capture-20110810-neris.pcap"),
+    ("stratosphere", "botnet-capture-20110811-neris",
+     f"{_MCFP}/CTU-Malware-Capture-Botnet-43/botnet-capture-20110811-neris.pcap"),
+    ("stratosphere", "botnet-capture-20110816-donbot",
+     f"{_MCFP}/CTU-Malware-Capture-Botnet-47/botnet-capture-20110816-donbot.pcap"),
+    ("stratosphere", "botnet-capture-20110816-sogou",
+     f"{_MCFP}/CTU-Malware-Capture-Botnet-48/botnet-capture-20110816-sogou.pcap"),
+    ("stratosphere", "botnet-capture-20110816-qvod",
+     f"{_MCFP}/CTU-Malware-Capture-Botnet-49/botnet-capture-20110816-qvod.pcap"),
     ("cybersure-win", "capture-win13",
-     "data/stratosphere/mcfp/CTU-Malware-Capture-Botnet-55/capture-win13.pcap"),
+     f"{_MCFP}/CTU-Malware-Capture-Botnet-55/capture-win13.pcap"),
+    ("cybersure-win", "capture-win19",
+     f"{_MCFP}/CTU-Malware-Capture-Botnet-11/capture-win19.pcap"),
+    ("cybersure-win", "2013-08-20_captureWin5",
+     f"{_MCFP}/CTU-Malware-Capture-Botnet-9/2013-08-20_captureWin5.pcap"),
+    ("cybersure-win", "2013-10-18_capture-win15",
+     f"{_MCFP}/CTU-Malware-Capture-Botnet-14/2013-10-18_capture-win15.pcap"),
+    ("cybersure-win", "2013-11-06_capture-win8",
+     f"{_MCFP}/CTU-Malware-Capture-Botnet-22/2013-11-06_capture-win8.pcap"),
+    ("cybersure-win", "2014-03-12_capture-win15",
+     f"{_MCFP}/CTU-Malware-Capture-Botnet-59/2014-03-12_capture-win15.pcap"),
+    ("cybersure-win", "2014-04-07_capture-win6",
+     f"{_MCFP}/CTU-Malware-Capture-Botnet-64/2014-04-07_capture-win6.pcap"),
+    ("cybersure-win", "2014-04-07_capture-win11",
+     f"{_MCFP}/CTU-Malware-Capture-Botnet-65/2014-04-07_capture-win11.pcap"),
 ]
 
 
