@@ -545,3 +545,37 @@ mẫu số đóng băng T0.1 — không phải x/40 hay x/120 thô.
 
 T0.1 → T0.2 → T0.3 → T0.4 (freeze) → T1.1–1.3 → T2.1–2.2 → T2.3 →
 T2.4 (probe nền) → [T3 nếu cần] → T4.1 (nền) → T4.2 → T4.3.
+
+---
+
+## KẾT QUẢ THỰC THI (2026-10-13, commit 14c591d → 7357aff)
+
+| Phase | Việc | Kết quả |
+|---|---|---|
+| 0 | T0.1 denominator · T0.2 chẩn đoán · T0.3 slack từng SID | 3 kết luận đóng băng: chỉ 16 flow có slack trên corpus cũ, 4/37 trên corpus mở rộng |
+| 0 | T0.4 quyết định D4-D7 | `docs/action_space_policy_p14.md` (file mới, không sửa file policy đã đóng băng) |
+| 1 | D7 parser CL-aware | **Không sửa cơ chế** — nguyên nhân là parser nuốt POST pipelined. `http_header_case` 14 → **16/16** |
+| 2 | D5 bar v2 + `query_param_prepend` | Citation đạt (RFC 3986 [6] + PHP parse_str [7]); **4/4 flow Virut né thật dưới Snort** |
+| 3 | `uri_value_percent` | **BỎ (YAGNI)** — Phase 2 đã phủ 100% flow có slack |
+| 4 | Đo lại oracle + docs | `docs/p14_results.md`; coverage không-split = 100% mọi flow có slack |
+
+### Phát hiện ngoài dự kiến — bug đo thật (P14.3)
+
+Probe độc lập trả `0 byte thay đổi` trên flow mà pipeline cho `+16`. Nguyên nhân:
+scapy restore chuỗi layer **lazy**; process chưa import `scapy.all` trước khi
+`pickle.load` thì `IP in pkt` / `Raw in pkt` trả **False** → cả flow rỗng →
+bar False, cơ chế no-op im lặng. Sửa bằng `ensure_chain` ở
+`c2_semantics.{reassembled_client_bytes, transport_payload, client_ip_of_packets,
+server_ip_of}` + `eval_pipeline.mutate_client_only` + `apply_mech`;
+`tests/test_scapy_lazy_unpickle.py` chạy subprocess trình mới để tái hiện.
+
+> Pipeline chính **không** bị ảnh hưởng (nó import scapy trước), nhưng mọi
+> probe độc lập sau này đều phải qua `ensure_chain`.
+
+### Claim được phép viết (có bằng chứng)
+
+1. Với mọi flow có **slack protocol phía client**, coverage không-split đạt
+   **100%** (16/16 corpus cũ · 4/4 corpus mở rộng).
+2. Phần chưa phủ là **đặc tính protocol/role**, không phải hạn chế action space:
+   TLS ClientHello (`byte_test` độ dài), DNS sinkhole **response** của bên thứ ba.
+3. Chi phí wire không-split: **+4…+8 B/flow, 0 fragment** (vs `split8` +10.744 B / 316 pkt).
