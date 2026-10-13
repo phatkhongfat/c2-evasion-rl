@@ -349,6 +349,33 @@ def apply_mech(pkts, mech: str, client_ip=None, ownership: str = "client"):
                 continue
             p[Raw].load = _lower_field_names(head) + b"\r\n\r\n" + body
 
+    elif mech == "query_param_prepend":
+        # Mirror of eval_pipeline.mutate_client_only (Fix 3 byte-identity):
+        # insert one benign query parameter after the '?' to break literal
+        # content-chains anchored on "<path>?<firstkey>=" (sid:2012533),
+        # while a standard query parser still recovers the same parameters.
+        # Request line lives on the client side, so pay_idx (client payload)
+        # regardless of ownership -- identical bytes in both modes.  EVERY
+        # request-bearing packet is rewritten (captures may repeat the same
+        # GET in one flow; Snort alerts on either copy).
+        from endpoint_model import is_http_request
+
+        for i in pay_idx:
+            p = as_raw(out[i])
+            raw = bytes(p[Raw].load)
+            if not is_http_request(raw):
+                continue
+            head, sep, rest = raw.partition(b"\r\n")
+            if not sep:
+                continue
+            parts = head.split(b" ")
+            if len(parts) < 2 or b"?" not in parts[1]:
+                continue
+            uri = parts[1]
+            q = uri.index(b"?")
+            parts[1] = uri[:q + 1] + b"x=0&" + uri[q + 1:]
+            p[Raw].load = b" ".join(parts) + sep + rest
+
     elif mech == "length_wrapper":
         # Mechanism B.  A wrapper header declares where the real data starts,
         # so any amount of filler precedes it.  Applied to the first

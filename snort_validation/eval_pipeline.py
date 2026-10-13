@@ -246,6 +246,35 @@ def mutate_client_only(packets: Sequence, mech: str, client_ip: Optional[str] = 
                 continue
             out[i][Raw].load = _lower_field_names(head) + b"\r\n\r\n" + body
 
+    elif mech == "query_param_prepend":
+        # Insert one benign query parameter right after the '?'.  Breaks the
+        # literal content-chains that anchor on "<path>?<firstkey>=" -- e.g.
+        # sid:2012533 (Virut.BN checkin) matches content:"list.php?c=" within:32
+        # plus "&v="/"&t=" distance:0 and a pcre on the c= value -- while every
+        # standard query parser still recovers c/v/t identically (split '&' then
+        # '='; RFC 3986: the inserted key x=0 is simply unknown to the handler).
+        # Request line only; body and other packets untouched.  +4 bytes, no
+        # fragmentation.  Client-owned by construction (the request line is the
+        # bot's), so payload_idx is used regardless of `ownership`.  EVERY
+        # request-bearing packet is rewritten -- the fast-flux capture repeats
+        # the same GET twice in one flow, and Snort alerts on either copy, so
+        # stopping after the first would leave the rule firing on the second.
+        for i in payload_idx:
+            out[i] = as_raw(out[i])
+            raw = bytes(out[i][Raw].load)
+            if not is_http_request(raw):
+                continue
+            head, sep, rest = raw.partition(b"\r\n")
+            if not sep:
+                continue
+            parts = head.split(b" ")
+            if len(parts) < 2 or b"?" not in parts[1]:
+                continue
+            uri = parts[1]
+            q = uri.index(b"?")
+            parts[1] = uri[:q + 1] + b"x=0&" + uri[q + 1:]
+            out[i][Raw].load = b" ".join(parts) + sep + rest
+
     elif mech == "length_wrapper":
         for i in payload_idx:
             out[i] = as_raw(out[i])
