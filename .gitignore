@@ -145,3 +145,5 @@ labels/oracle_*.json
 # Logs (keep only in session)
 logs/*.log
 logs/*1790*.log
+rulesets/p13/rules/
+rulesets/p13/*.tar.gz
