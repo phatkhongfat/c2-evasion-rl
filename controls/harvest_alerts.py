@@ -32,12 +32,20 @@ SID_RE = re.compile(r"\[1:(\d+):\d+\]")
 
 
 def harvest(capture: str, pcap: Path, conf: Path, outdir: Path) -> dict:
-    outdir.mkdir(parents=True, exist_ok=True)
-    alert = outdir / capture / "alert"
-    cmd = ["snort", "-r", str(pcap), "-c", str(conf), "-A", "fast",
-           "--alert-output", str(alert)]
+    # Snort 2.9.20 has no --alert-output flag (it prints the usage text and
+    # exits 1). `output alert_fast: alert` in the conf is relative to the LOG
+    # DIRECTORY, not the cwd -- without -l, alerts are counted but never
+    # written to disk and the capture dir stays empty.
+    cdir = outdir / capture
+    cdir.mkdir(parents=True, exist_ok=True)
+    alert = cdir / "alert"
+    if alert.exists():
+        alert.unlink()
+    cmd = ["snort", "-r", str(pcap.resolve()), "-c", str(conf.resolve()),
+           "-A", "fast", "-l", str(cdir.resolve())]
     t0 = time.time()
-    proc = subprocess.run(cmd, capture_output=True, text=True, timeout=7200)
+    proc = subprocess.run(cmd, capture_output=True, text=True,
+                          cwd=str(cdir), timeout=7200)
     dt = time.time() - t0
 
     sids = Counter()
@@ -48,6 +56,7 @@ def harvest(capture: str, pcap: Path, conf: Path, outdir: Path) -> dict:
                 sids[int(m.group(1))] += 1
 
     in_model = sorted(s for s in sids if s not in P2P)
+    tail = proc.stderr.strip().splitlines()[-1] if proc.stderr.strip() else ""
     return {
         "capture": capture,
         "rc": proc.returncode,
@@ -56,6 +65,7 @@ def harvest(capture: str, pcap: Path, conf: Path, outdir: Path) -> dict:
         "n_sids": len(sids),
         "in_model_sids": in_model,
         "alert_bytes": alert.stat().st_size if alert.exists() else 0,
+        "stderr_tail": tail,
     }
 
 
