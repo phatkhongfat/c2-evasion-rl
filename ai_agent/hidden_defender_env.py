@@ -91,6 +91,11 @@ ACTION_NAMES = [
     "corrupt8", "overlap8", "noop",
     "http_header_pad", "length_wrapper",
     "split_slow",
+    # P15 (D9/D10, docs/action_space_policy_p15.md): the two P14 mechanisms are
+    # promoted to actions.  Appended at the END so every pre-existing index is
+    # unchanged; old Discrete(15) checkpoints will not load, which is accepted
+    # (retraining is the goal).  Both are HTTP-only and carry measured wire cost.
+    "http_header_case", "query_param_prepend",
 ]
 N_ACTIONS = len(ACTION_NAMES)
 
@@ -124,6 +129,13 @@ ACTION_COSTS = {
     # latency/disruption cost).  Priced ABOVE split8's 0.60 so the agent only
     # pays it when the cheap fast splits do not clear the flow.
     14: 0.65,    # split_slow
+    # P15 (D10): both P14 mechanisms change the wire on purpose but add almost
+    # no bytes -- http_header_case 0 B (field-name case-fold), query_param_prepend
+    # +4..8 B / flow and 0 fragments.  Priced in the http_header_pad band (0.05)
+    # and below every split, anchored to the measured wire cost in
+    # docs/p14_results.md / docs/p14_cost_headroom.md.
+    15: 0.05,    # http_header_case (0 wire bytes)
+    16: 0.05,    # query_param_prepend (+4..8 bytes, no fragments)
 }
 
 
@@ -141,7 +153,9 @@ PROTOCOL_MATCH_BONUS = 0.15
 # the fast splits also clear all 40 -- so this is an offered option, not a
 # claim that the fast splits fail.)  ``http``/``neris`` keep their sets.
 PROTOCOL_APPROPRIATE = {
-    "http": ("http_header_pad", "length_wrapper", "split8", "split16", "split24"),
+    "http": ("http_header_pad", "length_wrapper", "split8", "split16", "split24",
+             # P15 (D10): the two P14 HTTP-native mechanisms are appropriate here.
+             "http_header_case", "query_param_prepend"),
     "neris": ("split8", "split16", "split24", "pad16", "reorder", "ttl"),
     "dns": ("split_slow",),
     "irc": ("split_slow",),
@@ -198,6 +212,12 @@ def mech_applicable(original_payloads, mech: str) -> bool:
         # Only meaningful when some payload exceeds the 8-byte fragment unit;
         # shorter payloads leave apply_mech a no-op, so it is inapplicable.
         return any(len(p) > 8 for p in original_payloads)
+    if mech == "query_param_prepend":
+        # P15: rewrites the request line by inserting a benign query parameter
+        # after the '?'.  Nothing legal to do on a non-HTTP framing (mirrors the
+        # apply_mech guard), and it is a no-op without a query string, so it is
+        # inapplicable there rather than counted as an evasion or a failure.
+        return framing == "http" and any(b"?" in p for p in original_payloads)
     return True
 
 
@@ -566,7 +586,7 @@ class HiddenDefenderEnv(gym.Env):
     def _compute_action_mask(self) -> list:
         """Direction 2: Compute which actions are applicable for current flow's protocol.
         
-        Returns a list of 15 binary values (0/1) where:
+        Returns a list of N_ACTIONS binary values (0/1) where:
         - 1 = action is applicable (semantics-preserving for this protocol)
         - 0 = action is not applicable (would break semantics or be protocol-invalid)
         
@@ -575,6 +595,9 @@ class HiddenDefenderEnv(gym.Env):
         - http_header_pad (12) only on HTTP
         - length_wrapper (13) only on HTTP (needs body to wrap)
         - split_slow (14) only when an owned packet has transport payload > 8
+        - http_header_case (15) only on HTTP (P15)
+        - query_param_prepend (16) only on HTTP and only with a '?' in an owned
+          payload (P15; mirrors mech_applicable and the apply_mech guard)
         - All split/prepend/ttl/reorder/overlap actions apply to any protocol (IP layer)
         """
         if self._idx >= len(self._flows):
@@ -590,6 +613,8 @@ class HiddenDefenderEnv(gym.Env):
         if framing != "http":
             mask[12] = 0  # http_header_pad requires HTTP
             mask[13] = 0  # length_wrapper requires HTTP body
+            mask[15] = 0  # http_header_case requires HTTP (P15)
+            mask[16] = 0  # query_param_prepend requires HTTP (P15)
         
         # neris-specific: prepend breaks the record chain parser
         # (conservative: only allow protocol-agnostic IP-layer mechanisms)
@@ -603,6 +628,11 @@ class HiddenDefenderEnv(gym.Env):
         # condition inside apply_mech: `0 < 8 < len(payload)`.
         if not any(len(p) > 8 for p in self._owned_payloads(flow)):
             mask[14] = 0  # split_slow
+        
+        # query_param_prepend needs a '?' in an owned payload (mirrors
+        # mech_applicable); without one apply_mech is a no-op.  (P15)
+        if not any(b"?" in p for p in self._owned_payloads(flow)):
+            mask[16] = 0  # query_param_prepend
         
         return mask
 
