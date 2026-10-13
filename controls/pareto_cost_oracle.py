@@ -26,6 +26,46 @@ from eval_pipeline import client_ip_of, mutate_client_only  # noqa: E402
 DEFAULT_REPORT = ROOT / "snort_validation" / "reports" / "ceiling_v6_case_fullrules_dualbar.json"
 
 
+def merge_cells(report_paths):
+    """Union of cells across sweep reports, keyed by (flow_id, mech).
+
+    First report wins for a repeated pair; a repeated pair that DISAGREES on
+    baseline_alert is a measurement contradiction and must not be silently
+    resolved -- a cell is only meaningful relative to its own baseline.
+    """
+    out: dict[tuple[str, str], dict] = {}
+    for path in report_paths:
+        rep = json.loads(Path(path).read_text())
+        for c in rep["cells"]:
+            key = (c["flow_id"], c["mech"])
+            prev = out.get(key)
+            if prev is None:
+                out[key] = c
+            elif bool(prev["baseline_alert"]) != bool(c["baseline_alert"]):
+                raise ValueError(
+                    f"contradicting duplicate cell {key}: baseline_alert "
+                    f"{prev['baseline_alert']} vs {c['baseline_alert']} "
+                    f"(reports disagree about the flow's baseline)")
+    return list(out.values())
+
+
+def bar_map(cells, column):
+    """{(flow_id, mech): bool} for one validity column.
+
+    A cell lacking the column counts as False: a sweep that did not compute a
+    bar is not evidence that the bar passed.
+    """
+    return {(c["flow_id"], c["mech"]): bool(c.get(column, False)) for c in cells}
+
+
+def baseline_map(cells):
+    """{flow_id: baseline_alert} (first cell for a flow wins)."""
+    out: dict[str, bool] = {}
+    for c in cells:
+        out.setdefault(c["flow_id"], bool(c["baseline_alert"]))
+    return out
+
+
 def wire_cost(packets) -> tuple[int, int]:
     """(total wire bytes, packet count) of a packet list."""
     b = 0
@@ -73,26 +113,45 @@ def pareto_for_bar(ids, cost, mechs, valid, label):
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--report", default=str(DEFAULT_REPORT),
-                    help="dualbar sweep report JSON with per-cell validity")
+    ap.add_argument("--report", default=None,
+                    help="dualbar sweep report JSON with per-cell validity "
+                         "(repeatable; cells are unioned by (flow_id, mech))")
     ap.add_argument("--corpus", default=None,
                     help="corpus pickle matching the report (default: checked-in)")
+    ap.add_argument("--bar", default="valid_evasion_endpoint",
+                    help="validity column used as the bar: "
+                         "valid_evasion_endpoint (v1) | "
+                         "valid_evasion_endpoint_q (D7, CL-aware) | "
+                         "valid_evasion_query (D5, query-parsed) | "
+                         "valid_evasion (byte)")
+    ap.add_argument("--no-frag", action="store_true",
+                    help="drop every fragmenting mech from BOTH the fixed "
+                         "baseline and the oracle, without needing to spell "
+                         "out which mechs those are")
     ap.add_argument("--exclude", default="",
                     help="comma-separated mechs to drop from BOTH the fixed "
                          "baseline and the oracle (same-constraint comparison, "
                          "e.g. split8,split16,split24,split_slow for a "
                          "fragmentation-blocked regime)")
     args = ap.parse_args()
+    reports = args.report.split(",") if args.report else [str(DEFAULT_REPORT)]
     excluded = {m.strip() for m in args.exclude.split(",") if m.strip()}
-    rep = json.loads(Path(args.report).read_text())
-    print(f"report: {args.report}  conf: {rep.get('conf')}")
-    cells = rep["cells"]
+    if args.no_frag:
+        from hidden_defender_env import ACTION_NAMES
+        frag = {m for m in ACTION_NAMES if m.startswith("split")}
+        extra = excluded - frag
+        excluded |= frag
+        print(f"--no-frag: dropping {sorted(frag)}"
+              + (f"  (already excluded: {sorted(extra)})" if extra else ""))
+    cells = merge_cells(reports)
+    for r in reports:
+        print(f"report: {r}")
+    rep0 = json.loads(Path(reports[0]).read_text())
+    print(f"conf: {rep0.get('conf')}   cells merged: {len(cells)}")
     # validity maps keyed by (flow_id, mech)
-    valid_ep = {(c["flow_id"], c["mech"]): c["valid_evasion_endpoint"] for c in cells}
-    valid_by = {(c["flow_id"], c["mech"]): c["valid_evasion"] for c in cells}
-    baseline_alert = {}
-    for c in cells:
-        baseline_alert.setdefault(c["flow_id"], c["baseline_alert"])
+    valid_ep = bar_map(cells, "valid_evasion_endpoint")
+    valid_by = bar_map(cells, "valid_evasion")
+    baseline_alert = baseline_map(cells)
     flows_alert = {f for f, a in baseline_alert.items() if a}
     print(f"flows in report: {len(baseline_alert)}  with baseline alert: {len(flows_alert)}")
 
@@ -139,7 +198,13 @@ def main() -> None:
     for mech, (ev, cb, cp) in sorted(fixed.items(), key=lambda kv: (-kv[1][0], kv[1][1])):
         print(f"  {mech:<18} {ev:>3}/{len(ids)}  {cb:>+9}  {cp:>+5}")
 
-    pareto_for_bar(ids, cost, mechs, valid_ep, "endpoint bar")
+    bar = bar_map(cells, args.bar)
+    print(f"bar: {args.bar}")
+    bar_label = {"valid_evasion_endpoint": "endpoint bar (v1)",
+                 "valid_evasion_endpoint_q": "endpoint_q bar (D7, CL-aware)",
+                 "valid_evasion_query": "query bar (D5, query-parsed)",
+                 "valid_evasion": "byte bar"}[args.bar]
+    pareto_for_bar(ids, cost, mechs, bar, bar_label)
     pareto_for_bar(ids, cost, mechs, valid_by, "byte bar")
 
 
