@@ -1,0 +1,564 @@
+{
+  "report": "snort_validation/reports/ceiling_v4_both_test_dualbar.json",
+  "conf": "default (ET Open full)",
+  "by_bar": {
+    "valid_evasion": {
+      "bar": "valid_evasion",
+      "flows_evaluated": 16,
+      "compositional_flows": [],
+      "composite_headroom": 0,
+      "near_miss_flows": [],
+      "per_flow": {
+        "botnet-capture-20110811-neris|147.32.84.165:1029->184.82.148.43:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:1337->184.82.148.43:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:1460->184.82.148.43:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:1820->184.82.148.43:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:2077->184.82.147.251:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:2350->184.82.148.43:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:2575->184.82.148.43:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:2612->184.82.155.107:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:2630->184.82.148.43:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:2909->184.82.147.251:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:3039->184.82.148.43:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:3531->184.82.147.251:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:3617->184.82.148.43:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:4312->184.82.155.107:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:4702->184.82.147.251:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:4883->184.82.155.107:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        }
+      }
+    },
+    "valid_evasion_endpoint": {
+      "bar": "valid_evasion_endpoint",
+      "flows_evaluated": 16,
+      "compositional_flows": [],
+      "composite_headroom": 0,
+      "near_miss_flows": [],
+      "per_flow": {
+        "botnet-capture-20110811-neris|147.32.84.165:1029->184.82.148.43:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "http_header_pad",
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "http_header_pad",
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:1337->184.82.148.43:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "http_header_pad",
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "http_header_pad",
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:1460->184.82.148.43:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "http_header_pad",
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "http_header_pad",
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:1820->184.82.148.43:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "http_header_pad",
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "http_header_pad",
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:2077->184.82.147.251:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "http_header_pad",
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "http_header_pad",
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:2350->184.82.148.43:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "http_header_pad",
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "http_header_pad",
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:2575->184.82.148.43:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "http_header_pad",
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "http_header_pad",
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:2612->184.82.155.107:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "http_header_pad",
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "http_header_pad",
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:2630->184.82.148.43:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "http_header_pad",
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "http_header_pad",
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:2909->184.82.147.251:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "http_header_pad",
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "http_header_pad",
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:3039->184.82.148.43:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:3531->184.82.147.251:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:3617->184.82.148.43:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "http_header_pad",
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "http_header_pad",
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:4312->184.82.155.107:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "http_header_pad",
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "http_header_pad",
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:4702->184.82.147.251:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "http_header_pad",
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "http_header_pad",
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        },
+        "botnet-capture-20110811-neris|147.32.84.165:4883->184.82.155.107:80|tcp": {
+          "compositional": false,
+          "reason": "single wins",
+          "winning_mechanisms": [
+            "http_header_pad",
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ],
+          "cover": [
+            "http_header_pad",
+            "split16",
+            "split24",
+            "split8",
+            "split_slow"
+          ]
+        }
+      }
+    }
+  }
+}
