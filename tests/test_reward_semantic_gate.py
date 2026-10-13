@@ -88,7 +88,7 @@ def _flow(flow_id, load, framing):
 class _NeverAlerts:
     """Replica stub: the defender never fires, so every action 'evades'."""
 
-    def verdict(self, pkts):
+    def verdict(self, pkts, home_ip=None):
         return False
 
 

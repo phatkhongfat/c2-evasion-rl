@@ -538,13 +538,22 @@ class HiddenDefenderEnv(gym.Env):
 
     # -- scoring ----------------------------------------------------------
     def _detected(self, flow, pkts) -> bool:
-        """True when the defender fires.  Replica or the real Snort binary."""
+        """True when the defender fires.  Replica or the real Snort binary.
+
+        The replica gets the flow's client IP as ``home_ip`` so rule-header
+        direction ($HOME_NET -> $EXTERNAL_NET) is honoured: a ``to_server``
+        rule must not fire on an intact SERVER packet while the client side is
+        fragmented.  Without ``home_ip`` the replica falls back to its legacy
+        direction-agnostic heuristic, which gave zero split-on-neris signal.
+        """
         if self.real_snort:
             svc = self._svc
             assert svc is not None
             res = svc.verdicts_chunked([(pkts, 0)])
             return bool(res.get(0, True))
-        return bool(flow["replica"].verdict(pkts))
+        fid = flow.get("flow_id")
+        cip = client_ip_of(fid) if fid else None
+        return bool(flow["replica"].verdict(pkts, home_ip=cip))
 
     def score(self, flow, mech: str):
         """Return (evaded, semantics_ok, alert, semantics_bytes) for one (flow, mechanism).

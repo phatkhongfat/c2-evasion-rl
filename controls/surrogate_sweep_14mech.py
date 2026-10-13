@@ -81,7 +81,7 @@ def main() -> int:
                 continue
 
             sem = bool(semantics_intact(flow["packets"], pkts, cip))
-            replica_alert = bool(flow["replica"].verdict(pkts))
+            replica_alert = bool(flow["replica"].verdict(pkts, home_ip=cip))
             real_alert = bool(svc.verdicts_chunked([(pkts, 0)]).get(0, True))
 
             env._idx = fidx  # noqa: SLF001

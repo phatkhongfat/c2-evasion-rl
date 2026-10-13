@@ -56,6 +56,12 @@ SID_RE = re.compile(r"\bsid\s*:\s*(\d+)")
 MSG_RE = re.compile(r'msg\s*:\s*"((?:[^"\\]|\\.)*)"')
 UNSUPPORTED_RE = re.compile(r"\b(pcre|byte_test|byte_extract|byte_jump)\s*:",
                             re.IGNORECASE)
+# Header direction: the rule HEADER is everything before the first '('.
+# `!$HOME_NET` is a negated list, not the home side, so the lookbehind rejects
+# it -- anything that is not a clean HOME_NET->EXTERNAL_NET (or the reverse)
+# stays 'any'.
+_HOME_FWD_RE = re.compile(r"(?<![!\w])\$HOME_NET\b[^(]*?->\s*(?<![!\w])\$EXTERNAL_NET\b")
+_HOME_REV_RE = re.compile(r"(?<![!\w])\$EXTERNAL_NET\b[^(]*?->\s*(?<![!\w])\$HOME_NET\b")
 
 _ESCAPES = {"n": 0x0A, "r": 0x0D, "t": 0x09, "\\": 0x5C, '"': 0x22,
             ";": 0x3B, ":": 0x3A}
@@ -135,6 +141,13 @@ class Rule:
     to_server: bool = False
     from_server: bool = False
     uses_unsupported: bool = False
+    # Header direction, derived from the rule HEADER (the text before the first
+    # '('): '$HOME_NET ... -> $EXTERNAL_NET' = 'to_server',
+    # '$EXTERNAL_NET ... -> $HOME_NET' = 'from_server', anything else = 'any'.
+    # A `flow:` keyword (to_server/from_server above) still wins when present;
+    # `direction` only decides payload selection, and ONLY when the caller
+    # passes an explicit home_ip (legacy callers keep the old behaviour).
+    direction: str = "any"
 
     def fires(self, payloads: Sequence[bytes], has_handshake: bool) -> bool:
         """True when every content matches, in order, inside ONE payload."""
@@ -190,6 +203,13 @@ def parse_ruleset(path: Path = RULES,
         msg_m = MSG_RE.search(line)
         rule = Rule(sid=sid, msg=msg_m.group(1) if msg_m else "",
                     uses_unsupported=bool(UNSUPPORTED_RE.search(line)))
+        header = line.split("(", 1)[0]
+        if _HOME_FWD_RE.search(header):
+            rule.direction = "to_server"
+        elif _HOME_REV_RE.search(header):
+            rule.direction = "from_server"
+        else:
+            rule.direction = "any"
         flow_m = FLOW_RE.search(line)
         if flow_m:
             flags = flow_m.group(1).lower()
@@ -275,17 +295,37 @@ def _initiator(packets: Sequence) -> Optional[str]:
     return None
 
 
-def _payloads(packets: Sequence, forward_only: bool = False) -> List[bytes]:
+def _payloads(packets: Sequence, forward_only: bool = False,
+              home_ip: Optional[str] = None) -> List[bytes]:
+    """Transport payloads, optionally restricted to one direction.
+
+    ``home_ip is None`` keeps the legacy heuristic (``forward_only`` ->
+    ``_initiator``).  With an explicit ``home_ip`` the caller supplies the bot
+    identity (``c2_semantics.client_ip_of(flow_id)``), which is what Snort's
+    ``$HOME_NET`` corresponds to: ``forward_only`` -> src == home_ip, otherwise
+    ALL payloads (the direction-agnostic "both" arm).  Use
+    ``_payloads_reverse`` for the peer->home arm.
+    """
     from scapy.all import IP, Raw
-    init = _initiator(packets) if forward_only else None
+    if home_ip is None:
+        init = _initiator(packets) if forward_only else None
+    else:
+        init = home_ip if forward_only else None
     out = []
     for p in packets:
         if Raw not in p:
             continue
-        if forward_only and init is not None and p[IP].src != init:
+        if init is not None and p[IP].src != init:
             continue
         out.append(bytes(p[Raw].load))
     return out
+
+
+def _payloads_reverse(packets: Sequence, home_ip: str) -> List[bytes]:
+    """The peer->home arm: payloads NOT sent by ``home_ip``."""
+    from scapy.all import IP, Raw
+    return [bytes(p[Raw].load) for p in packets
+            if Raw in p and IP in p and p[IP].src != home_ip]
 
 
 class RealRulesReplica:
@@ -303,36 +343,60 @@ class RealRulesReplica:
                     path: Path = RULES) -> "RealRulesReplica":
         return cls.for_sids(firing_sids(capture, dataset), path)
 
-    def _arms(self, packets: Sequence):
+    def _arms(self, packets: Sequence, home_ip: Optional[str] = None):
         handshake = _has_handshake(packets)
-        fwd = _payloads(packets, forward_only=True)
-        both = _payloads(packets, forward_only=False)
+        fwd = _payloads(packets, forward_only=True, home_ip=home_ip)
+        both = _payloads(packets, forward_only=False, home_ip=home_ip)
         return handshake, fwd, both
 
-    def alert_count(self, packets: Sequence) -> int:
+    @staticmethod
+    def _payloads_for(rule: "Rule", fwd, both, rev, home_ip):
+        """Which payload arm a rule matches against.
+
+        Legacy (``home_ip is None``): only a ``flow:to_server`` rule is
+        forward-only; everything else sees both sides -- unchanged behaviour.
+
+        With ``home_ip``: the rule's effective direction is ``flow:`` first,
+        then the header direction.  ``to_server`` -> home->peer packets,
+        ``from_server`` -> peer->home packets, ``any`` -> both.
+        """
+        if home_ip is None:
+            return fwd if (rule.to_server and not rule.from_server) else both
+        if rule.from_server or rule.direction == "from_server":
+            return rev
+        if rule.to_server or rule.direction == "to_server":
+            return fwd
+        return both
+
+    def alert_count(self, packets: Sequence,
+                    home_ip: Optional[str] = None) -> int:
         """How many real rules fire -- the shaped reward signal."""
         if not packets:
             return 0
-        handshake, fwd, both = self._arms(packets)
+        handshake, fwd, both = self._arms(packets, home_ip=home_ip)
+        rev = both if home_ip is None else _payloads_reverse(packets, home_ip)
         n = 0
         for rule in self.rules:
-            payloads = fwd if (rule.to_server and not rule.from_server) else both
+            payloads = self._payloads_for(rule, fwd, both, rev, home_ip)
             if rule.fires(payloads, handshake):
                 n += 1
         return n
 
-    def verdict(self, packets: Sequence) -> bool:
+    def verdict(self, packets: Sequence,
+                home_ip: Optional[str] = None) -> bool:
         """True = detected (alert), matching real Snort's semantics."""
-        return self.alert_count(packets) > 0
+        return self.alert_count(packets, home_ip=home_ip) > 0
 
-    def firing_rules(self, packets: Sequence) -> List[Rule]:
+    def firing_rules(self, packets: Sequence,
+                     home_ip: Optional[str] = None) -> List[Rule]:
         """Which rules fire -- for diagnosis, not for the reward."""
         if not packets:
             return []
-        handshake, fwd, both = self._arms(packets)
+        handshake, fwd, both = self._arms(packets, home_ip=home_ip)
+        rev = both if home_ip is None else _payloads_reverse(packets, home_ip)
         hit = []
         for rule in self.rules:
-            payloads = fwd if (rule.to_server and not rule.from_server) else both
+            payloads = self._payloads_for(rule, fwd, both, rev, home_ip)
             if rule.fires(payloads, handshake):
                 hit.append(rule)
         return hit
