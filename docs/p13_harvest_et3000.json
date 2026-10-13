@@ -1,0 +1,232 @@
+{
+  "conf": "rulesets/p13/snort_et3000.conf",
+  "captures": [
+    {
+      "capture": "botnet-capture-20110815-fast-flux",
+      "rc": 0,
+      "seconds": 37.9,
+      "alerts": 11,
+      "n_sids": 4,
+      "in_model_sids": [
+        2003254,
+        2012533,
+        2014635,
+        2100538
+      ],
+      "alert_bytes": 2658,
+      "stderr_tail": "Snort exiting"
+    },
+    {
+      "capture": "botnet-capture-20110812-rbot",
+      "rc": 0,
+      "seconds": 83.2,
+      "alerts": 38150,
+      "n_sids": 19,
+      "in_model_sids": [
+        2001219,
+        2001330,
+        2001972,
+        2002024,
+        2002025,
+        2002026,
+        2003068,
+        2008578,
+        2010935,
+        2011716,
+        2011766,
+        2012204,
+        2013479,
+        2017318,
+        2019471,
+        2019486,
+        2025066,
+        2100538,
+        2101411
+      ],
+      "alert_bytes": 7150428,
+      "stderr_tail": "Snort exiting"
+    },
+    {
+      "capture": "botnet-capture-20110810-neris",
+      "rc": 0,
+      "seconds": 67.3,
+      "alerts": 527,
+      "n_sids": 13,
+      "in_model_sids": [
+        2003254,
+        2003260,
+        2003266,
+        2011766,
+        2012204,
+        2012533,
+        2014169,
+        2022382,
+        2027863,
+        2035422,
+        2042930,
+        2100538,
+        2101411
+      ],
+      "alert_bytes": 105789,
+      "stderr_tail": "Snort exiting"
+    },
+    {
+      "capture": "botnet-capture-20110811-neris",
+      "rc": 0,
+      "seconds": 52.4,
+      "alerts": 519,
+      "n_sids": 13,
+      "in_model_sids": [
+        2003254,
+        2003260,
+        2003266,
+        2012533,
+        2012627,
+        2014635,
+        2027863,
+        2067085,
+        2067086,
+        2067087,
+        2100538,
+        2101411,
+        2102466
+      ],
+      "alert_bytes": 120141,
+      "stderr_tail": "Snort exiting"
+    },
+    {
+      "capture": "botnet-capture-20110816-donbot",
+      "rc": 0,
+      "seconds": 39.8,
+      "alerts": 124,
+      "n_sids": 6,
+      "in_model_sids": [
+        2001330,
+        2001972,
+        2012709,
+        2013479,
+        2100538,
+        2101411
+      ],
+      "alert_bytes": 23728,
+      "stderr_tail": "Snort exiting"
+    },
+    {
+      "capture": "botnet-capture-20110816-sogou",
+      "rc": 0,
+      "seconds": 36.2,
+      "alerts": 5,
+      "n_sids": 2,
+      "in_model_sids": [
+        2018959,
+        2101411
+      ],
+      "alert_bytes": 933,
+      "stderr_tail": "Snort exiting"
+    },
+    {
+      "capture": "botnet-capture-20110816-qvod",
+      "rc": 0,
+      "seconds": 41.6,
+      "alerts": 632,
+      "n_sids": 11,
+      "in_model_sids": [
+        2001330,
+        2001581,
+        2001972,
+        2003614,
+        2003615,
+        2010935,
+        2012709,
+        2013479,
+        2018959,
+        2100538,
+        2101411
+      ],
+      "alert_bytes": 123013,
+      "stderr_tail": "Snort exiting"
+    },
+    {
+      "capture": "capture-win13",
+      "rc": 0,
+      "seconds": 34.5,
+      "alerts": 939,
+      "n_sids": 1,
+      "in_model_sids": [
+        2016413
+      ],
+      "alert_bytes": 189678,
+      "stderr_tail": "Snort exiting"
+    },
+    {
+      "capture": "capture-win19",
+      "rc": 0,
+      "seconds": 35.5,
+      "alerts": 0,
+      "n_sids": 0,
+      "in_model_sids": [],
+      "alert_bytes": 0,
+      "stderr_tail": "Snort exiting"
+    },
+    {
+      "capture": "2013-08-20_captureWin5",
+      "rc": 0,
+      "seconds": 36.9,
+      "alerts": 0,
+      "n_sids": 0,
+      "in_model_sids": [],
+      "alert_bytes": 0,
+      "stderr_tail": "Snort exiting"
+    },
+    {
+      "capture": "2013-10-18_capture-win15",
+      "rc": 0,
+      "seconds": 37.7,
+      "alerts": 0,
+      "n_sids": 0,
+      "in_model_sids": [],
+      "alert_bytes": 0,
+      "stderr_tail": "Snort exiting"
+    },
+    {
+      "capture": "2013-11-06_capture-win8",
+      "rc": 0,
+      "seconds": 37.4,
+      "alerts": 0,
+      "n_sids": 0,
+      "in_model_sids": [],
+      "alert_bytes": 0,
+      "stderr_tail": "Snort exiting"
+    },
+    {
+      "capture": "2014-03-12_capture-win15",
+      "rc": 0,
+      "seconds": 39.4,
+      "alerts": 0,
+      "n_sids": 0,
+      "in_model_sids": [],
+      "alert_bytes": 0,
+      "stderr_tail": "Snort exiting"
+    },
+    {
+      "capture": "2014-04-07_capture-win6",
+      "rc": 0,
+      "seconds": 37.5,
+      "alerts": 0,
+      "n_sids": 0,
+      "in_model_sids": [],
+      "alert_bytes": 0,
+      "stderr_tail": "Snort exiting"
+    },
+    {
+      "capture": "2014-04-07_capture-win11",
+      "rc": 0,
+      "seconds": 47.6,
+      "alerts": 0,
+      "n_sids": 0,
+      "in_model_sids": [],
+      "alert_bytes": 0,
+      "stderr_tail": "Snort exiting"
+    }
+  ]
+}

@@ -1,5 +1,27 @@
 # P13 — Mở rộng không gian hành động: thêm ruleset + thêm traffic, đo bằng SID-action matrix
 
+## Trạng thái 2026-10-13 (đã thực thi, cập nhật liên tục)
+
+| Task | Trạng thái | Kết quả |
+|---|---|---|
+| T0.1 `sid_diversity.py` | ✅ xong, 20 test | S1 = **0** |
+| T0.2 `sid_action_matrix.py` | ✅ xong | S2 = **0** (mọi SID chung 1 tập cơ chế) |
+| T0.3 sweep 15 cơ chế | ⛔ **bỏ** — dữ liệu đã có sẵn | dùng `ceiling_v4_both_test_dualbar` |
+| T0.4 `composite_oracle.py` | ✅ xong | composite headroom = **0** dưới cả 2 bar |
+| T1.1 tải ET Open 3.0.0 | ✅ 52.454 rule, `snort -T` pass | superset của ruleset cũ |
+| T1.2 freeze danh sách | ✅ `rulesets/p13/MANIFEST.md`, `88a6d43` | trước mọi phép đo headroom |
+| T2.1 cứu `/tmp/cov` | ✅ 5 capture có alert thật → `snort_validation/alert_cov/` | không còn phụ thuộc `/tmp` |
+| T2.2 mở rộng traffic 2→15 capture | 🔄 đang chạy | harvest 52k rule nền |
+| T3.1 đo S1/S2 trên ruleset mới | ⏳ chờ T2.2 | |
+
+**Kết luận Phase 0 (chưa đổi ruleset, chưa đổi traffic):** `headroom = 0` dưới cả
+hai bar, và **giờ đã biết vì sao** — không chỉ vì `best_single` = 100%, mà vì
+**composite headroom cũng bằng 0**: không có flow nào mà *tập hợp* cơ chế né được
+trong khi *không cơ chế đơn lẻ nào* né được. Đây là phép đo mà `rl_headroom.py`
+cũ không thể làm (nó chỉ thử từng cơ chế một).
+
+---
+
 ## Goal
 
 Xác định bằng đo liệu có tồn tại một flow mà **hai cơ chế khác nhau, cùng hợp lệ
