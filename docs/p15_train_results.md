@@ -79,6 +79,30 @@ Câu hỏi headline (trả lời bằng số Phase 3, không chọn seed đẹp)
 2. Nó có chọn mech KHÔNG-split rẻ (0–8 B) thay vì split (+10.744 B) trên flow HTTP?
 3. Real-snort train có khôi phục 40/40 raw (A4: split coverage không thấp hơn model cũ)?
 
+## Đính chính baseline (2026-10-13, trước Phase 3)
+
+**Không được** dùng `ppo_masked_test.json` làm baseline so với policy P15. Bằng
+chứng (`docs/baseline_ownership_provenance.md`): report đó sinh tại `e6fb02d`
+(2026-10-04), **trước** `40fffdf` (2026-10-05) — commit đưa client-only mutation
+và strict byte bar vào code. Ở `e6fb02d`, `apply_mech(pkts, mech)` không có
+tham số ownership nên nhánh split fragment **mọi** packet có `Raw` (kể cả packet
+server), và `semantics_intact` khi đó so **per-packet với command bar relaxed**
+("packets that yield no command impose no constraint"). Vậy `40/40 raw` là
+**both-ownership + relaxed bar**.
+
+Ba con số baseline hợp lệ cho Phase 3:
+
+| baseline | pipeline | số |
+|---|---|---:|
+| `oracle_split8_test.json` | real Snort, **client-only**, strict bar | **23/40** (http 16/16, neris 7/24) |
+| `ppo_masked_test.json` | real Snort, **both**, relaxed bar | 40/40 *(superseded — chỉ để tham chiếu)* |
+| fixed mech trên **mẫu D4** (16 flow C2) | `http_header_case` 16/16 D5 · `query_param_prepend` 0/16 | **16/16** |
+
+Hệ quả cho câu hỏi 3 ở trên: "real-snort train có khôi phục 40/40 raw (A4)" là
+câu hỏi **sai baseline**. A4 đúng là: split coverage của model mới **không thấp
+hơn** `oracle_split8_test.json` per-framing (http 16/16, neris 7/24) dưới cùng
+client-only + strict bar.
+
 ## Phase 2b — surrogate direction fix (P15.5/P15.6)
 
 **Nguyên nhân (2 câu).** `RealRulesReplica.parse_ruleset` suy `to_server`/`from_server`

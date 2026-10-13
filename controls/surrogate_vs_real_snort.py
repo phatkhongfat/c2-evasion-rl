@@ -10,13 +10,16 @@ Real Snort costs ~10 s per flow, so keep --n-flows small.
 
 Scoring API (see hidden_defender_env.py):
     flow = env._flows[env._idx]; flow["packets"],
-    flow["replica"].verdict(pkts, home_ip=client_ip_of(flow["flow_id"]))
+    flow["replica"].verdict(pkts)
     mutate with apply_mech(pkts, mech); real verdict via SnortBatchService
 
-The replica is scored with the flow's client IP as ``home_ip`` so rule-header
-direction is honoured; without it the replica fires a ``to_server`` rule on an
-intact server packet while the client side is fragmented (the false-negative
-that made split-on-neris look useless in surrogate training).
+The replica is called WITHOUT ``home_ip`` (legacy direction-agnostic mode).
+P16b.0 revert: passing the client IP as ``home_ip`` (commit 99356c0) measured
+WORSE agreement with real Snort on both client-only references -- see
+``snort_validation/reports/surrogate_calibration_p15.json`` and
+``docs/baseline_ownership_provenance.md``.  ``et_open_c2`` conf sets
+``var HOME_NET any`` / ``var EXTERNAL_NET any``, so real Snort matches content
+in either direction.
 """
 from __future__ import annotations
 
@@ -66,7 +69,7 @@ def main() -> int:
         pkts = apply_mech(flow["packets"], mech, cip)
         sem = semantics_intact(flow["packets"], pkts, cip)
 
-        replica_alert = bool(flow["replica"].verdict(pkts, home_ip=cip))
+        replica_alert = bool(flow["replica"].verdict(pkts))
         real_alert = bool(svc.verdicts_chunked([(pkts, 0)]).get(0, True))
 
         rows.append({

@@ -438,6 +438,11 @@ Mỗi seed một dòng, TRÊN MẪU SỐ D4 (16 flow C2 — danh sách flow-id l
   `ceiling_v6_case_fullrules_qbar.json`, `p14_v10_qpp_old_corpus.json` — KHÔNG chạy
   lại Snort cho baseline);
 - A4 check: `split8`/`split_slow` coverage không thấp hơn `ppo_masked_test.json` cũ.
+  → **ĐÍNH CHÍNH 2026-10-13 (T0.4, P16b.0):** baseline đó là **both-ownership +
+  relaxed bar** (sinh tại `e6fb02d`, trước `40fffdf` — xem
+  `docs/baseline_ownership_provenance.md`). A4 đúng phải so với
+  `oracle_split8_test.json` = **23/40 client-only** (http 16/16, neris 7/24),
+  cùng pipeline client-only + strict bar với policy P15.
 
 Câu hỏi RL mà bảng này trả lời (viết nguyên văn vào doc): *policy học được có đạt
 ≥ coverage của fixed mech tốt nhất với ≤ wire cost, bằng action không-split, trên

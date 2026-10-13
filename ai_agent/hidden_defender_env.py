@@ -540,20 +540,24 @@ class HiddenDefenderEnv(gym.Env):
     def _detected(self, flow, pkts) -> bool:
         """True when the defender fires.  Replica or the real Snort binary.
 
-        The replica gets the flow's client IP as ``home_ip`` so rule-header
-        direction ($HOME_NET -> $EXTERNAL_NET) is honoured: a ``to_server``
-        rule must not fire on an intact SERVER packet while the client side is
-        fragmented.  Without ``home_ip`` the replica falls back to its legacy
-        direction-agnostic heuristic, which gave zero split-on-neris signal.
+        NOTE (P16b.0 revert): the replica is called WITHOUT ``home_ip``, i.e.
+        in its legacy direction-agnostic mode.  Commit 99356c0 passed the flow's
+        client IP so rule-header direction would be honoured, but
+        ``reports/surrogate_calibration_p15.json`` measured that this makes
+        agreement with real Snort WORSE on both client-only references
+        (noop 40/40 -> 36/40; oracle_split8 17/40 -> 7/40): ``et_open_c2`` conf
+        sets ``var HOME_NET any`` / ``var EXTERNAL_NET any``, so real Snort
+        matches content in EITHER direction and a header-direction filter cannot
+        reproduce it.  The ``home_ip`` parameter stays available (None = legacy)
+        for the record; do not re-enable it without a calibration that beats
+        40/40 and 17/40.
         """
         if self.real_snort:
             svc = self._svc
             assert svc is not None
             res = svc.verdicts_chunked([(pkts, 0)])
             return bool(res.get(0, True))
-        fid = flow.get("flow_id")
-        cip = client_ip_of(fid) if fid else None
-        return bool(flow["replica"].verdict(pkts, home_ip=cip))
+        return bool(flow["replica"].verdict(pkts))
 
     def score(self, flow, mech: str):
         """Return (evaded, semantics_ok, alert, semantics_bytes) for one (flow, mechanism).

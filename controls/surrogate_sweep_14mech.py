@@ -81,7 +81,9 @@ def main() -> int:
                 continue
 
             sem = bool(semantics_intact(flow["packets"], pkts, cip))
-            replica_alert = bool(flow["replica"].verdict(pkts, home_ip=cip))
+            # P16b.0 revert: no home_ip (legacy direction-agnostic replica).
+            # See docs/baseline_ownership_provenance.md + surrogate_calibration_p15.json.
+            replica_alert = bool(flow["replica"].verdict(pkts))
             real_alert = bool(svc.verdicts_chunked([(pkts, 0)]).get(0, True))
 
             env._idx = fidx  # noqa: SLF001
