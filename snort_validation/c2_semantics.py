@@ -480,3 +480,40 @@ def endpoint_command_preserved(original_packets: Sequence,
     if mutated_command is None:
         return False          # handler reads nothing from the mutation
     return mutated_command == command
+
+
+def endpoint_commands_preserved(original_packets: Sequence,
+                                mutated_packets: Sequence,
+                                client_ip: str) -> bool:
+    """True iff a real handler recovers the SAME per-request command LIST.
+
+    The D7 fix for pipelined HTTP: v1's endpoint_command_preserved reads the
+    whole stream after the first CRLFCRLF as one body, so on a pipelined pair
+    of POSTs request 2 lands verbatim inside request 1's "command" and a
+    protocol-legal case-fold of request 2's header names fails the bar even
+    though a real handler (which reads Content-Length, RFC 7230 s3.3.3)
+    recovers both commands intact.  This is an ADDITIONAL verdict, never a
+    replacement for v1 -- both are reported side by side.
+
+    Same three fail-closed paths as v1: unreadable IP family -> reject; an
+    original the parser cannot read -> reject (cannot certify what you cannot
+    read); a mutation that parses to None -> reject.
+    """
+    from endpoint_model import detect_framing, parse_commands
+
+    if _has_unreadable_ip_family(original_packets) \
+            or _has_unreadable_ip_family(mutated_packets):
+        return False
+
+    orig = reassembled_client_bytes(original_packets, client_ip)
+    mut = reassembled_client_bytes(mutated_packets, client_ip)
+
+    framing = detect_framing(orig)
+    commands = parse_commands(orig, framing)
+    if commands is None:
+        return False          # unreadable original -> cannot certify
+
+    mutated_commands = parse_commands(mut, framing)
+    if mutated_commands is None:
+        return False          # handler reads nothing from the mutation
+    return mutated_commands == commands

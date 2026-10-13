@@ -93,6 +93,71 @@ def parse_command(raw: bytes, framing: str) -> bytes | None:
     return fn(raw)
 
 
+_CL_LINE = re.compile(rb"^content-length:\s*(\d+)\s*$", re.I)
+
+
+def _http_request_command(req: bytes) -> bytes | None:
+    """Command of ONE complete HTTP request (request line + headers + body)."""
+    head, sep, body = req.partition(_HTTP_SEP)
+    if not sep:
+        return None
+    parts = head.split(b"\r\n")[0].split(b" ")
+    if len(parts) < 3 or not parts[0].isalpha():
+        return None
+    stripped = body.rstrip(b"\x00")
+    return stripped if stripped else (parts[1] or None)
+
+
+def _split_http_requests(raw: bytes) -> list[bytes] | None:
+    """Split a client stream into requests by Content-Length (RFC 7230
+    s3.3.3; pipelining s6.3.2).  Returns None when the stream cannot be
+    fully accounted for (truncated CL body, or bytes after the first header
+    block that never form a complete request).  A request without a
+    Content-Length header owns the rest of the stream -- exactly the v1
+    _parse_http behaviour, kept for bodyless GETs and CL-less POSTs."""
+    reqs: list[bytes] = []
+    pos = 0
+    while pos < len(raw):
+        head, sep, _ = raw[pos:].partition(_HTTP_SEP)
+        if not sep:
+            return None            # incomplete header block -> unreadable
+        body_start = pos + len(head) + len(_HTTP_SEP)
+        cl = None
+        for line in head.split(b"\r\n")[1:]:
+            m = _CL_LINE.match(line)
+            if m:
+                cl = int(m.group(1))
+        if cl is None:
+            reqs.append(raw[pos:])     # rest of stream belongs to this request
+            pos = len(raw)
+            break
+        if len(raw) - body_start < cl:
+            return None            # truncated body -> fail closed
+        reqs.append(raw[pos:body_start + cl])
+        pos = body_start + cl
+    return reqs or None
+
+
+def parse_commands(raw: bytes, framing: str) -> list[bytes] | None:
+    """Per-request command list (D7): what a real handler recovers from EVERY
+    request in a pipelined stream.  Non-HTTP framings delegate to
+    parse_command and wrap the result in a one-element list.  None means the
+    stream (or any request in it) is unreadable -- fail closed."""
+    if framing != "http":
+        c = parse_command(raw, framing)
+        return [c] if c is not None else None
+    reqs = _split_http_requests(raw)
+    if reqs is None:
+        return None
+    cmds = []
+    for r in reqs:
+        c = _http_request_command(r)
+        if c is None:
+            return None
+        cmds.append(c)
+    return cmds or None
+
+
 def is_http_request(raw: bytes) -> bool:
     """True when the payload opens with a well-formed HTTP request line.
 

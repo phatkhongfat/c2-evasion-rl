@@ -77,6 +77,8 @@ def main() -> int:
                          "mech": mech, "baseline_alert": base["alert"],
                          "evaded": r["evaded"], "semantics_ok": r["semantics_ok"],
                          "valid_evasion": r["valid_evasion"],
+                         "valid_evasion_endpoint": r.get("valid_evasion_endpoint"),
+                         "valid_evasion_endpoint_q": r.get("valid_evasion_endpoint_q"),
                          "sids": r.get("sids", []),
                          "baseline_sids": base.get("sids", [])})
         print(f"[{fi + 1}/{len(flows)}] {fid} done @ {time.time() - t0:.0f}s",

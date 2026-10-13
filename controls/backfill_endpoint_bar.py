@@ -34,9 +34,13 @@ sys.path.insert(0, str(ROOT / "snort_validation"))
 
 from hidden_defender_env import HiddenDefenderEnv  # noqa: E402
 from eval_pipeline import client_ip_of, mutate_client_only  # noqa: E402
-from c2_semantics import endpoint_command_preserved  # noqa: E402
+from c2_semantics import (  # noqa: E402
+    endpoint_command_preserved,
+    endpoint_commands_preserved,
+)
 
 BAR_ENDPOINT = "endpoint_command_preserved (c2_semantics.py)"
+BAR_ENDPOINT_Q = "endpoint_commands_preserved (c2_semantics.py, D7: per-request, Content-Length aware)"
 
 
 def backfill(report: dict, env, split: str = "test") -> dict:
@@ -54,17 +58,21 @@ def backfill(report: dict, env, split: str = "test") -> dict:
             continue
         cip = client_ip_of(c["flow_id"])
         if c["mech"] in ("None", None):
-            ep = endpoint_command_preserved(f["packets"], f["packets"], cip)
+            mut = f["packets"]
         else:
             mut = mutate_client_only(f["packets"], c["mech"], cip,
                                      ownership=ownership)
-            ep = endpoint_command_preserved(f["packets"], mut, cip)
+        ep = endpoint_command_preserved(f["packets"], mut, cip)
+        epq = endpoint_commands_preserved(f["packets"], mut, cip)
         n = dict(c)
         n["endpoint_ok"] = ep
         n["valid_evasion_endpoint"] = bool(c["evaded"]) and ep
+        n["endpoint_q_ok"] = epq
+        n["valid_evasion_endpoint_q"] = bool(c["evaded"]) and epq
         cells.append(n)
     out["cells"] = cells
     out["bar_endpoint"] = BAR_ENDPOINT
+    out["bar_endpoint_q"] = BAR_ENDPOINT_Q
     return out
 
 
@@ -74,13 +82,17 @@ def build_parser() -> argparse.ArgumentParser:
     ap.add_argument("report", help="existing ceiling sweep report JSON")
     ap.add_argument("--split", default="test",
                     help="corpus split to rebuild mutations from (default test)")
+    ap.add_argument("--corpus", default=None,
+                    help="corpus pickle override (e.g. the P13 extended corpus "
+                         "a v7/v8 report was swept on)")
     ap.add_argument("--out", required=True, help="output JSON (a NEW file)")
     return ap
 
 
 def main(argv=None) -> int:
     a = build_parser().parse_args(argv)
-    env = HiddenDefenderEnv(split=a.split, seed=42, real_snort=False)
+    env = HiddenDefenderEnv(split=a.split, seed=42, real_snort=False,
+                            corpus=a.corpus)
     src = json.loads(Path(a.report).read_text())
     Path(a.out).write_text(json.dumps(backfill(src, env, a.split), indent=1))
     print(f"wrote {a.out}")

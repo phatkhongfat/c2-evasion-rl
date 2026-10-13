@@ -80,6 +80,7 @@ from c2_semantics import (  # noqa: E402
     bytes_equal_semantics as bytes_equal_semantics,
     client_ip_of as client_ip_of,
     endpoint_command_preserved as endpoint_command_preserved,
+    endpoint_commands_preserved as endpoint_commands_preserved,
     reassembled_client_bytes as reassembled_client_bytes,
     as_raw as as_raw,
     server_ip_of as server_ip_of,
@@ -469,6 +470,7 @@ def score_flow_real(packets: Sequence, client_ip: str, attempt_id: int,
         mut = orig
     sem = bytes_equal_semantics(orig, mut, client_ip)
     endpoint_ok = endpoint_command_preserved(orig, mut, client_ip)
+    endpoint_q_ok = endpoint_commands_preserved(orig, mut, client_ip)
 
     translated = translate_source(mut, client_ip, attempt_id)
     pcap = tmp / f"flow_{attempt_id}.pcap"
@@ -486,6 +488,8 @@ def score_flow_real(packets: Sequence, client_ip: str, attempt_id: int,
         "valid_evasion": (n_alerts == 0) and sem,
         "endpoint_ok": endpoint_ok,
         "valid_evasion_endpoint": (n_alerts == 0) and endpoint_ok,
+        "endpoint_q_ok": endpoint_q_ok,
+        "valid_evasion_endpoint_q": (n_alerts == 0) and endpoint_q_ok,
         "sids": fired_sids,          # fired sids -> P2 severity stratification
         "n_snort_calls": 1,
     }
