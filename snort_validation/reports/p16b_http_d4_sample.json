@@ -1,0 +1,37 @@
+{
+ "frozen_at": "2026-10-13",
+ "gate": "G1b (docs/p16_direction_gates.md)",
+ "denominator_note": "HTTP subset of D4: 16 FakeAV (corpus c\u0169, test split) + 4 Virut (corpus m\u1edf r\u1ed9ng, test split). Every result table must print BOTH x/20 (HTTP-D4) and x/40 (full test).",
+ "fakeav_sid": 2012627,
+ "virut_sid": 2012533,
+ "fakeav_flows": [
+  "botnet-capture-20110811-neris|147.32.84.165:2077->184.82.147.251:80|tcp",
+  "botnet-capture-20110811-neris|147.32.84.165:1460->184.82.148.43:80|tcp",
+  "botnet-capture-20110811-neris|147.32.84.165:2630->184.82.148.43:80|tcp",
+  "botnet-capture-20110811-neris|147.32.84.165:1820->184.82.148.43:80|tcp",
+  "botnet-capture-20110811-neris|147.32.84.165:4702->184.82.147.251:80|tcp",
+  "botnet-capture-20110811-neris|147.32.84.165:2350->184.82.148.43:80|tcp",
+  "botnet-capture-20110811-neris|147.32.84.165:1029->184.82.148.43:80|tcp",
+  "botnet-capture-20110811-neris|147.32.84.165:1337->184.82.148.43:80|tcp",
+  "botnet-capture-20110811-neris|147.32.84.165:4883->184.82.155.107:80|tcp",
+  "botnet-capture-20110811-neris|147.32.84.165:2575->184.82.148.43:80|tcp",
+  "botnet-capture-20110811-neris|147.32.84.165:4312->184.82.155.107:80|tcp",
+  "botnet-capture-20110811-neris|147.32.84.165:3531->184.82.147.251:80|tcp",
+  "botnet-capture-20110811-neris|147.32.84.165:2612->184.82.155.107:80|tcp",
+  "botnet-capture-20110811-neris|147.32.84.165:2909->184.82.147.251:80|tcp",
+  "botnet-capture-20110811-neris|147.32.84.165:3617->184.82.148.43:80|tcp",
+  "botnet-capture-20110811-neris|147.32.84.165:3039->184.82.148.43:80|tcp"
+ ],
+ "virut_flows": [
+  "botnet-capture-20110811-neris|147.32.84.165:3653->60.190.223.75:888|tcp",
+  "botnet-capture-20110811-neris|147.32.84.165:2905->94.63.150.20:80|tcp",
+  "botnet-capture-20110811-neris|147.32.84.165:1102->60.190.223.75:888|tcp",
+  "botnet-capture-20110815-fast-flux|147.32.84.165:1058->94.63.150.63:80|tcp"
+ ],
+ "n": 20,
+ "source_reports": {
+  "fakeav": "p14_v10_qpp_old_corpus.json",
+  "virut": "p13_v9_query_prepend.json"
+ },
+ "problems": []
+}
