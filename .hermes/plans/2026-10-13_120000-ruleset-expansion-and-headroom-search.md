@@ -195,6 +195,25 @@ Thay vào đó:
 (evasion headroom=0) thành positive result (cost headroom>0, RL khai thác
 được), mà vẫn trung thực với dữ liệu.
 
+### Chế độ KHÔNG-SPLIT (commit `ada0899`, `--exclude split8,split16,split24,split_slow`)
+
+Theo ràng buộc đã chốt (D-decisions): cơ chế bị hạn chế thì so sánh với
+baseline tốt nhất **chịu cùng hạn chế**. Kết quả đo thật (endpoint bar):
+
+| chế độ | coverage | oracle vs fixed tốt nhất | headroom |
+|---|---:|---|---|
+| v4 đủ 15 mech | 40/40 | oracle = split8 (+10.744B) | 0 |
+| v6 đủ (case+split8) | 40/40 | oracle **rẻ hơn** (+9.792B, 2 mech) | **dương** |
+| v4 không-split | **14/40** | +2.128B vs pad +2.736B — nhưng `distinct=1`, chỉ là *bỏ qua flow không valid*, không phải chọn cơ chế | ~0 (không đạt bar ≥2 action) |
+| v6 không-split | **14/40** | oracle == fixed (case, zero-cost) đúng bằng nhau | 0 |
+| byte bar không-split | **0/40** | sụp đổ hoàn toàn | 0 |
+
+→ **Cost headroom chỉ tồn tại khi `split8` còn là fallback phổ quát đắt đỏ.**
+Pareto win = cơ chế miễn phí (case) cho subset + split8 cho phần còn lại;
+bỏ split8 thì không còn trade-off nào để tối ưu. Claim Phase 5 **bắt buộc
+ghi theo regime**: "khi fragmentation khả dụng". Đây cũng là bằng chứng cho
+quyết định cũ: không xóa split8/split_slow khỏi action space.
+
 ## Đo mới 2026-10-13 (thay đổi kế hoạch T0.3 và mẫu số)
 
 Đo trực tiếp trên `ceiling_v4_both_test_dualbar.json` — **600 cell = 15 cơ chế ×
