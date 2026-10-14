@@ -87,7 +87,15 @@ def parse_content(raw: str) -> bytes:
                 out.extend(raw[i:].encode("latin-1"))
                 break
             for tok in raw[i + 1:end].split():
-                out.append(int(tok, 16))
+                # Snort accepts `|58 06|` and `|5806|` alike; a token longer
+                # than one byte must be split into byte pairs, not fed to
+                # int(tok, 16) as a single byte.
+                tok = tok.strip("|")
+                if len(tok) > 2 and len(tok) % 2 == 0:
+                    for pair in (tok[j:j + 2] for j in range(0, len(tok), 2)):
+                        out.append(int(pair, 16))
+                else:
+                    out.append(int(tok, 16))
             i = end + 1
             continue
         out.append(ord(ch) & 0xFF)
