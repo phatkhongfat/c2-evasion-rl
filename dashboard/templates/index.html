@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C2-Evasion RL Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
+    <style>
+        :root {
+            --bg: #0B0E14;
+            --surface: #1E293B;
+            --surface-2: #0F172A;
+            --fg: #F8FAFC;
+            --muted: #94A3B8;
+            --border: #334155;
+            --accent: #38BDF8;
+            --warn: #F97316;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--fg);
+            padding: 1.5rem;
+        }
+        h1 {
+            font-size: 1.75rem;
+            margin-bottom: 0.25rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+        .subtitle { color: var(--muted); font-size: 0.85rem; margin-bottom: 1rem; }
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: flex-end;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--surface);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        .controls label { display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.8rem; color: var(--muted); }
+        select {
+            padding: 0.5rem;
+            background: var(--bg);
+            color: var(--fg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            min-width: 260px;
+        }
+        .meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem 1.5rem;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.5rem;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+        .meta b { color: var(--fg); font-weight: 600; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 1.5rem;
+        }
+        .chart {
+            background: var(--surface);
+            border-radius: 8px;
+            padding: 1rem;
+            border: 1px solid var(--border);
+        }
+        .chart h2 {
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            color: var(--accent);
+        }
+        .chart .note { font-size: 0.75rem; color: var(--muted); margin-bottom: 0.5rem; }
+        #error {
+            display: none;
+            background: #7f1d1d;
+            border: 1px solid #ef4444;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+        }
+        footer { margin-top: 2rem; color: var(--muted); font-size: 0.75rem; }
+    </style>
+</head>
+<body>
+    <h1>C2-Evasion RL Dashboard</h1>
+    <p class="subtitle">Read-only visualization of experiment reports &middot; snort_validation/reports/*.json</p>
+
+    <div id="error"></div>
+
+    <div class="controls">
+        <label>
+            Report
+            <select id="reportSelect"></select>
+        </label>
+        <label>
+            Framing
+            <select id="framingFilter">
+                <option value="all">All flows</option>
+                <option value="c2">C2-HTTP only</option>
+                <option value="dht">DHT / P2P only</option>
+            </select>
+        </label>
+        <label>
+            Mechanism filter
+            <select id="mechFilter">
+                <option value="all">All mechanisms</option>
+            </select>
+        </label>
+    </div>
+
+    <div class="meta" id="metaBar"></div>
+
+    <div class="grid">
+        <div class="chart">
+            <h2>Mechanism Evasion Rates</h2>
+            <div class="note">Evaded / (evaded + caught) per mechanism</div>
+            <div id="mechBar"></div>
+        </div>
+        <div class="chart">
+            <h2>Heatmap: Mechanism &times; Flow</h2>
+            <div class="note" id="heatmapNote"></div>
+            <div id="heatmap"></div>
+        </div>
+        <div class="chart">
+            <h2>Corpus Framing</h2>
+            <div class="note">Flow count by capture framing</div>
+            <div id="framingPie"></div>
+        </div>
+        <div class="chart">
+            <h2>Oracle vs Best-Single</h2>
+            <div class="note">Upper bound vs best single mechanism</div>
+            <div id="oracleBar"></div>
+        </div>
+        <div class="chart" id="framingByMechCard" style="display:none">
+            <h2>Evasion by Framing &times; Mechanism</h2>
+            <div class="note">C2-HTTP vs DHT P2P evasions per mechanism</div>
+            <div id="framingByMech"></div>
+        </div>
+        <div class="chart" id="actionsCard" style="display:none">
+            <h2>PPO Action Table</h2>
+            <div class="note" id="actionsNote"></div>
+            <div id="actionsBar"></div>
+        </div>
+        <div class="chart" id="barsCard" style="display:none">
+            <h2>Summary Metrics</h2>
+            <div class="note">Generic metrics for this report shape</div>
+            <div id="barsChart"></div>
+        </div>
+    </div>
+
+    <footer>
+        Data is read-only. Port 8888 (Taibu uses 3100). Rendered with Plotly.js.
+    </footer>
+
+    <script src="/static/dashboard.js"></script>
+</body>
+</html>
