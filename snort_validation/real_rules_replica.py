@@ -336,9 +336,54 @@ def _payloads_reverse(packets: Sequence, home_ip: str) -> List[bytes]:
             if Raw in p and IP in p and p[IP].src != home_ip]
 
 
+def _drop_fragments(packets: Sequence) -> List:
+    """Every packet that is NOT an IPv4 fragment (orphan tail of a dead session)."""
+    from scapy.all import IP
+    out = []
+    for p in packets:
+        if IP in p:
+            off = (p[IP].frag & 0x1FFF) * 8
+            if bool(p[IP].flags) or off > 0:
+                continue
+        out.append(p)
+    return out
+
+
+def _session_expired(frags: Sequence[tuple], timeout: float) -> bool:
+    """Whether a reassembly session dies mid-flow.
+
+    A gap between consecutive fragments wider than ``timeout`` discards the
+    session, so the engine never hands the rule the concatenated buffer --
+    ``apply_mech("split_slow")`` spaces fragments 75 s to trip Snort's 60 s.
+    A packet with no timestamp cannot participate; one fragment never expires.
+    """
+    stamps = sorted(float(p.time) for _, p in frags
+                    if getattr(p, "time", None) is not None)
+    return any(b - a > timeout for a, b in zip(stamps, stamps[1:]))
+
+
+def _chain_anomalous(frags: Sequence[tuple]) -> bool:
+    """Whether a fragment chain has a gap or an overlap.
+
+    Snort 2.9 runs ``frag3_engine: policy first detect_anomalies``, so such a
+    chain is never reassembled.  Without this check the ``b"".join`` below
+    repairs the gap for free and hands the rule a payload the engine never saw.
+    """
+    from scapy.all import Raw
+    cursor = 0
+    for offset, p in frags:
+        body = bytes(p[Raw].load) if Raw in p else b""
+        if offset != cursor:
+            return True
+        cursor = offset + len(body)
+    return False
+
+
 def _reassembled_buffers(packets: Sequence, forward_only: bool,
                         home_ip: Optional[str] = None,
-                        reverse: bool = False) -> List[bytes]:
+                        reverse: bool = False,
+                        frag3_timeout: Optional[float] = None,
+                        anomaly_check: bool = False) -> List[bytes]:
     """Payload buffers an engine scores after its own reassembly.
 
     A real engine reassembles at BOTH layers, in this order:
@@ -350,6 +395,13 @@ def _reassembled_buffers(packets: Sequence, forward_only: bool,
 
     UDP is message-oriented and is NEVER concatenated: after defrag each
     datagram stands on its own, exactly as Suricata and Snort score it.
+
+    ``frag3_timeout`` models the reassembly SESSION's lifetime.  An engine
+    discards a defrag session once the gap between consecutive fragments
+    exceeds the timeout, so the rule never sees the concatenated buffer.
+    ``apply_mech("split_slow")`` spaces fragments 75 s apart precisely to trip
+    this on Snort's 60 s default.  ``None`` (the default) keeps reassembly
+    time-blind, which is what the shipped corpus replicas use.
     """
     from scapy.all import IP, Raw, TCP, UDP
     if reverse:
@@ -388,6 +440,10 @@ def _reassembled_buffers(packets: Sequence, forward_only: bool,
         groups[key].append((offset, p))
     for key in order:
         frags = sorted(groups[key], key=lambda t: t[0])
+        if frag3_timeout is not None and _session_expired(frags, frag3_timeout):
+            continue  # engine's reassembly session died mid-flow
+        if anomaly_check and _chain_anomalous(frags):
+            continue  # frag3 `detect_anomalys` refuses a gapped/overlapping chain
         buf = b"".join(bytes(p[Raw].load) for _, p in frags if Raw in p)
         if buf and keep(frags[0][1]):
             defragged.append(buf)
@@ -422,7 +478,9 @@ def _reassembled_buffers(packets: Sequence, forward_only: bool,
 class RealRulesReplica:
     """Evaluate real ET Open C2 rules against real packet payloads."""
 
-    def __init__(self, rules: Sequence[Rule], reassemble: bool = True):
+    def __init__(self, rules: Sequence[Rule], reassemble: bool = True,
+                 frag3_timeout: Optional[float] = None,
+                 anomaly_check: bool = False):
         self.rules = list(rules)
         # Suricata (and Snort with stream reassembly on) matches content against
         # the REASSEMBLED TCP stream, so a rule that straddles a segment boundary
@@ -430,15 +488,30 @@ class RealRulesReplica:
         # fragmentation evades detection -- the single largest disagreement with
         # the real engine (24/100 cells on the frozen HTTP-D4 sample).
         self.reassemble = reassemble
+        # Snort 2.9's default 60s frag3_timeout is not set in snort_et_c2.conf,
+        # so a slower-fragmented flow never reaches the rule as one buffer.
+        # Without modelling it every mechanism is detected by construction and
+        # the +10 reward is unreachable.  None keeps time-blind behaviour.
+        self.frag3_timeout = frag3_timeout
+        self.anomaly_check = anomaly_check
 
     @classmethod
-    def for_sids(cls, sids: set, path: Path = RULES) -> "RealRulesReplica":
-        return cls(parse_ruleset(path, sid_filter=set(sids)))
+    def for_sids(cls, sids: set, path: Path = RULES,
+                 reassemble: bool = True,
+                 frag3_timeout: Optional[float] = None) -> "RealRulesReplica":
+        return cls(parse_ruleset(path, sid_filter=set(sids)),
+                   reassemble=reassemble, frag3_timeout=frag3_timeout)
 
     @classmethod
     def for_capture(cls, capture: str, dataset: str = "stratosphere",
-                    path: Path = RULES) -> "RealRulesReplica":
-        return cls.for_sids(firing_sids(capture, dataset), path)
+                    path: Path = RULES,
+                    frag3_timeout: Optional[float] = None) -> "RealRulesReplica":
+        return cls.for_sids(firing_sids(capture, dataset), path,
+                            frag3_timeout=frag3_timeout)
+
+    def _scored(self, packets: Sequence) -> Sequence:
+        """Packets eligible for direct (non-reassembled) scoring."""
+        return packets if self.frag3_timeout is None else _drop_fragments(packets)
 
     def _arms(self, packets: Sequence, home_ip: Optional[str] = None):
         """(handshake, forward arm, both-sides arm).
@@ -449,20 +522,31 @@ class RealRulesReplica:
         ``reassemble=False`` reproduces the old behaviour exactly.
         """
         handshake = _has_handshake(packets)
-        fwd = _payloads(packets, forward_only=True, home_ip=home_ip)
-        both = _payloads(packets, forward_only=False, home_ip=home_ip)
+        # Fragments score only through the reassembled buffer once a session
+        # lifetime is modelled; scoring them raw lets a 690-byte tail match a
+        # rule alone.  None keeps the shipped time-blind behaviour.
+        scored = self._scored(packets)
+        fwd = _payloads(scored, forward_only=True, home_ip=home_ip)
+        both = _payloads(scored, forward_only=False, home_ip=home_ip)
         if self.reassemble:
-            fwd = fwd + _reassembled_buffers(packets, True, home_ip)
-            both = both + _reassembled_buffers(packets, False, home_ip)
+            fwd = fwd + _reassembled_buffers(packets, True, home_ip,
+                                            frag3_timeout=self.frag3_timeout,
+                                            anomaly_check=self.anomaly_check)
+            both = both + _reassembled_buffers(packets, False, home_ip,
+                                               frag3_timeout=self.frag3_timeout,
+                                               anomaly_check=self.anomaly_check)
         return handshake, fwd, both
 
     def _reverse_arm(self, packets: Sequence, both, home_ip: Optional[str]):
         """The peer->home arm, with reassembly applied when enabled."""
         if home_ip is None:
             return both
-        rev = _payloads_reverse(packets, home_ip)
+        rev = _payloads_reverse(self._scored(packets), home_ip)
         if self.reassemble:
-            rev = rev + _reassembled_buffers(packets, True, home_ip, reverse=True)
+            rev = rev + _reassembled_buffers(packets, True, home_ip,
+                                            reverse=True,
+                                            frag3_timeout=self.frag3_timeout,
+                                            anomaly_check=self.anomaly_check)
         return rev
 
     @staticmethod
