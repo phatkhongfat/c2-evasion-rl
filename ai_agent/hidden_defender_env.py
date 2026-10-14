@@ -517,7 +517,8 @@ class HiddenDefenderEnv(gym.Env):
     def __init__(self, split: str = "train", real_snort: bool = False,
                  seed: int = 42, max_steps: int = 1,
                  capture: str | None = None, ownership: str = "client",
-                 corpus: str | None = None, reassemble: bool = True):
+                 corpus: str | None = None, reassemble: bool = True,
+                 replica_frag3_timeout: float | None = None):
         super().__init__()
         self.split = split
         self.capture = capture
@@ -537,10 +538,21 @@ class HiddenDefenderEnv(gym.Env):
         # would raise on first scoring. Rebuilding also means the env flag is
         # the single source of truth instead of however each pickle was made.
         self.reassemble = reassemble
+        # Frag3's 60s default: a chain not completed inside it never reaches
+        # reassembly.  The replica reassembled everything, flattening the reward
+        # so no action could beat the -1 detected floor and PPO had no signal.
+        self.replica_frag3_timeout = replica_frag3_timeout
         for flow in self._flows:
             rep = flow.get("replica")
-            if rep is not None and getattr(rep, "reassemble", None) != reassemble:
-                flow["replica"] = RealRulesReplica(rep.rules, reassemble=reassemble)
+            if rep is None:
+                continue
+            stale = (getattr(rep, "reassemble", None) != reassemble
+                     or getattr(rep, "frag3_timeout", None)
+                     != replica_frag3_timeout)
+            if stale:
+                flow["replica"] = RealRulesReplica(
+                    rep.rules, reassemble=reassemble,
+                    frag3_timeout=replica_frag3_timeout)
         self.real_snort = real_snort
         self._svc = SnortBatchService(batch_size=1) if real_snort else None
         self.max_steps = max_steps
