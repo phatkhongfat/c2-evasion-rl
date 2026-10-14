@@ -1,0 +1,56 @@
+{
+  "scorer": "RealRulesReplica (surrogate / TRAINING environment)",
+  "frag3_timeout_s": 60.0,
+  "gate": "d8",
+  "n_flows": 40,
+  "n_mechs": 17,
+  "evaded": {
+    "http_header_pad": 16,
+    "split_slow": 17,
+    "http_header_case": 16,
+    "split8": 1,
+    "split16": 1,
+    "split24": 1
+  },
+  "caught": {
+    "split8": 39,
+    "split16": 39,
+    "split24": 39,
+    "reorder": 22,
+    "ttl": 40,
+    "overlap8": 16,
+    "noop": 40,
+    "query_param_prepend": 40,
+    "http_header_pad": 24,
+    "split_slow": 23,
+    "http_header_case": 24
+  },
+  "invalid_semantics": {
+    "prepend4": 40,
+    "prepend8": 40,
+    "prepend12": 40,
+    "pad16": 40,
+    "corrupt8": 40,
+    "length_wrapper": 40,
+    "reorder": 18,
+    "overlap8": 24
+  },
+  "frag_packets_per_mech": {
+    "split8": 591,
+    "split16": 591,
+    "split24": 591,
+    "reorder": 171,
+    "ttl": 185,
+    "overlap8": 171,
+    "noop": 185,
+    "http_header_pad": 185,
+    "split_slow": 591,
+    "http_header_case": 185,
+    "query_param_prepend": 185
+  },
+  "oracle_flows": 17,
+  "oracle_pct": 42.5,
+  "best_single_mech": "split_slow",
+  "best_single": 17,
+  "headroom_pp": 0.0
+}

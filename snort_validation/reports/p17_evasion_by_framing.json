@@ -1,0 +1,74 @@
+{
+  "counts": {
+    "c2-http": 16,
+    "p2p-dht": 24
+  },
+  "per_mechanism": [
+    {
+      "mechanism": "split8",
+      "evaded": 16,
+      "c2_http": 16,
+      "p2p_dht": 0
+    },
+    {
+      "mechanism": "split16",
+      "evaded": 16,
+      "c2_http": 16,
+      "p2p_dht": 0
+    },
+    {
+      "mechanism": "split24",
+      "evaded": 16,
+      "c2_http": 16,
+      "p2p_dht": 0
+    },
+    {
+      "mechanism": "reorder",
+      "evaded": 0,
+      "c2_http": 0,
+      "p2p_dht": 0
+    },
+    {
+      "mechanism": "ttl",
+      "evaded": 0,
+      "c2_http": 0,
+      "p2p_dht": 0
+    },
+    {
+      "mechanism": "overlap8",
+      "evaded": 0,
+      "c2_http": 0,
+      "p2p_dht": 0
+    },
+    {
+      "mechanism": "noop",
+      "evaded": 0,
+      "c2_http": 0,
+      "p2p_dht": 0
+    },
+    {
+      "mechanism": "http_header_pad",
+      "evaded": 16,
+      "c2_http": 16,
+      "p2p_dht": 0
+    },
+    {
+      "mechanism": "split_slow",
+      "evaded": 23,
+      "c2_http": 16,
+      "p2p_dht": 7
+    },
+    {
+      "mechanism": "http_header_case",
+      "evaded": 16,
+      "c2_http": 16,
+      "p2p_dht": 0
+    },
+    {
+      "mechanism": "query_param_prepend",
+      "evaded": 0,
+      "c2_http": 0,
+      "p2p_dht": 0
+    }
+  ]
+}

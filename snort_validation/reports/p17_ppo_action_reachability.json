@@ -1,0 +1,147 @@
+{
+  "n_flows": 40,
+  "reward_evade": 10.0,
+  "reward_break_semantics": -10.0,
+  "actions": [
+    {
+      "action": "split8",
+      "unmasked": 40,
+      "applies": 40,
+      "rewards_semantics_ok": 40,
+      "breaks_semantics": 0,
+      "cost": 0.6
+    },
+    {
+      "action": "split16",
+      "unmasked": 40,
+      "applies": 40,
+      "rewards_semantics_ok": 40,
+      "breaks_semantics": 0,
+      "cost": 0.5
+    },
+    {
+      "action": "split24",
+      "unmasked": 40,
+      "applies": 40,
+      "rewards_semantics_ok": 40,
+      "breaks_semantics": 0,
+      "cost": 0.4
+    },
+    {
+      "action": "prepend4",
+      "unmasked": 40,
+      "applies": 40,
+      "rewards_semantics_ok": 40,
+      "breaks_semantics": 0,
+      "cost": 0.2
+    },
+    {
+      "action": "prepend8",
+      "unmasked": 40,
+      "applies": 40,
+      "rewards_semantics_ok": 40,
+      "breaks_semantics": 0,
+      "cost": 0.2
+    },
+    {
+      "action": "prepend12",
+      "unmasked": 40,
+      "applies": 40,
+      "rewards_semantics_ok": 40,
+      "breaks_semantics": 0,
+      "cost": 0.2
+    },
+    {
+      "action": "pad16",
+      "unmasked": 40,
+      "applies": 40,
+      "rewards_semantics_ok": 40,
+      "breaks_semantics": 0,
+      "cost": 0.1
+    },
+    {
+      "action": "reorder",
+      "unmasked": 40,
+      "applies": 40,
+      "rewards_semantics_ok": 40,
+      "breaks_semantics": 0,
+      "cost": 0.35
+    },
+    {
+      "action": "ttl",
+      "unmasked": 40,
+      "applies": 40,
+      "rewards_semantics_ok": 40,
+      "breaks_semantics": 0,
+      "cost": 0.1
+    },
+    {
+      "action": "corrupt8",
+      "unmasked": 40,
+      "applies": 40,
+      "rewards_semantics_ok": 40,
+      "breaks_semantics": 0,
+      "cost": 0.4
+    },
+    {
+      "action": "overlap8",
+      "unmasked": 40,
+      "applies": 40,
+      "rewards_semantics_ok": 40,
+      "breaks_semantics": 0,
+      "cost": 0.35
+    },
+    {
+      "action": "noop",
+      "unmasked": 40,
+      "applies": 40,
+      "rewards_semantics_ok": 40,
+      "breaks_semantics": 0,
+      "cost": 0.0
+    },
+    {
+      "action": "http_header_pad",
+      "unmasked": 40,
+      "applies": 16,
+      "rewards_semantics_ok": 16,
+      "breaks_semantics": 0,
+      "cost": 0.05
+    },
+    {
+      "action": "length_wrapper",
+      "unmasked": 40,
+      "applies": 0,
+      "rewards_semantics_ok": 0,
+      "breaks_semantics": 0,
+      "cost": 0.25
+    },
+    {
+      "action": "split_slow",
+      "unmasked": 40,
+      "applies": 40,
+      "rewards_semantics_ok": 40,
+      "breaks_semantics": 0,
+      "cost": 0.65
+    },
+    {
+      "action": "http_header_case",
+      "unmasked": 40,
+      "applies": 16,
+      "rewards_semantics_ok": 16,
+      "breaks_semantics": 0,
+      "cost": 0.05
+    },
+    {
+      "action": "query_param_prepend",
+      "unmasked": 0,
+      "applies": 0,
+      "rewards_semantics_ok": 0,
+      "breaks_semantics": 0,
+      "cost": null
+    }
+  ],
+  "never_masked_off": [
+    "query_param_prepend"
+  ],
+  "always_breaks": []
+}
