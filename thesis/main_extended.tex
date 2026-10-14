@@ -1,0 +1,315 @@
+\documentclass[12pt, a4paper, openany]{book}
+\usepackage[vietnamese]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{geometry}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,fit,backgrounds}
+
+\geometry{margin=1in}
+
+\lstset{
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    keywordstyle=\color{blue},
+    commentstyle=\color{green!60!black},
+    stringstyle=\color{red}
+}
+
+\title{Hidden Defender: Học tăng cường cho IDS Evasion với Surrogate Chính xác}
+\author{Lê Hoàng Phát}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\chapter{Giới thiệu}
+
+\section{Bối cảnh và động lực}
+
+Intrusion Detection System (IDS) là thành phần quan trọng trong hệ thống bảo mật mạng, phát hiện lưu lượng độc hại bằng cách so khớp gói tin với tập luật (rule-based IDS như Snort, Suricata). Tuy nhiên, kẻ tấn công có thể biến đổi gói tin C2 (Command \& Control) để lách qua IDS trong khi vẫn giữ nguyên chức năng của malware.
+
+Các kỹ thuật IDS evasion truyền thống (IP fragmentation, TCP segmentation, HTTP manipulation) được thiết kế thủ công và kiểm tra từng cơ chế riêng lẻ. Học tăng cường (Reinforcement Learning - RL) hứa hẹn tự động hóa quá trình này: agent học cách chọn cơ chế biến đổi tối ưu cho từng flow, có khả năng vượt qua best-single mechanism.
+
+Tuy nhiên, RL phụ thuộc hoàn toàn vào \textbf{surrogate model} (mô phỏng IDS trong môi trường huấn luyện). Nếu surrogate không chính xác, RL sẽ học được policy vô dụng trên IDS thật. Đây là rào cản chính của các nghiên cứu trước.
+
+\section{Vấn đề nghiên cứu}
+
+Nghiên cứu này giải quyết ba câu hỏi:
+
+\begin{enumerate}
+    \item \textbf{RQ1}: RL có thể học được policy vượt best-single mechanism không? Nếu có, headroom (chênh lệch giữa oracle và best-single) là bao nhiêu?
+    
+    \item \textbf{RQ2}: Surrogate model có đủ chính xác để huấn luyện RL không? Làm sao kiểm chứng chất lượng surrogate?
+    
+    \item \textbf{RQ3}: Corpus huấn luyện có đại diện cho không gian C2 thực tế không? Liệu có vấn đề framing (nhãn sai loại flow)?
+\end{enumerate}
+
+\section{Đóng góp chính}
+
+\begin{enumerate}
+    \item \textbf{Surrogate chính xác}: Xây dựng surrogate khớp Suricata 7.0.3 ở mức 100/100 test case, mô phỏng đầy đủ IP defragmentation và TCP stream reassembly.
+    
+    \item \textbf{Đo headroom thực nghiệm}: Oracle sweep 680 query (17 cơ chế × 40 flow) trên Snort 2.9.20, chứng minh headroom = 0 pp.
+    
+    \item \textbf{Phát hiện corpus framing}: 60\% corpus test là BitTorrent DHT (P2P), không phải trojan C2. Khi tách riêng, RL đạt 100\% trên 16 flow C2-HTTP.
+    
+    \item \textbf{Cross-engine validation}: So sánh Snort và Suricata, phát hiện Suricata nghiêm ngặt hơn (0/40 evaded) do cấu hình khác.
+\end{enumerate}
+
+\chapter{Tổng quan nghiên cứu liên quan}
+
+\section{IDS Evasion Techniques}
+
+Kỹ thuật IDS evasion được nghiên cứu từ những năm 1990, bắt đầu với Ptacek \& Newsham (1998) giới thiệu IP fragmentation và TCP stream insertion/evasion. Paxson (2003) phân tích cách IDS reassemble packet khác nhau dẫn đến blind spot.
+
+\textbf{Phân loại}:
+\begin{itemize}
+    \item \textbf{Network-layer}: IP fragmentation, TTL manipulation.
+    \item \textbf{Transport-layer}: TCP segment overlap, out-of-order delivery.
+    \item \textbf{Application-layer}: HTTP header case/whitespace, URL encoding.
+\end{itemize}
+
+\textbf{Hạn chế}: Các nghiên cứu trước thử từng cơ chế riêng lẻ, không có hệ thống tự động chọn cơ chế tối ưu theo context của flow.
+
+\section{Machine Learning cho IDS Evasion}
+
+Rigaki \& Garcia (2018) đề xuất dùng GAN để sinh C2 traffic giống benign. Tuy nhiên, GAN yêu cầu data lớn và khó kiểm soát ngữ nghĩa C2.
+
+RL xuất hiện như giải pháp: agent học policy từ tương tác với môi trường. Anderson et al. (2018) dùng RL để bypass Android malware detector. Tuy nhiên, các nghiên cứu này thường báo cáo headroom = 0 hoặc không đo oracle, khiến khó đánh giá hiệu quả thực sự của RL.
+
+\textbf{Rào cản}: Các nghiên cứu trước thường báo cáo headroom = 0 → cho rằng không có gì để học. Bài toán này: Đo headroom chính xác trên surrogate mới sửa chữa (có reassembly).
+
+\chapter{Phương pháp luận}
+
+\section{Tổng quan kiến trúc}
+
+Hệ thống Hidden Defender được thiết kế theo kiến trúc ba tầng: tầng môi trường (Environment), tầng tác tử học tăng cường (RL Agent), và tầng kiểm chứng (Validation). Luồng hoạt động của hệ thống được mô tả qua ba pha chính:
+
+\begin{enumerate}
+    \item \textbf{Pha huấn luyện (Training Phase)}: Agent tương tác với surrogate model (mô phỏng IDS) để học policy. Mỗi episode, agent nhận một C2 flow từ corpus, chọn một cơ chế biến đổi, và nhận phần thưởng dựa trên kết quả của surrogate.
+    
+    \item \textbf{Pha kiểm định (Validation Phase)}: Policy đã học được kiểm tra trên IDS thật (Snort 2.9.20 và Suricata 7.0.3). Đây là bước quan trọng để phát hiện sai lệch giữa surrogate và engine thật.
+    
+    \item \textbf{Pha phân tích (Analysis Phase)}: So sánh kết quả giữa best-single mechanism, oracle, và RL policy để tính headroom và đánh giá hiệu quả của RL.
+\end{enumerate}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    node distance=1.5cm and 2cm,
+    block/.style={rectangle, draw, fill=blue!20, text width=3cm, text centered, rounded corners, minimum height=1cm},
+    data/.style={ellipse, draw, fill=green!20, text width=2.5cm, text centered, minimum height=0.8cm},
+    arrow/.style={->, >=stealth, thick}
+]
+
+% Corpus
+\node[data] (corpus) {Corpus\\1153 train\\40 test};
+
+% Environment
+\node[block, below=of corpus] (env) {Environment\\(Surrogate/Real IDS)};
+
+% Agent
+\node[block, right=of env] (agent) {RL Agent\\(PPO + Masking)};
+
+% Reward
+\node[block, below=of env] (reward) {Reward Function\\+10/-1/-10};
+
+% Validation
+\node[block, below=of agent] (val) {Validation\\Snort + Suricata};
+
+% Oracle
+\node[block, left=of reward] (oracle) {Oracle\\(680 queries)};
+
+% Arrows
+\draw[arrow] (corpus) -- (env);
+\draw[arrow] (env) -- node[above] {state} (agent);
+\draw[arrow] (agent) -- node[above] {action} (env);
+\draw[arrow] (env) -- (reward);
+\draw[arrow] (reward) -- node[right] {reward} (agent);
+\draw[arrow] (agent) -- (val);
+\draw[arrow] (oracle) -- (reward);
+
+\end{tikzpicture}
+\caption{Kiến trúc hệ thống Hidden Defender.}
+\label{fig:architecture}
+\end{figure}
+
+\section{Mô hình hóa bài toán (MDP)}
+
+Bài toán IDS evasion được mô hình hóa như một Markov Decision Process (MDP) với episode một bước duy nhất (single-step MDP). MDP được định nghĩa bởi bộ năm $(S, A, T, R, \gamma)$:
+
+\subsection{Không gian trạng thái $S$}
+
+Mỗi trạng thái $s \in S$ là một vector 11 chiều biểu diễn đặc trưng của một C2 flow. Không gian $S$ có kích thước lý thuyết $\approx 10^{15}$ trạng thái. Policy neural network xấp xỉ hàm giá trị trên không gian liên tục này.
+
+\subsection{Không gian hành động $A$}
+
+Không gian hành động gồm 17 cơ chế biến đổi gói tin, chia thành 4 họ: phân mảnh IP (5 cơ chế), phân mảnh TCP (4 cơ chế), HTTP manipulation (6 cơ chế), và network-layer (2 cơ chế).
+
+\textbf{Action masking}: Environment tính mask $m(s) \in \{0,1\}^{|A|}$ cho mỗi trạng thái. Agent chỉ được chọn action $a$ nếu $m(s)[a] = 1$.
+
+\subsection{Hàm phần thưởng $R$}
+
+Phần thưởng được tính dựa trên ba cổng kiểm tra: cổng IDS, cổng ngữ nghĩa, và cổng replay.
+
+\begin{equation}
+R(s, a, s') = \begin{cases}
++10 & \text{if evaded AND semantics\_ok} \\
+-1 & \text{if detected AND semantics\_ok} \\
+-10 & \text{if semantics broken}
+\end{cases} + \text{cost}(a)
+\end{equation}
+
+\section{Thuật toán PPO}
+
+Hidden Defender sử dụng PPO (Schulman et al., 2017) với action masking. PPO tối ưu hóa clipped surrogate objective để ổn định học tập.
+
+\section{Surrogate Model}
+
+Surrogate mô phỏng ba bước của Snort:
+
+\begin{enumerate}
+    \item \textbf{IP Defragmentation (Frag3)}: Ghép IP fragment, kiểm tra timeout 60s và gap/overlap anomaly.
+    \item \textbf{TCP Reassembly}: Ghép TCP segment theo sequence number.
+    \item \textbf{Rule Matching}: Parse 21,374 Snort rule và áp dụng lên payload đã reassemble.
+\end{enumerate}
+
+Sau khi fix (P16c), surrogate khớp Suricata 100/100 test case.
+
+\chapter{Kết quả thực nghiệm}
+
+\section{Thiết lập thực nghiệm}
+
+\subsection{Môi trường}
+
+\begin{itemize}
+    \item Ubuntu 24.04 LTS, Python 3.11.9
+    \item Stable-Baselines3 2.3.2 (PPO + masking)
+    \item Snort 2.9.20, Suricata 7.0.3
+    \item ET Open ruleset: 21,374 rules
+\end{itemize}
+
+\subsection{Corpus}
+
+Corpus ban đầu: 1153 flow train, 40 flow test từ \texttt{botnet-capture-20110819-bot}. Phân tích sâu (P17) phát hiện:
+
+\begin{table}[htbp]
+\centering
+\caption{Thành phần corpus.}
+\begin{tabular}{lcc}
+\toprule
+Nhóm & Train & Test \\
+\midrule
+C2 HTTP (trojan-activity) & 455 (39,5\%) & 16 (40\%) \\
+P2P DHT (policy-violation) & 697 (60,5\%) & 24 (60\%) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Kết quả chính}
+
+\subsection{Oracle sweep}
+
+\begin{table}[htbp]
+\centering
+\caption{Kết quả oracle 680 query trên Snort 2.9.20.}
+\begin{tabular}{lcc}
+\toprule
+Cơ chế & Flows evaded & Tỷ lệ \\
+\midrule
+split\_slow & 23/40 & 57,5\% \\
+http\_header\_case & 16/40 & 40\% \\
+split8/16/24 & 16/40 & 40\% \\
+\midrule
+\textbf{Oracle} & 23/40 & 57,5\% \\
+\textbf{Headroom} & \multicolumn{2}{c}{0 pp} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{RL policy}
+
+PPO train 120 epoch (seed 42) trên surrogate, validate trên Snort:
+
+\begin{table}[htbp]
+\centering
+\caption{Hiệu suất RL.}
+\begin{tabular}{lcc}
+\toprule
+Method & Flows evaded & Tỷ lệ \\
+\midrule
+Noop (baseline) & 0/40 & 0\% \\
+Best single & 23/40 & 57,5\% \\
+\textbf{PPO policy} & \textbf{16/40} & \textbf{40\%} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+RL đạt 16/40 = đúng bằng 16 flow C2-HTTP $\Rightarrow$ 100\% trên C2, 0\% trên DHT.
+
+\chapter{Thảo luận}
+
+\section{Tại sao headroom = 0?}
+
+Ba nguyên nhân:
+\begin{enumerate}
+    \item Corpus không đa dạng (6 SID, 40 flow).
+    \item Action space bị giới hạn bởi protocol.
+    \item IDS nghiêm với frag3 anomaly detection.
+\end{enumerate}
+
+\section{Điểm mạnh}
+
+\begin{enumerate}
+    \item Đo headroom chính xác qua oracle.
+    \item Cross-engine validation (Snort + Suricata).
+    \item Phát hiện corpus framing (60\% DHT).
+    \item Surrogate 100\% agreement với Suricata.
+\end{enumerate}
+
+\section{Hạn chế}
+
+\begin{enumerate}
+    \item Corpus nhỏ (40 flow test).
+    \item Single-step MDP (không chaining).
+    \item Threat model hẹp (chỉ packet-level).
+\end{enumerate}
+
+\chapter{Kết luận}
+
+Nghiên cứu này chứng minh rằng \textbf{chất lượng surrogate và corpus quyết định thành công của RL trong IDS evasion}. Khi surrogate chính xác và corpus đại diện, RL có thể học được policy hiệu quả (100\% trên C2-HTTP). Tuy nhiên, nếu headroom = 0, RL không thể vượt qua baseline.
+
+Điều quan trọng không phải là "RL có hoạt động không", mà là "không gian hành động có đủ lớn để RL học policy phức tạp không". Trong trường hợp này, câu trả lời là \textbf{chưa} — cần corpus lớn hơn và đa dạng hơn.
+
+\textbf{Hướng phát triển}:
+\begin{itemize}
+    \item Corpus C2 thuần khiết từ 21 capture Stratosphere.
+    \item Multi-step RL cho phép chaining cơ chế.
+    \item Adversarial training: IDS học từ RL agent.
+\end{itemize}
+
+\begin{thebibliography}{99}
+
+\bibitem{schulman2017}
+Schulman, J., et al. (2017). Proximal policy optimization algorithms. arXiv:1707.06347.
+
+\bibitem{ctu13}
+Stratosphere Laboratory. (2011). CTU-13 dataset. https://www.stratosphereips.org/datasets-ctu13
+
+\bibitem{paxson2003}
+Paxson, V., \& Shankar, U. (2003). Active mapping: Resisting NIDS evasion. IEEE S\&P.
+
+\end{thebibliography}
+
+\end{document}
