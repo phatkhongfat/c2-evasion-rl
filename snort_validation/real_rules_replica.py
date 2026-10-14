@@ -328,11 +328,51 @@ def _payloads_reverse(packets: Sequence, home_ip: str) -> List[bytes]:
             if Raw in p and IP in p and p[IP].src != home_ip]
 
 
+def _stream_buffers(packets: Sequence, forward_only: bool,
+                    home_ip: Optional[str] = None,
+                    reverse: bool = False) -> List[bytes]:
+    """Each TCP/UDP direction's payloads joined into one contiguous buffer.
+
+    A real engine matches content against the reassembled stream, so a rule
+    whose content straddles a segment boundary still fires.  Buffers are kept
+    PER DIRECTION: joining both directions would let a rule match across the
+    client/server boundary, which no engine does.
+    """
+    from scapy.all import IP, Raw
+    if reverse:
+        initiator = home_ip  # keep everything home_ip did NOT send
+    elif forward_only and home_ip is None:
+        initiator = _initiator(packets)
+    else:
+        initiator = home_ip if forward_only else None
+    per_dir: dict = {}
+    order: list = []
+    for p in packets:
+        if Raw not in p or IP not in p:
+            continue
+        src = p[IP].src
+        if reverse and initiator is not None and src == initiator:
+            continue
+        if not reverse and initiator is not None and src != initiator:
+            continue
+        if src not in per_dir:
+            per_dir[src] = []
+            order.append(src)
+        per_dir[src].append(bytes(p[Raw].load))
+    return [b"".join(per_dir[src]) for src in order]
+
+
 class RealRulesReplica:
     """Evaluate real ET Open C2 rules against real packet payloads."""
 
-    def __init__(self, rules: Sequence[Rule]):
+    def __init__(self, rules: Sequence[Rule], reassemble: bool = True):
         self.rules = list(rules)
+        # Suricata (and Snort with stream reassembly on) matches content against
+        # the REASSEMBLED TCP stream, so a rule that straddles a segment boundary
+        # still fires.  Scoring per-packet instead made the surrogate believe
+        # fragmentation evades detection -- the single largest disagreement with
+        # the real engine (24/100 cells on the frozen HTTP-D4 sample).
+        self.reassemble = reassemble
 
     @classmethod
     def for_sids(cls, sids: set, path: Path = RULES) -> "RealRulesReplica":
@@ -344,10 +384,29 @@ class RealRulesReplica:
         return cls.for_sids(firing_sids(capture, dataset), path)
 
     def _arms(self, packets: Sequence, home_ip: Optional[str] = None):
+        """(handshake, forward arm, both-sides arm).
+
+        When ``reassemble`` is on, each arm also carries the per-direction
+        reassembled buffers appended AFTER the individual packets.  Per-packet
+        matching is kept so rules that match one segment still fire and so
+        ``reassemble=False`` reproduces the old behaviour exactly.
+        """
         handshake = _has_handshake(packets)
         fwd = _payloads(packets, forward_only=True, home_ip=home_ip)
         both = _payloads(packets, forward_only=False, home_ip=home_ip)
+        if self.reassemble:
+            fwd = fwd + _stream_buffers(packets, True, home_ip)
+            both = both + _stream_buffers(packets, False, home_ip)
         return handshake, fwd, both
+
+    def _reverse_arm(self, packets: Sequence, both, home_ip: Optional[str]):
+        """The peer->home arm, with reassembly applied when enabled."""
+        if home_ip is None:
+            return both
+        rev = _payloads_reverse(packets, home_ip)
+        if self.reassemble:
+            rev = rev + _stream_buffers(packets, True, home_ip, reverse=True)
+        return rev
 
     @staticmethod
     def _payloads_for(rule: "Rule", fwd, both, rev, home_ip):
@@ -374,7 +433,7 @@ class RealRulesReplica:
         if not packets:
             return 0
         handshake, fwd, both = self._arms(packets, home_ip=home_ip)
-        rev = both if home_ip is None else _payloads_reverse(packets, home_ip)
+        rev = self._reverse_arm(packets, both, home_ip)
         n = 0
         for rule in self.rules:
             payloads = self._payloads_for(rule, fwd, both, rev, home_ip)
@@ -393,7 +452,7 @@ class RealRulesReplica:
         if not packets:
             return []
         handshake, fwd, both = self._arms(packets, home_ip=home_ip)
-        rev = both if home_ip is None else _payloads_reverse(packets, home_ip)
+        rev = self._reverse_arm(packets, both, home_ip)
         hit = []
         for rule in self.rules:
             payloads = self._payloads_for(rule, fwd, both, rev, home_ip)
