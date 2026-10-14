@@ -1,0 +1,45 @@
+{
+  "scorer": "RealRulesReplica (surrogate / TRAINING environment)",
+  "n_flows": 40,
+  "n_mechs": 17,
+  "evaded": {
+    "split8": 16,
+    "split16": 16,
+    "split24": 16,
+    "reorder": 16,
+    "ttl": 16,
+    "overlap8": 16,
+    "noop": 16,
+    "split_slow": 16,
+    "query_param_prepend": 16
+  },
+  "caught": {
+    "split8": 24,
+    "split16": 24,
+    "split24": 24,
+    "ttl": 24,
+    "noop": 24,
+    "http_header_pad": 24,
+    "split_slow": 24,
+    "http_header_case": 24,
+    "query_param_prepend": 24,
+    "reorder": 6
+  },
+  "invalid_semantics": {
+    "prepend4": 40,
+    "prepend8": 40,
+    "prepend12": 40,
+    "pad16": 40,
+    "corrupt8": 40,
+    "http_header_pad": 16,
+    "length_wrapper": 40,
+    "http_header_case": 16,
+    "reorder": 18,
+    "overlap8": 24
+  },
+  "oracle_flows": 16,
+  "oracle_pct": 40.0,
+  "best_single_mech": "split8",
+  "best_single": 16,
+  "headroom_pp": 0.0
+}
