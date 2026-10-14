@@ -1,0 +1,39 @@
+{
+  "engine": "suricata 7.0.3",
+  "ruleset": "snort_validation/et_open_c2/suricata.rules",
+  "n_flows": 40,
+  "n_mechs": 17,
+  "n_queries": 680,
+  "evaded": {},
+  "caught": {
+    "split8": 40,
+    "split16": 40,
+    "split24": 40,
+    "reorder": 22,
+    "ttl": 40,
+    "overlap8": 16,
+    "noop": 40,
+    "split_slow": 40,
+    "query_param_prepend": 40,
+    "http_header_pad": 24,
+    "http_header_case": 24
+  },
+  "invalid_semantics": {
+    "prepend4": 40,
+    "prepend8": 40,
+    "prepend12": 40,
+    "pad16": 40,
+    "corrupt8": 40,
+    "http_header_pad": 16,
+    "length_wrapper": 40,
+    "http_header_case": 16,
+    "reorder": 18,
+    "overlap8": 24
+  },
+  "oracle_flows": 0,
+  "oracle_pct": 0.0,
+  "best_single_mech": null,
+  "best_single": 0,
+  "headroom_pp": 0.0,
+  "elapsed_s": 90.6
+}

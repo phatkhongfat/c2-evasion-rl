@@ -1,0 +1,49 @@
+{
+  "n_flows": 40,
+  "n_mechs": 17,
+  "engine": "snort 2.9.20 real binary",
+  "ruleset": "snort_et_c2.conf (ET Open C2 full)",
+  "evaded": {
+    "split8": 16,
+    "split16": 16,
+    "split24": 16,
+    "split_slow": 23
+  },
+  "caught": {
+    "reorder": 22,
+    "ttl": 40,
+    "overlap8": 16,
+    "noop": 40,
+    "query_param_prepend": 40,
+    "split8": 24,
+    "split16": 24,
+    "split24": 24,
+    "http_header_pad": 24,
+    "split_slow": 17,
+    "http_header_case": 24
+  },
+  "invalid_semantics": {
+    "prepend4": 40,
+    "prepend8": 40,
+    "prepend12": 40,
+    "pad16": 40,
+    "corrupt8": 40,
+    "http_header_pad": 16,
+    "length_wrapper": 40,
+    "http_header_case": 16,
+    "reorder": 18,
+    "overlap8": 24
+  },
+  "oracle_flows": 23,
+  "oracle_pct": 57.5,
+  "best_single_mech": "split_slow",
+  "best_single": 23,
+  "headroom_pp": 0.0,
+  "svc_stats": {
+    "snort_calls": 3,
+    "flows": 680,
+    "seconds": 33.7,
+    "ms_per_flow": 49.5
+  },
+  "elapsed_s": 47.4
+}

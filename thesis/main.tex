@@ -257,49 +257,92 @@ Full (29 SID) & 0 & 0/1153 & 0/1153 & 0 pp \\
 \end{itemize}
 Lưu ý: đây là \emph{rate theo epoch trên split train}, không phải đánh giá held-out.
 
-\subsection*{Đánh giá trên Snort 2.9 thật (split test, 40 flow)}
+\subsection*{Quét toàn bộ 17 cơ chế trên hai engine thật}
 
-Cùng ruleset với surrogate: \texttt{snort\_et\_c2.conf} nạp file ET Open C2 đầy đủ
-(21.374 rule). Cơ chế chấm điểm là \texttt{SnortBatchService}, tức binary Snort 2.9.20 thật.
+Để trả lời câu hỏi ``cơ chế nào thực sự lách được'', ta quét \emph{toàn bộ 17 cơ chế}
+(trích từ \texttt{ACTION\_NAMES}, không chọn lọc thủ công) trên 40 flow của split test.
+Mỗi cơ chế được chấm theo ba nhãn: \emph{phá semantics} (cơ chế dùng không hợp lệ vì
+lệnh C2 không còn chạy được), \emph{bị bắt} (lệnh còn chạy nhưng IDS vẫn cảnh báo),
+và \emph{lách hợp lệ} (lệnh còn chạy và IDS không cảnh báo).
 
-\begin{itemize}
-    \item \textbf{Control âm (noop):} 40/40 flow báo alert --- PASS. Không có flow nào
-    ``tự nhiên evade'', nên mọi con số lách qua dưới đây là do cơ chế, không phải do
-    detector im lặng.
-    \item \textbf{Policy PPO 120 epoch:} lách qua \textbf{16/40 flow = 40,0\%}.
-    Cơ chế được chọn: \texttt{http\_header\_pad} (16 lần) và \texttt{noop} (24 lần).
-\end{itemize}
-
-\subsection*{Môi trường quyết định kết quả}
-
-Cùng 40 flow test, cùng 17 cơ chế, hai môi trường cho hai kết quả đối nghịch:
+Cả hai engine chấm bằng đúng ruleset ET Open C2. Với Suricata, 680 câu hỏi được đóng
+gói thành 3 lần chạy duy nhất nhờ gán mỗi câu hỏi một địa chỉ \texttt{198.51.100.x}
+và ánh xạ ngược \texttt{eve.json} theo địa chỉ nguồn/đích.
 
 \begin{center}
-\begin{tabular}{|l|c|c|}
+\begin{tabular}{|l|c|c|c|c|c|}
 \hline
-\textbf{Môi trường} & \textbf{Kết quả} & \textbf{Nguồn} \\
+\textbf{Cơ chế} & \multicolumn{3}{c|}{\textbf{Snort 2.9.20}} & \multicolumn{2}{c}{\textbf{Suricata 7.0.3}} \\
+\cline{2-4}\cline{5-6}
+ & \textbf{Lách} & \textbf{Bắt} & \textbf{Phá} & \textbf{Lách} & \textbf{Phá} \\
 \hline
-Surrogate (RealRulesReplica, 21.374 rule) & 0/40 evade & oracle = best-single = 0 \\
-Snort 2.9.20 thật (cùng ruleset) & 16/40 evade (40,0\%) & \texttt{p16d\_eval\_real\_snort.json} \\
+\texttt{split\_slow}     & \textbf{23} & 17 & 0  & 0 & 0 \\
+\texttt{split8}         & 16 & 24 & 0  & 0 & 0 \\
+\texttt{split16}        & 16 & 24 & 0  & 0 & 0 \\
+\texttt{split24}        & 16 & 24 & 0  & 0 & 0 \\
+\texttt{ttl}            & 0  & 40 & 0  & 0 & 0 \\
+\texttt{query\_param\_prepend} & 0 & 40 & 0 & 0 & 0 \\
+\texttt{http\_header\_pad} & 0 & 24 & 16 & 0 & 16 \\
+\texttt{http\_header\_case} & 0 & 24 & 16 & 0 & 16 \\
+\texttt{reorder}        & 0  & 22 & 18 & 0 & 18 \\
+\texttt{overlap8}       & 0  & 16 & 24 & 0 & 24 \\
+\texttt{pad16}          & 0  & 0  & 40 & 0 & 40 \\
+\texttt{corrupt8}       & 0  & 0  & 40 & 0 & 40 \\
+\texttt{prepend4/8/12}  & 0  & 0  & 40 & 0 & 40 \\
+\texttt{length\_wrapper} & 0 & 0  & 40 & 0 & 40 \\
+\texttt{noop}           & 0  & 40 & 0  & 0 & 0 \\
 \hline
 \end{tabular}
 \end{center}
 
-Surrogate \emph{phủ nhận} cơ chế thắng: nó chấm \texttt{http\_header\_pad} là không lách
-được, trong khi engine thật lách được 40\% số flow. Hệ quả trực tiếp là khi huấn luyện
-trên surrogate, RL không được thưởng cho đúng cơ chế duy nhất thực sự có hiệu quả.
+Bốn kết luận quan trọng:
+
+\begin{enumerate}
+    \item \textbf{Không cơ chế nào lách được Suricata 7.0.3.} Suricata ghép lại
+    luồng TCP đầy đủ trước khi khớp rule, nên cả phân mảnh IP lẫn phân mảnh TCP đều
+    bị vô hiệu hoá. Kết quả này đối lập hoàn toàn với Snort.
+    \item \textbf{Trên Snort, chỉ phân mảnh mới lách được.} Bốn cơ chế phân mảnh là
+    nhóm duy nhất giữ được ngữ nghĩa và lách được: oracle đạt
+    \textbf{23/40 = 57,5\%}, cơ chế đơn tốt nhất là \texttt{split\_slow} với
+    \textbf{23/40}. Vì oracle bằng đúng cơ chế tốt nhất nên
+    \textbf{headroom = 0,0 điểm phần trăm} --- không có lợi thế cho RL so với chọn
+    một cơ chế cố định.
+    \item \textbf{Sáu cơ chế phá vỡ ngữ nghĩa ở cả 40 flow}
+    (\texttt{pad16}, \texttt{corrupt8}, \texttt{prepend4/8/12},
+    \texttt{length\_wrapper}). Chúng \emph{trông} như lách qua IDS nhưng lệnh C2
+    không còn chạy, nên bị cổng ngữ nghĩa loại. Đây chính là điều một reward chỉ dựa
+    trên cảnh báo IDS sẽ bỏ lỡ.
+    \item \textbf{16/40 ``lách qua'' mà policy đạt được là không hợp lệ.} Policy chọn
+    \texttt{http\_header\_pad}, cơ chế bị cổng ngữ nghĩa loại ở đúng 16 flow mà nó
+    lách. Tính cả ba nhãn, policy đạt \textbf{0/40 lách hợp lệ} --- thấp hơn cả
+    cơ chế \texttt{split\_slow} cố định.
+\end{enumerate}
+
+\subsection*{Vì sao policy chọn sai cơ chế}
+
+Surrogate chấm \texttt{http\_header\_pad} là không lách được, trong khi cơ chế
+thực sự có hiệu quả là \texttt{split\_slow} (23/40). Vì vậy khi
+huấn luyện, \texttt{split\_slow} --- cơ chế \emph{có} hiệu quả thật --- không bao
+giờ nhận phần thưởng lách, còn \texttt{http\_header\_pad} lại nhận phần thưởng vì
+surrogate cho rằng nó lách được. Gradient đẩy policy về cơ chế sai. Đây là hậu quả
+trực tiếp của việc huấn luyện trên một mô hình thay thế, và là minh hoạ rõ nhất cho
+luận điểm trung tâm của đề tài: khoảng cách giữa môi trường huấn luyện và môi trường
+kiểm định quyết định kết luận, chứ không phải chất lượng của thuật toán.
 
 \subsection*{Bài học}
 
-Ba bài học thực nghiệm của đề tài:
 \begin{enumerate}
-    \item \textbf{Surrogate không phải IDS.} Dù parse đủ 21.374 rule, \texttt{RealRulesReplica}
-    vẫn lệch với Snort thật ở các cơ chế biên (payload padding). Một probe chỉ quét 9/17
-    cơ chế đã dẫn tới kết luận sai rằng không tồn tại lách qua nào.
-    \item \textbf{Đo lại bằng engine thật là bắt buộc}, với control âm \texttt{noop} đi kèm;
-    nếu không có control, ``0 alert'' không phân biệt được với detector chết.
-    \item \textbf{Khoảng cách huấn luyện--kiểm định quyết định kết luận}: cùng một policy,
-    cùng một ruleset, hai bộ chấm cho 0\% và 40\%.
+    \item \textbf{Surrogate không phải IDS.} Parse đủ 21.374 rule vẫn không đủ: sai
+    lệch nằm ở hành vi tái lắp ghép luồng của engine, không nằm ở rule.
+    \item \textbf{Quét toàn bộ không gian hành động, không chọn lọc thủ công.} Một
+    probe chỉ quét 9/17 cơ chế đã dẫn tới kết luận sai rằng không tồn tại lách qua
+    nào; các cơ chế bị bỏ sót lại là cơ chế duy nhất có hiệu quả.
+    \item \textbf{Cổng ngữ nghĩa không phải là chi tiết.} Sáu cơ chế ``lách được''
+    trên giấy nhưng phá lệnh; và 16 lách của policy rơi vào đúng nhóm này.
+    \item \textbf{Khoảng cách huấn luyện--kiểm định quyết định kết luận.} Cùng
+    một ruleset và cùng một policy, hai môi trường cho hai kết luận trái ngược.
+    \item \textbf{Không dùng được thì đo, không suy luận.} Với cả hai engine, đo
+    trực tiếp 680 câu hỏi mất chưa đầy 90 giây nhờ đóng gói theo lô.
 \end{enumerate}
 
 \section{Reassembly Impact}
