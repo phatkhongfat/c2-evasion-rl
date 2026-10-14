@@ -1,0 +1,19 @@
+[Unit]
+Description=C2-Evasion RL Dashboard
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/.hermes/c2-evasion-rl
+ExecStart=/root/.hermes/c2-evasion-rl/.venv/bin/python dashboard/app.py
+Restart=on-failure
+RestartSec=10s
+Environment="PYTHONUNBUFFERED=1"
+# The venv's `python` symlink points at 3.11 (the interpreter that has numpy);
+# Flask is installed into that same 3.11 site-packages. See dashboard/README.md.
+StandardOutput=append:/root/.hermes/c2-evasion-rl/logs/dashboard.log
+StandardError=append:/root/.hermes/c2-evasion-rl/logs/dashboard.log
+
+[Install]
+WantedBy=multi-user.target
