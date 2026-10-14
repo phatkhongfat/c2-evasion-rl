@@ -160,43 +160,123 @@ Xác định MDP (Markov Decision Process):
 Gap 48,4\% → 0\% là do surrogate sai, không do RL vô dụng.
 
 \chapter{Dữ liệu và Thiết lập thực nghiệm}
+\label{ch:data}
 
 \section{Nguồn dữ liệu}
 
-\textbf{CTU-13 Dataset} (Stratosphere IPS):
+Đề tài sử dụng bộ dữ liệu CTU-13 \cite{ctu13} do Stratosphere Laboratory công bố, gồm các bản ghi lưu lượng botnet ở dạng PCAP kèm bản phân tích luồng dạng \texttt{binetflow}. Kho dữ liệu cục bộ được tổ chức thành hai lớp:
+
 \begin{itemize}
-    \item 13 capture files từ các botnet (Neris, Virut, FakeAV, v.v.).
-    \item Tổng ~1,4 triệu flow.
-    \item Trong đề tài: 1.153 flow huấn luyện (đã lọc), 40 flow đối chứng (20 FakeAV + 4 Virut + 16 Neris).
+    \item \texttt{data/archive/}: 13 tệp \texttt{.binetflow.parquet} tương ứng 13 capture thuộc 7 họ botnet (Neris, Rbot, Virut, Sogou, Menti, Murlo, NsisAy).
+    \item \texttt{data/mcfp-parts/}: 3 tệp \texttt{.parquet} tái dẫn xuất từ tệp PCAP gốc, giữ nguyên dãy gói tin ở mức từng gói để phục vụ tái dựng luồng.
 \end{itemize}
 
-\section{Gộp mẫu (Union Corpus)}
+Sau khi lọc và gộp, chỉ hai capture thực sự đóng góp vào corpus dùng cho các thí nghiệm: \texttt{botnet-capture-20110811-neris} và \texttt{botnet-capture-20110819-bot}. Các capture còn lại được duy trì trong kho nhưng không tham gia kết quả báo cáo.
 
-Để tăng tính đa dạng:
-\begin{itemize}
-    \item Lấy 16 flow FakeAV (HTTP, port 80).
-    \item Lấy 4 flow Virut (HTTP, port 80).
-    \item Lấy từ 2 capture khác nhau → đảm bảo không overlap.
-\end{itemize}
+\section{Quy trình xử lý dữ liệu}
 
-Corpus này dùng cho:
-\begin{enumerate}
-    \item P16b: Validate trên Suricata 7.0.3 (20-flow sample).
-    \item P16c: Validate surrogate reassembly (100/100 agreement).
-    \item P16d: Đo headroom trên full ruleset (1153 flow).
-\end{enumerate}
+\subsection{Tách luồng và gán nhãn khung}
+
+Mỗi luồng được định danh bằng khóa năm thành phần (địa chỉ nguồn, cổng nguồn, địa chỉ đích, cổng đích, giao thức) và gán một nhãn \emph{framing} mô tả kiểu ứng dụng của luồng. Bước tiền xử lý đáng chú ý là hiệu chỉnh nhãn cho luồng UDP cổng 53: bộ dò mặc định gán mọi luồng không xác định là \texttt{http}, khiến lưu lượng DNS bị ghi nhãn sai. Hàm \texttt{corrected\_framing} trong \texttt{controls/merge\_corpora.py} sửa đúng sai lệch này.
+
+\subsection{Gắn surrogate theo từng luồng}
+
+Mỗi luồng được gắn một đối tượng \texttt{RealRulesReplica} chứa \emph{đúng} các quy tắc mà luồng đó được gán nhãn là khớp, thông qua \texttt{RealRulesReplica.for\_sids}. Thiết kế này giữ cho surrogate nhẹ và chỉ mô phỏng các quy tắc liên quan. Hệ quả của thiết kế được phân tích ở Mục \ref{sec:quality}.
+
+\subsection{Gộp mẫu và tách tập}
+
+Quy trình gộp trong \texttt{controls/merge\_corpora.py} hợp nhất hai thế hệ corpus, đồng thời áp dụng hiệu chỉnh framing và gắn surrogate cho các luồng của thế hệ thứ ba. Tập kiểm thử 40 luồng của thế hệ thứ hai được giữ nguyên để mọi kết quả đã báo cáo trước đó còn tái lập được, và các luồng có \texttt{flow\_id} trùng với tập kiểm thử bị loại khỏi tập huấn luyện.
+
+\section{Thành phần corpus sau xử lý}
+
+Bảng \ref{tab:corpus} trình bày thành phần corpus thực tế sau toàn bộ chuỗi xử lý, đo trực tiếp từ môi trường huấn luyện chứ không suy ra từ tài liệu nguồn.
+
+\begin{table}[htbp]
+\centering
+\caption{Thành phần corpus sau xử lý.}
+\label{tab:corpus}
+\begin{tabular}{lrr}
+\toprule
+ & Tập huấn luyện & Tập kiểm thử \\
+\midrule
+Số luồng & 1.153 & 40 \\
+\midrule
+Capture 20110819-bot & 698 & 24 \\
+Capture 20110811-neris & 455 & 16 \\
+\midrule
+Giao thức TCP & 455 & 16 \\
+Giao thức UDP & 698 & 24 \\
+\midrule
+Nhãn framing \texttt{http} & 455 & 16 \\
+Nhãn framing \texttt{neris} & 698 & 24 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Số gói tin trên mỗi luồng: tối thiểu 4, trung vị 10, tối đa 3.696 ở tập huấn luyện; tối thiểu 4, trung vị 10, tối đa 38 ở tập kiểm thử. Chênh lệch rõ ở đuôi phân phối cho thấy tập kiểm thử thiên về các luồng ngắn, còn tập huấn luyện chứa một đuôi dài các luồng rất dài.
+
+\subsection{Phạm vi quy tắc được mô phỏng}
+
+\begin{table}[htbp]
+\centering
+\caption{Sáu SID xuất hiện trong surrogate, phân theo họ giao thức.}
+\label{tab:sids}
+\begin{tabular}{rll}
+\toprule
+SID & Mô tả & Giao thức \\
+\midrule
+2008581 & ET P2P BitTorrent DHT ping request & UDP \\
+2008583 & ET P2P BitTorrent DHT nodes reply & UDP \\
+2008585 & ET P2P BitTorrent DHT announce\_peers request & UDP \\
+2012533 & ET TROJAN Win32/Virut.BN Checkin & TCP \\
+2012627 & ET TROJAN FakeAV Check-in (HTTP) & TCP \\
+2014635 & ET TROJAN Possible Variant.Kazy.53640 Malformed Client Hello SSL 3.0 & TCP \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Kiểm soát chất lượng dữ liệu}
+\label{sec:quality}
+
+Trước khi huấn luyện, hai phép kiểm tra bắt buộc phải đạt.
+
+\paragraph{Cổng đối chứng.} Chạy hành động \texttt{noop}, tức không cải biến luồng, trên toàn bộ 40 luồng kiểm thử và đòi engine cảnh báo trên cả 40. Trên Snort 2.9.20 thật \cite{snort2009}, phép kiểm tra này đạt 40/40, xác nhận tập kiểm thử không chứa lưu lượng sạch.
+
+\paragraph{Độ phù hợp của surrogate.} Trên cùng tập 40 luồng, kết quả của surrogate phải khớp với Snort thật.
+
+Phép kiểm tra thứ hai là nơi lộ ra một hạn chế thật của corpus. Đo trực tiếp trên đúng các surrogate đã lưu trong tập dữ liệu cho thấy 16 trên 40 luồng không bao giờ sinh cảnh báo, kể cả với hành động \texttt{noop}.
+
+\begin{table}[htbp]
+\centering
+\caption{Phân nhóm 40 luồng kiểm thử theo hành vi của surrogate đã lưu trong corpus.}
+\label{tab:quality}
+\begin{tabular}{rllrl}
+\toprule
+SL & Capture & Framing & SID trong surrogate & Cảnh báo \\
+\midrule
+24 & 20110819-bot & neris & 2008581, 2008583, 2008585 & Có \\
+16 & 20110811-neris & http & 2012533, 2012627, 2014635 & Không \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Nguyên nhân được truy đến tận gốc: mỗi luồng chỉ mang các quy tắc thuộc đúng họ giao thức của nó. Nhóm 16 luồng TCP bị gán ba quy tắc HTTP và TLS, nhưng không quy tắc nào trong ba quy tắc đó khớp, trong khi Snort thật với 21.374 quy tắc vẫn cảnh báo được chúng bằng những quy tắc hoàn toàn khác. Đây là sai lệch giữa surrogate và engine, không phải đặc tính của dữ liệu. Một phép kiểm tra bổ sung đã loại trừ giả thuyết sai lệch do bộ phân tích cú pháp quy tắc: ba quy tắc trong surrogate và ba quy tắc được phân tích lại từ tệp quy tắc gốc cho kết quả đối chiếu giống hệt nhau.
+
+Hệ quả với RL được lượng hóa ở Chương \ref{ch:results}: trên 16 luồng này, mọi hành động bảo toàn ngữ nghĩa đều nhận cùng một phần thưởng, kể cả \texttt{noop}, nên mặt phẳng phần thưởng bằng phẳng và không tồn tại tín hiệu để học trên 40\% dữ liệu. Mục này ghi nhận hạn chế đó như một giới hạn của thiết lập thực nghiệm hiện tại, thay vì điều chỉnh bộ dữ liệu để đạt kết quả khả quan hơn.
 
 \section{Thiết lập thực nghiệm}
 
 \begin{itemize}
-    \item \textbf{Surrogate}: Real Rules Replica (Python mô phỏng Snort).
-    \item \textbf{Ruleset}: Snort 2.9 ET Open (21.374 rules).
-    \item \textbf{RL Algorithm}: PPO (Proximal Policy Optimization) với masking.
-    \item \textbf{Hyperparameters}: Learning rate 3e-4, γ=0.99, GAE λ=0.95.
-    \item \textbf{Training}: 1.920 queries, 30 epochs, seed=42.
+    \item \textbf{Môi trường}: Hidden Defender, quan sát 11 chiều trạng thái, không gian hành động gồm 17 cơ chế biến đổi luồng, quyền sở hữu luồng cố định ở phía client.
+    \item \textbf{Thuật toán}: PPO \cite{ppo} với action masking, triển khai qua Stable-Baselines3 \cite{sb3}.
+    \item \textbf{Siêu tham số}: chính sách \texttt{MlpPolicy}; \texttt{n\_steps} bằng \texttt{batch\_size} bằng số luồng mỗi epoch; \texttt{n\_epochs} bằng 10; learning rate $3\times 10^{-4}$; entropy coefficient bằng 0.0151; hệ số chiết khấu $\gamma$ bằng 0.
+    \item \textbf{Lý do chọn $\gamma=0$}: mỗi lượt tập luyện chỉ gồm một bước quyết định duy nhất cho mỗi luồng, nên không tồn tại phần thưởng tương lai cần chiết khấu; đặt $\gamma=0$ loại bỏ ảnh hưởng của phần thưởng vượt bước.
+    \item \textbf{Số phép gọi}: 7.680 (30 epoch), 15.360 (60 epoch), 30.720 (120 epoch), tính trên 256 luồng mỗi epoch.
+    \item \textbf{Đường đối chứng}: hành động \texttt{noop} phải đạt 0 luồng lách, và cơ chế tốt nhất đơn lẻ đóng vai trò đường trần dưới.
 \end{itemize}
 
 \chapter{Kết quả và Đánh giá}
+\label{ch:results}
 
 \section{Headroom trên tập quy tắc đầy đủ}
 
@@ -398,15 +478,15 @@ Kết luận: Suricata cũng không bỏ sót nếu tập quy tắc đầy đủ
 
 \begin{thebibliography}{99}
 
-\bibitem{snort2009} Roesch, M. (2009). \textit{Snort: A Lightweight Intrusion Detection System}. USENIX Security Symposium.
+\bibitem{ctu13} Stratosphere Laboratory. \textit{The CTU-13 Dataset: A Labeled Dataset with Botnet, Normal and Background Traffic}. Prague University of Technology. \url{https://www.stratosphereips.org/datasets-ctu13} (truy cập ngày 14/10/2026). Bộ dữ liệu gồm 13 capture (scenario) thu thập năm 2011 tại Đại học Công nghệ Prague.
 
-\bibitem{suricata2017} Oisel, O. (2017). \textit{Suricata: A Powerful Open Source Threat Detection Engine}. 
+\bibitem{snort2009} Roesch, M. (2009). \textit{Snort: A Lightweight Intrusion Detection System}. Proceedings of the 18th USENIX Security Symposium, pp. 137--148.
 
-\bibitem{ctu13} Stratosphere IPS Laboratory. \textit{CTU-13 Dataset: A New Dataset of Botnet Traffic}. Available at: https://www.stratosphereips.org/
+\bibitem{suricata2017} OISF. \textit{Suricata 7.0.3 --- Open, Fast and Portable IDS/IPS Engine}. \url{https://suricata.io} (truy cập ngày 14/10/2026). Bản cài đặt cụ thể dùng trong đề tài.
 
-\bibitem{sb3} Raffin, A., et al. (2021). \textit{Stable-Baselines3: Reliable Reinforcement Learning Implementations}. JMLR.
+\bibitem{ppo} Schulman, J., Wolski, F., Dhariwal, P., Radford, A., Klimov, O. (2017). \textit{Proximal Policy Optimization Algorithms}. arXiv:1707.06347.
 
-\bibitem{ppo} Schulman, J., et al. (2017). \textit{Proximal Policy Optimization Algorithms}. OpenAI.
+\bibitem{sb3} Raffin, A., Hill, A., Gleave, A., Kanervisto, A., Ernestus, M., Dormann, N. (2021). \textit{Stable-Baselines3: Reliable Reinforcement Learning Implementations}. Journal of Machine Learning Research, 22(268), pp. 1--8.
 
 \end{thebibliography}
 
