@@ -152,14 +152,41 @@ def test_prepend_breaks_the_channel():
         "semantics bar should reject it everywhere")
 
 
-def test_split24_preserves_semantics_and_evades():
-    """split24 is the split mechanism that both preserves the client stream and
-    (on HTTP) dodges the replica under the client-only, strict-bar design.  The
-    reward it earns is the base evasion reward minus its cost, plus the
-    protocol-appropriate family bonus (split24 is appropriate on both
-    framings); the cost must be reported in info so the penalty is auditable."""
+def test_split24_preserves_semantics_but_does_not_evade():
+    """split24 keeps the client stream intact and STILL fails to evade.
+
+    CORRECTED 2026-10-14.  This test previously asserted that split24 evaded,
+    pinning a per-packet replica artefact.  A real engine reassembles before
+    matching, and Suricata 7.0.3 confirms it on the frozen 20-flow sample:
+    split24 evades 0/20, split8 0/20.  Fragmentation is not an evasion
+    mechanism against a reassembling detector.
+    """
     env = HiddenDefenderEnv(split="train")
     idx = ACTION_NAMES.index("split24")
+    env.reset()
+    evaded = 0
+    semantics_ok = 0
+    for _ in range(len(env._flows)):
+        _o, _r, term, _t, info = env.step(idx)
+        evaded += bool(info["evaded"])
+        semantics_ok += bool(info["semantics_ok"])
+        if term:
+            break
+    assert semantics_ok == len(env._flows), (
+        "split24 must still preserve the client stream everywhere")
+    assert evaded == 0, (
+        f"split24 evaded {evaded} flows; Suricata 7.0.3 measured 0/20 on the "
+        "frozen sample, so a non-zero count means the replica regressed")
+
+
+def test_evading_mechanism_earns_the_documented_reward():
+    """The evasion reward must still be exactly base + protocol bonus.
+
+    Pinned on http_header_case because it is the mechanism that actually
+    evades (450/1153 train flows) -- split24 no longer exercises this path.
+    """
+    env = HiddenDefenderEnv(split="train")
+    idx = ACTION_NAMES.index("http_header_case")
     env.reset()
     valid = 0
     for _ in range(len(env._flows)):
@@ -170,7 +197,7 @@ def test_split24_preserves_semantics_and_evades():
             valid += 1
         if term:
             break
-    assert valid > 0, "split24 never produced a valid evasion; test is vacuous"
+    assert valid > 0, "http_header_case never produced a valid evasion"
 
 
 def test_semantics_intact_is_conservative():

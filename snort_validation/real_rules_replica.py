@@ -328,38 +328,87 @@ def _payloads_reverse(packets: Sequence, home_ip: str) -> List[bytes]:
             if Raw in p and IP in p and p[IP].src != home_ip]
 
 
-def _stream_buffers(packets: Sequence, forward_only: bool,
-                    home_ip: Optional[str] = None,
-                    reverse: bool = False) -> List[bytes]:
-    """Each TCP/UDP direction's payloads joined into one contiguous buffer.
+def _reassembled_buffers(packets: Sequence, forward_only: bool,
+                        home_ip: Optional[str] = None,
+                        reverse: bool = False) -> List[bytes]:
+    """Payload buffers an engine scores after its own reassembly.
 
-    A real engine matches content against the reassembled stream, so a rule
-    whose content straddles a segment boundary still fires.  Buffers are kept
-    PER DIRECTION: joining both directions would let a rule match across the
-    client/server boundary, which no engine does.
+    A real engine reassembles at BOTH layers, in this order:
+
+    1. IPv4 defrag -- fragments sharing (src, dst, proto, id) are rejoined.
+       ``apply_mech("split8"/"split24")`` fragments at layer 3, so skipping this
+       is what made fragmentation look like successful evasion.
+    2. TCP stream reassembly -- one buffer per 5-tuple.
+
+    UDP is message-oriented and is NEVER concatenated: after defrag each
+    datagram stands on its own, exactly as Suricata and Snort score it.
     """
-    from scapy.all import IP, Raw
+    from scapy.all import IP, Raw, TCP, UDP
     if reverse:
         initiator = home_ip  # keep everything home_ip did NOT send
     elif forward_only and home_ip is None:
         initiator = _initiator(packets)
     else:
         initiator = home_ip if forward_only else None
-    per_dir: dict = {}
+
+    def keep(ip) -> bool:
+        if reverse:
+            return initiator is None or ip[IP].src != initiator
+        return initiator is None or ip[IP].src == initiator
+
+    # -- layer 3: IPv4 defrag ------------------------------------------------
+    # scapy keeps the MF bit in IP.flags, NOT in IP.frag -- IP.frag carries the
+    # 13-bit offset in 8-byte units.  Reading MF from IP.frag silently treated
+    # every head fragment as a whole datagram.
+    def frag_of(p):
+        ip = p[IP]
+        return (ip.frag & 0x1FFF) * 8, bool(ip.flags)
+
+    groups: dict = {}
     order: list = []
+    defragged: list = []
     for p in packets:
-        if Raw not in p or IP not in p:
+        if IP not in p:
             continue
-        src = p[IP].src
-        if reverse and initiator is not None and src == initiator:
+        offset, mf = frag_of(p)
+        if not mf and offset == 0:
+            continue  # not a fragment
+        key = (p[IP].src, p[IP].dst, p[IP].proto, p[IP].id)
+        if key not in groups:
+            groups[key] = []
+            order.append(key)
+        groups[key].append((offset, p))
+    for key in order:
+        frags = sorted(groups[key], key=lambda t: t[0])
+        buf = b"".join(bytes(p[Raw].load) for _, p in frags if Raw in p)
+        if buf and keep(frags[0][1]):
+            defragged.append(buf)
+
+    # -- per-packet payloads that were never fragmented ----------------------
+    per_stream: dict = {}
+    stream_order: list = []
+    udp_payloads: list = []
+    for p in packets:
+        if IP not in p or Raw not in p:
             continue
-        if not reverse and initiator is not None and src != initiator:
+        offset, mf = frag_of(p)
+        if mf or offset > 0:
+            continue  # already handled by defrag
+        if not keep(p[IP]):
             continue
-        if src not in per_dir:
-            per_dir[src] = []
-            order.append(src)
-        per_dir[src].append(bytes(p[Raw].load))
-    return [b"".join(per_dir[src]) for src in order]
+        body = bytes(p[Raw].load)
+        if TCP in p:
+            key = (p[IP].src, p[IP].dst, p[TCP].sport, p[TCP].dport)
+            if key not in per_stream:
+                per_stream[key] = []
+                stream_order.append(key)
+            per_stream[key].append(body)
+        elif UDP in p:
+            udp_payloads.append(body)
+
+    out = defragged + [b"".join(per_stream[k]) for k in stream_order]
+    out.extend(udp_payloads)
+    return out
 
 
 class RealRulesReplica:
@@ -395,8 +444,8 @@ class RealRulesReplica:
         fwd = _payloads(packets, forward_only=True, home_ip=home_ip)
         both = _payloads(packets, forward_only=False, home_ip=home_ip)
         if self.reassemble:
-            fwd = fwd + _stream_buffers(packets, True, home_ip)
-            both = both + _stream_buffers(packets, False, home_ip)
+            fwd = fwd + _reassembled_buffers(packets, True, home_ip)
+            both = both + _reassembled_buffers(packets, False, home_ip)
         return handshake, fwd, both
 
     def _reverse_arm(self, packets: Sequence, both, home_ip: Optional[str]):
@@ -405,7 +454,7 @@ class RealRulesReplica:
             return both
         rev = _payloads_reverse(packets, home_ip)
         if self.reassemble:
-            rev = rev + _stream_buffers(packets, True, home_ip, reverse=True)
+            rev = rev + _reassembled_buffers(packets, True, home_ip, reverse=True)
         return rev
 
     @staticmethod

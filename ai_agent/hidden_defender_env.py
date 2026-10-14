@@ -33,6 +33,7 @@ sys.path.insert(0, str(REPO / "ai_agent"))
 sys.path.insert(0, str(REPO / "snort_validation"))
 
 from real_packet_env import payload_indices  # noqa: E402
+from real_rules_replica import RealRulesReplica  # noqa: E402
 from snort_batch_service import SnortBatchService  # noqa: E402
 
 # The ONE semantics bar (Fix 3), shared with the honest evaluation.  Module-level
@@ -516,7 +517,7 @@ class HiddenDefenderEnv(gym.Env):
     def __init__(self, split: str = "train", real_snort: bool = False,
                  seed: int = 42, max_steps: int = 1,
                  capture: str | None = None, ownership: str = "client",
-                 corpus: str | None = None):
+                 corpus: str | None = None, reassemble: bool = True):
         super().__init__()
         self.split = split
         self.capture = capture
@@ -525,6 +526,21 @@ class HiddenDefenderEnv(gym.Env):
                 f"ownership must be 'client' or 'both', got {ownership!r}")
         self.ownership = ownership
         self._flows = load_corpus(split, capture, corpus)
+        # P16c.3: score rules against the reassembled stream.  A per-packet
+        # scorer told the policy that fragmentation evades detection; real
+        # Suricata refutes that on every frozen flow (G1b(i)).  Independent of
+        # the reverted home_ip change -- this is about stream boundaries, not
+        # rule-header direction.
+        #
+        # The rebuild is unconditional on purpose: corpus pickles predate this
+        # flag, so their replicas carry no `reassemble` attribute at all and
+        # would raise on first scoring. Rebuilding also means the env flag is
+        # the single source of truth instead of however each pickle was made.
+        self.reassemble = reassemble
+        for flow in self._flows:
+            rep = flow.get("replica")
+            if rep is not None and getattr(rep, "reassemble", None) != reassemble:
+                flow["replica"] = RealRulesReplica(rep.rules, reassemble=reassemble)
         self.real_snort = real_snort
         self._svc = SnortBatchService(batch_size=1) if real_snort else None
         self.max_steps = max_steps

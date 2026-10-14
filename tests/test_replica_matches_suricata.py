@@ -104,3 +104,85 @@ def test_env_default_reassembles(pool):
         "env default must match Suricata semantics -- a per-packet scorer teaches "
         "the policy that fragmentation works, which the real engine refutes")
     assert pool[frozen_flow_ids()[0]]["flow_id"] == frozen_flow_ids()[0]
+
+
+def test_udp_datagrams_are_never_concatenated(tmp_path):
+    """UDP has no stream to reassemble -- engines score each datagram alone.
+
+    Regression guard: an earlier version of the fix joined payloads per source
+    IP for every protocol, which made three BitTorrent DHT datagrams look like
+    one continuous stream and reported matches no engine produces.
+    """
+    from scapy.all import Ether, IP, Raw, UDP
+
+    from real_rules_replica import RealRulesReplica, parse_ruleset
+    rule = tmp_path / "dht.rules"
+    rule.write_text(
+        'alert udp $EXTERNAL_NET any -> $HOME_NET any '
+        '(msg:"DHT"; content:"QQnodes"; depth:64; sid:9990002; rev:1;)\n')
+    rep = RealRulesReplica(parse_ruleset(rule))
+
+    def dht(payload):
+        return Ether() / IP(src="1.2.3.4", dst="10.0.0.1") / UDP(sport=1, dport=2) \
+            / Raw(load=payload)
+
+    # The pattern straddles two SEPARATE datagrams. An engine does not join
+    # them, so this must not fire.
+    assert rep.verdict([dht(b"QQ"), dht(b"nodes")]) is False
+    # Within one datagram it must still fire.
+    assert rep.verdict([dht(b"QQnodes")]) is True
+
+
+def test_ip_fragments_are_rejoined_before_matching(tmp_path):
+    """Layer-3 fragmentation must not hide content from the rule.
+
+    ``apply_mech("split8")`` fragments at layer 3, not layer 4. Suricata and
+    Snort defrag first, so a rule whose content straddles two fragments still
+    fires -- this is the exact reason the per-packet replica claimed 0 evasion.
+    """
+    from scapy.all import IP, Raw, TCP
+
+    from real_rules_replica import RealRulesReplica, parse_ruleset
+    rule = tmp_path / "frag.rules"
+    rule.write_text(
+        'alert tcp $EXTERNAL_NET any -> $HOME_NET any '
+        '(msg:"F"; content:"FRAGMENTED"; sid:9990004; rev:1;)\n')
+    rep = RealRulesReplica(parse_ruleset(rule))
+
+    # Real fragments repeat the IP header including proto (RFC 791 keys
+    # reassembly on src/dst/proto/id).  The offset counts from just after the
+    # IP header, so 20 TCP + 4 payload = 24 bytes = fragment offset 3.
+    first = (IP(src="10.0.0.9", dst="93.184.216.34", id=4321, proto=6,
+                frag=0, flags="MF")
+             / TCP(sport=5150, dport=80) / Raw(b"FRAG"))
+    second = (IP(src="10.0.0.9", dst="93.184.216.34", id=4321, proto=6,
+                 frag=3, flags=0)
+              / Raw(b"MENTED"))
+
+    # Separate payloads: a per-packet scorer misses it.
+    assert rep.verdict([first, second]) is True
+    # Nothing changes for a flow that was never fragmented.
+    intact = (IP(src="10.0.0.9", dst="93.184.216.34", id=4321)
+              / TCP(sport=5150, dport=80) / Raw(b"FRAGMENTED"))
+    assert rep.verdict([intact]) is True
+
+
+def test_tcp_reassembly_is_per_stream_not_per_host(tmp_path):
+    """Two connections from one host are two independent streams."""
+    from scapy.all import Ether, IP, Raw, TCP
+
+    from real_rules_replica import RealRulesReplica, parse_ruleset
+    rule = tmp_path / "tcp.rules"
+    rule.write_text(
+        'alert tcp $EXTERNAL_NET any -> $HOME_NET any '
+        '(msg:"T"; content:"SPLITME"; sid:9990003; rev:1;)\n')
+    rep = RealRulesReplica(parse_ruleset(rule))
+
+    def seg(sport, payload):
+        return Ether() / IP(src="1.2.3.4", dst="10.0.0.1") \
+            / TCP(sport=sport, dport=80, flags="PA") / Raw(load=payload)
+
+    # "SPLIT" on port 1111, "ME" on port 2222 -> different streams, no match.
+    assert rep.verdict([seg(1111, b"SPLIT"), seg(2222, b"ME")]) is False
+    # Same stream, split across segments -> reassembled, matches.
+    assert rep.verdict([seg(1111, b"SPLIT"), seg(1111, b"ME")]) is True
