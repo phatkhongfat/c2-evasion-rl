@@ -1,5 +1,12 @@
 # P16b — Hướng 1: đổi defender sang engine có reassembly (Suricata 7)
 
+> ⚠️ **ĐÍNH CHÍNH 2026-10-14 — đọc `docs/p16c_reassembly_correction.md` mục 3c.**
+> Con số **20 pp** ở đây đo trên mẫu **có chọn lọc** (16 FakeAV + 4 Virut — hai
+> family cố ý khác cơ chế thắng; 4 Virut đó chính là 4 flow duy nhất chỉ oracle
+> chạm tới trên toàn corpus). Trên toàn corpus 1153 flow, headroom thật là
+> **4 flow = 0,35 pp**, và một quy tắc 1-bit đạt đúng oracle. Đừng dùng 20 pp
+> làm claim thesis.
+
 **Verdict: G1a XANH, G1b(i) XANH, G1b(ii) XANH — nhưng headroom vẫn 0.**
 Chi tiết dưới. Mọi số đo bằng Suricata 7.0.3 thật, ruleset 21288 rule đã convert,
 ownership=client, mẫu số đóng băng 20 flow HTTP-D4.

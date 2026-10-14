@@ -95,6 +95,39 @@ and P14 only found headroom after leaving fragmentation behind for
 head-anchored mechanisms. The two phases were never in conflict — one of them
 was measuring a broken instrument.
 
+### 3c. THE DECISIVE NUMBER: RL headroom is 0.35 pp
+
+With the surrogate faithful, the per-flow oracle over all 9 candidate
+mechanisms on the full **1153-flow train corpus**:
+
+| | value |
+|---|---:|
+| best single mechanism (`http_header_case`) | 450/1153 = 39.0% |
+| per-flow oracle | 454/1153 = 39.4% |
+| **headroom** | **4 flows = 0.35 pp** |
+
+All 4 flows that only the oracle reaches want `query_param_prepend`, and all 4
+are `20110811-neris`:
+
+```
+147.32.84.165:1102->60.190.223.75:888|tcp
+147.32.84.165:1118->94.63.150.20:80|tcp
+147.32.84.165:2905->94.63.150.20:80|tcp
+147.32.84.165:3653->60.190.223.75:888|tcp
+```
+
+**A one-bit rule — "if `query_param_prepend` works, use it, else
+`http_header_case`" — attains the oracle exactly.** There is nothing left for a
+policy to learn. This is the same negative result P13 reached with real Snort,
+now reproduced on the corrected instrument.
+
+Note where the 20 pp of P16b came from: that sample was **selected** to hold
+16 FakeAV + 4 Virut, i.e. two families with deliberately *different* winning
+mechanisms, and those 4 Virut flows are the same 4 here. The 20 pp measured
+selection, not structure. On the corpus as it actually ships
+(`20110819-bot` 698 + `20110811-neris` 455 for train; 24 + 16 for test) the two
+mechanisms are near-nested and the gap collapses.
+
 ## 4. What this refutes
 
 `docs/headroom_root_cause.md` rests on `split8` evading 40/40. That number is
