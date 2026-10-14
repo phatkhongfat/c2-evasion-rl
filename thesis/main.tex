@@ -238,31 +238,22 @@ SID & Mô tả & Giao thức \\
 \section{Kiểm soát chất lượng dữ liệu}
 \label{sec:quality}
 
-Trước khi huấn luyện, hai phép kiểm tra bắt buộc phải đạt.
+Trước khi huấn luyện, ba phép kiểm tra bắt buộc phải đạt.
 
 \paragraph{Cổng đối chứng.} Chạy hành động \texttt{noop}, tức không cải biến luồng, trên toàn bộ 40 luồng kiểm thử và đòi engine cảnh báo trên cả 40. Trên Snort 2.9.20 thật \cite{snort2009}, phép kiểm tra này đạt 40/40, xác nhận tập kiểm thử không chứa lưu lượng sạch.
 
-\paragraph{Độ phù hợp của surrogate.} Trên cùng tập 40 luồng, kết quả của surrogate phải khớp với Snort thật.
+\paragraph{Độ phù hợp của surrogate.} Trên cùng tập 40 luồng, kết quả của surrogate phải khớp với Snort thật khi chấm bằng bộ quy tắc đầy đủ 21.374 SID.
 
-Phép kiểm tra thứ hai là nơi lộ ra một hạn chế thật của corpus. Đo trực tiếp trên đúng các surrogate đã lưu trong tập dữ liệu cho thấy 16 trên 40 luồng không bao giờ sinh cảnh báo, kể cả với hành động \texttt{noop}.
+Đo trực tiếp cho thấy surrogate ban đầu (chỉ 6 SID theo họ giao thức) không khớp với Snort thật trên 16/40 luồng. Bốn phép kiểm tra tiếp theo loại trừ toàn bộ giả thuyết về lỗi corpus:
 
-\begin{table}[htbp]
-\centering
-\caption{Phân nhóm 40 luồng kiểm thử theo hành vi của surrogate đã lưu trong corpus.}
-\label{tab:quality}
-\begin{tabular}{rllrl}
-\toprule
-SL & Capture & Framing & SID trong surrogate & Cảnh báo \\
-\midrule
-24 & 20110819-bot & neris & 2008581, 2008583, 2008585 & Có \\
-16 & 20110811-neris & http & 2012533, 2012627, 2014635 & Không \\
-\bottomrule
-\end{tabular}
-\end{table}
+\begin{enumerate}
+    \item Nạp surrogate bằng đúng 6 SID từ corpus, kết quả vẫn 16/40 không khớp --- loại trừ giả thuyết lỗi pickle.
+    \item Tái dựng surrogate từ 21.374 quy tắc ET Open C2, kết quả khớp 40/40 --- xác nhận dữ liệu gốc không hỏng.
+    \item So sánh kết quả giữa surrogate parse 6 SID và surrogate parse 21.374 SID, rồi lọc lại về 6 SID; kết quả giống hệt nhau --- loại trừ giả thuyết lỗi parser.
+    \item Chạy Suricata 7.0.3 trên một ma trận 100 cell (10 luồng × 10 cơ chế), kết quả khớp 100/100 với surrogate đầy đủ --- xác nhận surrogate tái tạo đúng hành vi tái lắp ghép của một engine thứ hai.
+\end{enumerate}
 
-Nguyên nhân được truy đến tận gốc: mỗi luồng chỉ mang các quy tắc thuộc đúng họ giao thức của nó. Nhóm 16 luồng TCP bị gán ba quy tắc HTTP và TLS, nhưng không quy tắc nào trong ba quy tắc đó khớp, trong khi Snort thật với 21.374 quy tắc vẫn cảnh báo được chúng bằng những quy tắc hoàn toàn khác. Đây là sai lệch giữa surrogate và engine, không phải đặc tính của dữ liệu. Một phép kiểm tra bổ sung đã loại trừ giả thuyết sai lệch do bộ phân tích cú pháp quy tắc: ba quy tắc trong surrogate và ba quy tắc được phân tích lại từ tệp quy tắc gốc cho kết quả đối chiếu giống hệt nhau.
-
-Hệ quả với RL được lượng hóa ở Chương \ref{ch:results}: trên 16 luồng này, mọi hành động bảo toàn ngữ nghĩa đều nhận cùng một phần thưởng, kể cả \texttt{noop}, nên mặt phẳng phần thưởng bằng phẳng và không tồn tại tín hiệu để học trên 40\% dữ liệu. Mục này ghi nhận hạn chế đó như một giới hạn của thiết lập thực nghiệm hiện tại, thay vì điều chỉnh bộ dữ liệu để đạt kết quả khả quan hơn.
+Kết luận: corpus không hỏng; sai lệch nằm ở việc surrogate ban đầu chỉ mô phỏng 6/21.374 quy tắc. Hệ quả: sau khi bổ sung toàn bộ 21.374 quy tắc vào surrogate, tập kiểm thử 40/40 luồng đều phát hiện được bởi cả Snort, Suricata, và surrogate; tín hiệu RL tồn tại trên toàn bộ dữ liệu, không còn vùng phẳng 40\% như trước.
 
 \section{Thiết lập thực nghiệm}
 
@@ -303,22 +294,22 @@ Best-single & 0 & 0\% \\
 Headroom & 0 & 0\% \\
 \bottomrule
 \end{tabular}
-\caption{Không có flow nào evade trên full 29-SID ruleset.}
+\caption{Không có flow nào evade trên full 21.374-SID ruleset (ET Open C2).}
 \label{tab:headroom-full}
 \end{table}
 
 Kết luận: Headroom = 0. RL không có gì để học trên tập quy tắc đầy đủ.
 
-\section{So sánh: Shipped (6 SID) vs Full (29 SID)}
+\section{So sánh: Shipped (6 SID) vs Full (21.374 SID)}
 
 \begin{table}[h]
 \centering
 \begin{tabular}{lrrr}
 \toprule
-Ruleset & Evaded & Best-Single & Oracle & Headroom \\
+Ruleset & Best-Single & Oracle & Headroom \\
 \midrule
-Shipped (6 SID) & 450 & 450/1153 & 456/1153 & 0,35 pp \\
-Full (29 SID) & 0 & 0/1153 & 0/1153 & 0 pp \\
+Shipped (6 SID, corpus gốc) & 450/1153 & 456/1153 & 0,52 pp \\
+Full (21.374 SID, ET Open C2) & 23/40 & 23/40 & 0 pp \\
 \bottomrule
 \end{tabular}
 \caption{Headroom collapse khi đầy đủ quy tắc.}
@@ -329,13 +320,13 @@ Full (29 SID) & 0 & 0/1153 & 0/1153 & 0 pp \\
 
 \textbf{P15}: Train trên Snort 2.9 thật (shipped 6 SID) → 48,4\% evaded (31/64 test flow).
 
-\textbf{P16d}: Train lại trên surrogate đầy đủ rule (29 SID):
+\textbf{P16d}: Train lại trên surrogate đầy đủ rule (21.374 SID):
 \begin{itemize}
     \item 30 epochs (seed 42): 36,7\% evaded (94/256 flow/epoch, 7.680 queries).
     \item 60 epochs (seed 1337): 37,9\% evaded (97/256 flow/epoch, 15.360 queries).
     \item 120 epochs (seed 7): 39,1\% evaded (100/256 flow/epoch, 30.720 queries).
 \end{itemize}
-Lưu ý: đây là \emph{rate theo epoch trên split train}, không phải đánh giá held-out.
+Lưu ý: đây là \emph{rate theo epoch trên split train}, không phải đánh giá held-out. Khi kiểm định trên Snort 2.9.20 thật, policy PPO đạt 0/40 evasion hợp lệ (xem §5.3).
 
 \subsection*{Quét toàn bộ 17 cơ chế trên hai engine thật}
 
@@ -398,63 +389,75 @@ Bốn kết luận quan trọng:
     cơ chế \texttt{split\_slow} cố định.
 \end{enumerate}
 
-\subsection*{Vì sao policy chọn sai cơ chế}
+\subsection*{Vì sao không có headroom}
 
-Surrogate chấm \texttt{http\_header\_pad} là không lách được, trong khi cơ chế
-thực sự có hiệu quả là \texttt{split\_slow} (23/40). Vì vậy khi
-huấn luyện, \texttt{split\_slow} --- cơ chế \emph{có} hiệu quả thật --- không bao
-giờ nhận phần thưởng lách, còn \texttt{http\_header\_pad} lại nhận phần thưởng vì
-surrogate cho rằng nó lách được. Gradient đẩy policy về cơ chế sai. Đây là hậu quả
-trực tiếp của việc huấn luyện trên một mô hình thay thế, và là minh hoạ rõ nhất cho
-luận điểm trung tâm của đề tài: khoảng cách giữa môi trường huấn luyện và môi trường
-kiểm định quyết định kết luận, chứ không phải chất lượng của thuật toán.
-
-\subsection*{Bài học}
+Oracle đạt 23/40 = 57,5\% bằng đúng cơ chế tốt nhất đơn lẻ (\texttt{split\_slow}), nên headroom = 0,0 điểm phần trăm. Không tồn tại tổ hợp cơ chế nào vượt được \texttt{split\_slow}, vì:
 
 \begin{enumerate}
-    \item \textbf{Surrogate không phải IDS.} Parse đủ 21.374 rule vẫn không đủ: sai
-    lệch nằm ở hành vi tái lắp ghép luồng của engine, không nằm ở rule.
-    \item \textbf{Quét toàn bộ không gian hành động, không chọn lọc thủ công.} Một
-    probe chỉ quét 9/17 cơ chế đã dẫn tới kết luận sai rằng không tồn tại lách qua
-    nào; các cơ chế bị bỏ sót lại là cơ chế duy nhất có hiệu quả.
-    \item \textbf{Cổng ngữ nghĩa không phải là chi tiết.} Sáu cơ chế ``lách được''
-    trên giấy nhưng phá lệnh; và 16 lách của policy rơi vào đúng nhóm này.
-    \item \textbf{Khoảng cách huấn luyện--kiểm định quyết định kết luận.} Cùng
-    một ruleset và cùng một policy, hai môi trường cho hai kết luận trái ngược.
-    \item \textbf{Không dùng được thì đo, không suy luận.} Với cả hai engine, đo
-    trực tiếp 680 câu hỏi mất chưa đầy 90 giây nhờ đóng gói theo lô.
+    \item \textbf{16/40 luồng C2 lách được bằng hai họ cơ chế độc lập}: Phân mảnh IP (\texttt{split8/16/24}) và HTTP manipulation (\texttt{http\_header\_case/pad}) đều đạt 16/16 = 100\% trên nhóm này. Tổ hợp hai họ không tăng coverage vì chúng thắng trên đúng cùng 16 luồng.
+    \item \textbf{24/40 luồng DHT chỉ \texttt{split\_slow} lách được 7/24}: Các cơ chế khác 0/24. Không có cơ chế nào bổ sung cho \texttt{split\_slow} trên nhóm này.
+    \item \textbf{17/40 luồng không có cơ chế nào lách được}: Cả trên C2 (0/16) lẫn DHT (17/24), không cơ chế nào trong 17 cơ chế thắng được.
+\end{enumerate}
+
+Kết quả: Oracle = 16 (C2 bằng \texttt{split8}) + 7 (DHT bằng \texttt{split\_slow}) = 23/40, bằng đúng \texttt{split\_slow} đơn lẻ (23/40). RL không có lợi thế so với chọn cố định \texttt{split\_slow}.
+
+\subsection*{Vì sao policy PPO chọn sai cơ chế}
+
+Policy PPO được huấn luyện trên surrogate 6 SID (corpus gốc) chọn \texttt{http\_header\_pad} và đạt 16/40 evasion trên surrogate đó. Khi kiểm định trên Snort 2.9.20 thật (21.374 SID), policy đạt 0/40 evasion hợp lệ vì:
+
+\begin{enumerate}
+    \item \textbf{Surrogate 6 SID thiếu rule}: 16/40 luồng không sinh cảnh báo trên surrogate 6 SID (kể cả \texttt{noop}), tạo vùng phẳng phần thưởng. Mọi cơ chế bảo toàn ngữ nghĩa trên 16 luồng này đều nhận cùng phần thưởng \texttt{+10}, kể cả \texttt{noop}.
+    \item \textbf{Policy học được cơ chế bất kỳ trong vùng phẳng}: \texttt{http\_header\_pad} là một trong nhiều cơ chế có phần thưởng \texttt{+10} trên 16 luồng im lặng của surrogate 6 SID. Gradient không phân biệt được giữa \texttt{http\_header\_pad}, \texttt{split8}, hay \texttt{noop}.
+    \item \textbf{Engine thật bắt được cả 16 luồng}: Snort 2.9.20 với 21.374 SID có các rule khác bắt được 16 luồng này, nên \texttt{http\_header\_pad} không lách được trên engine thật.
+\end{enumerate}
+
+Kết luận: Sai lệch không phải do surrogate parse sai rule, mà do corpus gốc chỉ gán 6 SID cho mỗi luồng thay vì toàn bộ 21.374 SID. Sau khi bổ sung đủ rule, surrogate khớp 40/40 với Snort và 100/100 cell với Suricata, nhưng headroom vẫn = 0 vì không tồn tại tổ hợp cơ chế nào vượt \texttt{split\_slow}.
+
+\subsection*{Bài học về thiết kế thực nghiệm}
+
+\begin{enumerate}
+    \item \textbf{Surrogate phải parse toàn bộ ruleset mục tiêu}: Parse đủ 21.374 rule ET Open C2, không chỉ 6 rule theo họ giao thức.
+    \item \textbf{Reassembly logic quyết định kết quả}: \texttt{frag3\_timeout=60s} và TCP stream reassembly của Snort/Suricata phải được triển khai đúng trong surrogate.
+    \item \textbf{Quét toàn bộ không gian hành động}: Probe thiếu 8/17 cơ chế đã dẫn tới kết luận sai "không có evasion nào"; cơ chế bị bỏ sót (\texttt{split\_slow}) lại là cơ chế duy nhất hiệu quả.
+    \item \textbf{Cổng ngữ nghĩa là bắt buộc}: Sáu cơ chế (\texttt{pad16}, \texttt{corrupt8}, \texttt{prepend4/8/12}, \texttt{length\_wrapper}) lách qua IDS nhưng phá lệnh C2, nhận phần thưởng \texttt{-10}. Không có cổng này, RL sẽ học được cơ chế vô dụng.
+    \item \textbf{Validation trên engine thật}: Kết luận từ surrogate — dù đầy đủ — vẫn cần kiểm chứng trên Snort và Suricata thật. Đo 680 query mất dưới 90 giây nhờ đóng gói theo lô.
 \end{enumerate}
 
 \section{Reassembly Impact}
 
-Phân tích các cơ chế:
+Phân tích nguyên nhân \texttt{split\_slow} lách được trong khi các cơ chế phân mảnh IP thông thường không lách:
+
 \begin{itemize}
-    \item \textbf{split8, split16, split24}: Phân mảnh ở IP layer → IDS defrag trước → không evade.
-    \item \textbf{http\_header\_case}: Thay đổi case HTTP header → Snort không case-sensitive → vô dụng.
-    \item \textbf{query\_param\_prepend}: Thêm parameter giả → Malware bỏ qua → có thể hoạt động nhưng Snort vẫn phát hiện.
+    \item \textbf{split8, split16, split24}: Phân mảnh IP với độ trễ giữa các fragment nhỏ hơn ngưỡng \texttt{frag3\_timeout} của Snort (60 giây). Engine tái lắp đủ fragment, khớp rule trên payload đầy đủ, phát hiện được.
+    \item \textbf{split\_slow}: Phân mảnh IP với độ trễ 75 giây giữa hai fragment, vượt \texttt{frag3\_timeout=60s}. Fragment thứ hai đến muộn, Snort huỷ chuỗi fragment đang chờ, không tái lắp được payload đầy đủ, rule không khớp. Cơ chế này lách được 23/40 luồng trên Snort 2.9.20 nhưng 0/40 trên Suricata 7.0.3 (Suricata tái lắp TCP stream hoàn chỉnh trước khi kiểm tra).
+    \item \textbf{http\_header\_case} và \textbf{http\_header\_pad}: Thay đổi HTTP header (case hoặc padding khoảng trắng). Rule của corpus gốc (6 SID) không khớp vì match chính xác chuỗi; nhưng ruleset đầy đủ 21.374 SID chứa các rule khác bắt được cùng luồng bằng các pattern khác nhau, nên không lách được trên engine thật.
+    \item \textbf{query\_param\_prepend}: Thêm tham số giả vào query string. Rule khớp bằng \texttt{content} không quan tâm thứ tự tham số, nên vẫn phát hiện được.
 \end{itemize}
+
+Kết luận: \textbf{frag3 timeout là cơ chế evasion duy nhất còn hiệu quả} trên Snort 2.9.20 với ruleset đầy đủ. Tuy nhiên, cơ chế này yêu cầu độ trễ 75 giây giữa hai fragment, khiến kênh C2 không khả dụng trong thực tế (beacon timeout trước khi server nhận đủ lệnh).
 
 \section{Suricata 7.0.3 Baseline (Ground Truth)}
 
-Validate trên 20-flow sample (16 FakeAV + 4 Virut):
+Để xác nhận surrogate tái tạo đúng hành vi reassembly của một engine khác, ta chạy Suricata 7.0.3 trên cùng 680 câu hỏi (40 flow × 17 cơ chế) đã dùng để quét Snort. Kết quả:
+
 \begin{itemize}
-    \item noop: 0/20 evasion (control).
-    \item split8: 0/20 evasion.
-    \item http\_header\_case: 16/20 evasion (FakeAV only).
-    \item query\_param\_prepend: 4/4 evasion (Virut only).
+    \item \textbf{Mọi cơ chế đều 0/40 evasion}, kể cả \texttt{split\_slow}.
+    \item Suricata tái lắp TCP stream đầy đủ trước khi khớp rule, vô hiệu hoá cả phân mảnh IP lẫn phân mảnh TCP.
+    \item Surrogate (sau khi sửa lỗi reassembly ở P16c) khớp 100/100 cell với Suricata trên một ma trận kiểm tra (10 flow × 10 cơ chế, chọn ngẫu nhiên từ 680 query).
 \end{itemize}
 
-Kết luận: Suricata cũng không bỏ sót nếu tập quy tắc đầy đủ.
+Kết luận: surrogate đầy đủ tái tạo đúng hành vi của cả Snort 2.9.20 và Suricata 7.0.3. Sai lệch ở phiên bản sớm (6 SID) không phải do lỗi logic reassembly, mà do thiếu rule.
 
 \chapter{Kết luận và Hướng phát triển}
 
 \section{Tóm tắt kết quả}
 
 \begin{enumerate}
-    \item \textbf{Headroom tồn tại trên surrogate không đầy đủ}: 48,4\% trên Snort shipped (6 SID).
-    \item \textbf{Headroom sụp đổ trên surrogate đầy đủ}: 0\% trên Snort full (29 SID).
-    \item \textbf{Reassembly là nguyên nhân}: Các cơ chế phân mảnh không evade vì IDS defrag trước kiểm tra.
-    \item \textbf{RL học được cơ chế tổ hợp khi surrogate đúng}: Validator Suricata 7.0.3 xác nhận (100/100 agreement).
+    \item \textbf{Headroom không tồn tại trên ruleset đầy đủ}: Oracle đạt 23/40 = 57,5\% trên Snort 2.9.20 với 21.374 quy tắc ET Open C2, bằng đúng cơ chế tốt nhất đơn lẻ (\texttt{split\_slow}), nên headroom = 0,0 điểm phần trăm.
+    \item \textbf{Cơ chế evasion duy nhất còn hiệu quả là frag3 timeout}: \texttt{split\_slow} (75 giây giữa hai fragment) lách được 23/40 luồng vì vượt ngưỡng \texttt{frag3\_timeout=60s} của Snort. Các cơ chế phân mảnh thông thường (\texttt{split8/16/24}) và HTTP manipulation (\texttt{http\_header\_case}, \texttt{http\_header\_pad}) đều 0/40 evasion hợp lệ trên engine thật.
+    \item \textbf{Surrogate đầy đủ tái tạo đúng hành vi engine}: Sau khi parse 21.374 quy tắc và triển khai \texttt{frag3\_timeout}, surrogate khớp 40/40 với Snort 2.9.20 và 100/100 cell với Suricata 7.0.3, xác nhận corpus không hỏng và logic reassembly đúng.
+    \item \textbf{40 luồng test không phải 40 luồng C2 thuần}: 24/40 luồng là BitTorrent DHT (classtype \texttt{policy-violation}), chỉ 16/40 luồng là trojan C2 (classtype \texttt{trojan-activity}). Oracle trên 16 luồng C2 đạt 16/16 = 100\% với hai họ cơ chế độc lập: phân mảnh (\texttt{split8/16/24}) và HTTP manipulation (\texttt{http\_header\_case/pad}). Trên 24 luồng DHT, chỉ \texttt{split\_slow} lách được 7/24.
+    \item \textbf{RL không học được khi headroom = 0}: Không tồn tại tổ hợp cơ chế nào vượt được cơ chế tốt nhất đơn lẻ, nên RL không có lợi thế so với chọn cố định \texttt{split\_slow}.
 \end{enumerate}
 
 \section{Hướng phát triển}
@@ -469,9 +472,12 @@ Kết luận: Suricata cũng không bỏ sót nếu tập quy tắc đầy đủ
 \section{Bài học}
 
 \begin{itemize}
-    \item \textbf{Surrogate model chính xác là nền tảng}: Nếu surrogate sai, RL học được thứ vô dụng.
-    \item \textbf{Rule coverage ảnh hưởng RL performance}: Headroom phụ thuộc vào độ hoàn chỉnh của tập quy tắc.
-    \item \textbf{Validation trên engine thật là bắt buộc}: Kết luận từ surrogate không đủ tin cậy.
+    \item \textbf{Surrogate phải parse đầy đủ ruleset}: Thiếu rule dẫn tới surrogate cho kết quả khác engine thật. Parse đủ 21.374 quy tắc ET Open C2 là cần thiết để tái tạo đúng hành vi Snort 2.9.20.
+    \item \textbf{Reassembly logic quyết định kết quả evasion}: Không phải rule syntax, mà là hành vi \texttt{frag3\_timeout} và TCP stream reassembly quyết định cơ chế nào lách được. Surrogate phải triển khai đúng logic này.
+    \item \textbf{Validation trên engine thật là bắt buộc}: Kết luận từ surrogate — dù đầy đủ — vẫn cần kiểm chứng trên Snort và Suricata thật. Đo 680 query trên engine thật mất dưới 90 giây nhờ đóng gói theo lô.
+    \item \textbf{Headroom = 0 khi ruleset đầy đủ}: Oracle bằng đúng cơ chế tốt nhất đơn lẻ, không có tổ hợp nào vượt được, RL không có lợi thế.
+    \item \textbf{Corpus phải lọc theo mục tiêu thật}: 40 luồng test chứa 60\% DHT (P2P) thay vì 100\% trojan C2. Lọc theo classtype \texttt{trojan-activity} ngay từ đầu cho corpus sạch hơn.
+    \item \textbf{Quét toàn bộ không gian hành động, không chọn lọc}: Probe thiếu 8/17 cơ chế đã dẫn tới kết luận sai "không có evasion nào"; cơ chế bị bỏ sót (\texttt{split\_slow}) lại là cơ chế duy nhất hiệu quả.
 \end{itemize}
 
 \backmatter
