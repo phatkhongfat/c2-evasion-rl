@@ -1,0 +1,12 @@
+{
+  "method": "ppo",
+  "diversity_coef": 0.0,
+  "queries": 30720,
+  "evaded": 100,
+  "n_flows": 256,
+  "evasion_pct": 39.1,
+  "epochs": 120,
+  "semantics_breaks": 2,
+  "distinct_flows_solved_cumulative": 454,
+  "scorer": "replica"
+}

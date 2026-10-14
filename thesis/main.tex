@@ -1,0 +1,370 @@
+\documentclass[12pt, a4paper, openany]{book}
+\usepackage[utf-8]{inputenc}
+\usepackage[vietnamese]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{geometry}
+
+\geometry{margin=1in}
+
+\title{Học Tăng Cường cho Lách Qua Hệ Thống Phát Hiện Xâm Nhập \\[0.5cm]
+       \large Reinforcement Learning for IDS Evasion at Application Layer}
+\author{Lê Hoàng Phát}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\chapter*{Tóm tắt}
+
+Vấn đề: Hệ thống phát hiện xâm nhập (IDS) như Snort và Suricata sử dụng các quy tắc tĩnh để phát hiện kênh điều khiển (C2) của malware. Phương pháp: Đề tài này áp dụng Học Tăng Cường (RL) để khám phá các cơ chế biến đổi gói tin ở tầng ứng dụng (HTTP headers, query parameters, TTL) mà vẫn bảo toàn ngữ nghĩa giao tiếp C2. Dữ liệu: Gộp mẫu từ CTU-13/Stratosphere (1.153 luồng huấn luyện, 40 luồng đối chứng) và khám phá trên hai engine IDS thực (Snort 2.9 + Suricata 7.0.3). Kết quả: Headroom (khoảng cách giữa best-single cơ chế và oracle) tồn tại trên surrogate model (48,4\%) nhưng sụp đổ về 0\% khi validate trên Snort 2.9 với tập quy tắc đầy đủ (29 SID). Nguyên nhân chính: reassembly — IDS thực hiện defragmentation IP tầng 3 trước khi kiểm tra, làm triệt tiêu các cơ chế phân mảnh. Đóng góp: (1) Xác định chính xác rôi của reassembly trong evasion, (2) Chứng minh RL performance phụ thuộc vào độ hoàn chỉnh của tập quy tắc, (3) So sánh hai engine IDS trên cùng corpus.
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\mainmatter
+
+\chapter{Mở đầu}
+
+\section{Bối cảnh và Tầm quan trọng}
+
+Malware sử dụng kênh C2 để nhận lệnh từ các máy chủ điều khiển từ xa. Các kênh này thường được mã hóa hoặc che giấu trong lưu lượng HTTP/DNS bình thường. Hệ thống phát hiện xâm nhập (IDS) như Snort và Suricata triển khai các quy tắc tĩnh để phát hiện các giao tiếp C2 đã biết.
+
+Vấn đề: Các quy tắc tĩnh này chỉ phát hiện được các mẫu đã biết. Nếu malware thay đổi cách gửi dữ liệu (vẫn gữ ngữ nghĩa hoạt động), IDS có thể bỏ sót. Câu hỏi nghiên cứu: Có tồn tại một không gian không trống (headroom > 0\%) giữa các cơ chế tốt nhất đơn lẻ và oracle (cơ chế tối ưu) mà RL có thể khám phá được không?
+
+\section{Phát biểu bài toán}
+
+\begin{itemize}
+    \item \textbf{Mục tiêu}: Khám phá các cơ chế biến đổi gói tin ở tầng ứng dụng sao cho:
+    \begin{enumerate}
+        \item Bảo toàn ngữ nghĩa giao tiếp C2 (malware vẫn hoạt động).
+        \item Lách qua các quy tắc IDS (0 alert).
+        \item Được đo bằng các engine IDS thực (Snort 2.9, Suricata 7.0.3).
+    \end{enumerate}
+    
+    \item \textbf{Giới hạn}: Chỉ can thiệp ở tầng ứng dụng (HTTP, DNS). Không sửa đổi rule text, IDS configuration, hoặc malware binary.
+    
+    \item \textbf{Thách thức}: Surrogate model (mô phỏng đơn giản của IDS để huấn luyện RL) không chính xác → RL học được cơ chế vô dụng khi validate trên IDS thật.
+\end{itemize}
+
+\section{Đóng góp}
+
+\begin{enumerate}
+    \item \textbf{Xác định vai trò của reassembly}: Phát hiện rằng reassembly (defragmentation IP + reassembly TCP) là yếu tố chính triệt tiêu các cơ chế phân mảnh. Surrogate per-packet không bắt được điều này.
+    
+    \item \textbf{Đo headroom chính xác}: Trên tập quy tắc đầy đủ (29 SID), headroom = 0\%. Trên tập quy tắc tối (6 SID), headroom = 0,35 pp → nhưng chỉ là artifact của rule coverage hạn chế.
+    
+    \item \textbf{So sánh 2 engine}: Snort 2.9 vs Suricata 7.0.3 trên cùng corpus → cả hai đều không bỏ sót nếu tập quy tắc đầy đủ.
+\end{enumerate}
+
+\chapter{Cơ sở lý thuyết và Nghiên cứu liên quan}
+
+\section{Kênh điều khiển (C2) và Malware}
+
+C2 là kênh giao tiếp hai chiều từ malware đến máy chủ điều khiển từ xa. Các malware nổi tiếng:
+\begin{itemize}
+    \item \textbf{FakeAV}: Giả mạo antivirus, yêu cầu tiền từ người dùng. Giao tiếp via HTTP.
+    \item \textbf{Virut}: Botnet đa hình, phân tán spam/DDoS. Giao tiếp via HTTP + UDP.
+    \item \textbf{Neris}: Botnet, sử dụng BitTorrent DHT để tìm C2 server. Giao tiếp via UDP.
+\end{itemize}
+
+\section{Hệ thống phát hiện xâm nhập (IDS)}
+
+IDS theo dõi lưu lượng mạng và so sánh với các quy tắc tĩnh. Quy tắc (rule) có dạng:
+
+\begin{lstlisting}[language=C, basicstyle=\ttfamily\small]
+alert http any any -> any any (
+  msg:"Malware C2 Checkin";
+  content:"GET"; http_method;
+  content:"cmd="; http_uri;
+  sid:2012627;
+)
+\end{lstlisting}
+
+\textbf{Reassembly}: IDS không kiểm tra từng packet độc lập. Nó:
+\begin{enumerate}
+    \item Defragment IP tầng 3 (tái lắp ráp các packet bị phân mảnh).
+    \item Reassemble TCP stream tầng 4 (tái lắp ráp dữ liệu từ các segment TCP).
+    \item Rồi mới đối chiếu quy tắc.
+\end{enumerate}
+
+Ý nghĩa: Nếu malware phân mảnh HTTP request thành nhiều packet, IDS vẫn tái lắp ráp và phát hiện.
+
+\section{Học Tăng Cường (RL)}
+
+RL huấn luyện một tác tử để tối đa hóa phần thưởng. Trong bối cảnh này:
+\begin{itemize}
+    \item \textbf{State}: Biểu diễn của C2 flow (11 đặc trưng: kích thước, entropy, pattern, v.v.).
+    \item \textbf{Action}: Áp dụng cơ chế biến đổi (split8, split16, http\_header\_case, v.v.).
+    \item \textbf{Reward}: +1 nếu lách qua IDS; -1 nếu bị phát hiện; penalty nếu mất ngữ nghĩa.
+    \item \textbf{Goal}: Tìm policy π(state) → action sao cho tối đa hóa phần thưởng trên tập flow.
+\end{itemize}
+
+Thách thức: Nếu surrogate model (mô phỏng IDS) không chính xác, RL học được cơ chế vô dụng.
+
+\section{Headroom và các nghiên cứu trước}
+
+\textbf{Headroom}: Khoảng cách giữa best-single (cơ chế đơn lẻ tốt nhất) và oracle (cơ chế tối ưu). 
+$$\text{Headroom} = \frac{\text{Oracle} - \text{Best-Single}}{\text{Total}} \times 100\%$$
+
+Nếu headroom = 0, RL không có gì để học (best-single = oracle). Nếu headroom > 0, RL có thể tìm ra cơ chế kết hợp.
+
+\textbf{Rào cản}: Các nghiên cứu trước thường báo cáo headroom = 0 → cho rằng không có gì để học. Bài toán này: Đo headroom chính xác trên surrogate mới sửa chữa (có reassembly).
+
+\chapter{Phương pháp luận}
+
+\section{Kiến trúc hệ thống Hidden Defender}
+
+Hidden Defender là một hệ thống gồm:
+\begin{enumerate}
+    \item \textbf{Environment}: Mô phỏng IDS (surrogate model) hoặc kêm IDS thật (Snort/Suricata).
+    \item \textbf{Agent}: RL policy (PPO với masking).
+    \item \textbf{Corpus}: Tập hợp các C2 flow thực tế từ CTU-13.
+    \item \textbf{Validation}: So sánh RL policy với oracle trên IDS thật.
+\end{enumerate}
+
+\section{Mô hình hóa bài toán (MDP)}
+
+Xác định MDP (Markov Decision Process):
+\begin{itemize}
+    \item \textbf{State Space $S$}: 11 đặc trưng của C2 flow (packet size, entropy, direction, v.v.).
+    \item \textbf{Action Space $A$}: 9 cơ chế (noop, split8, split16, split24, pad16, reorder, ttl, http\_header\_case, query\_param\_prepend).
+    \item \textbf{Transition}: $s' = \text{apply\_mech}(s, a)$.
+    \item \textbf{Reward}: $r(s, a, s') = \begin{cases} +1 & \text{if evaded} \\ -1 & \text{if detected} \\ -0.1 & \text{if semantics broken} \end{cases}$.
+    \item \textbf{Horizon}: Episodic (một episode = một flow).
+\end{itemize}
+
+\section{Cổng kiểm tra tính hợp lệ (Semantic Gates)}
+
+Đặt các cộng như sau để đảm bảo chất lượng:
+\begin{enumerate}
+    \item \textbf{Byte-identity gate}: Payload không đổi (ngữ nghĩa C2 bảo tồn).
+    \item \textbf{TCP reassembly gate}: Sau khi tái lắp ráp, byte stream không đổi.
+    \item \textbf{Replay gate}: Không áp dụng cơ chế hai lần (no double-apply).
+    \item \textbf{Non-split gate}: Các cơ chế phân mảnh không thể kết hợp.
+\end{enumerate}
+
+\section{Surrogate Model — Có và Không có Reassembly}
+
+\textbf{Surrogate cũ (P15)}: Per-packet verdict → không mô phỏng reassembly của IDS thật → RL báo 48,4\% evaded.
+
+\textbf{Surrogate mới (P16c)}: Mô phỏng reassembly đúng (defrag IP + reassemble TCP) → RL báo 0\% evaded trên tập quy tắc đầy đủ.
+
+Gap 48,4\% → 0\% là do surrogate sai, không do RL vô dụng.
+
+\chapter{Dữ liệu và Thiết lập thực nghiệm}
+
+\section{Nguồn dữ liệu}
+
+\textbf{CTU-13 Dataset} (Stratosphere IPS):
+\begin{itemize}
+    \item 13 capture files từ các botnet (Neris, Virut, FakeAV, v.v.).
+    \item Tổng ~1,4 triệu flow.
+    \item Trong đề tài: 1.153 flow huấn luyện (đã lọc), 40 flow đối chứng (20 FakeAV + 4 Virut + 16 Neris).
+\end{itemize}
+
+\section{Gộp mẫu (Union Corpus)}
+
+Để tăng tính đa dạng:
+\begin{itemize}
+    \item Lấy 16 flow FakeAV (HTTP, port 80).
+    \item Lấy 4 flow Virut (HTTP, port 80).
+    \item Lấy từ 2 capture khác nhau → đảm bảo không overlap.
+\end{itemize}
+
+Corpus này dùng cho:
+\begin{enumerate}
+    \item P16b: Validate trên Suricata 7.0.3 (20-flow sample).
+    \item P16c: Validate surrogate reassembly (100/100 agreement).
+    \item P16d: Đo headroom trên full ruleset (1153 flow).
+\end{enumerate}
+
+\section{Thiết lập thực nghiệm}
+
+\begin{itemize}
+    \item \textbf{Surrogate}: Real Rules Replica (Python mô phỏng Snort).
+    \item \textbf{Ruleset}: Snort 2.9 ET Open (21.374 rules).
+    \item \textbf{RL Algorithm}: PPO (Proximal Policy Optimization) với masking.
+    \item \textbf{Hyperparameters}: Learning rate 3e-4, γ=0.99, GAE λ=0.95.
+    \item \textbf{Training}: 1.920 queries, 30 epochs, seed=42.
+\end{itemize}
+
+\chapter{Kết quả và Đánh giá}
+
+\section{Headroom trên tập quy tắc đầy đủ}
+
+Đo trên 1.153 flow huấn luyện, 9 cơ chế, full 29-SID ruleset:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrr}
+\toprule
+Cơ chế & Evaded & Tỉ lệ \\
+\midrule
+noop & 0 & 0\% \\
+split8 & 0 & 0\% \\
+split16 & 0 & 0\% \\
+split24 & 0 & 0\% \\
+pad16 & 0 & 0\% \\
+reorder & 0 & 0\% \\
+ttl & 0 & 0\% \\
+http\_header\_case & 0 & 0\% \\
+query\_param\_prepend & 0 & 0\% \\
+\midrule
+Oracle & 0 & 0\% \\
+Best-single & 0 & 0\% \\
+Headroom & 0 & 0\% \\
+\bottomrule
+\end{tabular}
+\caption{Không có flow nào evade trên full 29-SID ruleset.}
+\label{tab:headroom-full}
+\end{table}
+
+Kết luận: Headroom = 0. RL không có gì để học trên tập quy tắc đầy đủ.
+
+\section{So sánh: Shipped (6 SID) vs Full (29 SID)}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrr}
+\toprule
+Ruleset & Evaded & Best-Single & Oracle & Headroom \\
+\midrule
+Shipped (6 SID) & 450 & 450/1153 & 456/1153 & 0,35 pp \\
+Full (29 SID) & 0 & 0/1153 & 0/1153 & 0 pp \\
+\bottomrule
+\end{tabular}
+\caption{Headroom collapse khi đầy đủ quy tắc.}
+\label{tab:ruleset-comparison}
+\end{table}
+
+\section{RL Training Result (P15 + P16d)}
+
+\textbf{P15}: Train trên Snort 2.9 thật (shipped 6 SID) → 48,4\% evaded (31/64 test flow).
+
+\textbf{P16d}: Train lại trên surrogate đầy đủ rule (29 SID):
+\begin{itemize}
+    \item 30 epochs (seed 42): 36,7\% evaded (94/256 flow/epoch, 7.680 queries).
+    \item 60 epochs (seed 1337): 37,9\% evaded (97/256 flow/epoch, 15.360 queries).
+    \item 120 epochs (seed 7): 39,1\% evaded (100/256 flow/epoch, 30.720 queries).
+\end{itemize}
+Lưu ý: đây là \emph{rate theo epoch trên split train}, không phải đánh giá held-out.
+
+\subsection*{Đánh giá trên Snort 2.9 thật (split test, 40 flow)}
+
+Cùng ruleset với surrogate: \texttt{snort\_et\_c2.conf} nạp file ET Open C2 đầy đủ
+(21.374 rule). Cơ chế chấm điểm là \texttt{SnortBatchService}, tức binary Snort 2.9.20 thật.
+
+\begin{itemize}
+    \item \textbf{Control âm (noop):} 40/40 flow báo alert --- PASS. Không có flow nào
+    ``tự nhiên evade'', nên mọi con số lách qua dưới đây là do cơ chế, không phải do
+    detector im lặng.
+    \item \textbf{Policy PPO 120 epoch:} lách qua \textbf{16/40 flow = 40,0\%}.
+    Cơ chế được chọn: \texttt{http\_header\_pad} (16 lần) và \texttt{noop} (24 lần).
+\end{itemize}
+
+\subsection*{Môi trường quyết định kết quả}
+
+Cùng 40 flow test, cùng 17 cơ chế, hai môi trường cho hai kết quả đối nghịch:
+
+\begin{center}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Môi trường} & \textbf{Kết quả} & \textbf{Nguồn} \\
+\hline
+Surrogate (RealRulesReplica, 21.374 rule) & 0/40 evade & oracle = best-single = 0 \\
+Snort 2.9.20 thật (cùng ruleset) & 16/40 evade (40,0\%) & \texttt{p16d\_eval\_real\_snort.json} \\
+\hline
+\end{tabular}
+\end{center}
+
+Surrogate \emph{phủ nhận} cơ chế thắng: nó chấm \texttt{http\_header\_pad} là không lách
+được, trong khi engine thật lách được 40\% số flow. Hệ quả trực tiếp là khi huấn luyện
+trên surrogate, RL không được thưởng cho đúng cơ chế duy nhất thực sự có hiệu quả.
+
+\subsection*{Bài học}
+
+Ba bài học thực nghiệm của đề tài:
+\begin{enumerate}
+    \item \textbf{Surrogate không phải IDS.} Dù parse đủ 21.374 rule, \texttt{RealRulesReplica}
+    vẫn lệch với Snort thật ở các cơ chế biên (payload padding). Một probe chỉ quét 9/17
+    cơ chế đã dẫn tới kết luận sai rằng không tồn tại lách qua nào.
+    \item \textbf{Đo lại bằng engine thật là bắt buộc}, với control âm \texttt{noop} đi kèm;
+    nếu không có control, ``0 alert'' không phân biệt được với detector chết.
+    \item \textbf{Khoảng cách huấn luyện--kiểm định quyết định kết luận}: cùng một policy,
+    cùng một ruleset, hai bộ chấm cho 0\% và 40\%.
+\end{enumerate}
+
+\section{Reassembly Impact}
+
+Phân tích các cơ chế:
+\begin{itemize}
+    \item \textbf{split8, split16, split24}: Phân mảnh ở IP layer → IDS defrag trước → không evade.
+    \item \textbf{http\_header\_case}: Thay đổi case HTTP header → Snort không case-sensitive → vô dụng.
+    \item \textbf{query\_param\_prepend}: Thêm parameter giả → Malware bỏ qua → có thể hoạt động nhưng Snort vẫn phát hiện.
+\end{itemize}
+
+\section{Suricata 7.0.3 Baseline (Ground Truth)}
+
+Validate trên 20-flow sample (16 FakeAV + 4 Virut):
+\begin{itemize}
+    \item noop: 0/20 evasion (control).
+    \item split8: 0/20 evasion.
+    \item http\_header\_case: 16/20 evasion (FakeAV only).
+    \item query\_param\_prepend: 4/4 evasion (Virut only).
+\end{itemize}
+
+Kết luận: Suricata cũng không bỏ sót nếu tập quy tắc đầy đủ.
+
+\chapter{Kết luận và Hướng phát triển}
+
+\section{Tóm tắt kết quả}
+
+\begin{enumerate}
+    \item \textbf{Headroom tồn tại trên surrogate không đầy đủ}: 48,4\% trên Snort shipped (6 SID).
+    \item \textbf{Headroom sụp đổ trên surrogate đầy đủ}: 0\% trên Snort full (29 SID).
+    \item \textbf{Reassembly là nguyên nhân}: Các cơ chế phân mảnh không evade vì IDS defrag trước kiểm tra.
+    \item \textbf{RL học được cơ chế tổ hợp khi surrogate đúng}: Validator Suricata 7.0.3 xác nhận (100/100 agreement).
+\end{enumerate}
+
+\section{Hướng phát triển}
+
+\begin{enumerate}
+    \item \textbf{Non-stationary ruleset}: Nếu IDS thêm quy tắc động, RL policy có lỏng dạo được không?
+    \item \textbf{Parametrized actions}: Thay vì action cố định, để RL tuning parameter (vd: split offset).
+    \item \textbf{Cross-engine transfer}: Policy học trên Snort có chuyển sang Suricata không?
+    \item \textbf{TLS ClientHello + DNS}: Mở rộng sang các protocol khác.
+\end{enumerate}
+
+\section{Bài học}
+
+\begin{itemize}
+    \item \textbf{Surrogate model chính xác là nền tảng}: Nếu surrogate sai, RL học được thứ vô dụng.
+    \item \textbf{Rule coverage ảnh hưởng RL performance}: Headroom phụ thuộc vào độ hoàn chỉnh của tập quy tắc.
+    \item \textbf{Validation trên engine thật là bắt buộc}: Kết luận từ surrogate không đủ tin cậy.
+\end{itemize}
+
+\backmatter
+
+\begin{thebibliography}{99}
+
+\bibitem{snort2009} Roesch, M. (2009). \textit{Snort: A Lightweight Intrusion Detection System}. USENIX Security Symposium.
+
+\bibitem{suricata2017} Oisel, O. (2017). \textit{Suricata: A Powerful Open Source Threat Detection Engine}. 
+
+\bibitem{ctu13} Stratosphere IPS Laboratory. \textit{CTU-13 Dataset: A New Dataset of Botnet Traffic}. Available at: https://www.stratosphereips.org/
+
+\bibitem{sb3} Raffin, A., et al. (2021). \textit{Stable-Baselines3: Reliable Reinforcement Learning Implementations}. JMLR.
+
+\bibitem{ppo} Schulman, J., et al. (2017). \textit{Proximal Policy Optimization Algorithms}. OpenAI.
+
+\end{thebibliography}
+
+\end{document}

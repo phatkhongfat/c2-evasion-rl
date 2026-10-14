@@ -1,0 +1,509 @@
+{
+  "model": "/tmp/model_full_p16d_120ep",
+  "split": "test",
+  "n_flows": 40,
+  "scorer": "real_snort",
+  "ruleset": "snort_et_c2.conf (ET Open C2, full)",
+  "noop_control": {
+    "alerted": 40,
+    "n": 40,
+    "pass": true
+  },
+  "policy": {
+    "evaded": 16,
+    "alerted": 24,
+    "n": 40,
+    "evasion_pct": 40.0,
+    "mech_histogram": {
+      "http_header_pad": 16,
+      "noop": 24
+    }
+  },
+  "elapsed_s": 904.2,
+  "rows": {
+    "noop": [
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:2077->184.82.147.251:80|tcp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|87.0.4.47:24320->147.32.84.165:32234|udp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:1460->184.82.148.43:80|tcp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|31.28.239.85:50948->147.32.84.165:32234|udp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|178.178.32.179:40345->147.32.84.191:29676|udp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|147.32.84.165:32234->46.0.71.91:17112|udp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|147.32.84.165:32234->123.195.171.63:16001|udp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|93.116.10.237:44526->147.32.84.192:31037|udp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|130.208.183.47:36380->147.32.84.165:32234|udp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|89.75.125.168:17075->147.32.84.192:31037|udp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|147.32.84.165:32234->79.167.0.55:17773|udp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:2630->184.82.148.43:80|tcp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|89.169.146.232:20275->147.32.84.165:32234|udp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|147.32.84.165:32234->117.198.83.101:15919|udp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:1820->184.82.148.43:80|tcp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|95.161.9.43:44946->147.32.84.191:29676|udp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|115.138.197.2:51162->147.32.84.165:32234|udp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:4702->184.82.147.251:80|tcp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|147.32.84.191:29676->216.110.98.73:51413|udp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:2350->184.82.148.43:80|tcp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|85.105.140.222:10396->147.32.84.191:29676|udp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:1029->184.82.148.43:80|tcp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:1337->184.82.148.43:80|tcp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:4883->184.82.155.107:80|tcp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:2575->184.82.148.43:80|tcp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:4312->184.82.155.107:80|tcp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|147.32.84.191:29676->120.6.154.200:9669|udp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|94.213.173.117:23599->147.32.84.191:29676|udp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|93.103.159.190:53025->147.32.84.191:29676|udp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|196.215.21.212:17326->147.32.84.192:31037|udp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:3531->184.82.147.251:80|tcp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:2612->184.82.155.107:80|tcp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|38.107.163.247:6882->147.32.84.192:31037|udp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:2909->184.82.147.251:80|tcp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|112.210.156.223:12831->147.32.84.191:29676|udp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:3617->184.82.148.43:80|tcp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|86.58.46.218:62731->147.32.84.191:29676|udp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|147.32.84.192:31037->123.131.126.227:9252|udp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:3039->184.82.148.43:80|tcp",
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|94.45.190.75:52057->147.32.84.165:32234|udp",
+        "alert": true,
+        "evaded": false
+      }
+    ],
+    "policy": [
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:2077->184.82.147.251:80|tcp",
+        "mech": "http_header_pad",
+        "semantics_ok": true,
+        "alert": false,
+        "evaded": true
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|87.0.4.47:24320->147.32.84.165:32234|udp",
+        "mech": "noop",
+        "semantics_ok": true,
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:1460->184.82.148.43:80|tcp",
+        "mech": "http_header_pad",
+        "semantics_ok": true,
+        "alert": false,
+        "evaded": true
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|31.28.239.85:50948->147.32.84.165:32234|udp",
+        "mech": "noop",
+        "semantics_ok": true,
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|178.178.32.179:40345->147.32.84.191:29676|udp",
+        "mech": "noop",
+        "semantics_ok": true,
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|147.32.84.165:32234->46.0.71.91:17112|udp",
+        "mech": "noop",
+        "semantics_ok": true,
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|147.32.84.165:32234->123.195.171.63:16001|udp",
+        "mech": "noop",
+        "semantics_ok": true,
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|93.116.10.237:44526->147.32.84.192:31037|udp",
+        "mech": "noop",
+        "semantics_ok": true,
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|130.208.183.47:36380->147.32.84.165:32234|udp",
+        "mech": "noop",
+        "semantics_ok": true,
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|89.75.125.168:17075->147.32.84.192:31037|udp",
+        "mech": "noop",
+        "semantics_ok": true,
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|147.32.84.165:32234->79.167.0.55:17773|udp",
+        "mech": "noop",
+        "semantics_ok": true,
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:2630->184.82.148.43:80|tcp",
+        "mech": "http_header_pad",
+        "semantics_ok": true,
+        "alert": false,
+        "evaded": true
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|89.169.146.232:20275->147.32.84.165:32234|udp",
+        "mech": "noop",
+        "semantics_ok": true,
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|147.32.84.165:32234->117.198.83.101:15919|udp",
+        "mech": "noop",
+        "semantics_ok": true,
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:1820->184.82.148.43:80|tcp",
+        "mech": "http_header_pad",
+        "semantics_ok": true,
+        "alert": false,
+        "evaded": true
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|95.161.9.43:44946->147.32.84.191:29676|udp",
+        "mech": "noop",
+        "semantics_ok": true,
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|115.138.197.2:51162->147.32.84.165:32234|udp",
+        "mech": "noop",
+        "semantics_ok": true,
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:4702->184.82.147.251:80|tcp",
+        "mech": "http_header_pad",
+        "semantics_ok": true,
+        "alert": false,
+        "evaded": true
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|147.32.84.191:29676->216.110.98.73:51413|udp",
+        "mech": "noop",
+        "semantics_ok": true,
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:2350->184.82.148.43:80|tcp",
+        "mech": "http_header_pad",
+        "semantics_ok": true,
+        "alert": false,
+        "evaded": true
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|85.105.140.222:10396->147.32.84.191:29676|udp",
+        "mech": "noop",
+        "semantics_ok": true,
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:1029->184.82.148.43:80|tcp",
+        "mech": "http_header_pad",
+        "semantics_ok": true,
+        "alert": false,
+        "evaded": true
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:1337->184.82.148.43:80|tcp",
+        "mech": "http_header_pad",
+        "semantics_ok": true,
+        "alert": false,
+        "evaded": true
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:4883->184.82.155.107:80|tcp",
+        "mech": "http_header_pad",
+        "semantics_ok": true,
+        "alert": false,
+        "evaded": true
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:2575->184.82.148.43:80|tcp",
+        "mech": "http_header_pad",
+        "semantics_ok": true,
+        "alert": false,
+        "evaded": true
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:4312->184.82.155.107:80|tcp",
+        "mech": "http_header_pad",
+        "semantics_ok": true,
+        "alert": false,
+        "evaded": true
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|147.32.84.191:29676->120.6.154.200:9669|udp",
+        "mech": "noop",
+        "semantics_ok": true,
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|94.213.173.117:23599->147.32.84.191:29676|udp",
+        "mech": "noop",
+        "semantics_ok": true,
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|93.103.159.190:53025->147.32.84.191:29676|udp",
+        "mech": "noop",
+        "semantics_ok": true,
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|196.215.21.212:17326->147.32.84.192:31037|udp",
+        "mech": "noop",
+        "semantics_ok": true,
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:3531->184.82.147.251:80|tcp",
+        "mech": "http_header_pad",
+        "semantics_ok": true,
+        "alert": false,
+        "evaded": true
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:2612->184.82.155.107:80|tcp",
+        "mech": "http_header_pad",
+        "semantics_ok": true,
+        "alert": false,
+        "evaded": true
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|38.107.163.247:6882->147.32.84.192:31037|udp",
+        "mech": "noop",
+        "semantics_ok": true,
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:2909->184.82.147.251:80|tcp",
+        "mech": "http_header_pad",
+        "semantics_ok": true,
+        "alert": false,
+        "evaded": true
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|112.210.156.223:12831->147.32.84.191:29676|udp",
+        "mech": "noop",
+        "semantics_ok": true,
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:3617->184.82.148.43:80|tcp",
+        "mech": "http_header_pad",
+        "semantics_ok": true,
+        "alert": false,
+        "evaded": true
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|86.58.46.218:62731->147.32.84.191:29676|udp",
+        "mech": "noop",
+        "semantics_ok": true,
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|147.32.84.192:31037->123.131.126.227:9252|udp",
+        "mech": "noop",
+        "semantics_ok": true,
+        "alert": true,
+        "evaded": false
+      },
+      {
+        "flow_id": "botnet-capture-20110811-neris|147.32.84.165:3039->184.82.148.43:80|tcp",
+        "mech": "http_header_pad",
+        "semantics_ok": true,
+        "alert": false,
+        "evaded": true
+      },
+      {
+        "flow_id": "botnet-capture-20110819-bot|94.45.190.75:52057->147.32.84.165:32234|udp",
+        "mech": "noop",
+        "semantics_ok": true,
+        "alert": true,
+        "evaded": false
+      }
+    ]
+  }
+}
