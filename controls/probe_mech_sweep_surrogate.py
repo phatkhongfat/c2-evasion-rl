@@ -56,7 +56,14 @@ def main() -> int:
             if mech != "noop" and not semantics_intact(pkts, cand, cid):
                 invalid[mech] += 1
                 continue
-            hit = any(f["replica"].verdict(pk, home_ip=None) for pk in cand)
+            # Score the WHOLE mutated flow, not one packet at a time. The
+            # replica is rebuilt with reassemble=True (hidden_defender_env.py
+            # :543); handing it a single segment gives the reassembler no
+            # offset context, so content straddling a segment boundary is
+            # missed and every flow looks "evaded". Scoring per packet is what
+            # made an earlier sweep report a flat reward surface that two other
+            # measurements contradict.
+            hit = f["replica"].verdict(cand, home_ip=None)
             if hit:
                 caught[mech] += 1
             else:
