@@ -92,6 +92,15 @@ TCP `split8`/`split16`/`split24` all `EVADED` (`alerts=0, valid=True`) and UDP
 `split16`/`split24` and `overlap8` stayed `ALERT`/invalid as measured, matching
 the sweep.)
 
+> ⚠️ **SUPERSEDED 2026-10-14.** The `EVADED` verdicts above are real *Snort
+> alerts*, but "no alert" there meant the **rule did not fire** — not that the
+> traffic was safe. Snort 2.9 with `frag3` cannot match a head-anchored C2
+> pattern in a reassembled flow, so it reports 0 alerts; Suricata 7.0.3 with
+> full stream reassembly defrags and reassembles, and matches. Suricata measures
+> `split8` **0/20** and `split24` **0/20** on the frozen sample, i.e. it is
+> **DETECTED**, not evaded. Treat "alert count 0" as "engine did not evaluate
+> this", never as "evasion". See `docs/p16c_reassembly_correction.md`.
+
 ## Wire-through (DRY)
 
 One mutation path, one bar, for both reward and evaluation:

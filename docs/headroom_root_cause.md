@@ -1,5 +1,12 @@
 # Root cause: vì sao oracle = fragmentation (và oracle ≠ split8)
 
+> ⚠️ **SUPERSEDED 2026-10-14 — đọc `docs/p16c_reassembly_correction.md` trước.**
+> Toàn bộ tài liệu này dựa trên giả định fragmentation né được IDS. Đo lại bằng
+> Suricata 7.0.3 thật: `split8` 0/20, `split24` 0/20 trên mẫu 20 flow đóng băng.
+> Số "split8 40/40" bên dưới là **artifact của surrogate so khớp trong một packet**,
+> không phải hành vi engine. Với surrogate đã sửa: `split24` 454/1153 → **0/1153**.
+> Nội dung giữ nguyên để lưu vết, không dùng làm căn cứ.
+
 Ngày: 2026-10-12. Bắt đầu là phân tích read-only trên artifact sẵn có (P7–P9); từ
 **P11 trở đi đã chạy sweep Snort thật** — xem `ceiling_v4_*.json`.
 
